@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\quantization_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\rocm_benchmark_request.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 

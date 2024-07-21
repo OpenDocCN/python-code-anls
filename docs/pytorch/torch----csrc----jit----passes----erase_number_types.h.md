@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\erase_number_types.h`
 
-```
+```py
 // 预处理指令，指示编译器在编译此头文件时只包含一次，避免重复包含
 #pragma once
 

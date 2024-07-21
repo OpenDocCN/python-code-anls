@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Sorting.cpp`
 
-```
+```py
 // 定义编译时仅支持方法操作符的宏，仅在此处起作用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

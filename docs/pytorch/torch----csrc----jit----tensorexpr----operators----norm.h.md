@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\norm.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令：指示编译器只包含当前头文件一次

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\function_schema.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/StringUtil.h>

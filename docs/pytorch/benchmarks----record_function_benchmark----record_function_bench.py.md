@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\record_function_benchmark\record_function_bench.py`
 
-```
+```py
 # 导入命令行参数解析模块
 import argparse
 # 导入系统模块

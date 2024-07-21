@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\_data_parallel_utils.py`
 
-```
+```py
 # 导入 functools 模块中的 partial 函数
 from functools import partial
 # 导入 typing 模块中的 no_type_check, Optional, Tuple

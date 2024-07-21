@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\PyTorchAndroid.java`
 
-```
+```py
 /**
  * 导入必要的类和包，包括Android资源管理器和Facebook的JNI注解。
  */

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runtime\utils_cuda.h`
 
-```
+```py
 #pragma once
 
 #ifdef USE_CUDA

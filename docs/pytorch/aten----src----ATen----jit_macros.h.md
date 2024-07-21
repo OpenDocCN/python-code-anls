@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\jit_macros.h`
 
-```
+```py
 #pragma once
 // 在 C++ 中，#pragma once 是一种预处理指令，用于确保头文件只被包含一次
 

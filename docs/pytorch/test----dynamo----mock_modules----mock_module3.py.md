@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\mock_modules\mock_module3.py`
 
-```
+```py
 import torch  # 导入 torch 库，用于科学计算和机器学习任务
 
 

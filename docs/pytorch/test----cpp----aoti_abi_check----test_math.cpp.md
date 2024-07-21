@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_abi_check\test_math.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <ATen/NumericUtils.h>  // 包含 ATen 数字工具库的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\MPSCNNClampOp.h`
 
-```
+```py
 #import <ATen/native/metal/mpscnn/MPSCNNOp.h>
 
 # 导入 Metal 下的 ATen 库中 MPSCNNOp.h 文件，这是为了使用 Metal Performance Shaders (MPS) CNN 操作。

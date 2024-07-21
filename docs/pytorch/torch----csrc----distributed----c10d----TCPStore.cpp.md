@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\TCPStore.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <c10/util/irange.h>
 #include <fmt/format.h>

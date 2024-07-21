@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\timer\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 上面的注释指定了允许未类型化的函数定义，这对于类型检查工具很有用
 # Copyright (c) Facebook, Inc. and its affiliates.

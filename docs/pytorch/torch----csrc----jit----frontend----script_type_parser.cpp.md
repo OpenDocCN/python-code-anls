@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\script_type_parser.cpp`
 
-```
+```py
 #include <torch/csrc/jit/frontend/script_type_parser.h>  // 引入ScriptTypeParser头文件
 
 #include <ATen/core/type_factory.h>  // 引入ATen核心类型工厂头文件

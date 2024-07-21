@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\tempfile.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Export.h> // 引入 c10 库的导出宏定义

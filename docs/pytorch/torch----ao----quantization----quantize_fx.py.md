@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantize_fx.py`
 
-```
+```py
 from typing import Any, Dict, Optional, Tuple, Union
 import warnings
 
@@ -221,7 +221,7 @@ def _prepare_standalone_module_fx(
 # from torch.ao.quantization import fuse_fx
 # m = Model().eval()
 # m = fuse_fx(m)
-# ```
+# ```py
 def fuse_fx(
     model: torch.nn.Module,
     fuse_custom_config: Union[FuseCustomConfig, Dict[str, Any], None] = None,

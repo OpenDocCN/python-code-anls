@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\templates\RegisterDispatchKeyCustomOps.cpp`
 
-```
+```py
 // clang-format off
 // clang-format 被禁用，避免格式化修改此部分代码风格
 

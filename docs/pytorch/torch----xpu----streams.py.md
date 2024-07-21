@@ -1,6 +1,6 @@
 # `.\pytorch\torch\xpu\streams.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 ctypes 模块，用于处理 C 数据类型
 import ctypes

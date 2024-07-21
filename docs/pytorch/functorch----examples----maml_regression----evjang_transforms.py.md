@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\maml_regression\evjang_transforms.py`
 
-```
+```py
 # Eric Jang originally wrote an implementation of MAML in JAX
 # (https://github.com/ericjang/maml-jax).
 # We translated his implementation from JAX to PyTorch.

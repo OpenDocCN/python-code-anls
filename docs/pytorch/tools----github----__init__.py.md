@@ -1,6 +1,6 @@
 # `.\pytorch\tools\github\__init__.py`
 
-```
+```py
 # 导入所需的模块：os（操作系统接口）、shutil（高级文件操作工具）、datetime（处理日期和时间的标准库）
 import os
 import shutil

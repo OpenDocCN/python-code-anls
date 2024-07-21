@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_aot_autograd.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入copy模块，用于复制对象
 import re  # 导入re模块，用于正则表达式匹配

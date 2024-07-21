@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_nested_dict.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入需要的模块和函数

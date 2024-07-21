@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_native_mha.py`
 
-```
+```py
 # 导入 math 和 copy 模块
 import math
 import copy

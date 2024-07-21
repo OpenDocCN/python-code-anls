@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\constant_propagation.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>

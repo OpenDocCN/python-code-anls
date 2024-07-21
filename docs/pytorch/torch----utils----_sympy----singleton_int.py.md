@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\singleton_int.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 sympy 库
 import sympy

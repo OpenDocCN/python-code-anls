@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\NeuralNetworks.h`
 
-```
+```py
 /*
  * Copyright (C) 2017 The Android Open Source Project
  *

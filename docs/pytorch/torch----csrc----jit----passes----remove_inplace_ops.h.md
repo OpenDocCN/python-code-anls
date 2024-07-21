@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_inplace_ops.h`
 
-```
+```py
 #pragma once
 
 

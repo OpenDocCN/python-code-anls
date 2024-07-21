@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\te_wrapper.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/codegen.h>  // 引入TensorExpr的代码生成相关头文件

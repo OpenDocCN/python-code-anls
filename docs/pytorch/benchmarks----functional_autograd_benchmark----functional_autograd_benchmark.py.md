@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\functional_autograd_benchmark.py`
 
-```
+```py
 import time  # 导入time模块，用于时间相关操作
 from argparse import ArgumentParser  # 导入ArgumentParser类，用于解析命令行参数
 from collections import defaultdict  # 导入defaultdict类，创建默认值字典

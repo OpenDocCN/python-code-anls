@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\qconfig_mapping.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Import necessary modules and functions
 from __future__ import annotations

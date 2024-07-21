@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\instancenorm.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 
@@ -56,7 +56,7 @@ struct TORCH_API InstanceNormOptions {
 /// ```
 /// InstanceNorm1d
 /// model(InstanceNorm1dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 using InstanceNorm1dOptions = InstanceNormOptions;
 
 /// Options for the `InstanceNorm2d` module.
@@ -66,7 +66,7 @@ using InstanceNorm1dOptions = InstanceNormOptions;
 /// ```
 /// InstanceNorm2d
 /// model(InstanceNorm2dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 using InstanceNorm2dOptions = InstanceNormOptions;
 
 /// Options for the `InstanceNorm3d` module.
@@ -76,7 +76,7 @@ using InstanceNorm2dOptions = InstanceNormOptions;
 /// ```
 /// InstanceNorm3d
 /// model(InstanceNorm3dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 using InstanceNorm3dOptions = InstanceNormOptions;
 
 namespace functional {
@@ -89,7 +89,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::instance_norm(input,
 /// F::InstanceNormFuncOptions().running_mean(mean).running_var(variance).weight(weight).bias(bias).momentum(0.1).eps(1e-5));
-/// ```
+/// ```py
 struct TORCH_API InstanceNormFuncOptions {
   TORCH_ARG(Tensor, running_mean) = Tensor();
   // 运行均值的张量选项，默认为空张量

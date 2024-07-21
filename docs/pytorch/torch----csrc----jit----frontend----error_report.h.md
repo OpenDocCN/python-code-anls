@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\error_report.h`
 
-```
+```py
 #pragma once
 
 

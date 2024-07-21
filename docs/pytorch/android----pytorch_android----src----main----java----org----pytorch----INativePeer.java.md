@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\INativePeer.java`
 
-```
+```py
 package org.pytorch;
 
 # 定义一个接口 INativePeer，用于表示与本地（native）代码的接口

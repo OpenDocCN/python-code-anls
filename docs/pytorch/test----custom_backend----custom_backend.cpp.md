@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_backend\custom_backend.cpp`
 
-```
+```py
 // 包含自定义后端头文件
 #include "custom_backend.h"
 // 包含 Torch 后端预处理的头文件

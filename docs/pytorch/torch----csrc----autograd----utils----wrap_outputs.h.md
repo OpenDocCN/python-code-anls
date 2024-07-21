@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\utils\wrap_outputs.h`
 
-```
+```py
 #pragma once
 // 一次性包装张量操作的输出为 PyObject*
 

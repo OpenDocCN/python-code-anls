@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\BuildFeatureTracer.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/model_tracer/BuildFeatureTracer.h>
 #include <mutex>
 

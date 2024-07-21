@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\__init__.py`
 
-```
+```py
 # 从.quantizer模块中导入以下类和变量，用于本模块的使用
 from .quantizer import (
     DerivedQuantizationSpec,         # 导入DerivedQuantizationSpec类

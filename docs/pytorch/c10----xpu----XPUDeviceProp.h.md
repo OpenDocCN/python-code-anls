@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUDeviceProp.h`
 
-```
+```py
 #pragma once
 
 #include <c10/xpu/XPUMacros.h>

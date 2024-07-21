@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_list.h`
 
-```
+```py
 #pragma once
 
 这行指令告诉编译器只包含当前文件一次，避免重复包含。

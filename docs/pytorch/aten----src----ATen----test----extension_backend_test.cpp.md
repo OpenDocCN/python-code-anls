@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\extension_backend_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/ATen.h>

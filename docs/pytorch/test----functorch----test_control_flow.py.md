@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_control_flow.py`
 
-```
+```py
 # 导入所需的模块和库
 import contextlib
 import functools

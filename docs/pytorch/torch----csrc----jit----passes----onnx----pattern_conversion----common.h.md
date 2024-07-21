@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\pattern_conversion\common.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\xnnpack\test_xnnpack_delegate.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入unittest模块，用于编写和运行测试用例

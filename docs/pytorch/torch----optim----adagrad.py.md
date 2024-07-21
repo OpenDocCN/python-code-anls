@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\adagrad.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型声明
 from typing import List, Optional

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\types.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 引入内建模块

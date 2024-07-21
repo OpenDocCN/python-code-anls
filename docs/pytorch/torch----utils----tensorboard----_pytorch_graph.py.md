@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\_pytorch_graph.py`
 
-```
+```py
 # 使用 'mypy: allow-untyped-defs' 指令允许未类型化的定义
 from collections import OrderedDict  # 导入有序字典模块
 import contextlib  # 导入上下文管理模块

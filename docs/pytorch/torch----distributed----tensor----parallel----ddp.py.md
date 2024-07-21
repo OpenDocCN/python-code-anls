@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\ddp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型声明
 from typing import Any, List, Tuple

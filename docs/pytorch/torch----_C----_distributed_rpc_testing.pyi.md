@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_distributed_rpc_testing.pyi`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 导入分布式通信库中的Store类

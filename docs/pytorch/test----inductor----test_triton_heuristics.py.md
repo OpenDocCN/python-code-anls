@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_triton_heuristics.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入必要的模块和库

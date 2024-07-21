@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_quantized_functional.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # Torch库的引入，包括量化相关的功能模块和常规的神经网络功能模块

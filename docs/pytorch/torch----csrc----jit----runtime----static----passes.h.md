@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\passes.h`
 
-```
+```py
 // 包含 Torch 的 JIT IR 相关头文件
 #include <torch/csrc/jit/ir/ir.h>
 

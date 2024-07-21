@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\dynamic_ir.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/symbol.h>  // 包含 ATen 核心库中的符号定义
@@ -33,7 +33,7 @@ namespace lazy {
  * 考虑以下示例：
  * ```
  * numel = x.shape()[0] * x.shape()[1]
- * ```
+ * ```py
  * 这里，`x.shape()[i]` 将是 SizeNode（DimensionNode 的子类），
  * 两个 SizeNode 的乘积将由 SizeMul（也是 DimensionNode 的子类）表示。
  * 通过这种方式，我们可以防止 `numel` 被表示为 Python int，从而烧入图中。

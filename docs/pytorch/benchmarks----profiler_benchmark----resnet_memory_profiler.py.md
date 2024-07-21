@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\profiler_benchmark\resnet_memory_profiler.py`
 
-```
+```py
 # 导入torchvision中的预定义模型，包括ResNet等
 import torchvision.models as models
 

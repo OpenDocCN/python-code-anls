@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\embedding.h`
 
-```
+```py
 // 预处理指令，表示本文件只被编译一次
 #pragma once
 
@@ -30,7 +30,7 @@ namespace nn {
 /// 示例:
 /// ```
 /// Embedding model(EmbeddingOptions(10, 2).padding_idx(3).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true));
-/// ```
+/// ```py
 class TORCH_API EmbeddingImpl : public torch::nn::Cloneable<EmbeddingImpl> {
  public:
   // 构造函数，根据给定的参数创建嵌入层
@@ -105,7 +105,7 @@ class Embedding : public torch::nn::ModuleHolder<EmbeddingImpl> {
 /// ```
 /// EmbeddingBag model(EmbeddingBagOptions(10,
 /// 2).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true).mode(torch::kSum).padding_idx(1));
-/// ```
+/// ```py
 class TORCH_API EmbeddingBagImpl
     : public torch::nn::Cloneable<EmbeddingBagImpl> {
  public:

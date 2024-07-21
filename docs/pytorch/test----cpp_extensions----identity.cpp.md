@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\identity.cpp`
 
-```
+```py
 // 引入 PyTorch C++ 扩展的头文件
 #include <torch/extension.h>
 // 引入 PyTorch 核心功能的头文件

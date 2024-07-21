@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\monitor\events.cpp`
 
-```
+```py
 // 引入 Torch 监视器事件头文件
 
 #include <torch/csrc/monitor/events.h>

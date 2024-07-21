@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_apply.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 代码所有者，指定分布式相关责任人员
 
 import sys  # 导入系统模块，用于处理系统相关功能

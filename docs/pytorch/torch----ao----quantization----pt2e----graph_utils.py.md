@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\graph_utils.py`
 
-```
+```py
 # 设置静态类型检查允许未标注的函数定义
 # Allow untyped definitions for mypy
 # ------------------------------------------------------------

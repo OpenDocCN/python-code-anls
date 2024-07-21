@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LegacyBatchingRegistrations.cpp`
 
-```
+```py
 // PyTorch C++ code for defining batching rules for tensor operations.
 
 #include <torch/library.h>

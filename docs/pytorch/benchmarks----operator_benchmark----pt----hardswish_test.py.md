@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\hardswish_test.py`
 
-```
+```py
 # 导入operator_benchmark模块，用于性能基准测试
 import operator_benchmark as op_bench
 # 导入PyTorch模块

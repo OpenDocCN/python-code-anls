@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_minifier.py`
 
-```
+```py
 # Owner(s): ["module: functorch"]
 
 import torch  # 导入PyTorch库

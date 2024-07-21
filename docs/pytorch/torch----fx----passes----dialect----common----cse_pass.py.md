@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\dialect\common\cse_pass.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型注解
 from typing import Dict, Tuple, Any

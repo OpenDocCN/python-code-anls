@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\transformerlayer.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>  // 包含 Torch 库中克隆相关的头文件
@@ -35,7 +35,7 @@ namespace nn {
 /// ```
 /// TransformerEncoderLayer encoderLayer(TransformerEncoderLayerOptions(512,
 /// 8).dropout(0.1));
-/// ```
+/// ```py
 class TORCH_API TransformerEncoderLayerImpl
     : public Cloneable<TransformerEncoderLayerImpl> {
  public:
@@ -123,7 +123,7 @@ TORCH_MODULE(TransformerEncoderLayer);
 /// ```
 /// TransformerDecoderLayer model(TransformerDecoderLayerOptions(512,
 /// 8).dropout(0.2));
-/// ```
+/// ```py
 /// This example demonstrates how to instantiate a Transformer decoder layer
 /// with specified options (e.g., hidden size of 512, number of attention heads
 /// as 8, and dropout rate of 0.2).

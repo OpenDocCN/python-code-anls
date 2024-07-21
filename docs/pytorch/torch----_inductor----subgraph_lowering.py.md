@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\subgraph_lowering.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 用于高阶操作符使用的降低子图的实用程序

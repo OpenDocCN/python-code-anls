@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_throughput_benchmark.py`
 
-```
+```py
 ```python`
 # 导入必要的库和模块
 import torch

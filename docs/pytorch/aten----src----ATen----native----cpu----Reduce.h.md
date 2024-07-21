@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\Reduce.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/native/cpu/Loops.h>

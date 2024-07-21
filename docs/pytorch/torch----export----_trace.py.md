@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\_trace.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import dataclasses  # 用于数据类的装饰器

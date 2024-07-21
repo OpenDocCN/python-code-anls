@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\__init__.py`
 
-```
+```py
 # 初始化一个变量result，赋值为字符串"package_a"
 result = "package_a"
 

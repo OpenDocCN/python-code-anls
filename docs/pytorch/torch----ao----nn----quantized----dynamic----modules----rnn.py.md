@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\dynamic\modules\rnn.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import numbers  # 导入 numbers 模块，用于数值类型的处理

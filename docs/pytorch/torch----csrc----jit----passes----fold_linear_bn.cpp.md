@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fold_linear_bn.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/fold_linear_bn.h>
 
 #include <ATen/TensorOperators.h>

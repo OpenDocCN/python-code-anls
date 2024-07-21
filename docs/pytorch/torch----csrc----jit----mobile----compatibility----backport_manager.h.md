@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\compatibility\backport_manager.h`
 
-```
+```py
 #pragma once
 
 #include <functional>  // 包含函数对象的头文件

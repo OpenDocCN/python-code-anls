@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\node.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入必要的类型

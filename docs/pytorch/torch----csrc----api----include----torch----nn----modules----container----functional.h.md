@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\container\functional.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>

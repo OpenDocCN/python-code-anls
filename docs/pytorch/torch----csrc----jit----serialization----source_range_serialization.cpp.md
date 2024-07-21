@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\source_range_serialization.cpp`
 
-```
+```py
 // 包含 Torch 序列化中的源范围相关头文件
 #include <torch/csrc/jit/serialization/source_range_serialization.h>
 #include <torch/csrc/jit/serialization/source_range_serialization_impl.h>

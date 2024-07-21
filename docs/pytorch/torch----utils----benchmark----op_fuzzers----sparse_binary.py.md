@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\op_fuzzers\sparse_binary.py`
 
-```
+```py
 # 添加类型检查忽略声明，允许未类型化的定义
 mypy: allow-untyped-defs
 

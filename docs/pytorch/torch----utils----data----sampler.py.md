@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\sampler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的类型定义模块
 from typing import (

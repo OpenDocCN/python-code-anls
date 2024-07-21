@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\nnpack\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入上下文管理器模块
 from contextlib import contextmanager

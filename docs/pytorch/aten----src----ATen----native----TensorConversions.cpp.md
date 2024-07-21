@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorConversions.cpp`
 
-```
+```py
 // 定义是否仅为 Torch 断言方法运算符开启宏
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

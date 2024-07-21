@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\PadNd.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/PadNd.h>
 #include <ATen/core/Tensor.h>

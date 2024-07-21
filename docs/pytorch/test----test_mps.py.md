@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_mps.py`
 
-```
+```py
 # Owner(s): ["module: mps"]
 
 import io  # 导入 io 模块，用于处理输入输出流

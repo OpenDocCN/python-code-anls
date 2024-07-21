@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\unsupported_tensor_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 textwrap 模块中的 dedent 函数，用于去除文本的缩进
 from textwrap import dedent

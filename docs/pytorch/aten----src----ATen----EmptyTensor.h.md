@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\EmptyTensor.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/TensorBase.h>
 

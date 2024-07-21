@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\api.h`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_VULKAN_API 宏，则包含 Vulkan API 相关的头文件
 #ifdef USE_VULKAN_API

@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_debug_util.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入标准库和模块

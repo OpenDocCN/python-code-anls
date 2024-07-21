@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\edit_distance.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 指令，确保此头文件只被编译一次，避免重复包含

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\CatKernel.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 指令，确保此头文件在编译过程中只被包含一次，以防止多重包含导致的重定义错误

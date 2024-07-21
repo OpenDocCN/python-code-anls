@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8avgpool\mp8x9p8q-sse2.c`
 
-```
+```py
 /*
  * Copyright (c) Facebook, Inc. and its affiliates.
  * All rights reserved.

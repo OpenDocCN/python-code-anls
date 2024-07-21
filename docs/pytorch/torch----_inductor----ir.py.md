@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\ir.py`
 
-```
+```py
 log = logging.getLogger(__name__)
 # 获取当前模块的日志记录器对象
 

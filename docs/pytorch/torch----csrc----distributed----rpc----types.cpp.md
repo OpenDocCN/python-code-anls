@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\types.cpp`
 
-```
+```py
 // 引用 Torch 分布式 RPC 框架中的类型定义头文件
 #include <torch/csrc/distributed/rpc/types.h>
 

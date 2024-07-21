@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_functorch.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和类
 from enum import Enum

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\action.h`
 
-```
+```py
 #pragma once
 #include <stdint.h> // 包含标准整数类型定义
 #include <ostream> // 包含输出流操作相关的头文件

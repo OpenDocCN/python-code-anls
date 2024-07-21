@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\batch_norm_kernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含批归一化的相关头文件
 #include <ATen/native/batch_norm.h>

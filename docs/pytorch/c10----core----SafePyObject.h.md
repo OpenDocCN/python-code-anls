@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SafePyObject.h`
 
-```
+```py
 #pragma once
 // 只包含一次该头文件，确保头文件内容不会被多次包含
 

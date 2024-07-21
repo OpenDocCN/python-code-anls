@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\requantization-tester.h`
 
-```
+```py
 /*
  * 版权所有（c）Facebook公司及其附属公司。
  * 保留所有权利。

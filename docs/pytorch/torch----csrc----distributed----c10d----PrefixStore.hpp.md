@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\PrefixStore.hpp`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/c10d/Store.hpp>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_dropout.h`
 
-```
+```py
 #pragma once
 
 

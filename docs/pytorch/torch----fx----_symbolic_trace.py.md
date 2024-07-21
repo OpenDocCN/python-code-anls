@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\_symbolic_trace.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入内置模块和第三方模块
 import builtins

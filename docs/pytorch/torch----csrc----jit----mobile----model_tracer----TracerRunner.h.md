@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\TracerRunner.h`
 
-```
+```py
 #pragma once
 // 只要引用一次，这个头文件就会被包含在程序中
 

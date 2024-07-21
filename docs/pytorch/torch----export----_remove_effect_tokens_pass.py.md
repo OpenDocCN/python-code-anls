@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\_remove_effect_tokens_pass.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类
 import operator

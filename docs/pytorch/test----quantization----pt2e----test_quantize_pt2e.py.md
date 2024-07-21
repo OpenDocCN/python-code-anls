@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_quantize_pt2e.py`
 
-```
+```py
 # 引入所需模块和类
 from typing import List, Tuple  # 引入类型提示 List 和 Tuple
 

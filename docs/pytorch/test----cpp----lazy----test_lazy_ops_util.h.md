@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_lazy_ops_util.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保此头文件只被包含一次
 

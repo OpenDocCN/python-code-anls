@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_sparse_functions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于指定仅为方法运算符进行断言
 

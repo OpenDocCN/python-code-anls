@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorAdvancedIndexing.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次引用
 

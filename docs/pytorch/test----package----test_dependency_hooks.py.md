@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_dependency_hooks.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 from io import BytesIO  # 导入 BytesIO 类，用于创建内存中的二进制数据流

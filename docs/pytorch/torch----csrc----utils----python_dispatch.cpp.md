@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_dispatch.cpp`
 
-```
+```py
 // 引入 Torch 库中的函数和头文件
 #include <torch/csrc/jit/frontend/function_schema_parser.h>
 #include <torch/csrc/utils/python_dispatch.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\pattern_conversion\pattern_encapsulation.cpp`
 
-```
+```py
 // 引入 Torch 库中相关头文件，用于 JIT 编译器的死代码消除和 ONNX 操作支持
 #include <torch/csrc/jit/passes/dead_code_elimination.h>
 #include <torch/csrc/jit/passes/onnx.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\test_minifier_common.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需的模块和库
 import dataclasses  # 用于数据类的装饰器

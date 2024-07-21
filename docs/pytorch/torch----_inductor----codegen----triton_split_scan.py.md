@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\triton_split_scan.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import functools  # 导入 functools 模块，用于高阶函数的支持
 

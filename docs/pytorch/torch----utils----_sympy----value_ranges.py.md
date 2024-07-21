@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\value_ranges.py`
 
-```
+```py
 # 设置类型提示允许未定义的函数
 # 从未来导入注释
 from __future__ import annotations

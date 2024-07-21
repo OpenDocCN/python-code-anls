@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lite_interpreter_runtime\test_lite_interpreter_runtime.cpp`
 
-```
+```py
 // 包含 ATen 库中的函数定义头文件
 #include <ATen/Functions.h>
 // 包含 ATen 库中张量操作相关的头文件

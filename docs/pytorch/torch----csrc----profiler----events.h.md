@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\events.h`
 
-```
+```py
 #pragma once
 
 #include <array>  // 引入数组容器的头文件

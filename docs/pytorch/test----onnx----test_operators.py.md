@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_operators.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 """

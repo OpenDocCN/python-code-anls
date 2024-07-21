@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\applications\ci.py`
 
-```
+```py
 """Collect instruction counts for continuous integration."""
 # 导入必要的模块和库
 import argparse  # 导入解析命令行参数的模块

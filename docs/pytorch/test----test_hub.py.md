@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_hub.py`
 
-```
+```py
 # Owner(s): ["module: hub"]
 
 # 导入所需的库和模块

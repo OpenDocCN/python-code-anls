@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SoftMaxKernel.cpp`
 
-```
+```py
 // 包含必要的头文件和宏定义
 #include <memory>
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS

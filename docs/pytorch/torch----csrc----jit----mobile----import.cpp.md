@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\import.cpp`
 
-```
+```py
 // 包含 Torch 移动端 JIT 的相关头文件
 #include <torch/csrc/jit/mobile/import.h>
 #include <torch/csrc/jit/mobile/parse_bytecode.h>

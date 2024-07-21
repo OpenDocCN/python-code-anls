@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\debug\__init__.py`
 
-```
+```py
 # 引入类型提示允许未定义的函数或方法
 # 从torch.distributed._tensor.api模块导入DTensor类
 from torch.distributed._tensor.api import DTensor

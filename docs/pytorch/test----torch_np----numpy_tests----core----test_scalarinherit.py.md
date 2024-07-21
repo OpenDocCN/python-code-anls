@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_scalarinherit.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """ Test printing of scalar types.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\DataLoader.cpp`
 
-```
+```py
 // Torch 数据加载模块的头文件，用于实现数据加载器的相关功能
 #include <torch/csrc/DataLoader.h>
 

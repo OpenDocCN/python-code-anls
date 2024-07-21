@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\dead_code_elimination.cpp`
 
-```
+```py
     // 如果节点已经标记过，返回 false，表示未标记新内容
     if (marked_.count(node)) {
       return false;

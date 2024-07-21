@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\multipledispatch\core.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入检查模块和系统模块
 import inspect

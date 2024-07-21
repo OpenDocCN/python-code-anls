@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\core\macros.h`
 
-```
+```py
 #pragma once
 // 这是一个预处理指令，确保当前头文件在编译时只被包含一次
 

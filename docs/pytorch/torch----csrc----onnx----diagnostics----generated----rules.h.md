@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\onnx\diagnostics\generated\rules.h`
 
-```
+```py
 #pragma once
 
 /**

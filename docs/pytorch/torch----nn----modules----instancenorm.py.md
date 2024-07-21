@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\instancenorm.py`
 
-```
+```py
 # 引入警告模块，用于管理警告信息的显示
 import warnings
 

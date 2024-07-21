@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Event.h`
 
-```
+```py
 #ifndef THCP_EVENT_INC
 #define THCP_EVENT_INC
 

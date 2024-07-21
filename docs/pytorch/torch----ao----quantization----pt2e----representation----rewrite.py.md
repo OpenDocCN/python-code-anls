@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\representation\rewrite.py`
 
-```
+```py
 # 设置 mypy: allow-untyped-defs，允许在类型检查时不对函数进行类型声明
 import torch  # 导入 PyTorch 模块
 from torch.fx import GraphModule  # 从 torch.fx 模块导入 GraphModule 类

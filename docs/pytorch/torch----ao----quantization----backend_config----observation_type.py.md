@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\observation_type.py`
 
-```
+```py
 # 导入所需的模块：os 模块用于与操作系统交互，shutil 模块用于高级文件操作，tempfile 模块用于创建临时文件和目录
 import os
 import shutil

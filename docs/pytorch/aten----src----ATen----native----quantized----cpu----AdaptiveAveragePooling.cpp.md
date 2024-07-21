@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\AdaptiveAveragePooling.cpp`
 
-```
+```py
 // 定义编译时仅用于 Torch 断言的宏
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

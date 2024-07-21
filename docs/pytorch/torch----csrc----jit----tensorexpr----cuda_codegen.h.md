@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\cuda_codegen.h`
 
-```
+```py
 #pragma once
 
 #include <unordered_map>  // 引入无序映射

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\MaxUnpooling.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>
 #include <ATen/native/cpu/MaxUnpoolKernel.h>

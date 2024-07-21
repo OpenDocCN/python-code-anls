@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\permutation_util.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ArrayRef.h>

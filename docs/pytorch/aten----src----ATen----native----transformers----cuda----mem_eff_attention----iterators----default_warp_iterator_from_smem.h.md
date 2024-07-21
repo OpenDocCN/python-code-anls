@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\iterators\default_warp_iterator_from_smem.h`
 
-```
+```py
 /***************************************************************************************************
  * Copyright (c) 2017 - 2023 NVIDIA CORPORATION & AFFILIATES. All rights
  *reserved. SPDX-License-Identifier: BSD-3-Clause

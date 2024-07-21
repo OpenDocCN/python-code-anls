@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_random_ops.py`
 
-```
+```py
 # 导入所需模块和函数
 import itertools
 

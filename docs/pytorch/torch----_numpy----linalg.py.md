@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\linalg.py`
 
-```
+```py
 # 忽略 mypy 的错误
 # 从 __future__ 模块导入 annotations，用于支持类型注解中的类型自引用
 import functools  # 导入 functools 模块，用于创建高阶函数和函数工具

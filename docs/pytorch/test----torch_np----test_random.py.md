@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_random.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """Light smoke test switching between numpy to pytorch random streams.

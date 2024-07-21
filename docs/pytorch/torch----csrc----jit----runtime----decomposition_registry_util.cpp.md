@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\decomposition_registry_util.cpp`
 
-```
+```py
 /**
  * @generated
  * This is an auto-generated file. Please do not modify it by hand.

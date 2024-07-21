@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\utils\matcher_with_name_node_map_utils.py`
 
-```
+```py
 from typing import Dict, List, Tuple  # 导入必要的类型提示
 
 from torch.fx import Graph, GraphModule, Node  # 导入 torch.fx 相关模块
@@ -119,13 +119,13 @@ class SubgraphMatcherWithNameNodeMap(SubgraphMatcher):
         def pattern(...):
             ...
             return relu
-        ```
+        ```py
         我们应该这样做:
         ```
         def pattern(...):
             ...
             return relu, {"conv": conv, "relu": relu}
-        ``` 替代
+        ```py 替代
         """
         # 调用父类的 match 方法，获取内部匹配结果列表
         internal_matches = super().match(graph)

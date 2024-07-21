@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\map\combining.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型引用
 from typing import Sized, Tuple, TypeVar

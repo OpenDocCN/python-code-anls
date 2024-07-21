@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\_embedding.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入数学库和第三方库
 import math

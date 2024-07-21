@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_numbers.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Device.h>  // 引入 c10::Device 相关头文件

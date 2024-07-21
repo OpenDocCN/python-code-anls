@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cpp_extensions_stream_and_event.py`
 
-```
+```py
 # Owner(s): ["module: mtia"]
 
 # 导入必要的库和模块

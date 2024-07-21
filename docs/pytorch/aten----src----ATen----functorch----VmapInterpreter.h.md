@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\VmapInterpreter.h`
 
-```
+```py
 #pragma once
 // 包含头文件 Interpreter.h，位于 ATen/functorch 目录下
 #include <ATen/functorch/Interpreter.h>

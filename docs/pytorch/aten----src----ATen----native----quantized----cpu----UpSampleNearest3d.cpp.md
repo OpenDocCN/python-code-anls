@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\UpSampleNearest3d.cpp`
 
-```
+```py
 // 定义预处理宏，用于指定只包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库中的核心 Tensor 类和 Dispatch 头文件

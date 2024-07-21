@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\op_registration.cpp`
 
-```
+```py
 // 包含C10和Torch的头文件，用于宏和操作注册
 #include <c10/macros/Macros.h>
 #include <ATen/core/dispatch/Dispatcher.h>

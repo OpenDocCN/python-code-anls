@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\decorators.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # ruff: noqa: TCH004
 # 从 dataclasses 模块导入 dataclass 装饰器

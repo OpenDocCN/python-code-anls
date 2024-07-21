@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mkl\SparseBlas.cpp`
 
-```
+```py
 /*
   Provides the implementations of MKL Sparse BLAS function templates.
 */

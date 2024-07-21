@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\_functions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库
 import torch

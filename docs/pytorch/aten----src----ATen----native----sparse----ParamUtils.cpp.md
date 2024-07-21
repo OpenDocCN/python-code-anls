@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\ParamUtils.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/sparse/ParamUtils.h>
 #include <ATen/core/Tensor.h>

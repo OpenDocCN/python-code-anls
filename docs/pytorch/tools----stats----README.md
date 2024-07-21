@@ -10,7 +10,7 @@ We track various stats about each CI job.
 3. `upload-test-stats` downloads the raw stats from the intermediate data store
    and uploads them as JSON to Rockset, our metrics backend.
 
-```mermaid
+```py
 graph LR
     J1[Job with AWS creds<br>e.g. linux, win] --raw stats--> S3[(AWS S3)]
     J2[Job w/o AWS creds<br>e.g. mac] --raw stats--> GHA[(GH artifacts)]

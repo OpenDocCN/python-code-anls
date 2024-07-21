@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_dropout.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 # 导入必要的模块和库：itertools 用于迭代操作，random 用于生成随机数，unittest 用于单元测试
 import itertools

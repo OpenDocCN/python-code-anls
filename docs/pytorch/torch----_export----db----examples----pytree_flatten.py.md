@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\pytree_flatten.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 

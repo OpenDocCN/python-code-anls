@@ -1,6 +1,6 @@
 # `.\pytorch\docs\source\scripts\build_quantization_configs.py`
 
-```
+```py
 """
 This script will generate default values of quantization configs.
 These are for use in the documentation.

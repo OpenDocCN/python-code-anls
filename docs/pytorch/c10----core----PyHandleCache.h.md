@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\PyHandleCache.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/impl/PyInterpreter.h>

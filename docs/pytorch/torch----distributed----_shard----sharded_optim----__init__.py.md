@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_optim\__init__.py`
 
-```
+```py
 # 从 typing 模块导入必要的类型提示
 from typing import Iterator, Tuple, Union
 

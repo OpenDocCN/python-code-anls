@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\testing\faulty_tensorpipe_agent.h`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_TENSORPIPE 宏，则包含以下头文件
 #ifdef USE_TENSORPIPE

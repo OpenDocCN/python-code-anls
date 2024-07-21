@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_flatbuffer.cpp`
 
-```
+```py
 #include <test/cpp/jit/test_utils.h>  // 引入测试工具头文件
 
 #include <gtest/gtest.h>  // 引入 Google 测试框架头文件

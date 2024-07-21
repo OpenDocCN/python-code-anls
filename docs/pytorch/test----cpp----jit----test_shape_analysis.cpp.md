@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_shape_analysis.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

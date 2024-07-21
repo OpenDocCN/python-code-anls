@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rref_backward_req.cpp`
 
-```
+```py
 // 包含必要的头文件：定义了 RRefBackwardReq 类及其依赖的其他类和函数
 #include <torch/csrc/distributed/autograd/rpc_messages/rref_backward_req.h>
 #include <torch/csrc/distributed/rpc/rpc_agent.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\linear.h`
 
-```
+```py
 #pragma once
 
 #include <torch/types.h>

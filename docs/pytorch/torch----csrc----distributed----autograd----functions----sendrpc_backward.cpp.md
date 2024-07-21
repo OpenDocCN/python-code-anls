@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\functions\sendrpc_backward.cpp`
 
-```
+```py
 // 引入 sendrpc_backward.h 头文件，包含了 SendRpcBackward 类的声明
 #include <torch/csrc/distributed/autograd/functions/sendrpc_backward.h>
 

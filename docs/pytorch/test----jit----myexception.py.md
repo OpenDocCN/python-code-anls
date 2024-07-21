@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\myexception.py`
 
-```
+```py
 """
 Define exceptions used in test_exception.py. We define them in a
 separate file on purpose to make sure the fully qualified exception class name

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantizable\modules\__init__.py`
 
-```
+```py
 # 导入本地的 activation 模块中的 MultiheadAttention 类
 from .activation import MultiheadAttention
 # 导入本地的 rnn 模块中的 LSTM 类

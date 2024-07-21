@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\gumbel.py`
 
-```
+```py
 # 引入数学库和 torch 库
 import math
 import torch

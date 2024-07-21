@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\transformer\sdp.py`
 
-```
+```py
 # 导入需要的库和模块
 import argparse  # 解析命令行参数的模块
 import itertools  # 提供用于创建迭代器的函数的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\overrides_benchmark\common.py`
 
-```
+```py
 ```python`
 # 导入 PyTorch 库
 import torch

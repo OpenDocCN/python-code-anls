@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_ir_utils.py`
 
-```
+```py
 # 声明一个类型提示，允许未类型化的函数定义在mypy检查中
 # 导入必要的模块
 from typing import Union

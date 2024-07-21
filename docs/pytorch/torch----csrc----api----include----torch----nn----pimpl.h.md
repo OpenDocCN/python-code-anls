@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\pimpl.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 引入 Torch 库中的参数处理头文件

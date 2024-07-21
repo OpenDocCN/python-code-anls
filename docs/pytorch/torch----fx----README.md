@@ -41,7 +41,7 @@ The following sections will walk us through the components that transform from o
 
 FX’s front-end makes use of the dynamic nature of Python to intercept call-sites for various entities (PyTorch operators, Module invocations, and Tensor method invocations). The simplest way to get an FX graph is by using `torch.fx.symbolic_trace`.  We can see how this works by way of an example:
 
-```python
+```py
 import torch
 
 class MyModule(torch.nn.Module):
@@ -90,7 +90,7 @@ Proxy objects are Node wrappers used by the Tracer to record operations seen dur
 
 Consider the following example:
 
-```python
+```py
   class M(torch.nn.Module):
       def forward(self, x):
           return torch.relu(x)
@@ -130,7 +130,7 @@ An invocation of `symbolic_traced` above requires a valid `forward()` method to 
 
 After tracing, the code given under [Technical Details](#technical-details) is represented as follows:
 
-```python
+```py
 def forward(self, x):
     param = self.param
     add_1 = x + param;  x = param = None

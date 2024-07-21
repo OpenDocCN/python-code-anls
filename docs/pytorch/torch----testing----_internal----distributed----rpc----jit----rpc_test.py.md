@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\jit\rpc_test.py`
 
-```
+```py
 # 忽略 mypy 的类型检查错误
 # 导入必要的时间、IO、类型相关的库
 import time

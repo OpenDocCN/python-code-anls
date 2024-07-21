@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\api\__init__.py`
 
-```
+```py
 # 定义一个名为 merge_sort 的函数，用于执行归并排序
 def merge_sort(arr):
     # 如果数组的长度小于等于1，则直接返回，不需要排序

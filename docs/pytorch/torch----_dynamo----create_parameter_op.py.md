@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\create_parameter_op.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入线程和上下文管理器模块
 import threading

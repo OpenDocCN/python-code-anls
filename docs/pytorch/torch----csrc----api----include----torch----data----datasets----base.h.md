@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\base.h`
 
-```
+```py
 #pragma once
 /// 定义了一个模板，用于表示数据流数据集。它的模板参数包括：
 /// - Self: 表示自身类型，通常用于引用类本身

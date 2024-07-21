@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\utils.py`
 
-```
+```py
 # flake8: noqa: F401
 """
 Utils shared by different modes of quantization (eager/graph)

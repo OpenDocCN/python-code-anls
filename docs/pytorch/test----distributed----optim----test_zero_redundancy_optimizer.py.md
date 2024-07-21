@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\optim\test_zero_redundancy_optimizer.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.

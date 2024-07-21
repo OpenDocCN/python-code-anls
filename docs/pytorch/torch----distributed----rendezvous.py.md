@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rendezvous.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 try:
     # 尝试导入必要的模块和函数

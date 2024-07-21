@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\python_autograd.h`
 
-```
+```py
 #pragma once
 
 

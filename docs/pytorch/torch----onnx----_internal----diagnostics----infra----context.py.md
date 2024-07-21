@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\context.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """A diagnostic context based on SARIF."""
 

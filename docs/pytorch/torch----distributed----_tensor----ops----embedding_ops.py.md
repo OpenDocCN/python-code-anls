@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\embedding_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # implement matrix related ops for distributed tensor

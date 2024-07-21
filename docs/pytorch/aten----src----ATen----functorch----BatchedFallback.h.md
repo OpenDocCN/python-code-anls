@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchedFallback.h`
 
-```
+```py
 // 版权声明和许可信息
 // Copyright (c) Facebook, Inc. and its affiliates.
 // All rights reserved.

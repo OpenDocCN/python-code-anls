@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\ruff_linter.py`
 
-```
+```py
 """Adapter for https://github.com/charliermarsh/ruff."""
 
 # 引入未来的注解支持

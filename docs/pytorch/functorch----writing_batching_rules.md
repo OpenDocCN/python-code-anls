@@ -17,7 +17,7 @@ That is how `vmap` works. For every single operator, we define how to transform 
 
 ### Basic Batching Rule (unsqueeze)
 Let's take a look at our batching rule API. For some reference, the function signature for unsqueeze is `unsqueeze(Tensor(a) self, int dim) -> Tensor(a)`. This can be found [here](https://github.com/pytorch/pytorch/blob/master/aten/src/ATen/functorch/BatchRulesViews.cpp).
-```
+```py
 std::tuple<Tensor,optional<int64_t>> unsqueeze_batch_rule(
     const Tensor& self,
     optional<int64_t> self_bdim,
@@ -29,7 +29,7 @@ std::tuple<Tensor,optional<int64_t>> unsqueeze_batch_rule(
 }
 ```
 Now, let's look at each part individually.
-```
+```py
 std::tuple<Tensor,optional<int64_t>> unsqueeze_batch_rule(
     const Tensor& self,
     optional<int64_t> self_bdim,
@@ -37,19 +37,19 @@ std::tuple<Tensor,optional<int64_t>> unsqueeze_batch_rule(
 ```
 For the most part, the function signature for a batching rule is identical to the function signature for the operator. The only difference is that for each `Tensor` (both in the input and the output), we have an additional `optional<int64_t>`. This is the batch dimension. In the previous explanation, we implicitly assumed that the batch dimension was always at 0, but we allow for batch dimensions to be on arbitrary dimensions. The `optional` part reflects that not all tensors are batched - if a function takes multiple tensors then it's possible for only one of them to be a `BatchedTensor`. Note, however, that we guarantee that at least one tensor will always have a batch dimension.
 
-```
+```py
   auto self_ = moveBatchDimToFront(self, self_bdim);
   auto rank = rankWithoutBatchDim(self, self_bdim);
   dim = maybe_wrap_dim(dim, rank + 1) + 1;
 ```
 For `unsqueeze(x, dim)`, the strategy for the batching rule is pretty simple. We first move the batching dimension to the front. Then, instead of doing `unsqueeze(x, dim)`, we do `unsqueeze(x, dim + 1)` (since there's now an extra bdim).
 
-```
+```py
 return std::make_tuple(self_.unsqueeze(dim), 0);
 ```
 Now, we return a tuple of the tensor along with its batch dimension (which is now 0 since we moved it to the front).
 
-```
+```py
 VMAP_SUPPORT(unsqueeze, unsqueeze_batch_rule);
 ```
 Finally, we add support for it by using the `VMAP_SUPPORT` macro.
@@ -70,7 +70,7 @@ There are 3 primary boxed fallbacks that we've used (I'll refer to the macros he
 ### Sidestepping batching rules by decomposing operators
 Sometimes, it's difficult to implement a batching rule by transforming it into another operator. For example, `trace`. In that case, instead of transforming the operator, we can simply decompose it.
 
-```
+```py
 Tensor trace_decomp(const Tensor& self) {
   return at::sum(at::diagonal(self));
 }

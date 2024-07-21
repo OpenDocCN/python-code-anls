@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_expr.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <test/cpp/tensorexpr/test_base.h>

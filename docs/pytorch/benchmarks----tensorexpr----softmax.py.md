@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\softmax.py`
 
-```
+```py
 import scipy.special  # 导入科学计算库中的特殊函数模块
 
 from . import benchmark  # 导入当前目录下的 benchmark 模块

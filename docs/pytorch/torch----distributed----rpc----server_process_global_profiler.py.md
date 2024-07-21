@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\server_process_global_profiler.py`
 
-```
+```py
 #!/usr/bin/python3
 # mypy: allow-untyped-defs
 

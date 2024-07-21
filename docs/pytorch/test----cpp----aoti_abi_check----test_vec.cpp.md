@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_abi_check\test_vec.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <ATen/cpu/vec/vec.h>  // 包含 ATen 的 CPU 向量化功能的头文件

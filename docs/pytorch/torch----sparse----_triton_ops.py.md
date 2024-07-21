@@ -1,6 +1,6 @@
 # `.\pytorch\torch\sparse\_triton_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import math  # 导入数学模块

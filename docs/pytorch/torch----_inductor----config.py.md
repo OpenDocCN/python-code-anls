@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\config.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入os模块，并告知 linter 忽略 C101 规则
 import os  # noqa: C101

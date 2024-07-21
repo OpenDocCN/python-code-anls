@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\infra\pass_base.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import abc  # 导入抽象基类模块

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\onnx_test_common.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 from __future__ import annotations
@@ -608,7 +608,7 @@ def skip_slow(
     )
 
 
-```  
+```py  
 def add_decorate_info(
     all_opinfos: Sequence[opinfo_core.OpInfo],
     test_class_name: str,

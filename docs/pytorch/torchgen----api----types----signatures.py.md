@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\types\signatures.py`
 
-```
+```py
     """
     A CppSignature represents a single overload in the C++ API.  For
     any given function schema, there may be multiple CppSignatures

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\check_strict_fusion.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/check_strict_fusion.h>  // 导入严格融合检查的头文件
 
 #include <c10/util/Exception.h>  // 导入C10库的异常处理

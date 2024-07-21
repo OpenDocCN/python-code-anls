@@ -1,6 +1,6 @@
 # `.\pytorch\torch\xpu\_utils.py`
 
-```
+```py
 # 引入了用于类型提示的 Any 类型
 from typing import Any
 

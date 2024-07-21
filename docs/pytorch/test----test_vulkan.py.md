@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_vulkan.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入单元测试模块和相关的PyTorch模块

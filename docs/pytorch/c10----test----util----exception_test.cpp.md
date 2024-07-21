@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\exception_test.cpp`
 
-```
+```py
 #include <c10/util/Exception.h>
 #include <gtest/gtest.h>
 #include <stdexcept>

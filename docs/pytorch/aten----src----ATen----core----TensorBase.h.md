@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\TensorBase.h`
 
-```
+```py
 ```cpp`
 #pragma once
 
@@ -642,7 +642,7 @@ NamedTensorMeta* get_named_tensor_meta() {
 
 /// 返回与此 `Tensor` 对应的 `TensorOptions`。定义在 TensorOptions.h 中。
 TensorOptions options() const {
-    ```cpp`
+    ```py`
       // 返回一个 TensorOptions 对象，设置其数据类型、设备和布局，然后返回该对象
       return TensorOptions().dtype(dtype())
                             .device(device())

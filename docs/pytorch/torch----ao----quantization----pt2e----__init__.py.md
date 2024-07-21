@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\__init__.py`
 
-```
+```py
 # 导入所需模块：os 模块用于操作文件系统，re 模块用于正则表达式操作
 import os
 import re

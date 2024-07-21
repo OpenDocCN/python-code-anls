@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\algorithms\test_join.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入需要的模块

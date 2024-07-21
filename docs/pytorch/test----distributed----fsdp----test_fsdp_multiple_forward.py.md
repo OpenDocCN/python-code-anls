@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_multiple_forward.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import sys  # 导入 sys 模块，用于处理系统相关的功能

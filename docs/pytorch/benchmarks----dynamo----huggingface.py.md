@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\huggingface.py`
 
-```
+```py
 #!/usr/bin/env python3
 import importlib  # 导入模块，用于动态导入其他模块
 import logging  # 导入日志模块，用于记录程序运行日志

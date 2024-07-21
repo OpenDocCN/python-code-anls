@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_cmake.py`
 
-```
+```py
     # 引入未来的注释，允许在当前版本的 Python 中使用来自未来版本的特性
     from __future__ import annotations
 

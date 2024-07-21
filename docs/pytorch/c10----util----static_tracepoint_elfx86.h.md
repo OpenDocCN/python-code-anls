@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\static_tracepoint_elfx86.h`
 
-```
+```py
 #pragma once
 // 定义默认的操作数探测约束
 #ifndef TORCH_SDT_ARG_CONSTRAINT

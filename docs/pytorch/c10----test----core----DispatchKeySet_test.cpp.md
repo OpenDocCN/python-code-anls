@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\DispatchKeySet_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 的头文件
 
 #include <cstddef>  // 包含标准库的头文件

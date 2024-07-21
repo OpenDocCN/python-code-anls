@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_arg_parser.cpp`
 
-```
+```py
 // 包含 Torch C++ 库中的头文件，用于处理 Python 函数参数解析
 #include <torch/csrc/utils/python_arg_parser.h>
 

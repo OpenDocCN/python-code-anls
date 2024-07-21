@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\metadata.py`
 
-```
+```py
 # 使用 mypy: allow-untyped-defs 以允许未类型化的定义
 from dataclasses import dataclass, field  # 导入 dataclass 和 field 装饰器
 from enum import Enum  # 导入枚举类型 Enum

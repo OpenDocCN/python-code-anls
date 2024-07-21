@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ThreadLocalDebugInfo.cpp`
 
-```
+```py
 // 包含 C10 库中的异常处理、线程局部存储和调试信息相关的头文件
 #include <c10/util/Exception.h>
 #include <c10/util/ThreadLocal.h>

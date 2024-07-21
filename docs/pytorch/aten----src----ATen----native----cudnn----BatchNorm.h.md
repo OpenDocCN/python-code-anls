@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\BatchNorm.h`
 
-```
+```py
 # 定义了一个命名空间 `at::native`，用于组织与本地（native）实现相关的功能
 namespace at::native {
 

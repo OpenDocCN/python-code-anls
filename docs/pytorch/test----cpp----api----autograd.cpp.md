@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\autograd.cpp`
 
-```
+```py
 // 引入 ATen 核心库的测试辅助工具头文件
 #include <ATen/core/boxing/impl/test_helpers.h>
 // 引入 Google 测试框架头文件

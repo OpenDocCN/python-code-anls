@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\ObservedOperators.cpp`
 
-```
+```py
 /* static */
 // 返回未被观察到的运算符列表的引用
 std::unordered_set<std::string>& ObservedOperators::getUnobservedOperatorList() {

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\IndexKernel.cpp`
 
-```
+```py
 // 定义宏以禁用Torch的运算符断言
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含ATen库中的索引内核头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\overrides_benchmark\pyspybench.py`
 
-```
+```py
 # 导入 argparse 模块，用于解析命令行参数
 import argparse
 

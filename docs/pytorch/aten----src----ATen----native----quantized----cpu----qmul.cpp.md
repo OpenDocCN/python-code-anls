@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qmul.cpp`
 
-```
+```py
 // 定义宏，用于声明只使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入必要的头文件

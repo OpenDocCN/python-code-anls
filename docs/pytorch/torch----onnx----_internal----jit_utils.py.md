@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\jit_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 定义了一个模块，用于处理 torch.Graph 对象和 torchscript 的操作
 """Utilities for manipulating the torch.Graph object and the torchscript."""

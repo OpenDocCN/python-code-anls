@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\IndexKernels.h`
 
-```
+```py
 #pragma once
 
 namespace at::mps {

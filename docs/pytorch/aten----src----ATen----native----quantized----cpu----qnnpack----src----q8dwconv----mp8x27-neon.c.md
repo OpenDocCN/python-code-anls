@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\mp8x27-neon.c`
 
-```
+```py
 /**
  * 核心函数，用于执行带有27个权重的深度卷积（例如3x3x3大小的卷积核）。
  * 总体策略是：

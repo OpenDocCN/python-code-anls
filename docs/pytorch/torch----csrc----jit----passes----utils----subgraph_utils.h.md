@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\subgraph_utils.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，确保头文件只被编译一次，防止重复包含

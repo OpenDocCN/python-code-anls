@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\cpp_shim.h`
 
-```
+```py
 #pragma once
 
 # 如果编译器支持，确保头文件只被包含一次，避免重复定义错误

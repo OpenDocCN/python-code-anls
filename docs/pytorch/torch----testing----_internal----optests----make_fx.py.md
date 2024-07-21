@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\optests\make_fx.py`
 
-```
+```py
 # 忽略 mypy 类型检查错误
 
 # 导入 torch 库

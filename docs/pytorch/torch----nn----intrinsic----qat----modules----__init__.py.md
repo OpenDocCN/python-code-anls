@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\qat\modules\__init__.py`
 
-```
+```py
 # 从当前目录下的 linear_relu 模块中导入 LinearReLU 类
 from .linear_relu import LinearReLU
 # 从当前目录下的 linear_fused 模块中导入 LinearBn1d 类

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\extra_state.cpp`
 
-```
+```py
 #include <torch/csrc/dynamo/extra_state.h>
 
 #include <torch/csrc/dynamo/cache_entry.h>

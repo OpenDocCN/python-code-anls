@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_namedtensor.py`
 
-```
+```py
 # Owner(s): ["module: named tensor"]
 
 # 引入单元测试模块

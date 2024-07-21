@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\multipledispatch\conflict.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和函数
 from .utils import _toposort, groupby

@@ -81,7 +81,7 @@ construct Tensors in a second pass. As a concrete reference, the following
 will create Tensors `x` and `y`, where `x` is a 2D Tensor and `y` is
 broadcastable to the shape of `x`:
 
-```
+```py
 fuzzer = Fuzzer(
   parameters=[
     FuzzedParameter("k0", 16, 16 * 1024, "loguniform"),

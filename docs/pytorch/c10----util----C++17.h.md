@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\C++17.h`
 
-```
+```py
 #pragma once
 #ifndef C10_UTIL_CPP17_H_
 #define C10_UTIL_CPP17_H_

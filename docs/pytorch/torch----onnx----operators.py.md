@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\operators.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""This file provides a location for operators that help exporting models via onnx.
 

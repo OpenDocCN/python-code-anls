@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_lite_trainer.cpp`
 
-```
+```py
 // 包含用于测试的头文件
 #include <test/cpp/jit/test_utils.h>
 

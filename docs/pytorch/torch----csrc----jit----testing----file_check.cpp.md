@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\testing\file_check.cpp`
 
-```
+```py
 //==-- llvm/Support/FileCheck.h ---------------------------*- C++ -*-==//
 //
 //                     The LLVM Compiler Infrastructure

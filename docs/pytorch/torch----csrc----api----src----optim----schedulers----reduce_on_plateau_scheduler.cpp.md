@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\schedulers\reduce_on_plateau_scheduler.cpp`
 
-```
+```py
 // 引入 Torch 库中的优化器模块和调度器模块的头文件
 #include <torch/optim/schedulers/reduce_on_plateau_scheduler.h>
 

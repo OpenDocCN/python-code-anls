@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\functionalization.py`
 
-```
+```py
 # 从未来模块导入注解，用于支持类型提示中的 `annotations`
 from __future__ import annotations
 

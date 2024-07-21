@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\metrics.py`
 
-```
+```py
 # 使用 mypy: allow-untyped-defs 来允许未类型化的定义
 import torch._C._lazy
 

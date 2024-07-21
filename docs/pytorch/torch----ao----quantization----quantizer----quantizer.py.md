@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\quantizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs  # 允许未类型化的定义，用于类型检查时的设置
 from abc import ABC, abstractmethod  # 导入抽象基类和抽象方法装饰器
 from dataclasses import dataclass, field  # 导入用于数据类装饰器和字段装饰器

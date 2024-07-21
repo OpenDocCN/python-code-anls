@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\fake_class_registry.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块，用于记录程序运行信息
 import logging

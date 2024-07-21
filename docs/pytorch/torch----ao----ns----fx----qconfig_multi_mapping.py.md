@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\qconfig_multi_mapping.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 

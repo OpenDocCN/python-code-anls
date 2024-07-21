@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\fusion_passes.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/quantization/fusion_passes.h>
 #include <torch/csrc/jit/passes/subgraph_rewrite.h>
 

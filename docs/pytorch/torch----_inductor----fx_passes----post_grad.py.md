@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\post_grad.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import functools  # 导入 functools 模块，用于高阶函数操作

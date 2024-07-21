@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\x8zip\x2-neon.c`
 
-```
+```py
 #include <arm_neon.h>  // 包含 ARM NEON 指令集的头文件
 
 #include <qnnpack/x8zip.h>  // 包含 x8zip 相关的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\data_flow.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保头文件只被包含一次
 

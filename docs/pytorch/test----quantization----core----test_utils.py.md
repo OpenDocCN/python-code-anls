@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch

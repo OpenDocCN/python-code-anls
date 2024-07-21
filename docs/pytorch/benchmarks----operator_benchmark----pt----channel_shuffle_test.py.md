@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\channel_shuffle_test.py`
 
-```
+```py
 # 导入 operator_benchmark 库和 PyTorch 库
 import operator_benchmark as op_bench
 import torch

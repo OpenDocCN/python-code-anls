@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Dtype.cpp`
 
-```
+```py
 #include <torch/csrc/Dtype.h>
 
 #include <c10/core/ScalarType.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\UnaryConstants.h`
 
-```
+```py
 #pragma once
 
 const char* UNARY_KERNEL_TEMPLATE = R"METAL(

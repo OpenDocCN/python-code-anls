@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\serialize.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/util/flat_hash_map.h>

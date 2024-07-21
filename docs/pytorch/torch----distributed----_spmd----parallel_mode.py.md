@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\parallel_mode.py`
 
-```
+```py
 # 从abc模块导入ABC（抽象基类）和abstractmethod（抽象方法装饰器）
 from abc import ABC, abstractmethod
 # 从typing模块导入Any（表示任意类型）、Callable（可调用对象类型）、Dict（字典类型）、List（列表类型）、Optional（可选类型）、Tuple（元组类型）

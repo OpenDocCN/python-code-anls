@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cudnn\AutocastRNN.cpp`
 
-```
+```py
 // 引入 ATen 库，包括 ATen 头文件和自动混合精度模式头文件
 #include <ATen/ATen.h>
 #include <ATen/autocast_mode.h>

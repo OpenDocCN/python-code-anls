@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_reorder_logs.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入所需的模块和库
 import io

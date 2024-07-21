@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\print_handler.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/print_handler.h>
 // 包含打印处理器的头文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\mem_dependency_checker.h`
 
-```
+```py
 #pragma once
 #include <c10/core/ScalarType.h>
 #include <torch/csrc/Export.h>

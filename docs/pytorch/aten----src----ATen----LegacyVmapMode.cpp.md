@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LegacyVmapMode.cpp`
 
-```
+```py
 #include <ATen/LegacyVmapMode.h>  // 包含 ATen 库中的 LegacyVmapMode 头文件
 
 namespace at::impl {  // 进入 at::impl 命名空间

@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_sparse.py`
 
-```
+```py
 # Owner(s): ["module: sparse"]
 #
 # Test to ensure sparsity information propagates properly into traced graph.

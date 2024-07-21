@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\ufunc.py`
 
-```
+```py
 # 从未来模块导入 annotations，这样可以使用类型提示中的 NamedCType 类
 from __future__ import annotations
 

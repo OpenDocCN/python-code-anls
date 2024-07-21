@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DeviceArray.h`
 
-```
+```py
 // 包含 C10 核心模块中的 Allocator 头文件
 #include <c10/core/Allocator.h>
 // 包含 C10 实用工具中的 Exception 头文件

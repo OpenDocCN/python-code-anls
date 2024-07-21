@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ConstexprCrc.h`
 
-```
+```py
 #pragma once
 // 引入必要的头文件 <cstddef> 和 <cstdint>
 #include <c10/util/IdWrapper.h>

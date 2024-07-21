@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\pass_infra\__init__.py`
 
-```
+```py
 # 导入必要的模块：os模块用于操作系统相关功能，sys模块提供了与Python解释器交互的变量和函数
 import os
 import sys

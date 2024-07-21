@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_content_store.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # This module provides a FAST (on GPU) content addressable store for storages
 # (and tensors on top of them) with VERY WEAK portability guarantees (e.g.,

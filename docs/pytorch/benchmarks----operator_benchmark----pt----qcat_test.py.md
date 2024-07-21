@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qcat_test.py`
 
-```
+```py
 # 从 typing 模块中导入 List 类型
 from typing import List
 

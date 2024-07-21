@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_inference\test.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 导入AOT编译器

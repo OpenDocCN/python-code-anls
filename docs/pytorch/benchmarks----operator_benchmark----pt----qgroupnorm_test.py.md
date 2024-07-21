@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qgroupnorm_test.py`
 
-```
+```py
 # 导入运算基准模块用作操作基准
 import operator_benchmark as op_bench
 # 导入 PyTorch 库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\autograd.cpp`
 
-```
+```py
 // 包含 ATen 库中的记录函数和 Torch 分布式自动求导模块
 #include <ATen/record_function.h>
 #include <torch/csrc/distributed/autograd/autograd.h>

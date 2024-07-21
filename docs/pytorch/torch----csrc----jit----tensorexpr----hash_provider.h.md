@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\hash_provider.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/ir.h>

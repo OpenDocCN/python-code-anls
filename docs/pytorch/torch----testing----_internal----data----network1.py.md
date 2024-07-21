@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\data\network1.py`
 
-```
+```py
 # 忽略 mypy 的错误，因为在某些情况下，可能会发生类型检查的错误
 import torch.nn as nn
 

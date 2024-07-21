@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\config.h`
 
-```
+```py
 #pragma once
 // C10 库中的宏定义，用于导出符号
 #include <c10/macros/Export.h>

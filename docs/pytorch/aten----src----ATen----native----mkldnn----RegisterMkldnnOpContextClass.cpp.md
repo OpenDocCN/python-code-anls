@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\RegisterMkldnnOpContextClass.cpp`
 
-```
+```py
 #include <ATen/Config.h>
 
 #if AT_MKLDNN_ENABLED()  // 检查是否启用了 MKLDNN

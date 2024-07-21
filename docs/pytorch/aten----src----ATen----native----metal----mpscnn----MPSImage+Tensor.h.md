@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\MPSImage+Tensor.h`
 
-```
+```py
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
 

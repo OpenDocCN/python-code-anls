@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_logging\_internal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块
 import functools                   # 导入 functools 模块，用于高阶函数（Higher-order functions）操作

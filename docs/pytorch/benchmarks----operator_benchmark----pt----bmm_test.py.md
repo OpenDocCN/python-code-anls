@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\bmm_test.py`
 
-```
+```py
 # 导入名为operator_benchmark的模块，并使用别名op_bench
 import operator_benchmark as op_bench
 # 导入PyTorch库

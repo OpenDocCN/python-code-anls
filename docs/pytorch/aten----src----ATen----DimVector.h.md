@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\DimVector.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/DimVector.h>
 

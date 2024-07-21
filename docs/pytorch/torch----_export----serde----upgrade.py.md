@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\serde\upgrade.py`
 
-```
+```py
 # 指定类型检查工具 mypy 允许未标注类型的定义
 
 class GraphModuleOpUpgrader:

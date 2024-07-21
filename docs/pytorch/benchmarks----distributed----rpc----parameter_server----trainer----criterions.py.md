@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\criterions.py`
 
-```
+```py
 # 导入 PyTorch 的神经网络模块中的 nn 类
 import torch.nn as nn
 

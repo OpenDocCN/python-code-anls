@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\__init__.py`
 
-```
+```py
 # 定义一个名为 find_divisors 的函数，用于找到指定整数的所有约数并返回
 def find_divisors(n):
     # 初始化一个空列表，用于存储找到的约数

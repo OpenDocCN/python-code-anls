@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\quantization.cpp`
 
-```
+```py
 namespace torch {
 namespace jit {
 namespace mobile {

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_allocatorTraceTracker_test.cpp`
 
-```
+```py
 #include <c10/cuda/CUDACachingAllocator.h>  // 包含 CUDA 缓存分配器的头文件
 
 #include <gtest/gtest.h>  // 包含 Google 测试框架的头文件

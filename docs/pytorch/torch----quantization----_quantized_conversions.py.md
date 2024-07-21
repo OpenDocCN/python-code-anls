@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\_quantized_conversions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import torch  # 导入PyTorch库
 

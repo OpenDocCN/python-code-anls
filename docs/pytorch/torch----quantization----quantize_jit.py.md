@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\quantize_jit.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""
 This file is in the process of migration to `torch/ao/quantization`, and

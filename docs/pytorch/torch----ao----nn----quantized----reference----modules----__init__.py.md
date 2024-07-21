@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\reference\modules\__init__.py`
 
-```
+```py
 # 导入模块中的具体类或函数：从linear模块中导入Linear类
 from .linear import Linear
 # 导入模块中的具体类或函数：从conv模块中导入Conv1d、Conv2d、Conv3d、ConvTranspose1d、ConvTranspose2d、ConvTranspose3d类

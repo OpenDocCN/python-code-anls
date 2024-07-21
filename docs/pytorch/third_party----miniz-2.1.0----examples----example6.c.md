@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\examples\example6.c`
 
-```
+```py
 // example6.c - Demonstrates how to use miniz's PNG writer function.
 // Public domain, April 11 2012, Rich Geldreich, richgel99@gmail.com.
 // See "unlicense" statement at the end of tinfl.c.

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_string.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 从特定路径导入测试工具和依赖

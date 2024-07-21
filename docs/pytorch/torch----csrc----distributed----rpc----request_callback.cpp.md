@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\request_callback.cpp`
 
-```
+```py
 // 包含请求回调所需的头文件
 #include <torch/csrc/distributed/rpc/request_callback.h>
 

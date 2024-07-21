@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\_imported_class_test\bar.py`
 
-```
+```py
 import torch
 
 # 导入 torch 库，用于使用 PyTorch 功能

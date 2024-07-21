@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\output_graph.py`
 
-```
+```py
 # 导入必要的模块和库
 
 # 导入用于处理默认类型的声明

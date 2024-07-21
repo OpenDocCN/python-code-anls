@@ -1,6 +1,6 @@
 # `.\pytorch\torch\serialization.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的标准库和第三方库
 import copyreg  # 注册对象支持的 pickle 协议

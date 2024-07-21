@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\container\any_value.h`
 
-```
+```py
 #pragma once
 
 #include <torch/detail/static.h>

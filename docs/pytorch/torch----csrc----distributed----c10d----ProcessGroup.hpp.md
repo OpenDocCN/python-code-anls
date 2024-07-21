@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroup.hpp`
 
-```
+```py
 // 仅在编译器支持时生效，确保头文件只被包含一次
 #pragma once
 

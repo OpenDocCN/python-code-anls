@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\variable.py`
 
-```
+```py
 # 引入torch模块，用于深度学习任务
 # 从torch._C中引入_ImperativeEngine作为ImperativeEngine
 import torch

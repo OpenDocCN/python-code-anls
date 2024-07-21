@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rpc_with_autograd.h`
 
-```
+```py
 #pragma once
 // 预处理指令：指示编译器只包含该头文件一次
 

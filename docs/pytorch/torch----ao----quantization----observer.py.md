@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\observer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 This module implements observers which are used to collect statistics about
@@ -1539,7 +1539,7 @@ class ReuseInputObserver(ObserverBase):
     ```
     x0 = ...
     x1 = x0.reshape()
-    ```
+    ```py
     if we configure x0 to be observed by some observer, let's say MinMaxObserver,
     and reshape is configured with ReuseInputObserver, we'll reuse the observer instance
     for x0 for x1 (output of reshape). If x0 is not observed, we also won't observe x1.

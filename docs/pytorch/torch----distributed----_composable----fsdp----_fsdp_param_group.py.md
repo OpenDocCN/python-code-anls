@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fsdp\_fsdp_param_group.py`
 
-```
+```py
 # 引入 mypy: allow-untyped-defs，允许未类型化的定义
 import contextlib  # 提供对上下文管理器的支持
 import logging  # 日志记录模块

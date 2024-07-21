@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\qnnpack\operator.h`
 
-```
+```py
 /*
  * 版权声明与许可声明
  * 版权所有，Facebook公司及其关联公司保留所有权利

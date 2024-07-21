@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\DeadlockDetection_test.cpp`
 
-```
+```py
 #include <c10/util/DeadlockDetection.h>  // 包含 DeadlockDetection.h 头文件，提供死锁检测相关功能
 
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件

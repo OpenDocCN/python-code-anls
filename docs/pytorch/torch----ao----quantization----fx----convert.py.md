@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\convert.py`
 
-```
+```py
 # 忽略类型检查错误的标志
 # 从 typing 模块导入各种类型注解，以便在代码中使用
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, Type, Callable

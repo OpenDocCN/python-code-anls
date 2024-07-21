@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\ddp_under_dist_autograd_test.py`
 
-```
+```py
 # 忽略类型检查错误，这通常用于类型检查工具（如mypy）忽略该文件中的类型错误
 # 导入标准库模块
 import contextlib           # 提供常见的上下文管理器

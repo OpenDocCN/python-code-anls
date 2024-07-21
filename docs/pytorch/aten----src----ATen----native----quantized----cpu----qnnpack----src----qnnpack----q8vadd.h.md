@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\qnnpack\q8vadd.h`
 
-```
+```py
 /*
  * 版权声明和许可信息，说明代码的版权归属和使用许可
  * Copyright (c) Facebook, Inc. and its affiliates.

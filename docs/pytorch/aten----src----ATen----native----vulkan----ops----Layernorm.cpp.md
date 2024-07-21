@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Layernorm.cpp`
 
-```
+```py
 #include <ATen/native/vulkan/ops/Layernorm.h>
 #include <ATen/native/vulkan/ops/Utils.h>
 

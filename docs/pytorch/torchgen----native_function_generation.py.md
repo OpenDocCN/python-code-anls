@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\native_function_generation.py`
 
-```
+```py
 # 引入未来版本的注释类型声明，用于在代码中指定类型的注释
 from __future__ import annotations
 

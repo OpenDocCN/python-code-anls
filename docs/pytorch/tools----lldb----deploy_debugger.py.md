@@ -1,6 +1,6 @@
 # `.\pytorch\tools\lldb\deploy_debugger.py`
 
-```
+```py
 import lldb  # type: ignore[import]
 
 # 创建一个新的断点对象，使用正则表达式作为断点条件

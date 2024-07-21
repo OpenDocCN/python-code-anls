@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\strong_type.h`
 
-```
+```py
 /*
  * strong_type C++14/17/20 strong typedef library
  *

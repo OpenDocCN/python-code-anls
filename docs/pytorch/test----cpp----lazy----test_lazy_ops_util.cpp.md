@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_lazy_ops_util.cpp`
 
-```
+```py
 // 包含头文件用于测试懒惰操作工具
 #include <test/cpp/lazy/test_lazy_ops_util.h>
 

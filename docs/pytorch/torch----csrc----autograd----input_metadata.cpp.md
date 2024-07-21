@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\input_metadata.cpp`
 
-```
+```py
 // 包含 Torch 的自动微分模块中的输入元数据定义头文件
 #include <torch/csrc/autograd/input_metadata.h>
 

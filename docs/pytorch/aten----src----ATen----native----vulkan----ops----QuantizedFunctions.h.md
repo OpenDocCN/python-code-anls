@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\QuantizedFunctions.h`
 
-```
+```py
 // 引入 ATen 库中 Vulkan 实现的公共头文件
 #include <ATen/native/vulkan/ops/Common.h>
 

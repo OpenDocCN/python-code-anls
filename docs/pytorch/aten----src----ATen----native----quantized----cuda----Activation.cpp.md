@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cuda\Activation.cpp`
 
-```
+```py
 // 引入头文件 Exception.h，包含了异常处理的相关定义
 // 引入 ATen.h 和 Functions.h，提供了 PyTorch Tensor 操作和函数的定义
 

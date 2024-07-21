@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Storage.h`
 
-```
+```py
 #pragma once
 #include <c10/core/Storage.h>
 

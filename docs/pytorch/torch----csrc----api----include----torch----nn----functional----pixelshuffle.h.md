@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\pixelshuffle.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once，确保头文件只被编译一次
 
@@ -46,7 +46,7 @@ inline Tensor pixel_unshuffle(const Tensor& input, int64_t downscale_factor) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::pixel_shuffle(x, F::PixelShuffleFuncOptions(2));
-/// ```
+/// ```py
 /// 示例：使用torch命名空间中的functional别名F来调用pixel_shuffle函数，传入PixelShuffleFuncOptions对象参数。
 inline Tensor pixel_shuffle(
     const Tensor& input,

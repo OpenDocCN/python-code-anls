@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\reveal\torch_optim.py`
 
-```
+```py
 # 导入 torch 库，用于神经网络和优化器等机器学习任务
 import torch
 

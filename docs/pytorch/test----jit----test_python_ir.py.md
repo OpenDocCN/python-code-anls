@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_python_ir.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入单元测试模块

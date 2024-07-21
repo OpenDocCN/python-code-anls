@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_d\imports_directly.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 

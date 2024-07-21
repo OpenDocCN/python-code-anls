@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\CompileTimeFunctionPointer_test.cpp`
 
-```
+```py
 // 引入 Torch 的编译时函数指针相关头文件
 #include <c10/core/CompileTimeFunctionPointer.h>
 // 引入 Google Test 框架的头文件

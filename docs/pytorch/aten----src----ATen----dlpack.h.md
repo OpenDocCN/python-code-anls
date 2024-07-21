@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\dlpack.h`
 
-```
+```py
 /*!
  *  Copyright (c) 2017 by Contributors
  * \file dlpack.h

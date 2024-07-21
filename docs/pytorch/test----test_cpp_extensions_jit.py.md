@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cpp_extensions_jit.py`
 
-```
+```py
 # Owner(s): ["module: cpp-extensions"]
 
 # 导入必要的库和模块

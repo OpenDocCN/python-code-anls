@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qhardswish.cpp`
 
-```
+```py
 // 定义编译时仅启用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

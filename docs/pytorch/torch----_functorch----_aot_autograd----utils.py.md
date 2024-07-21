@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\utils.py`
 
-```
+```py
 """
 Contains various utils for AOTAutograd, including those for handling collections.
 """

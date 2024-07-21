@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\all.h`
 
-```
+```py
 #pragma once
 
 #if !defined(_MSC_VER) && __cplusplus < 201703L

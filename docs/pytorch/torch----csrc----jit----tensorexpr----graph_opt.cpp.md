@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\graph_opt.cpp`
 
-```
+```py
 // 包含头文件，声明使用的 Torch 的 TensorExpr 库中的相关功能
 #include <torch/csrc/jit/tensorexpr/graph_opt.h>
 

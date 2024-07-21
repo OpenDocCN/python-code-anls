@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\xpu_event_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/xpu/XPUEvent.h>  // 包含 XPUEvent 头文件

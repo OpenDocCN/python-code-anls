@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\sparse\utils.py`
 
-```
+```py
 # 导入 functools、operator、random 和 time 模块
 import functools
 import operator

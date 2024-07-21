@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\optim_baseline.h`
 
-```
+```py
 // @generated from optim_baseline.py
 // 包含 Torch C++ API 的类型定义头文件
 

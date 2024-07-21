@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\activation_sparsifier\activation_sparsifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类型声明
 from typing import Any, Dict, List, Optional

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Matmul.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件只被包含一次
 

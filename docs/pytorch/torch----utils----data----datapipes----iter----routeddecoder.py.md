@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\routeddecoder.py`
 
-```
+```py
 # 导入必要的模块和类
 from io import BufferedIOBase
 from typing import Any, Callable, Iterable, Iterator, Sized, Tuple

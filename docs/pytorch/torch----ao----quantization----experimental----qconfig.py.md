@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\qconfig.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 从 torch.ao.quantization.qconfig 模块导入 QConfig 类

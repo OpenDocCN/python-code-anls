@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_hsdp_checkpoint.py`
 
-```
+```py
 # 所有者：["oncall: distributed"]
 from copy import deepcopy  # 导入深拷贝函数 deepcopy
 

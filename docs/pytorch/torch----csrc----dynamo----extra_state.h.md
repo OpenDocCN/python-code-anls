@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\extra_state.h`
 
-```
+```py
 #pragma once
 // 只包含一次这个文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\class_type.h`
 
-```
+```py
 // 预处理指令，用于确保头文件只被包含一次
 #pragma once
 

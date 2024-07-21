@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\schedulers\lr_scheduler.cpp`
 
-```
+```py
 // 包含头文件 <c10/util/irange.h>，提供用于范围迭代的工具
 // 包含头文件 <torch/optim/schedulers/lr_scheduler.h>，提供学习率调度器的定义
 

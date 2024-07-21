@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\GeneratorImpl.cpp`
 
-```
+```py
 /**
  * Header files inclusion for C++ GeneratorImpl class.
  */
@@ -156,7 +156,7 @@ uint64_t getNonDeterministicRandom(bool is_cuda) {
 
   return s;
 }
-```  
+```py  
 
 // 返回生成的随机数 s
 

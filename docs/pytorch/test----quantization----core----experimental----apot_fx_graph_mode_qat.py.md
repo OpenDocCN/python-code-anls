@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\apot_fx_graph_mode_qat.py`
 
-```
+```py
 # 导入需要的模块和函数
 from torchvision.models.quantization.resnet import resnet18  # 导入resnet18模型
 from torch.ao.quantization.experimental.quantization_helper import (

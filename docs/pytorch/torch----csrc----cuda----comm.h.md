@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\comm.h`
 
-```
+```py
 #pragma once
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>

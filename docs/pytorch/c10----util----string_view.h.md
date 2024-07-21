@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\string_view.h`
 
-```
+```py
 #pragma once
 
 #include <algorithm>  // 包含标准库算法头文件

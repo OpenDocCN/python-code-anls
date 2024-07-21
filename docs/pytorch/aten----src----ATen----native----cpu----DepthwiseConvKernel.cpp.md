@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\DepthwiseConvKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/cpu/DepthwiseConvKernel.h>
 #include <ATen/core/Tensor.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAFunctions.cpp`
 
-```
+```py
 // 包含 CUDA 相关头文件
 #include <c10/cuda/CUDAFunctions.h>
 #include <c10/macros/Macros.h>
@@ -229,7 +229,7 @@ cudaError_t GetDeviceCount(int* dev_count) {
 // import torch
 // x = torch.empty(1, device=“cuda:1”) # 此后 cuda:0 上没有 CUDA 上下文
 // y = torch.empty(1, device=“cuda”) # CUDA 上下文将在 cuda:0 上创建
-// ```
+// ```py
 #if CUDA_VERSION >= 12000
 thread_local DeviceIndex targetDeviceIndex = -1;
 

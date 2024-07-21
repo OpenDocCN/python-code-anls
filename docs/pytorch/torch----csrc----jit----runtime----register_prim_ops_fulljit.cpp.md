@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_prim_ops_fulljit.cpp`
 
-```
+```py
 // 包含 Torch 库的头文件，用于 JIT 编译器和运行时操作的注册和工具函数
 #include <torch/csrc/jit/codegen/fuser/interface.h>
 #include <torch/csrc/jit/runtime/register_ops_utils.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\ios\TestApp\run_on_aws_devicefarm.py`
 
-```
+```py
 # 指定 Python 解释器位置为当前环境下的 Python 3
 #!/usr/bin/env python3
 

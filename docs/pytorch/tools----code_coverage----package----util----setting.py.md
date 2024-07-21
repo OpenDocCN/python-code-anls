@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\util\setting.py`
 
-```
+```py
 ```python`
 # 引入 __future__ 模块，支持类型注解的类型自引用
 from __future__ import annotations

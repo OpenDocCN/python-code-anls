@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\adaround_loss.py`
 
-```
+```py
 from typing import Tuple  # 导入类型提示模块
 
 import numpy as np  # 导入NumPy库

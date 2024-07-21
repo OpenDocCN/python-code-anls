@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\canonicalize_graph_fuser_ops.cpp`
 
-```
+```py
 // 包含必要的头文件，用于在 Torch JIT 中进行操作和优化
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/jit_log.h>

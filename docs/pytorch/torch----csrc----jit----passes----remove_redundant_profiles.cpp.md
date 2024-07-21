@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_redundant_profiles.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 模块中的头文件，用于死代码消除和移除冗余 profile 的操作
 #include <torch/csrc/jit/passes/dead_code_elimination.h>
 #include <torch/csrc/jit/passes/remove_redundant_profiles.h>

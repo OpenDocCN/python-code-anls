@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_generate_numeric_debug_handle.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import unittest  # 引入 unittest 模块

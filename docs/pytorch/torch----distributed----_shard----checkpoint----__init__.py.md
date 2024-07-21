@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\checkpoint\__init__.py`
 
-```
+```py
 # 引入系统模块和警告模块
 import sys
 import warnings

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_expands.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/remove_expands.h>
 
 namespace torch {

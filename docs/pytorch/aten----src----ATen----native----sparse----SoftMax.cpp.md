@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SoftMax.cpp`
 
-```
+```py
   // 定义宏，仅在使用方法运算符时启用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
   // 包含张量相关的头文件

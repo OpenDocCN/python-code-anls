@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Event.cpp`
 
-```
+```py
 # 包含头文件 pybind11/pybind11.h，用于 PyTorch C++ 扩展的 Python 绑定
 #include <pybind11/pybind11.h>
 

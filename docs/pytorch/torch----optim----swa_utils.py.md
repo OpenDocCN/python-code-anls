@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\swa_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Implementation for Stochastic Weight Averaging implementation."""
 

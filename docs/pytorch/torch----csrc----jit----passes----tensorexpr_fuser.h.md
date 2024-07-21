@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\tensorexpr_fuser.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // Torch导出宏定义

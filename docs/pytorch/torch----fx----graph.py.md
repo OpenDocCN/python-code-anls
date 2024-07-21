@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入默认字典集合模块
 from collections import defaultdict

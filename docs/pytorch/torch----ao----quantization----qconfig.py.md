@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\qconfig.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 namedtuple，用于创建带有名称的 tuple
 from collections import namedtuple

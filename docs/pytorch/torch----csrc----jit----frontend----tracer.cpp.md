@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\tracer.cpp`
 
-```
+```py
 // 引入 Torch 的头文件，用于 JIT 前端的追踪功能
 #include <torch/csrc/jit/frontend/tracer.h>
 

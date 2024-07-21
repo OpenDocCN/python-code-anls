@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_directory_reader.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作系统路径模块和文件通配模块
 import os.path

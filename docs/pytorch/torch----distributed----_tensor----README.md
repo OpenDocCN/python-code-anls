@@ -5,7 +5,7 @@ This folder contains the DTensor (a.k.a DistributedTensor) implementation in PyT
 ## Introduction
 We propose distributed tensor primitives to allow easier distributed computation authoring in SPMD(Single Program Multiple Devices) paradigm. The primitives are simple but powerful when used to express tensor distributions with both sharding and replication parallelism strategies. This could empower native Tensor parallelism among other advanced parallelism explorations. For example, to shard a big tensor across devices with 3 lines of code:
 
-```python
+```py
 # to run this file (i.e. dtensor_example.py):
 # torchrun --standalone --nnodes=1 --nproc-per-node=4 dtensor_example.py
 import os
@@ -51,7 +51,7 @@ Here are some basic DTensor API examples that showcase:
 2. How to create DTensor from a local `torch.Tensor`.
 3. How to “reshard” an existing DTensor to a different DTensor with modified placement strategy or world size.
 
-```python
+```py
 # torchrun --standalone --nnodes=1 --nproc-per-node=4 dtensor_example.py
 import torch
 from torch.distributed._tensor import DTensor, Shard, Replicate, distribute_tensor, distribute_module, init_device_mesh
@@ -91,7 +91,7 @@ replica_tensor = colwise_tensor.redistribute(device_mesh, replica_placement)
 
 Users can use DTensor tensor constructors directly to create a distributed tensor (i.e. `distributed.ones/empty`), but for existing modules like `nn.Linear` that are already having `torch.Tensor` as parameters, how to make them distributed parameters? We offer a way to directly distribute a `torch.Tensor` and a module level APIs to directly distribute the module parameters. Below is the high level API we introduce:
 
-```python
+```py
 def distribute_tensor(tensor: torch.Tensor, device_mesh: DeviceMesh=None, placements: List[Placement]=None):
     '''
     distribute the tensor according to device_mesh and placements, `tensor` could be a "meta" tensor.
@@ -112,7 +112,7 @@ def distribute_module(
 
 #### High level API examples:
 
-```python
+```py
 import torch.nn as nn
 from torch.distributed._tensor import Shard, distribute_tensor, distribute_module, init_device_mesh
 

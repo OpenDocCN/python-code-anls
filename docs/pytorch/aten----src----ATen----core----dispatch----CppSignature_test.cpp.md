@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\CppSignature_test.cpp`
 
-```
+```py
 // 包含 ATen 库的 CppSignature 头文件
 #include <ATen/core/dispatch/CppSignature.h>
 // 包含 Google 测试框架的头文件

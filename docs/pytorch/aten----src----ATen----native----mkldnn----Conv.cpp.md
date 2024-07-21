@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Conv.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/Config.h>
 #include <torch/library.h>

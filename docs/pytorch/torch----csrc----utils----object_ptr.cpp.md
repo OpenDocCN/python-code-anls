@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\object_ptr.cpp`
 
-```
+```py
 // 定义模板特化，用于释放 PyObject 指针的资源
 template <>
 void THPPointer<PyObject>::free() {

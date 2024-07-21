@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\graph_fuser.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，包括了 OneDNN 的图形融合器相关功能
 #include <torch/csrc/jit/codegen/onednn/graph_fuser.h>
 // 引入 Torch 库中的头文件，包括了 OneDNN 的图形助手相关功能

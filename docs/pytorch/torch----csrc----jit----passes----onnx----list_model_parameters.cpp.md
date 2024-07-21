@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\list_model_parameters.cpp`
 
-```
+```py
 // 包含 Torch JIT 前端错误报告、日志、死代码消除等头文件
 #include <torch/csrc/jit/frontend/error_report.h>
 #include <torch/csrc/jit/jit_log.h>

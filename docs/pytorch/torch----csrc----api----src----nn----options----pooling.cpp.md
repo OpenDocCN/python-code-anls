@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\pooling.cpp`
 
-```
+```py
 // 包含了 Torch 深度学习库中的池化操作的选项头文件
 #include <torch/nn/options/pooling.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\accumulate.h`
 
-```
+```py
 // 版权声明，指明此代码版权归Facebook所有，保留所有权利
 #pragma once
 

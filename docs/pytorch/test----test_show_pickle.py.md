@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_show_pickle.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入所需的模块

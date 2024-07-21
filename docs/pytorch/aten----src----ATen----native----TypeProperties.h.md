@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TypeProperties.h`
 
-```
+```py
 #pragma once
 
 

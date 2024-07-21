@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\quantized\modules\bn_relu.py`
 
-```
+```py
 # 导入 torch 模块中的量化推理操作：二维批归一化和激活函数合并操作
 from torch.ao.nn.intrinsic.quantized import BNReLU2d
 # 导入 torch 模块中的量化推理操作：三维批归一化和激活函数合并操作

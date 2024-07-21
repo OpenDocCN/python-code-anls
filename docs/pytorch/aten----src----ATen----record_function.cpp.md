@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\record_function.cpp`
 
-```
+```py
 // 包含 ATen 库的记录功能头文件
 #include <ATen/record_function.h>
 // 包含 ATen 库的调度器头文件

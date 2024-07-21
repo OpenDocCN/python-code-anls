@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\diagnostics.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 使用未类型化的定义允许 MyPy 放宽对类型的检查
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Dispatch.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/DeprecatedTypeProperties.h>

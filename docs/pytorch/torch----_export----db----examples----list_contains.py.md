@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\list_contains.py`
 
-```
+```py
 # 引入torch模块，用于神经网络和张量操作
 import torch
 

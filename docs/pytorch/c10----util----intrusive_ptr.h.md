@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\intrusive_ptr.h`
 
-```
+```py
 #pragma once
 // 一次性包含防止重复引用
 
@@ -909,52 +909,52 @@ class weak_intrusive_ptr final {
   }
 
 - `rhs.target_ = NullType::singleton();`
-  ```cpp
+  ```py
   // 将 rhs 对象的 target_ 成员设置为 NullType 的单例对象
   ```
 
 - `template <class From, class FromNullType>`
-  ```cpp
+  ```py
   // 模板：移动构造函数，从另一个类型为 weak_intrusive_ptr 的对象 rhs 移动构造
   ```
 
 - `/* implicit */ weak_intrusive_ptr(`
-  ```cpp
+  ```py
   // 隐式构造函数：weak_intrusive_ptr 的移动构造函数
   ```
 
 - `// NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)`
-  ```cpp
+  ```py
   // 禁止对 rhs 参数进行移动的静态分析指令
   ```
 
 - `weak_intrusive_ptr<From, FromNullType>&& rhs) noexcept`
-  ```cpp
+  ```py
   // 右值引用参数 rhs，移动构造函数使用 noexcept 保证不抛出异常
   ```
 
 - `: target_(`
-  ```cpp
+  ```py
   // 初始化列表：将 target_ 成员初始化为以下表达式的结果
   ```
 
 - `detail::assign_ptr_<TTarget, NullType, FromNullType>(rhs.target_)) {`
-  ```cpp
+  ```py
   // 调用 detail 命名空间中的 assign_ptr_ 模板函数，用 rhs.target_ 的值初始化 target_
   ```
 
 - `static_assert(`
-  ```cpp
+  ```py
   // 静态断言：确保 From* 可以隐式转换为 TTarget*，否则编译错误并显示指定的错误消息
   ```
 
 - `"Type mismatch. weak_intrusive_ptr move constructor got pointer of wrong type.");`
-  ```cpp
+  ```py
   // 静态断言失败时显示的错误消息，指示移动构造函数接收了错误类型的指针
   ```
 
 - `rhs.target_ = FromNullType::singleton();`
-  ```cpp
+  ```py
   // 将 rhs 对象的 target_ 成员设置为 FromNullType 的单例对象
   ```
   // 将 rhs.target_ 设置为 tmp

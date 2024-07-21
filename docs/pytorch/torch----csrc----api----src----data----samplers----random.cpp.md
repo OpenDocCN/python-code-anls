@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\data\samplers\random.cpp`
 
-```
+```py
 namespace torch {
 namespace data {
 namespace samplers {

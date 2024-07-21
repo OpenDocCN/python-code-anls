@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\module.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/modules/container/any_module_holder.h>

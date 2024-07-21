@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\map\utils.py`
 
-```
+```py
 # 引入必要的模块和声明允许未类型化的定义
 # mypy: allow-untyped-defs
 import copy  # 导入深拷贝模块

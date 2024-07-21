@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\vulkan_quantized_api_test.cpp`
 
-```
+```py
 #ifdef USE_VULKAN_API
 // 引入相关的头文件
 #include <ATen/ATen.h>

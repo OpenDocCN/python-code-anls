@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\WrapDimMinimal.cpp`
 
-```
+```py
 #include <c10/core/WrapDimMinimal.h>
 
 namespace c10::detail {

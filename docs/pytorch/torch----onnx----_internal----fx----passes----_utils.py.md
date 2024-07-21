@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Common utility functions for FX passes.
 

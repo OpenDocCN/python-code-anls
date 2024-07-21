@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\gemm\threadblock\default_mma.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/native/cuda/cutlass_extensions/gemm/threadblock/default_dq_mma_multistage.h>

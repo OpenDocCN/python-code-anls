@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\EmptyTensor.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 #include <ATen/cuda/EmptyTensor.h>
 #include <ATen/cuda/CUDAContext.h>

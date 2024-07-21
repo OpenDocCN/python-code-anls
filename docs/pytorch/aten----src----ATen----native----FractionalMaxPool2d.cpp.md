@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FractionalMaxPool2d.cpp`
 
-```
+```py
 // 定义宏，指定仅支持方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\RegisterSchema.cpp`
 
-```
+```py
 // 定义宏以仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入Torch库的头文件

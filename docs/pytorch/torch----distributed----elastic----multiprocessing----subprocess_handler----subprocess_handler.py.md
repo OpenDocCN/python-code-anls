@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\subprocess_handler\subprocess_handler.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # Copyright (c) Facebook, Inc. and its affiliates.

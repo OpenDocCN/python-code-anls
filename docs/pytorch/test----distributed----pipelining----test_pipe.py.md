@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_pipe.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # Owner(s): ["oncall: distributed"]
 # 从模型注册表中导入所需的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\operator_schemas.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型定义
 import torch  # 导入PyTorch库

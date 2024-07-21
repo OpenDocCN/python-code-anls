@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_mangling.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Import mangling.
 See mangling.md for details.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\torch_sym_min.py`
 
-```
+```py
 # 导入torch模块
 import torch
 

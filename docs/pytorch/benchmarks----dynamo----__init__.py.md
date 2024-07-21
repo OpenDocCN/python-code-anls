@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\__init__.py`
 
-```
+```py
 # 定义一个名为 bubble_sort 的函数，用于对输入的列表进行冒泡排序
 def bubble_sort(arr):
     # 获取列表的长度

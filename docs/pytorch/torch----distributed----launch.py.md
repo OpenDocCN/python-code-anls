@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\launch.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""
 Module ``torch.distributed.launch``.

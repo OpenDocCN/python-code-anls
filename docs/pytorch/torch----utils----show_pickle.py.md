@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\show_pickle.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 import sys

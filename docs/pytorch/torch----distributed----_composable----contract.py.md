@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\contract.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 uuid 模块，用于生成唯一标识符
 import uuid

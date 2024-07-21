@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\dataloader\base.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/dataloader_options.h>

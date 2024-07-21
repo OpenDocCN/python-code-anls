@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\instancenorm.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/modules/batchnorm.h>
@@ -77,7 +77,7 @@ class InstanceNormImpl
 /// ```
 /// InstanceNorm1d
 /// model(InstanceNorm1dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 class TORCH_API InstanceNorm1dImpl
     : public InstanceNormImpl<1, InstanceNorm1dImpl> {
  protected:
@@ -110,7 +110,7 @@ TORCH_MODULE(InstanceNorm1d);
 /// ```
 /// InstanceNorm2d
 /// model(InstanceNorm2dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 class TORCH_API InstanceNorm2dImpl
     : public InstanceNormImpl<2, InstanceNorm2dImpl> {
  protected:
@@ -141,7 +141,7 @@ TORCH_MODULE(InstanceNorm2d);
 /// ```
 /// InstanceNorm3d
 /// model(InstanceNorm3dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 class TORCH_API InstanceNorm3dImpl
     : public InstanceNormImpl<3, InstanceNorm3dImpl> {
  protected:

@@ -16,7 +16,7 @@ So far the recommendation was to standardize on fused conditionals.
 
 Tensor IR contains both expression conditionals (`CompareSelect` and `IfThenElse`), as well as statement conditionals (`Cond`).  Expression conditionals are defined by being functional in nature: there is no side effect from duplicating the conditional, evaluating it twice, etc.  They are an important ingredient in expression important operators like ReLU:
 
-```
+```py
 store (((load A) >= 0.0) ? (load A) : 0.0), B
 ```
 
@@ -28,7 +28,7 @@ Within the space of expression conditionals, Tensor IR contains a distinction be
 
 This may seem like an esoteric distinction, but it becomes an important distinction in kernels like concat loops.  In that situation, we often have code of the form:
 
-```
+```py
 for i = 0 ... N
     store ((i < 16) ? load A[i] : load B[i-16]), C
 ```

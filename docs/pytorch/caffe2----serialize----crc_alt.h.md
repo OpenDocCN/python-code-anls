@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\serialize\crc_alt.h`
 
-```
+```py
 #pragma once
 
 // //////////////////////////////////////////////////////////

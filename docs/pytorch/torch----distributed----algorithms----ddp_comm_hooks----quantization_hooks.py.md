@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\quantization_hooks.py`
 
-```
+```py
     # 引入必要的库和模块
     # mypy: allow-untyped-defs
     import torch  # 导入PyTorch库

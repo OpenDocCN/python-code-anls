@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\static_for_loop.py`
 
-```
+```py
 # 导入 torch 模块，用于神经网络和张量操作
 import torch
 

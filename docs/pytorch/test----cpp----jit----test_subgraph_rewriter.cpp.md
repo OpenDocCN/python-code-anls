@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_subgraph_rewriter.cpp`
 
-```
+```py
 // 引入 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

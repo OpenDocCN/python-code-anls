@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\check_memory_compression_ratio.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 解析命令行参数的库
 import sys  # 提供对 Python 解释器的访问和一些系统相关的功能

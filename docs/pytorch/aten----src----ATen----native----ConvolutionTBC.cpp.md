@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ConvolutionTBC.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入张量库的头文件
 #include <ATen/core/Tensor.h>

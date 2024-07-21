@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\test_module.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入 torch 库和 torch.fx 中的 wrap 函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\init.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/static/init.h>
 // 引入静态图模型初始化相关的头文件
 

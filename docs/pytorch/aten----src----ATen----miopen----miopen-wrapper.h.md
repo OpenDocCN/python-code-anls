@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\miopen\miopen-wrapper.h`
 
-```
+```py
 #pragma once
 
 

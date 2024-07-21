@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\callable.py`
 
-```
+```py
 # 设置类型提示允许未被类型化的函数定义
 mypy: allow-untyped-defs
 

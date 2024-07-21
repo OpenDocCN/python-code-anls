@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\triton_kernel_wrap.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import dataclasses  # 导入用于数据类的模块

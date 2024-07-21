@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\nn\api\remote_module_test.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入必要的库和模块

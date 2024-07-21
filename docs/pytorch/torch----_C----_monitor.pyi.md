@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_monitor.pyi`
 
-```
+```py
 # Defined in torch/csrc/monitor/python_init.cpp
 
 # 导入 datetime 模块，用于处理日期和时间

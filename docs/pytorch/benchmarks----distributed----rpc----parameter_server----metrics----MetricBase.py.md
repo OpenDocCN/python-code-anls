@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\metrics\MetricBase.py`
 
-```
+```py
 from abc import ABC, abstractmethod
 
 # 定义抽象基类 MetricBase，继承自 ABC（Abstract Base Class）

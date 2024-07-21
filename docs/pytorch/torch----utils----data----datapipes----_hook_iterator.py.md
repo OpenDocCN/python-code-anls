@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\_hook_iterator.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块，用于支持函数式编程工具
 import functools

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\xnnpack_backend_preprocess.cpp`
 
-```
+```py
 // 包含 Torch 库的头文件，用于 JIT 后端和预处理
 #include <torch/csrc/jit/backends/backend.h>
 #include <torch/csrc/jit/backends/backend_preprocess.h>

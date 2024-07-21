@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\conv.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Quantized convolution modules."""
 

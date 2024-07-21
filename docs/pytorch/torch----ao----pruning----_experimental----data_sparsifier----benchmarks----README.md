@@ -25,7 +25,7 @@ The benchmarks are created for the dlrm model on the Kaggle CriteoDataset which 
 2. **Model Quality**: The model accuracy decreases slowly with sparsity levels. Even at 90% sparsity levels, the model accuracy decreases only by 2%.
 
 
-3. **Model forward time**: Sparse coo tensors are introduced on the features before feeding into the top layer of the dlrm model. Post that, we perform a sparse ```torch.mm``` with the first linear weight of the top layer.
+3. **Model forward time**: Sparse coo tensors are introduced on the features before feeding into the top layer of the dlrm model. Post that, we perform a sparse ```py.mm``` with the first linear weight of the top layer.
 The takeaway is that the dlrm model with sparse coo tensor is slower (roughly 2x). This is because even though the sparsity levels are high in the embedding weights, the interaction step between the dense and sparse features increases the sparsity levels. Hence, creating sparse coo tensor on this not so sparse features actually slows down the model.
 
 <img src="./images/forward_time.png" height="250" width="400" >
@@ -36,7 +36,7 @@ The benchmark codes depend on the [DLRM codebase](https://github.com/facebookres
 1. Clone the dlrm git repository
 2. Download the dataset from [here](https://ailab.criteo.com/ressources/) or [here](https://figshare.com/articles/dataset/Kaggle_Display_Advertising_Challenge_dataset/5732310/1)
 3. The DLRM model can be trained using the following script
-```
+```py
 # Make sure you go into the file and make sure that the path to dataset is correct.
 
 ./bench/dlrm_s_criteo_kaggle.sh --save-model=./models/criteo_model.ckpt [--use-gpu]
@@ -49,7 +49,7 @@ The benchmark codes depend on the [DLRM codebase](https://github.com/facebookres
 ## Scripts to run each experiment.
 
 ### **Disk savings**
-```
+```py
 python evaluate_disk_savings.py --model-path=<path_to_model_checkpoint> --sparsified-model-dump-path=<path_to_dump_sparsified_models>
 ```
 
@@ -57,20 +57,20 @@ Running this script should dump
 * sparsified model checkpoints: model is sparsified for all the
     combinations of sparsity levels, block shapes and norms and dumped.
 
-* ```sparse_model_metadata.csv```: This contains the compressed file size and path info for all the sparsified models. This file will be used for other experiments
+* ```py.csv```: This contains the compressed file size and path info for all the sparsified models. This file will be used for other experiments
 
 
 ### **Model Quality**
-```
+```py
 python evaluate_model_metrics.py --raw-data-file=<path_to_raw_data_txt_file> --processed-data-file=<path_to_kaggleAdDisplayChallenge_processed.npz> --sparse-model-metadata=<path_to_sparse_model_metadata_csv>
 ```
-Running this script should dump ```sparse_model_metrics.csv``` that contains evaluation metrics for all sparsified models.
+Running this script should dump ```py.csv``` that contains evaluation metrics for all sparsified models.
 
 ### **Model forward time**:
-```
+```py
 python evaluate_forward_time.py --raw-data-file=<path_to_raw_data_txt_file> --processed-data-file=<path_to_kaggleAdDisplayChallenge_processed.npz> --sparse-model-metadata=<path_to_sparse_model_metadata_csv>
 ```
-Running this script should dump ```dlrm_forward_time_info.csv``` that contains forward time for all sparsified models with and without torch.sparse in the forward pass.
+Running this script should dump ```py.csv``` that contains forward time for all sparsified models with and without torch.sparse in the forward pass.
 
 ## Requirements
 pytorch (latest)
@@ -94,4 +94,4 @@ GPU: A100
 ## Future work
 1. **Evaluate memory savings**: The idea is to use torch.sparse tensors to store weights of the embedding bags so that the model memory consumption improves. This will be possible once the embedding bags starts supporting torch.sparse backend.
 
-2. **Sparsifying activations**: Use activation sparsifier to sparsify the activations of the dlrm model. The idea is to sparsify the features before feeding to the top dense layer (sparsify ```z``` [here](https://github.com/facebookresearch/dlrm/blob/11afc52120c5baaf0bfe418c610bc5cccb9c5777/dlrm_s_pytorch.py#L595)).
+2. **Sparsifying activations**: Use activation sparsifier to sparsify the activations of the dlrm model. The idea is to sparsify the features before feeding to the top dense layer (sparsify ```pyz``` [here](https://github.com/facebookresearch/dlrm/blob/11afc52120c5baaf0bfe418c610bc5cccb9c5777/dlrm_s_pytorch.py#L595)).

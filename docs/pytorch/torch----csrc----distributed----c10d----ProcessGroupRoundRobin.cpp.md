@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupRoundRobin.cpp`
 
-```
+```py
 // 包含 Torch 分布式通信模块的头文件 ProcessGroupRoundRobin.hpp
 
 namespace c10d {

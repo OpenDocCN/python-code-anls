@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Dtype.h`
 
-```
+```py
 #pragma once
 // 预处理指令：指示编译器只包含本文件一次
 

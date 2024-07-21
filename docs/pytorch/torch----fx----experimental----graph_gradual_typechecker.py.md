@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\graph_gradual_typechecker.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 reduce 函数和 torch 库
 from functools import reduce

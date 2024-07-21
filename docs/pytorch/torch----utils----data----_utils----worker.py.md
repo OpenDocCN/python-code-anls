@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\_utils\worker.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 定义了 _BaseDataLoaderIter 工作线程使用的方法。
 # 这些方法需要在全局范围内定义，因为 Py2 不支持序列化静态方法。

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\fx\node.h`
 
-```
+```py
 #pragma once
 
 指示预处理器仅包含此头文件一次，用于防止多次包含同一头文件造成的重复定义错误。

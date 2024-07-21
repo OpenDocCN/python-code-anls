@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\quantization_util.py`
 
-```
+```py
 # 导入PyTorch和相关模块
 import torch
 import torchvision

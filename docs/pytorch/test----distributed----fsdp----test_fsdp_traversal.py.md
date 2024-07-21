@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_traversal.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统模块 sys

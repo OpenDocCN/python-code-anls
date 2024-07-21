@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\tensor\python_tensor.cpp`
 
-```
+```py
 // 引入 Torch 的 C++ Tensor 头文件
 #include <torch/csrc/tensor/python_tensor.h>
 
@@ -557,7 +557,7 @@ void py_set_default_tensor_type(PyObject* obj) {
   TORCH_WARN_ONCE(
       "torch.set_default_tensor_type() is deprecated as of PyTorch 2.1, "
       "please use torch.set_default_dtype() and torch.set_default_device() as alternatives.")
-``` 
+```py 
 // 发出一次性警告，指出 `torch.set_default_tensor_type()` 自 PyTorch 2.1 起已弃用，建议使用 `torch.set_default_dtype()` 和 `torch.set_default_device()` 作为替代方案。
 
 
@@ -569,7 +569,7 @@ void py_set_default_tensor_type(PyObject* obj) {
 
 
   PyTensorType* type = (PyTensorType*)obj;
-``` 
+```py 
 // 将 `obj` 强制转换为 `PyTensorType*` 类型，存储在 `type` 变量中。
 
 
@@ -583,7 +583,7 @@ void py_set_default_tensor_type(PyObject* obj) {
 
 
   set_default_tensor_type(type->get_backend(), type->get_scalar_type());
-``` 
+```py 
 // 调用 `set_default_tensor_type` 函数，设置默认的张量类型，传入 `type` 的后端和标量类型信息。
 
 
@@ -597,7 +597,7 @@ void py_set_default_dtype(PyObject* obj) {
   TORCH_CHECK_TYPE(
       THPDtype_Check(obj),
       "invalid dtype object: only floating-point types are supported as the default type");
-``` 
+```py 
 // 检查 `obj` 是否为 `THPDtype` 类型，如果不是，抛出类型错误，提示仅支持浮点类型作为默认类型。
 
 
@@ -607,7 +607,7 @@ void py_set_default_dtype(PyObject* obj) {
 
 
   set_default_tensor_type(/*backend=*/c10::nullopt, scalar_type);
-``` 
+```py 
 // 调用 `set_default_tensor_type` 函数，设置默认的张量类型，传入空的后端选项和 `scalar_type` 标量类型信息。
 
 
@@ -619,7 +619,7 @@ c10::DispatchKey get_default_dispatch_key() {
 
 
   return backendToDispatchKey(default_backend);
-``` 
+```py 
 // 调用 `backendToDispatchKey` 函数，将默认后端转换为 `DispatchKey` 并返回。
 
 
@@ -631,7 +631,7 @@ at::Device get_default_device() {
 
 
   return at::Device(c10::backendToDeviceType(default_backend));
-``` 
+```py 
 // 调用 `backendToDeviceType` 函数，将默认后端转换为设备类型并包装为 `at::Device` 对象返回。
 
 
@@ -643,7 +643,7 @@ ScalarType get_default_scalar_type() {
 
 
   return get_default_dtype_as_scalartype();
-``` 
+```py 
 // 调用 `get_default_dtype_as_scalartype` 函数，获取默认的标量类型并返回。
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\rmsprop.cpp`
 
-```
+```py
 /// 包含 RMSprop 优化器的实现
 #include <torch/optim/rmsprop.h>
 

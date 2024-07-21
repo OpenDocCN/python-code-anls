@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_binary_ufuncs_impl.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略类型检查错误的标记
 

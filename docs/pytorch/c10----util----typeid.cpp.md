@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\typeid.cpp`
 
-```
+```py
 cpp
 // 包含异常处理和类型标识头文件
 #include <c10/util/Exception.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\utils.py`
 
-```
+```py
 # 导入数学库
 import math
 

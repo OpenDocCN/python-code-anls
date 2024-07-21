@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\irparser.cpp`
 
-```
+```py
 #include <torch/csrc/jit/ir/irparser.h>
 // 引入 Torch 的 IR 解析器头文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\serialization.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 

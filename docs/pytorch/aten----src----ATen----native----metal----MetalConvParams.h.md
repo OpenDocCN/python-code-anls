@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalConvParams.h`
 
-```
+```py
 #ifndef MetalConvParams_h
 #define MetalConvParams_h
 

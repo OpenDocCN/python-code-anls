@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_reuse_ir.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的库和模块

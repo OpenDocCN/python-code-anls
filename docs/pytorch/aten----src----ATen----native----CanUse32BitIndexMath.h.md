@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\CanUse32BitIndexMath.h`
 
-```
+```py
 #pragma once
 #include <c10/macros/Export.h>  // 包含导出宏定义头文件
 #include <limits>  // 包含数值极限定义头文件

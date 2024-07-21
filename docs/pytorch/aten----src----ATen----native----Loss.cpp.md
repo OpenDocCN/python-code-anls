@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Loss.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义预处理指令，限定仅包含方法操作符
 

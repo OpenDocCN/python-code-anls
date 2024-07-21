@@ -1,6 +1,6 @@
 # `.\pytorch\tools\jit\templates\external_functions_codegen_template.cpp`
 
-```
+```py
 // 包含外部函数声明的头文件
 #include <torch/csrc/jit/tensorexpr/external_functions.h>
 

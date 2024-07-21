@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\input_buffer.cpp`
 
-```
+```py
 // 包含 Torch 的自动求导库中定义的输入缓冲区相关头文件
 #include <torch/csrc/autograd/input_buffer.h>
 

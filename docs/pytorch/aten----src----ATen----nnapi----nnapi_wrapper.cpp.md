@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_wrapper.cpp`
 
-```
+```py
 // 声明一个整数变量 loaded 并初始化为 0
 static int loaded = 0;
 // 声明 nnapi_wrapper 结构体 nnapi_

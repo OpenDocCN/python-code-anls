@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_eager\kernel_meta_info.cpp`
 
-```
+```py
 #if !defined(C10_MOBILE) && !defined(ANDROID)
 // 如果未定义 C10_MOBILE 和 ANDROID，则编译以下代码块
 

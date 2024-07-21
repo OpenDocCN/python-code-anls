@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_overrides.py`
 
-```
+```py
 # Owner(s): ["module: __torch_function__"]
 
 import torch  # 导入 PyTorch 库

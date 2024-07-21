@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\compilation_unit.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 

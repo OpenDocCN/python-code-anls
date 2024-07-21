@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\Dimname_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/Dimname.h>  // 引入 ATen 库中的 Dimname 头文件

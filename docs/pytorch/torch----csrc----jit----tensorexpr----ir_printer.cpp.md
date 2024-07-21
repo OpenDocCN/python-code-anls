@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_printer.cpp`
 
-```
+```py
 // 包含头文件 ir_printer.h，这是 TensorExpr 库中用于打印 IR 的头文件
 #include <torch/csrc/jit/tensorexpr/ir_printer.h>
 

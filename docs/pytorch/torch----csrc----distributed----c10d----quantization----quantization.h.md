@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\quantization\quantization.h`
 
-```
+```py
 // 声明命名空间 torch::distributed::c10d::quantization，用于量化相关功能
 namespace torch::distributed::c10d::quantization {
 

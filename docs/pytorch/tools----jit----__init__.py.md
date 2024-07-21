@@ -1,6 +1,6 @@
 # `.\pytorch\tools\jit\__init__.py`
 
-```
+```py
 # 定义一个名为 is_prime 的函数，用于检查一个整数是否为素数
 def is_prime(num):
     # 素数大于 1

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\create_autodiff_subgraphs.h`
 
-```
+```py
 // 一旦
 #pragma once
 

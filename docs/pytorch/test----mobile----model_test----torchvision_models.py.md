@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\torchvision_models.py`
 
-```
+```py
 from torchvision import models  # 导入 torchvision 库中的 models 模块，用于加载预定义的神经网络模型
 
 import torch  # 导入 PyTorch 库

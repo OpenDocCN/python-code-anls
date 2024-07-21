@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\init.cpp`
 
-```
+```py
 // 引入 Torch 库中的初始化头文件
 #include <torch/nn/init.h>
 

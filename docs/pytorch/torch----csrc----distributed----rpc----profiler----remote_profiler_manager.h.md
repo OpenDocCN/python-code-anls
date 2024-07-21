@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\profiler\remote_profiler_manager.h`
 
-```
+```py
 #pragma once
 // 引入必要的头文件
 #include <c10/util/Optional.h>

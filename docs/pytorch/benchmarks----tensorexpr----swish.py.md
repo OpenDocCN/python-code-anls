@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\swish.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 
 from . import benchmark  # 从当前包中导入benchmark模块

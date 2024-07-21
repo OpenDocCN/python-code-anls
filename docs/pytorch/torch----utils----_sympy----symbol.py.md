@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\symbol.py`
 
-```
+```py
 """
 This file contains canonical definitions for our symbol naming conventions,
 across torch.fx.experimental.symbolic_shapes and torch._inductor.  The

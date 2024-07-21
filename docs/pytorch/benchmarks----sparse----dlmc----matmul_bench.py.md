@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\sparse\dlmc\matmul_bench.py`
 
-```
+```py
 # 稀疏矩阵乘法性能基准测试
 
 # 该基准测试用于测试稀疏矩阵乘法的性能。

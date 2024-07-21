@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\memory_planner.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/runtime/static/impl.h>

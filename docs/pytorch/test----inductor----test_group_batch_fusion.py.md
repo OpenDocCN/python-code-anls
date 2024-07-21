@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_group_batch_fusion.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_symmetric_memory.py`
 
-```
+```py
 # Owner(s): ["module: c10d"]
 
 # 导入必要的模块和库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import copy  # 导入深拷贝模块

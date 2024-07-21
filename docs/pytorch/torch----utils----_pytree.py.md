@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_pytree.py`
 
-```
+```py
 """
 Contains utility functions for working with nested python data structures.
 

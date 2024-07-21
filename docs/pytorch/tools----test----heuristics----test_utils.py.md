@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\heuristics\test_utils.py`
 
-```
+```py
 from __future__ import annotations
 
 import sys

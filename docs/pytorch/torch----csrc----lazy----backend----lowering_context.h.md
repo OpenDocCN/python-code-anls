@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\lowering_context.h`
 
-```
+```py
 #pragma once
 
 #include <memory>  // 包含内存管理相关的头文件

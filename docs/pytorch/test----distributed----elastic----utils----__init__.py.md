@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\utils\__init__.py`
 
-```
+```py
 # 指定脚本的解释器为 Python 3，使得系统可以正确识别并执行该脚本
 
 #!/usr/bin/env python3

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\flash_attn\flash_fwd_launch_template.h`
 
-```
+```py
 /******************************************************************************
  * Copyright (c) 2023, Tri Dao.
  ******************************************************************************/

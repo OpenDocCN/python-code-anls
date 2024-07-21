@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ops\arithmetic_ir_ops.cpp`
 
-```
+```py
 // 包含头文件 torch/csrc/lazy/core/ops/arithmetic_ir_ops.h
 #include <torch/csrc/lazy/core/ops/arithmetic_ir_ops.h>
 

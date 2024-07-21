@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_lowering_context.cpp`
 
-```
+```py
 namespace torch {
 namespace lazy {
 

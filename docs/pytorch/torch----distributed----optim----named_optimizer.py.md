@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\named_optimizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 logging 模块
 import logging

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\cpp_jit.py`
 
-```
+```py
 # 导入必要的库和模块
 """JIT C++ strings into executables."""
 import atexit           # 用于注册退出时的清理操作
@@ -29,7 +29,7 @@ SOURCE_ROOT = os.path.split(os.path.abspath(__file__))[0]   # 获取当前文件
 # stmt = "torch::mm(x, x);"
 # for num_threads in [1, 2, 4, 8]:
 #   print(Timer(stmt, setup, num_threads=num_threads, language="c++").blocked_autorange())
-# ````
+# ```py`
 # `setup` 和 `stmt` 不会改变，因此我们可以重用第一次循环的可执行文件。
 _BUILD_ROOT: Optional[str] = None
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\__init__.py`
 
-```
+```py
 # 导入 torch._C 模块中的 FileCheck 别名为 FileCheck
 # （注意：通常不建议直接从内部模块导入，而应该从公共接口导入）
 from torch._C import FileCheck as FileCheck

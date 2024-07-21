@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ssize.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Exception.h>

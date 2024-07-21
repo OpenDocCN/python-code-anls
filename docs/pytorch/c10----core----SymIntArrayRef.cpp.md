@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymIntArrayRef.cpp`
 
-```
+```py
 #include <c10/core/SymIntArrayRef.h>
 
 

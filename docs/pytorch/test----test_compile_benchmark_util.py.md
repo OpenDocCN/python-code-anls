@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_compile_benchmark_util.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 引入 unittest 模块，用于编写和运行测试

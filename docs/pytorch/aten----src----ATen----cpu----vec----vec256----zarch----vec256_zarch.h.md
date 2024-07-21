@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\zarch\vec256_zarch.h`
 
-```
+```py
 // 引入数学函数、字符串处理、数值极限、类型特性以及实用工具
 #include <cmath>
 #include <cstring>
@@ -3361,7 +3361,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
 
   }                                                                                                        \
-```  
+```py  
 结束函数定义。
 
 
@@ -3373,7 +3373,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
 
     return Vectorized<typex>{a.vec() & b.vec()};                                                           \
-```  
+```py  
 返回一个 `Vectorized<typex>` 对象，它包含 `a` 和 `b` 向量执行按位与操作的结果。
 
 
@@ -3385,7 +3385,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
                                                                                                            \
   template <>                                                                                              \
   Vectorized<typex> C10_ALWAYS_INLINE operator|(const Vectorized<typex>& a, const Vectorized<typex>& b) {  \
-```  
+```py  
 定义模板特化的按位或（|）操作符重载函数，其返回一个 `Vectorized<typex>` 对象。
 
 
@@ -3395,7 +3395,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
 
   }                                                                                                        \
-```  
+```py  
 结束函数定义。
 
 
@@ -3407,7 +3407,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
 
     return Vectorized<typex>{a.vec() ^ b.vec()};                                                           \
-```  
+```py  
 返回一个 `Vectorized<typex>` 对象，它包含 `a` 和 `b` 向量执行按位异或操作的结果。
 
 
@@ -3418,7 +3418,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
                                                                                                            \
   Vectorized<typex> C10_ALWAYS_INLINE operator==(const Vectorized<typex>& a, const Vectorized<typex>& b) { \
-```  
+```py  
 定义重载的相等（==）操作符函数，其返回一个 `Vectorized<typex>` 对象。
 
 
@@ -3428,7 +3428,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
 
   }                                                                                                        \
-```  
+```py  
 结束函数定义。
 
 
@@ -3439,7 +3439,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
 
     return Vectorized<typex>{a.vec() != b.vec()};                                                          \
-```  
+```py  
 返回一个 `Vectorized<typex>` 对象，它包含 `a` 和 `b` 向量执行不等比较操作的结果。
 
 
@@ -3450,7 +3450,7 @@ static std::enable_if_t<sizeof(U) == 8, Vectorized<T>> arange(
 
                                                                                                            \
   Vectorized<typex> C10_ALWAYS_INLINE operator<(const Vectorized<typex>& a, const Vectorized<typex>& b) {  \
-```  
+```py  
 定义重载的小于（<）操作符函数，其返回一个 `Vectorized<typex>` 对象。
     // 对于复数不支持此操作，触发运行时检查，并抛出错误信息
     TORCH_CHECK(false, "not supported for complex numbers");                                               \

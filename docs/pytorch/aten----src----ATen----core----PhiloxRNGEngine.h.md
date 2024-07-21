@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\PhiloxRNGEngine.h`
 
-```
+```py
 #pragma once
 
 // define constants like M_PI and C keywords for MSVC

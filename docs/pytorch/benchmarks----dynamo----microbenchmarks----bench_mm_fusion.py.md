@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\bench_mm_fusion.py`
 
-```
+```py
 # flake8: noqa
 # 引入triton和PrettyTable库
 import triton

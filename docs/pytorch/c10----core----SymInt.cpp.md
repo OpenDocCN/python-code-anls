@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymInt.cpp`
 
-```
+```py
 // 包含C10库中所需的头文件
 #include <c10/core/ConstantSymNodeImpl.h>
 #include <c10/core/SymFloat.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ufunc\add.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保头文件只包含一次
 

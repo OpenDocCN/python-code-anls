@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_autograd_function.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # flake8: noqa: B950
 

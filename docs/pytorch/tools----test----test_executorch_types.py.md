@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_executorch_types.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 

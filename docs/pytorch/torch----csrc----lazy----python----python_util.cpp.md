@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\python\python_util.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 工具头文件
 #include <torch/csrc/lazy/python/python_util.h>
 

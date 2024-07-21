@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\aoti\__init__.py`
 
-```
+```py
 # 导入所需的模块：os 模块用于文件路径操作，subprocess 模块用于执行外部命令
 import os
 import subprocess

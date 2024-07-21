@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\kernel_lambda_legacy_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 // 引入测试框架的头文件

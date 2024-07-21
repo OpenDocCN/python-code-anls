@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\functional_modules.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型定义 List
 from typing import List

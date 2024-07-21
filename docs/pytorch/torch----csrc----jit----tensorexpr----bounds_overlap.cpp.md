@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\bounds_overlap.cpp`
 
-```
+```py
 // 引入头文件以便访问相关库函数和类
 #include <torch/csrc/jit/tensorexpr/bounds_overlap.h>
 #include <torch/csrc/jit/tensorexpr/ir_simplifier.h>

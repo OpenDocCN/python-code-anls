@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\ops\MetalCopy.h`
 
-```
+```py
 #ifndef MetalCopy_h
 #define MetalCopy_h
 

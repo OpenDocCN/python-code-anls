@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_freezing_weights.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import contextlib                  # 引入上下文管理模块，用于管理上下文，如禁用自动求导

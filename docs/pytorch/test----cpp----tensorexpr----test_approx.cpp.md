@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_approx.cpp`
 
-```
+```py
 #ifdef TORCH_ENABLE_LLVM
 #ifdef TORCH_ENABLE_LLVM 检查是否定义了 TORCH_ENABLE_LLVM 宏，用于条件编译
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\dynamic_shapes.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import dataclasses  # 用于数据类的装饰器

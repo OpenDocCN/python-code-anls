@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\onnx\diagnostics\diagnostics.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/onnx/diagnostics/generated/rules.h>
 #include <torch/csrc/utils/pybind.h>

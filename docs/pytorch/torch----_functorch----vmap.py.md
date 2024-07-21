@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\vmap.py`
 
-```
+```py
 # 忽略类型检查错误，对于mypy来说，这个指令告诉它在当前文件中忽略类型错误
 # 代码版权声明，此代码版权归Facebook及其关联公司所有
 # 在根目录的LICENSE文件中可以找到BSD风格的许可证

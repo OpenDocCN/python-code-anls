@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256_qint.h`
 
-```
+```py
 // 使用 #pragma once 指令确保头文件只被包含一次
 #pragma once
 

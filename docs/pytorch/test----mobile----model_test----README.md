@@ -56,23 +56,23 @@ NOTE: currently Android simulator test does not generate on-the-fly models. Only
 If the simulator test is falling, that means the current change will potentially break a production model. So be careful. The detailed error message can be found in test log. If the change has to be made, make sure it doesn't break existing production models, and update the failed test model as appropriate (see the next section).
 
 You can also run these tests locally, please see the instruction in android and ios folder. Remember to generate on-the-fly test models if you want to test it locally (but don't commit these models with _temp suffix).
-```
+```py
 python test/mobile/model_test/gen_test_model.py ios-test
 ```
 
 ## Update test model
 If for any reason a test model needs to be updated, run this script:
-```
+```py
 python test/mobile/model_test/gen_test_model.py <model_name_without_suffix>
 ```
 For example,
-```
+```py
 python test/mobile/model_test/gen_test_model.py reduction_ops
 python test/mobile/model_test/gen_test_model.py mobilenet_v2
 ```
 
 You can also update all test models for android and iOS:
-```
+```py
 python test/mobile/model_test/gen_test_model.py android
 python test/mobile/model_test/gen_test_model.py ios
 ```
@@ -82,6 +82,6 @@ The test coverage is based on the number of root ops tested in these test models
 https://github.com/pytorch/pytorch/blob/master/test/mobile/model_test/coverage.yaml
 
 In additional, the simulator tests will also report the percentage of Meta's production ops that are covered. The list of production ops changes overtime, so a Meta employee needs to regularly udpate the list it using
-```
+```py
 python test/mobile/model_test/update_production_ops.py ~/fbsource/xplat/pytorch_models/build/all_mobile_model_configs.yaml
 ```

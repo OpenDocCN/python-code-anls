@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\ns_types.py`
 
-```
+```py
 # 导入枚举模块 enum
 import enum
 # 导入命名元组模块 NamedTuple

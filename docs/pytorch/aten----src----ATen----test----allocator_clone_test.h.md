@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\allocator_clone_test.h`
 
-```
+```py
 #pragma once
 #include <gtest/gtest.h>
 #include <ATen/ATen.h>

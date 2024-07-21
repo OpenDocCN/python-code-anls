@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\optests\__init__.py`
 
-```
+```py
 # 忽略 mypy 的类型检查错误
 
 # 导入 make_fx 模块中的 make_fx_check 函数

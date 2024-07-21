@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\flash_attn\kernels\generate_kernels.py`
 
-```
+```py
 # 用于生成 flash_attn 内核实例化的文件，加速编译过程
 
 # 导入必要的模块和库

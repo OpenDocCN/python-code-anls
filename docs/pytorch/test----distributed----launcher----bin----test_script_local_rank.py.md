@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\launcher\bin\test_script_local_rank.py`
 
-```
+```py
 # 指定脚本的解释器为 Python 3
 #!/usr/bin/env python3
 

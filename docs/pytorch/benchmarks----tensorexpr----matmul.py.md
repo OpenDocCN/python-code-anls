@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\matmul.py`
 
-```
+```py
 # 导入NumPy库，并使用“np”作为别名
 import numpy as np
 

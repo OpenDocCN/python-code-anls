@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\build_bundled.py`
 
-```
+```py
 #!/usr/bin/env python3
 import argparse  # 导入命令行参数解析模块
 import os  # 导入操作系统功能模块

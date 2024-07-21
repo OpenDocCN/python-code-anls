@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\init_baseline.h`
 
-```
+```py
 // 以下代码片段是从路径 /home/josh/git/pytorch/test/cpp/api/init_baseline.py 自动生成的
 
 #include <torch/types.h>  // 包含了 Torch 库中定义的数据类型

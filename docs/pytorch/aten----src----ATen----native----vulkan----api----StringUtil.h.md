@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\StringUtil.h`
 
-```
+```py
 #pragma once
 // @lint-ignore-every CLANGTIDY facebook-hte-LocalUncheckedArrayBounds
 #ifdef USE_VULKAN_API

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\example\allreduce.cpp`
 
-```
+```py
 // 引入头文件，用于包含所需的库和模块
 #include <c10/util/irange.h>
 #include <torch/csrc/distributed/c10d/FileStore.hpp>

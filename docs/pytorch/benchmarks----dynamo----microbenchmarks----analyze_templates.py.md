@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\analyze_templates.py`
 
-```
+```py
 """
 This script uses linear programming to analyze outputs of triton mm config tuning.
 To generate output that can be fed into this script set the env varTORCHINDUCTOR_MM_LOGGING_FILE.

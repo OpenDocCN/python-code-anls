@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\parameterdict.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <torch/torch.h>
 #include <algorithm>

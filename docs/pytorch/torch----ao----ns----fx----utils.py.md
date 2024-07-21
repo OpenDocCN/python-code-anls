@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入枚举和操作符模块
 import enum

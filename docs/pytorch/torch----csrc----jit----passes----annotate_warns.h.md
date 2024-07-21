@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\annotate_warns.h`
 
-```
+```py
 #pragma once
 
 # 指令：#pragma once

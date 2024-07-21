@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\distributed_utils.py`
 
-```
+```py
 # 忽略 mypy 的错误提示
 
 # 导入所需模块

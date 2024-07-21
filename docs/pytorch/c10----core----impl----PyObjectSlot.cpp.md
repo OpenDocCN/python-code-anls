@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\PyObjectSlot.cpp`
 
-```
+```py
 // 在 c10::impl 命名空间中定义 PyObjectSlot 类
 
 PyObjectSlot::PyObjectSlot() : pyobj_interpreter_(nullptr), pyobj_(nullptr) {}

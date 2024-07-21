@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\local.py`
 
-```
+```py
 # 从未来导入注释，使得类型注释在旧版本Python中也能正常工作
 from __future__ import annotations
 

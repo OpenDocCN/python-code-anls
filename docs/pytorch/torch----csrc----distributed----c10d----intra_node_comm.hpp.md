@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\intra_node_comm.hpp`
 
-```
+```py
 #pragma once
 // 预处理指令，确保此头文件只被编译一次
 

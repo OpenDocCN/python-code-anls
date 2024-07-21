@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\remote_cache.py`
 
-```
+```py
 # 设置类型检查选项，允许未类型化的函数定义
 # mypy: allow-untyped-defs
 # 导入操作系统相关功能

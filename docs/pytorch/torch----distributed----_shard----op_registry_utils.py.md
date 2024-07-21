@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\op_registry_utils.py`
 
-```
+```py
 # 设置类型检查允许未类型化的定义
 mypy: allow-untyped-defs
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_binary_ufuncs.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 # 导入所需的模块和库

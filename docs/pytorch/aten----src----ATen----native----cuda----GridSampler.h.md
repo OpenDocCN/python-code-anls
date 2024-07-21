@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\GridSampler.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once，确保此头文件只被编译一次
 

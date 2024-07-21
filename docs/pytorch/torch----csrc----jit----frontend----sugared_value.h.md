@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\sugared_value.h`
 
-```
+```py
 // 一旦这个头文件被包含，确保当前头文件内容只被编译一次
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\AffineQuantizer.cpp`
 
-```
+```py
 namespace at {
 namespace native {
 

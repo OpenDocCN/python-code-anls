@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_sharding_prop.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from functools import lru_cache  # 导入 functools 模块中的 lru_cache 装饰器，用于缓存函数调用结果
 from itertools import chain  # 导入 itertools 模块中的 chain 函数，用于将多个可迭代对象连接在一起

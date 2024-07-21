@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\samplers.h`
 
-```
+```py
 #pragma once
 
 # 在 C++ 中，指示编译器只包含头文件一次，避免重复包含

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8avgpool\mp8x9p8q-neon.c`
 
-```
+```py
 /*
  * 确保输入数量非零
  * 参数 n 表示输入的数量

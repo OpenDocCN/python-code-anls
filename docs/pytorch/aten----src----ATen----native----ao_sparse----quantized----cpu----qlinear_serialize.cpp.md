@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\qlinear_serialize.cpp`
 
-```
+```py
 /**
  * Includes the ATen library for PyTorch tensor operations.
  */

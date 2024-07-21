@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\rnn_model_with_packed_sequence.py`
 
-```
+```py
 from torch import nn
 from torch.nn.utils import rnn as rnn_utils
 

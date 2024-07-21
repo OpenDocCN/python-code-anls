@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\up8x9-sse2.c`
 
-```
+```py
 /*
  * 该函数是用于执行 8 通道输入和 9 通道内核的深度可分离卷积的特定微内核，基于 SSE2 指令集实现。
  */

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\coverage_plugins_package\src\coverage_plugins\jit_plugin.py`
 
-```
+```py
 """
 This coverage plug-in attempts to cover JIT'd functions and methods that were previously missed in code coverage. Any
 function and method that was passed through/decorated with torch.jit.script or torch.jit.script_method should now be

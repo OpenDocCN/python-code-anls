@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\torch_export_graph_extractor.py`
 
-```
+```py
 # 用于声明未来的类型注解可以使用未定义的函数或类
 # mypy: allow-untyped-defs
 

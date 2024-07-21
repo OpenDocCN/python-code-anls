@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_limiter_utils.py`
 
-```
+```py
 import collections  # 导入collections模块，用于创建双端队列
 from typing import Deque, Optional  # 导入类型提示，用于声明Deque和Optional类型
 

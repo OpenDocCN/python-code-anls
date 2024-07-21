@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\onnxruntime.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import dataclasses  # 导入用于数据类的模块
 import importlib  # 导入用于动态导入模块的模块

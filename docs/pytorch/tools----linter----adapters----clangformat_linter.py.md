@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\clangformat_linter.py`
 
-```
+```py
 # 从未来模块中导入注解支持
 from __future__ import annotations
 

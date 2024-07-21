@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\__init__.py`
 
-```
+```py
 # 导入来自 torch 库中的条件操作（cond）、循环操作（while_loop）、灵活注意力（flex_attention）和灵活注意力反向（flex_attention_backward）
 from torch._higher_order_ops.cond import cond
 from torch._higher_order_ops.flex_attention import (

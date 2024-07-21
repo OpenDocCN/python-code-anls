@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_abi_check\main.cpp`
 
-```
+```py
 # 包含 Google Test 框架的头文件，用于单元测试
 #include <gtest/gtest.h>
 

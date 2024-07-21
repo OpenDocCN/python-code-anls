@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ParallelFuture.h`
 
-```
+```py
 #pragma once
 // 预处理指令：防止头文件被多次包含
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\MathConstants.h`
 
-```
+```py
 #pragma once
 // 一旦只允许头文件被编译一次
 

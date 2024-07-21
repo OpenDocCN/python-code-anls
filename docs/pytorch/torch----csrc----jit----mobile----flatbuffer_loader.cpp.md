@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\flatbuffer_loader.cpp`
 
-```
+```py
 // 如果定义了 FLATBUFFERS_VERSION_MAJOR 宏，则产生编译错误，要求 flatbuffer_loader.h 文件不得包含任何 flatbuffers 头文件
 #ifdef FLATBUFFERS_VERSION_MAJOR
 #error "flatbuffer_loader.h must not include any flatbuffers headers"

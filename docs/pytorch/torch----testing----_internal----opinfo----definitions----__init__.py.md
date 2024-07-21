@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\__init__.py`
 
-```
+```py
 # 忽略类型检查错误，这是为了防止类型检查器(mypy)报告不必要的错误
 mypy: ignore-errors
 

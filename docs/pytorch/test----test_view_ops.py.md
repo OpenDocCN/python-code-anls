@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_view_ops.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 import random  # 导入随机数生成模块
 

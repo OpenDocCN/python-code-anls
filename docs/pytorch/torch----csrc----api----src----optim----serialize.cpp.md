@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\serialize.cpp`
 
-```
+```py
 // 包含 Torch 库中的序列化相关头文件
 #include <torch/optim/serialize.h>
 

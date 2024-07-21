@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\state_dict_saver.py`
 
-```
+```py
 # 引入需要的模块和依赖项
 import inspect  # 用于获取对象信息的模块
 import os  # 提供与操作系统交互的功能

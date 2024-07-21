@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorFactories.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

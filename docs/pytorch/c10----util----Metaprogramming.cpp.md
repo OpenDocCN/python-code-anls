@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Metaprogramming.cpp`
 
-```
+```py
 #include <c10/util/Metaprogramming.h>
 
 

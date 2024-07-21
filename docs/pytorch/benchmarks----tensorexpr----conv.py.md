@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\conv.py`
 
-```
+```py
 from . import benchmark
 从当前目录中导入 benchmark 模块
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\rng_extension.cpp`
 
-```
+```py
 // 引入 Torch C++ 扩展所需的头文件
 #include <torch/extension.h>
 #include <torch/library.h>

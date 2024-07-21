@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\eliminate_no_ops.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/eliminate_no_ops.h>
 
 #include <torch/csrc/jit/jit_log.h>

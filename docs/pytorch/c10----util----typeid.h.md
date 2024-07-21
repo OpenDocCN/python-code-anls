@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\typeid.h`
 
-```
+```py
 #pragma once
 
 #include <array>  // 引入标准数组库

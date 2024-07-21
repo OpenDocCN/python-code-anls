@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_quantized_op.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入必要的模块和库

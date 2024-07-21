@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\dispatch.py`
 
-```
+```py
 # 导入 functools 模块中的 partial 函数，用于创建偏函数
 from functools import partial
 # 从当前模块的 multipledispatch 中导入 dispatch 函数，并忽略类型检查的警告

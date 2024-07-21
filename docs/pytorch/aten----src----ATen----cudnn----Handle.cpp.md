@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cudnn\Handle.cpp`
 
-```
+```py
 namespace at { namespace native {
 namespace {
 

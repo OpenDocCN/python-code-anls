@@ -1,6 +1,6 @@
 # `.\pytorch\test\xpu\test_conv.py`
 
-```
+```py
 # Owner(s): ["module: intel"]
 
 # 导入必要的库和模块

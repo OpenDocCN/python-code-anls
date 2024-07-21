@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\utils\ParamsHash.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>  // 引入范围库，用于迭代器的范围操作

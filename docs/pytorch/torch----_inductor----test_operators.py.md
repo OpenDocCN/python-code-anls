@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\test_operators.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库的 `library` 模块
 import torch.library

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\cub.h`
 
-```
+```py
 #pragma once
 // 用于确保头文件只被编译一次的预处理指令
 

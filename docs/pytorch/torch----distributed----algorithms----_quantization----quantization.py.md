@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\_quantization\quantization.py`
 
-```
+```py
 # 设置一个全局变量，用于存储半精度浮点数的最小值
 TORCH_HALF_MIN = torch.finfo(torch.float16).min
 # 设置一个全局变量，用于存储半精度浮点数的最大值

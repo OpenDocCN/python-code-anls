@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_module_api.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <test/cpp/jit/test_utils.h>  // 包含用于 JIT 测试的实用函数的头文件

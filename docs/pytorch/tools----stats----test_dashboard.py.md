@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\test_dashboard.py`
 
-```
+```py
 # 从__future__模块导入annotations，支持类型注解
 from __future__ import annotations
 

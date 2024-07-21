@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen_executorch.py`
 
-```
+```py
 # 导入必要的模块和类
 from __future__ import annotations  # 允许类型注解中使用类型本身（Python 3.10 之前需要）
 import argparse  # 命令行参数解析模块

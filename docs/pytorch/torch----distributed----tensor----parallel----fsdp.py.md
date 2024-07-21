@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\fsdp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型
 import copy

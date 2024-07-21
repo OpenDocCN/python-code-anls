@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\builtin.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入标准库模块
 import contextlib

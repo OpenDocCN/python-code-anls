@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ExclusivelyOwnedTensorTraits.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件只被编译一次
 

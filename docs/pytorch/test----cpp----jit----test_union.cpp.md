@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_union.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/core/jit_type.h>  // 引入 PyTorch 的 JIT 类型定义头文件

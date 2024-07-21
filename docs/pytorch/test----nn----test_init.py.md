@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_init.py`
 
-```
+```py
 # 导入必要的库和模块
 # Owner(s): ["module: nn"]
 import math  # 导入数学函数库

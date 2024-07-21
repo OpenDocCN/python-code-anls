@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\parser_constants.h`
 
-```
+```py
 #pragma once
 
 // 在 C++ 中，此指令确保头文件只被编译一次，以防止重复包含

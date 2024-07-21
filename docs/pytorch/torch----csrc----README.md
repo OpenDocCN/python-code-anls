@@ -56,7 +56,7 @@ Exceptions define helpers for two main cases:
 * For code where you write the python binding by hand, `HANDLE_TH_ERRORS`,
 `END_HANDLE_TH_ERRORS` and an exception class `python_error`.  You call them like this:
 
-```
+```py
 // Entry point from Python interpreter
 PyObject* run(PyObject* arg) {
   HANDLE_TH_ERRORS
@@ -80,7 +80,7 @@ will raise that exception, nothing else needs to be done."
 can be used. They will work jointly with pybind error handling to raise
 pytorch errors and warnings natively and let pybind handle other errors. It can be used as:
 
-```
+```py
 // Function given to the pybind binding
 at::Tensor foo(at::Tensor x) {
   HANDLE_TH_ERRORS
@@ -104,7 +104,7 @@ the Python GIL, as none of these calls are thread safe.
 `pybind11::gil_scoped_acquire` is a RAII struct which handles taking and
 releasing the GIL.  Use it like this:
 
-```
+```py
 void iWantToUsePython() {
   pybind11::gil_scoped_acquire gil;
   ...

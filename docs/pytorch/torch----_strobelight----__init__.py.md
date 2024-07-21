@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_strobelight\__init__.py`
 
-```
+```py
 # 导入所需模块：os（操作系统功能）、shutil（文件操作）、datetime（日期时间处理）
 import os
 import shutil

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\generate_bc_packages.py`
 
-```
+```py
 # 从 pathlib 库中导入 Path 类，用于处理文件路径
 from pathlib import Path
 

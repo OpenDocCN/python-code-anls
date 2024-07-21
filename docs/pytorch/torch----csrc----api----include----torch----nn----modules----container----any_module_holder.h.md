@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\container\any_module_holder.h`
 
-```
+```py
     /// 从给定的参数向前调用底层模块的 `forward()` 方法，将每个 `AnyValue` 转换为具体值
     /// 参数:
     /// - arguments: 包含任意类型值的向量，用于调用模块的 `forward()` 方法

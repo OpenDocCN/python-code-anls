@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 库中的 Adagrad 优化器头文件
 #include <torch/optim/adagrad.h>

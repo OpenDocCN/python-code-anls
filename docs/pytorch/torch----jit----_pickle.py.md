@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_pickle.py`
 
-```
+```py
 # 设置一个类型检查的标志，允许在未标注类型的函数中使用
 # 这些函数被引用自由 ScriptModule.save() 生成的 pickle 存档中
 

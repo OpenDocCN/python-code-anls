@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_meta.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import itertools  # 导入 itertools 库，用于生成迭代器的函数

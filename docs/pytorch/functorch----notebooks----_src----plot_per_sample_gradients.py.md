@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\notebooks\_src\plot_per_sample_gradients.py`
 
-```
+```py
 """
 ==========================
 Per-sample-gradients

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\MathBitFallThroughLists.h`
 
-```
+```py
 #pragma once
 
 namespace at {

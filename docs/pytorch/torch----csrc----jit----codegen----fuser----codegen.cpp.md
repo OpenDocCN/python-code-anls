@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\codegen.cpp`
 
-```
+```py
 // 引入 Torch JIT 中用于代码生成的相关头文件
 #include <torch/csrc/jit/codegen/fuser/codegen.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\contrib\_tensorboard_vis.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块和库
 import time  # 导入时间模块

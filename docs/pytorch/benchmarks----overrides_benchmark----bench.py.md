@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\overrides_benchmark\bench.py`
 
-```
+```py
 # 导入 argparse 模块，用于解析命令行参数
 import argparse
 # 导入 time 模块，用于测量代码执行时间

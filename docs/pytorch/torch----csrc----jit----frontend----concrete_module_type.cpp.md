@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\concrete_module_type.cpp`
 
-```
+```py
 #include <torch/csrc/jit/frontend/concrete_module_type.h>
 
 #include <c10/util/irange.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\rpc_test.py`
 
-```
+```py
 # 忽略 MyPy 的错误提示
 
 import concurrent.futures  # 引入并发执行任务的库

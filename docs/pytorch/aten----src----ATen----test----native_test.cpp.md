@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\native_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/ATen.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\UCCTracing.cpp`
 
-```
+```py
 #ifdef USE_C10D_UCC
 // 如果定义了 USE_C10D_UCC 宏，则包含以下头文件
 #include <torch/csrc/distributed/c10d/UCCTracing.hpp>

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\test_bench.py`
 
-```
+```py
 # 导入 pytest 库，用于编写和运行测试
 import pytest
 

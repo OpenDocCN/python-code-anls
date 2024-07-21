@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\saved_variable.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令：`#pragma once`用于确保头文件只被编译一次，防止多重包含。

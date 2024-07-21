@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseMatMul.cpp`
 
-```
+```py
 // 定义宏以仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 核心头文件

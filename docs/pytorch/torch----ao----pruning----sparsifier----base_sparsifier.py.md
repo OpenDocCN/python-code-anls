@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\sparsifier\base_sparsifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入抽象基类模块
 import abc

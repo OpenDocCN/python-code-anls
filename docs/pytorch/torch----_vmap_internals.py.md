@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_vmap_internals.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools 库，用于处理函数相关的工具函数
 import functools

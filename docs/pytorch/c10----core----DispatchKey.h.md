@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DispatchKey.h`
 
-```
+```py
 // 预处理指令，确保本文件只被编译一次
 #pragma once
 

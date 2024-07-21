@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\import.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/jit/mobile/module.h>
 #include <torch/csrc/jit/mobile/parse_operators.h>

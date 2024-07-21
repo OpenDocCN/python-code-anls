@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_refs\nn\functional\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入数学库
 import math

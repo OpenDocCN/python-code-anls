@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\EmbeddingBag.h`
 
-```
+```py
 // 引入 ATen 库中的 Tensor 类和配置信息
 #include <ATen/core/Tensor.h>
 #include <ATen/Config.h>

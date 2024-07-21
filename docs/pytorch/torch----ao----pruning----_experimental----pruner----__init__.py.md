@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\__init__.py`
 
-```
+```py
 # 从当前包中导入 BaseStructuredSparsifier 类
 from .base_structured_sparsifier import BaseStructuredSparsifier
 # 从当前包中导入 FakeStructuredSparsity 和 BiasHook 类

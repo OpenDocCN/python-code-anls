@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\templates\RegisterSchema.cpp`
 
-```
+```py
 // ${generated_comment}
 // 定义宏，用于声明只包含方法的运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS

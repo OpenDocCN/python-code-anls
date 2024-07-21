@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\attributes.cpp`
 
-```
+```py
 // 引入头文件：包含了C++标准库和Torch库中定义的必要组件
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/ir/attributes.h>

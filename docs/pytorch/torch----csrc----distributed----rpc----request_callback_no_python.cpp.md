@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\request_callback_no_python.cpp`
 
-```
+```py
 // 包含 Torch 分布式 RPC 请求回调所需的头文件
 
 #include <torch/csrc/distributed/rpc/request_callback_no_python.h>

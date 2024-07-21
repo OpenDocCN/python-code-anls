@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\memory_planning.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 使用未类型化的定义来允许类型推断
 

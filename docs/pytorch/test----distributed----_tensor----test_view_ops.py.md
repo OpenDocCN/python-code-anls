@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_view_ops.py`
 
-```
+```py
 # 导入所需模块和库
 import itertools  # 提供迭代工具
 from typing import cast, List  # 类型提示，用于类型检查和转换

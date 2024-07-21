@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\lut-microkernel-tester.h`
 
-```
+```py
 /*
  * Copyright (c) Facebook, Inc. and its affiliates.
  * All rights reserved.

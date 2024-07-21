@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\int128.h`
 
-```
+```py
 // 这个文件基于 protobuf 的 uint128 实现，源自以下链接：
 // https://github.com/protocolbuffers/protobuf/blob/1e88936fce10cf773cb72b44c6a7f48b38c7578b/src/google/protobuf/stubs/int128.h
 //

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\ScanKernels.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>
 #include <ATen/TensorUtils.h>

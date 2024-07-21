@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\utils.py`
 
-```
+```py
 # 设置 mypy 以允许未类型化的定义
 mypy: allow-untyped-defs
 

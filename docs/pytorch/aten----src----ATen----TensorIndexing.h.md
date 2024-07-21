@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorIndexing.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ExpandUtils.h> // 引入 ATen 库中的扩展工具

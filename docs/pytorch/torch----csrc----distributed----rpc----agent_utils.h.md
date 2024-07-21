@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\agent_utils.h`
 
-```
+```py
 // 防止头文件重复包含，只在首次引入时起作用
 #pragma once
 

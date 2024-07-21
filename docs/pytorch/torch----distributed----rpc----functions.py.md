@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\functions.py`
 
-```
+```py
 # 引入 functools 模块，用于函数装饰器
 import functools
 

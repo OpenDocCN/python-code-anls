@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\_reduction.py`
 
-```
+```py
 # 导入警告模块，用于在需要时发出警告
 import warnings
 # 导入可选类型，用于指定参数的可选性

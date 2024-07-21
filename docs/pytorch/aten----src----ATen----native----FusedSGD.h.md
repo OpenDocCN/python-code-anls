@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FusedSGD.h`
 
-```
+```py
 // 引入 ATen 核心库中的 Tensor 头文件
 #include <ATen/core/Tensor.h>
 // 引入 ATen 中的分发存根头文件

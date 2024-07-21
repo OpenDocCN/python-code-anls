@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\flash_attn\flash_api.h`
 
-```
+```py
 #pragma once
 #include <cstddef>
 

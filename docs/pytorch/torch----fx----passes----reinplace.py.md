@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\reinplace.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 相关模块和类
 import torch

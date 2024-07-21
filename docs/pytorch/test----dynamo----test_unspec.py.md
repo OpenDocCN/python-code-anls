@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_unspec.py`
 
-```
+```py
 # 导入标准数学库和随机库
 import math
 import random

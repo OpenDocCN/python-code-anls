@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\interp.py`
 
-```
+```py
 """
 这是一个简单的Sympy表达式解释器，根据torch._inductor.virtualized的调用约定分派给不同的类处理。
 为了直接性，解释器直接使用处理程序，而不是查询TLS（线程本地存储）。

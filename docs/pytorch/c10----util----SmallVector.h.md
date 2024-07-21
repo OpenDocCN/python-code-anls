@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\SmallVector.h`
 
-```
+```py
 // LLVM 项目中用于处理 'Normally small' 向量的类 SmallVector 的定义
 // 此处的 SmallVectorBase 类包含了所有 SmallVector 共有的基本功能
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\sizevars.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和函数
 import functools

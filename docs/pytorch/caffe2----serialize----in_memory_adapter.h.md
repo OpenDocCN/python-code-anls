@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\serialize\in_memory_adapter.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件内容只被包含一次
 

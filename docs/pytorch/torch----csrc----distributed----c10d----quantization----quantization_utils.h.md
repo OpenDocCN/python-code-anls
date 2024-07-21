@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\quantization\quantization_utils.h`
 
-```
+```py
 // 使用#pragma once确保头文件只被包含一次，避免重复定义问题
 
 #include <ATen/ATen.h>  // 引入ATen库，用于PyTorch张量操作

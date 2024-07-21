@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Register.h`
 
-```
+```py
 #ifdef USE_VULKAN_API
 // 如果定义了 USE_VULKAN_API 宏，则进入条件编译
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\edit_distance.cpp`
 
-```
+```py
 // 包含头文件，用于计算两个单词之间的编辑距离
 #include <torch/csrc/jit/frontend/edit_distance.h>
 #include <algorithm>

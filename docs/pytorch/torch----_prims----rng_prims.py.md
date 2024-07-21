@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_prims\rng_prims.py`
 
-```
+```py
 # 添加类型检查注释声明，允许未经类型化的定义
 # mypy: allow-untyped-defs
 # 导入所需的类型

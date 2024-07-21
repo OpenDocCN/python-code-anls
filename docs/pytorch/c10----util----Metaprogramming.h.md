@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Metaprogramming.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/TypeList.h>

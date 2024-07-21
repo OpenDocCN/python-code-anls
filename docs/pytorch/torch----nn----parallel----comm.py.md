@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\comm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入警告模块，用于处理警告信息
 import warnings

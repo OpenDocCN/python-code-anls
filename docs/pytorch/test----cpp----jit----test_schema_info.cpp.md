@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_schema_info.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 #include <torch/csrc/autograd/generated/variable_factories.h>  // 引入 Torch 的变量工厂相关头文件
 #include <torch/csrc/utils/schema_info.h>  // 引入 Torch 的模式信息工具头文件

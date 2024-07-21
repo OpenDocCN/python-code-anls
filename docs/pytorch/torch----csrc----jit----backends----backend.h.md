@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/builtin_function.h>

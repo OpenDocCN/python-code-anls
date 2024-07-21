@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\compilation\linear_train.py`
 
-```
+```py
 # 导入时间模块，用于测量代码执行时间
 import time
 

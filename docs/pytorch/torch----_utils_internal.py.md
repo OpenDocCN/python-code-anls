@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_utils_internal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import functools  # 提供了函数式编程支持的工具

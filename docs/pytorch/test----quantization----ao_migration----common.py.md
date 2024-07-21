@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\ao_migration\common.py`
 
-```
+```py
 import importlib  # 导入 importlib 模块，用于动态导入模块
 from typing import List, Optional  # 导入 List 和 Optional 类型提示
 

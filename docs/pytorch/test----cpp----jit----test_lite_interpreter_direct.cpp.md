@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_lite_interpreter_direct.cpp`
 
-```
+```py
 // 包含测试所需的头文件
 #include <test/cpp/jit/test_utils.h>
 

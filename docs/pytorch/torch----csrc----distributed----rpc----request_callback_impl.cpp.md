@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\request_callback_impl.cpp`
 
-```
+```py
 // 包含头文件：请求处理实现的定义
 #include <torch/csrc/distributed/rpc/request_callback_impl.h>
 

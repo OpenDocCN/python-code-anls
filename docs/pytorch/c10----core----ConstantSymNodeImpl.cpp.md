@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\ConstantSymNodeImpl.cpp`
 
-```
+```py
 // 包含头文件 <c10/core/ConstantSymNodeImpl.h>
 #include <c10/core/ConstantSymNodeImpl.h>
 

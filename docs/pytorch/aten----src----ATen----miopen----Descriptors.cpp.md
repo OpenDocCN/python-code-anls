@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\miopen\Descriptors.cpp`
 
-```
+```py
 // 引入 MIOpen 的描述符头文件和 ATen 的基础头文件
 #include <ATen/miopen/Descriptors.h>
 #include <ATen/ATen.h>

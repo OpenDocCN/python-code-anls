@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\current_scope_id.py`
 
-```
+```py
 # 引入用于允许未标注的函数定义的类型检查配置
 # 这里导入了contextlib和threading模块
 import contextlib

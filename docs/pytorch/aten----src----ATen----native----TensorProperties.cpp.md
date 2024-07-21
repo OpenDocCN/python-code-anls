@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorProperties.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，仅在 Torch 中使用方法操作符
 

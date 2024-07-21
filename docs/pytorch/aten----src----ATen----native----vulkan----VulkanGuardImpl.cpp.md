@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\VulkanGuardImpl.cpp`
 
-```
+```py
 namespace at {
 namespace detail {
 

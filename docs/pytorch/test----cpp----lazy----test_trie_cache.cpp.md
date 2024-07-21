@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_trie_cache.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <c10/util/Exception.h>  // 引入异常处理相关的头文件

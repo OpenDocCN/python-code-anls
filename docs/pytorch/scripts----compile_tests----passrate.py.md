@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\compile_tests\passrate.py`
 
-```
+```py
 # 导入 argparse 库，用于解析命令行参数
 import argparse
 

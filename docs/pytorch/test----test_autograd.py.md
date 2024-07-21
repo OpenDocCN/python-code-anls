@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_autograd.py`
 
-```
+```py
 # Owner(s): ["module: autograd"]
 
 # 导入需要的标准库和第三方库

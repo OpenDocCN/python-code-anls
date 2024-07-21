@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\propagate_gradients_req.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h>

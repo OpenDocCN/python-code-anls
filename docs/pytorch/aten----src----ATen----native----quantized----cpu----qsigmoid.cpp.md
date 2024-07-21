@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qsigmoid.cpp`
 
-```
+```py
 // 定义编译标志以仅支持方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

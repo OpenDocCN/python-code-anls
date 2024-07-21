@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\fuse\gen_patterns.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入操作系统相关的模块
 import os

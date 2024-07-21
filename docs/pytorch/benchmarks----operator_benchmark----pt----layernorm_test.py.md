@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\layernorm_test.py`
 
-```
+```py
 # 导入 operator_benchmark 库和 torch 库，用于性能测试和神经网络操作
 import operator_benchmark as op_bench
 import torch

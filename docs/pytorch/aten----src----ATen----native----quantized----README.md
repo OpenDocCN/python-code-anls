@@ -16,7 +16,7 @@ Before writing the quantized kernel and registering it, let us implement a quant
 That would assist in any further discussion.
 The snippet below shows the implementation of a quantized XAND operator, with the support of all implemented quantized types.
 
-```c++
+```py++
 Tensor quantized_xand(Tensor qa, Tensor qb) {
   // Some type checks for qa and qb should be here...
   Tensor qc;
@@ -60,7 +60,7 @@ it should also use the aliases for the quantized data types instead of the expli
 Update `aten/src/ATen/native/quantized/library.cpp` and add
 a `def` for your new operator:
 
-```c++
+```py++
 TORCH_LIBRARY(quantized, m) {
   // ... the existing definitions ...
   m.def("quantized::xand(Tensor qa, Tensor qb) -> Tensor");
@@ -75,7 +75,7 @@ This translates to `torch._ops.ops.quantized.xand` function in Python of the app
 
 The registration is done using `TORCH_LIBRARY_IMPL`.
 
-```c++
+```py++
 TORCH_LIBRARY_IMPL(quantized, QuantizedCPU, m) {
   m.impl("xand", TORCH_FN(quantized_xand));
 }
@@ -88,7 +88,7 @@ A detailed explanation on this file can be found [here](https://github.com/pytor
 
 **If adding a new entry to the `native_functions.yaml`:**
 
-```yaml
+```py
 - func: quantized_xand(Tensor qa, Tensor qb) -> Tensor
   dispatch:
     QuantizedCPU: quantized_xand
@@ -100,7 +100,7 @@ If you find an entry in the yaml file, and would like to add a quantized kernel 
 For example, let's assume there existed a `xand` function in the YAML file.
 In that case, modification would look as:
 
-```yaml
+```py
 - func: xand(Tensor a, Tensor b) -> Tensor
   dispatch:
     CPU: _xand_cpu     # Assume this existed
@@ -112,7 +112,7 @@ In that case, modification would look as:
 
 The final file `ATen/native/quantized/cpu/qxand.cpp` would look as follows
 
-```c++
+```py++
 #include <ATen/ATen.h>
 #include <ATen/NativeFunctions.h> // Need that for the `native_functions.yaml`
 #include <ATen/core/Type.h>
@@ -140,7 +140,7 @@ If the op is placed under `native/quantized/cpu`, this already done for you.
 However, if the location is changed, two files must be notified:
 
 - *`caffe2/aten/TARGETS`* -- You can follow the same example, and add your path in somewhere in that file. Notice in this file we places the path to the quantized source files:
-```bash
+```py
 ATEN_NATIVE_CPP = glob([
 #...
   "src/ATen/native/quantized/**/*.cpp",
@@ -150,7 +150,7 @@ ATEN_NATIVE_CPP = glob([
 - *`caffe2/aten/src/ATen/CMakeLists.txt`* -- Again, following the example, you must add your paths.
 The current quantization paths are added as
 
-```bash
+```py
 FILE(GLOB native_quantized_cpp
           "native/quantized/*.cpp"
           "native/quantized/cpu/*.cpp")
@@ -163,7 +163,7 @@ FILE(GLOB native_quantized_cpp
 Usage in Python is pretty easy.
 To implement the python quantized function using our kernel, you can do the following
 
-```python
+```py
 from torch._ops import ops
 
 def quantized_xand(qa, qb):
@@ -179,7 +179,7 @@ it is strongly encouraged to place them in the `torch/ao/nn/quantized/functional
 You should not need to use the registered kernels in C++.
 Although **officially not supported**, you can use the following
 
-```c++
+```py++
   Tensor quantized_xand(Tensor qa, Tensor qb) {
     static const c10::OperatorHandle op = c10::Dispatcher::singleton().findSchema({"quantized::xand", ""}).value();
     return op.call<Tensor, Tensor, Tensor>(qa, qb);

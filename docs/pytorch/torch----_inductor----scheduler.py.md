@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\scheduler.py`
 
-```
+```py
 # mypy: disallow-untyped-defs
 # 从未来导入的注释，禁止未注释的函数类型
 from __future__ import annotations

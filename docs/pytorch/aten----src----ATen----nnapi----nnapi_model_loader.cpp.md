@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_model_loader.cpp`
 
-```
+```py
 // NOLINTNEXTLINE(modernize-deprecated-headers)
 #include <stdint.h>  // 包含用于整数类型的标准头文件
 

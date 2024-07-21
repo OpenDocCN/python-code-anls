@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_optim.py`
 
-```
+```py
 # Owner(s): ["module: optimizer"]
 import functools  # 导入 functools 模块，用于高阶函数和函数式编程支持
 import math  # 导入 math 模块，提供数学运算函数

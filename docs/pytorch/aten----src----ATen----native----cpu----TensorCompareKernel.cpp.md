@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\TensorCompareKernel.cpp`
 
-```
+```py
 // 包含C++头文件，用于张量操作和计算
 #include <c10/core/ScalarType.h>
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\optests\aot_autograd.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入PyTorch库

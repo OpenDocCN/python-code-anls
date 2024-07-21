@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\BatchLinearAlgebra.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含标准库头文件 <utility>
 #include <utility>

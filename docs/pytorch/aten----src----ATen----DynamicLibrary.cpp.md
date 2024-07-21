@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\DynamicLibrary.cpp`
 
-```
+```py
 // 引入 C10 库中的异常处理和 Unicode 支持
 #include <c10/util/Exception.h>
 #include <c10/util/Unicode.h>

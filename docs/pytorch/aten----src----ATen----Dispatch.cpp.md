@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Dispatch.cpp`
 
-```
+```py
 #include <ATen/Dispatch.h>
 #if defined ENABLE_RECORD_KERNEL_FUNCTION_DTYPE
 #include <ATen/record_function.h>

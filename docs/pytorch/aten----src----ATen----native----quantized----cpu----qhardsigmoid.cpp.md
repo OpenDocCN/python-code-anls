@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qhardsigmoid.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

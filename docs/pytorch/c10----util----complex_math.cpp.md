@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\complex_math.cpp`
 
-```
+```py
 #include <c10/util/complex.h>
 
 #include <cmath>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\generated_ops.cpp`
 
-```
+```py
 // 忽略 clang-tidy 的检查，此处自动生成于 torchgen/static_runtime/gen_static_runtime_ops.py
 
 #include <torch/csrc/jit/runtime/static/ops.h> // 导入静态运行时操作头文件

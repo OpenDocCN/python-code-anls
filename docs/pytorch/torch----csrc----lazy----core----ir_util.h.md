@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ir_util.h`
 
-```
+```py
 #pragma once
 
 #include <unordered_map>

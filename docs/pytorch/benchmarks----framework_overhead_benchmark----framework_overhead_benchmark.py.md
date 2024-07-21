@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\framework_overhead_benchmark\framework_overhead_benchmark.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 导入命令行参数解析模块
 

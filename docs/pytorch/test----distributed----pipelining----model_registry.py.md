@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\model_registry.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # Owner(s): ["oncall: distributed"]
 # This file is a model zoo for testing torch.distributed.pipelining.

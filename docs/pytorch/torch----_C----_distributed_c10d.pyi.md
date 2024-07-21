@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_distributed_c10d.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # mypy: disable-error-code="type-arg"
 # 从 datetime 模块导入 timedelta 类型

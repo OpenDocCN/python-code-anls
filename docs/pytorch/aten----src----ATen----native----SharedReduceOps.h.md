@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SharedReduceOps.h`
 
-```
+```py
 #pragma once
 // 这个指令确保头文件只被包含一次，避免重复定义
 

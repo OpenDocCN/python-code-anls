@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Padding.cpp`
 
-```
+```py
 // 引入Vulkan操作所需的头文件
 #include <ATen/native/vulkan/ops/Common.h>
 // 引入c10库中的范围工具

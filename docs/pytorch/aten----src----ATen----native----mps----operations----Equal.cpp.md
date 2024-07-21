@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\operations\Equal.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，可能用于限制操作符方法
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的 Tensor 类定义

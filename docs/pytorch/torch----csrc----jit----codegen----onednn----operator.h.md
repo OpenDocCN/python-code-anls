@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\operator.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 确保头文件只被编译一次
 

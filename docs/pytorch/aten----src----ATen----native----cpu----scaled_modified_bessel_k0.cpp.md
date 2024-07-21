@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\scaled_modified_bessel_k0.cpp`
 
-```
+```py
 // 定义宏，禁用 Torch 运算符断言功能
 #define TORCH_ASSERT_NO_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_functional_collectives.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入系统模块和警告模块
 import sys

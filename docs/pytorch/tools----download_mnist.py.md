@@ -1,6 +1,6 @@
 # `.\pytorch\tools\download_mnist.py`
 
-```
+```py
 import argparse  # 导入命令行参数解析模块
 import gzip  # 导入 gzip 压缩文件处理模块
 import os  # 导入操作系统功能模块

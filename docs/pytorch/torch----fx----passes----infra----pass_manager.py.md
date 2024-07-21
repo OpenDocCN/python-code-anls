@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\infra\pass_manager.py`
 
-```
+```py
 # 声明类型检查允许未标记的函数定义
 # 导入检查源码的模块
 # 导入日志记录模块
@@ -163,7 +163,7 @@ def this_before_that_pass_constraint(this: Callable, that: Callable) -> Callable
     constraints = [
         this_before_that_pass_constraint(pass_a, pass_b)
     ]
-    ```
+    ```py
 
     Args:
         this (Callable): pass which should occur first

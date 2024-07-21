@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\PythonOpRegistrationTrampoline.cpp`
 
-```
+```py
 // 定义命名空间 `at::impl`，实现 Python 操作的注册桥接器
 namespace at::impl {
 

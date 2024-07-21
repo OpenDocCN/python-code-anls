@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Half.h`
 
-```
+```py
 #pragma once
 
 /// Defines the Half type (half-precision floating-point) including conversions

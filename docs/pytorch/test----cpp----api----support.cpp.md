@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\support.cpp`
 
-```
+```py
 # 包含测试支持的头文件
 #include <test/cpp/api/support.h>
 

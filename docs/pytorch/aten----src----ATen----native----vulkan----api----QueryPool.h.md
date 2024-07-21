@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\QueryPool.h`
 
-```
+```py
 #pragma once
 // @lint-ignore-every CLANGTIDY facebook-hte-BadMemberName
 

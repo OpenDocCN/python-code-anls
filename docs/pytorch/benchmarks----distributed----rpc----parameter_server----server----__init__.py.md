@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\server\__init__.py`
 
-```
+```py
 # 导入自定义模块中的 AverageBatchParameterServer 和 AverageParameterServer 类
 from .server import AverageBatchParameterServer, AverageParameterServer
 

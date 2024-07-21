@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cpu_profiling_allocator_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 引入 Google Test 框架的头文件
 
 #include <c10/core/CPUAllocator.h> // 引入 C10 核心模块的 CPUAllocator 头文件

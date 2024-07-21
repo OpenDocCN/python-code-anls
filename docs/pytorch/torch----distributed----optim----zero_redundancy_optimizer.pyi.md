@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\zero_redundancy_optimizer.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型声明
 import enum  # 导入枚举模块

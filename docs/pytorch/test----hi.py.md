@@ -1,6 +1,6 @@
 # `.\pytorch\test\hi.py`
 
-```
+```py
 # 导入requests库，用于发送HTTP请求
 import requests
 # 导入BeautifulSoup库，用于HTML解析

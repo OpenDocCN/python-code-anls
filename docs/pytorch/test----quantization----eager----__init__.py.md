@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\eager\__init__.py`
 
-```
+```py
 # 定义一个名为 process_data 的函数，接受一个名为 data 的参数
 def process_data(data):
     # 初始化一个名为 result 的空列表，用于存储处理后的数据

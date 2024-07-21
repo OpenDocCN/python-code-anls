@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\csrc\dim\arena.h`
 
-```
+```py
 // 版权声明，此代码受到 BSD 风格许可证保护，详见根目录下的 LICENSE 文件
 #pragma once
 // 引入 ATen 库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\tensor_aten_ops.cpp`
 
-```
+```py
 #include <torch/csrc/lazy/ts_backend/tensor_aten_ops.h>
 
 #include <ATen/InferSize.h>

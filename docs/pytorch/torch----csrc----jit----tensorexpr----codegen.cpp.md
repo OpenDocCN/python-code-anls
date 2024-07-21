@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\codegen.cpp`
 
-```
+```py
 #include <torch/csrc/jit/jit_log.h>  // 引入 Torch JIT 的日志功能头文件
 #include <torch/csrc/jit/tensorexpr/analysis.h>  // 引入 Torch JIT Tensor Expression 的分析功能头文件
 #include <torch/csrc/jit/tensorexpr/codegen.h>  // 引入 Torch JIT Tensor Expression 的代码生成功能头文件

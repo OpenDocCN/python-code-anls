@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\onnxrt.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # This backend is maintained by ONNX team. To direct issues

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rpc.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保本文件只被编译一次，避免重复包含
 

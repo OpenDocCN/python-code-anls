@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\qat\modules\linear_fused.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import torch  # 导入 PyTorch 库
 import torch.nn as nn  # 导入神经网络模块

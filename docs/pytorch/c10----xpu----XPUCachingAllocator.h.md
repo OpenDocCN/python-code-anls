@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUCachingAllocator.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，确保头文件只被包含一次，防止重复定义

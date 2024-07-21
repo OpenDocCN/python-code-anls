@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\mps_test_allocator.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <torch/torch.h>
 #include <ATen/mps/MPSAllocatorInterface.h>

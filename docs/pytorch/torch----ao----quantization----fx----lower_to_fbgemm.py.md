@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\lower_to_fbgemm.py`
 
-```
+```py
 # 从 _lower_to_native_backend 模块中导入 _lower_to_native_backend 函数
 # 这个函数用于将模型转换为本地后端的实现
 from ._lower_to_native_backend import _lower_to_native_backend

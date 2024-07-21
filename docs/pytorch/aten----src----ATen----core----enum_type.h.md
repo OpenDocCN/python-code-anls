@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\enum_type.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/ivalue.h>  // 包含 ATen 库中的 IValue 头文件

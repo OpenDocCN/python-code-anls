@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\canonicalize.h`
 
-```
+```py
 #pragma once
 // 预处理指令：指示编译器确保头文件只包含一次
 

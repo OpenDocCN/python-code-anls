@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\default_hooks.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型定义
 from typing import Any, Callable, cast, Tuple

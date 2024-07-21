@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_models_quantized_onnxruntime.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 引入标准库和第三方库

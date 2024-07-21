@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入上下文管理工具
 import contextlib

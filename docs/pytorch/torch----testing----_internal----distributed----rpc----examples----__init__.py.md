@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\examples\__init__.py`
 
-```
+```py
 # 导入必要的模块 BytesIO 和 zipfile
 from io import BytesIO
 import zipfile

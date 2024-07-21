@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\inductor_prims.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入未类型化的函数定义的兼容性声明
 

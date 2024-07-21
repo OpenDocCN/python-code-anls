@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_embedding.py`
 
-```
+```py
 # 导入必要的库和模块
 # 这些库包括了进行单元测试和深度学习模型测试所需的工具和函数
 # Owner(s): ["module: nn"]

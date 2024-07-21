@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\hardsigmoid_test.py`
 
-```
+```py
 # 导入自定义的性能基准模块 `operator_benchmark` 和 PyTorch 库
 import operator_benchmark as op_bench
 import torch

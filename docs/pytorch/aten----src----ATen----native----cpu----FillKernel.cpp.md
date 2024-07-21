@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\FillKernel.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_NO_OPERATORS，禁用 ATen 库的运算符重载
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库的分发和并行计算相关头文件

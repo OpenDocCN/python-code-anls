@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\readability.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来导入注释允许未类型化的定义
 

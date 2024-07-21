@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_debug_handler.cpp`
 
-```
+```py
 // 引入 Torch 后端调试处理器的头文件
 #include <torch/csrc/jit/backends/backend_debug_handler.h>
 

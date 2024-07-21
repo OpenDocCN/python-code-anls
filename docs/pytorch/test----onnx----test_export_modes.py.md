@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_export_modes.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 引入所需的模块和库

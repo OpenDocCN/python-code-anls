@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\__init__.py`
 
-```
+```py
 # 导入必要的模块和类型检查
 from __future__ import annotations  # 启用类型提示的新语法支持
 from typing import TYPE_CHECKING  # 导入类型检查模块

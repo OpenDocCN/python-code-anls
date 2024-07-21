@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\pattern_conversion\common.cpp`
 
-```
+```py
 // 包含 Torch 库中 ONNX 模式转换通用功能的头文件
 #include <torch/csrc/jit/passes/onnx/pattern_conversion/common.h>
 

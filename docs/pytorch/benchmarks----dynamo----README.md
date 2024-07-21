@@ -79,7 +79,7 @@ For debugging you can run just a single benchmark by adding the `--only=<NAME>` 
 A complete list of options can be seen by running each of the runners with the `--help` flag.
 
 As an example, the commands to run first line of the dashboard (performance only) would be:
-```
+```py
 ./benchmarks/dynamo/torchbench.py --performance --training --amp --backend=inductor --output=torchbench_training.csv
 ./benchmarks/dynamo/torchbench.py --performance --inference --bfloat16 --backend=inductor --output=torchbench_inference.csv
 

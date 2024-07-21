@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_foreach.py`
 
-```
+```py
 # Owner(s): ["module: mta"]
 
 # 引入需要的库和模块

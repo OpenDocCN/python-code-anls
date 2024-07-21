@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\lightning\callbacks\__init__.py`
 
-```
+```py
 # 导入 os 模块，提供了与操作系统交互的方法
 import os
 

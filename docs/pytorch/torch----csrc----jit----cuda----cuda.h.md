@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\cuda\cuda.h`
 
-```
+```py
 namespace torch {
 namespace jit {
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\default_comm_hooks.cpp`
 
-```
+```py
 namespace c10d {
 
 # 进入 c10d 命名空间，该命名空间包含了分布式相关的 C10 库功能。

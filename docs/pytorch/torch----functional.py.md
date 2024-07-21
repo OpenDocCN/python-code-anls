@@ -1,6 +1,6 @@
 # `.\pytorch\torch\functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 itertools 模块，提供了用于构建迭代器的函数
 import itertools
@@ -1618,7 +1618,7 @@ def _lu_impl(A, pivot=True, get_infos=False, out=None):
     :attr:`A`. Returns a tuple containing the LU factorization and
     pivots of :attr:`A`.  Pivoting is done if :attr:`pivot` is set to
     ``True``.
-    ```
+    ```py
     # 计算矩阵 A 或批次矩阵的 LU 分解，返回包含 LU 分解和枢轴的元组
     r"""Computes the LU factorization of a matrix or batches of matrices
     :attr:`A`. Returns a tuple containing the LU factorization and

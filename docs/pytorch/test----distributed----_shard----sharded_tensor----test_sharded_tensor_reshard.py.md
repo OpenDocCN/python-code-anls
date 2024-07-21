@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\test_sharded_tensor_reshard.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统相关的模块和函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\init.h`
 
-```
+```py
 #include <torch/csrc/jit/python/pybind_utils.h>
 
 // 包含了 Torch 的 C++ 库中用于 Python 绑定的头文件 `pybind_utils.h`

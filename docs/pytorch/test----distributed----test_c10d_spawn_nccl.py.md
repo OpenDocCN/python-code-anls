@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_spawn_nccl.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入系统模块
 import sys

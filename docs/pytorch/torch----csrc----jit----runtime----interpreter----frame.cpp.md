@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\interpreter\frame.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 模块中解释器的帧头文件
 #include <torch/csrc/jit/runtime/interpreter/frame.h>
 

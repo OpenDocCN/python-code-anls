@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\comm_tensor.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 from dataclasses import dataclass

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\api\__init__.py`
 
-```
+```py
 # 导入模块 requests 和 json
 import requests
 import json

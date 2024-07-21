@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\gemm\threadblock\default_dq_mma.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/native/cuda/cutlass_extensions/arch/mma.h>
@@ -111,7 +111,7 @@ struct DqMma;
 
 
 }  // namespace threadblock
-```  
+```py  
 结束了 `threadblock` 命名空间的定义。
 
 
@@ -121,7 +121,7 @@ struct DqMma;
 
 
 }  // namespace cutlass
-```  
+```py  
 结束了 `cutlass` 命名空间的定义。
 
 这段代码定义了嵌套的命名空间结构，依次是 `cutlass` 命名空间包含 `gemm` 命名空间，而 `gemm` 命名空间又包含 `threadblock` 命名空间。

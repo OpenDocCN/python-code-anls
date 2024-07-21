@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_cache.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/util/Exception.h>

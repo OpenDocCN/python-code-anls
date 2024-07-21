@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\mps\Module.h`
 
-```
+```py
 #pragma once
 
 这行代码指令表示编译器应该只包含这个头文件一次，以避免重复包含。

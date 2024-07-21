@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\comms.py`
 
-```
+```py
 # 声明代码静态分析工具类型检查为不进行类型定义
 # 启用严格类型检查
 from __future__ import annotations
@@ -232,7 +232,7 @@ def get_ancestors(node, inverse_users):
         Decides a global ordering of all compute and communication nodes,
         ```
         # 此处是函数的主体部分，实现了对所有计算和通信节点的全局排序，
-        #```
+        #```py
     assuming that we already have a global ordering of communication nodes.
 
     Overall scheduling procedure is:

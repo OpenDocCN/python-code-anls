@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\base_data_sparsifier.py`
 
-```
+```py
 # 引入必要的模块和库
 import abc  # 抽象基类模块
 import torch  # PyTorch深度学习库

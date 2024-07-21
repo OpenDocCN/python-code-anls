@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_eager_fallback.cpp`
 
-```
+```py
 // 引入 Torch 和 ATen 库的相关头文件
 
 #include <torch/csrc/lazy/ts_backend/ts_eager_fallback.h>

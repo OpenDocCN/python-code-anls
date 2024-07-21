@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Sum.cpp`
 
-```
+```py
 // 包含 Vulkan 操作的常见头文件和工具函数头文件
 #include <ATen/native/vulkan/ops/Common.h>
 #include <ATen/native/vulkan/ops/Utils.h>

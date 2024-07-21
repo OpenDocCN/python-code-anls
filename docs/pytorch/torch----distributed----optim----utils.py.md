@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入类型相关的模块
 from typing import Type

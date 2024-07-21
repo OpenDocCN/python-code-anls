@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\update_graph_executor_opt.cpp`
 
-```
+```py
 #include <torch/csrc/jit/python/update_graph_executor_opt.h>
 // 包含头文件 <torch/csrc/jit/python/update_graph_executor_opt.h>，用于引入相关库函数和声明
 

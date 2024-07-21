@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\external_functions_core.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被包含一次
 

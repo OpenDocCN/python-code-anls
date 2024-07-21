@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\qat_utils.py`
 
-```
+```py
 # Type hinting: allow untyped definitions in mypy
 mypy: allow-untyped-defs
 

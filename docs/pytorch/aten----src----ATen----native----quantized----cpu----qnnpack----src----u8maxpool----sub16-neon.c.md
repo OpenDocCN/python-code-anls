@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\u8maxpool\sub16-neon.c`
 
-```
+```py
 /*
  * Copyright (c) Facebook, Inc. and its affiliates.
  * All rights reserved.

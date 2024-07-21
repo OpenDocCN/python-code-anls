@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\Sleep.h`
 
-```
+```py
 #pragma once
 #include <c10/macros/Export.h>  // 包含 C10 库的导出宏定义
 #include <cstdint>  // 包含 C++ 标准库中的cstdint头文件，提供整数类型定义

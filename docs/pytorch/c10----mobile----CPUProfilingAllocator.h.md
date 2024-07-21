@@ -1,6 +1,6 @@
 # `.\pytorch\c10\mobile\CPUProfilingAllocator.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Export.h> // 包含导出宏定义

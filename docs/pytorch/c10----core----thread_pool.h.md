@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\thread_pool.h`
 
-```
+```py
 #pragma once
 
 #include <atomic>                               // 原子操作

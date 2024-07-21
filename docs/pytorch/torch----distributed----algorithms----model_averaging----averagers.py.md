@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\model_averaging\averagers.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入警告模块，用于显示警告信息
 import warnings

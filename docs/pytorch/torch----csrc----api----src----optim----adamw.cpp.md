@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\adamw.cpp`
 
-```
+```py
 #include <torch/optim/adamw.h>  // 引入AdamW优化器的头文件
 
 #include <torch/csrc/autograd/variable.h>  // 引入变量自动求导相关头文件

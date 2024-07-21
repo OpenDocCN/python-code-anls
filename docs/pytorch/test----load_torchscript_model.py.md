@@ -1,6 +1,6 @@
 # `.\pytorch\test\load_torchscript_model.py`
 
-```
+```py
 # 导入 sys 模块，用于处理命令行参数和退出程序
 import sys
 

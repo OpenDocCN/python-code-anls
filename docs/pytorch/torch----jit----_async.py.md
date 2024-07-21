@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_async.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Async API.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\LegacyBatchingRegistrations.cpp`
 
-```
+```py
 // 引入 PyTorch 库的必要头文件
 #include <torch/library.h>
 #include <ATen/native/ResizeCommon.h>

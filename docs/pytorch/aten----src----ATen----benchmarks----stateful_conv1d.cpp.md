@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\benchmarks\stateful_conv1d.cpp`
 
-```
+```py
 // 包含 Google Benchmark 库的头文件
 #include <benchmark/benchmark.h>
 // 包含 C10 库中的工具类 irange 的头文件

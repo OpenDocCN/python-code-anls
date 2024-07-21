@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_distributed_rpc.pyi`
 
-```
+```py
 # 引入类型检查相关的声明
 # 允许未标注类型的函数定义
 # 禁止类型错误码为 "type-arg"

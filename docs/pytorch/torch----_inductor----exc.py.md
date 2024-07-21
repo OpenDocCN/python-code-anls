@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\exc.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入允许未类型化定义的标志，用于类型检查工具mypy
 

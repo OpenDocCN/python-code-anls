@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\constraint_registry.py`
 
-```
+```py
 # 设置类型检查选项，允许未标记类型的函数定义
 # 通常用于 PyTorch 提供的全局 ConstraintRegistry 对象，将 Constraint 对象链接到 Transform 对象上
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\examples\reinforcement_learning_rpc_test.py`
 
-```
+```py
 # 忽略类型检查错误
 # 如果你需要修改这个文件以使测试通过，请同时对 https://github.com/pytorch/examples/blob/master/distributed/rpc/rl/main.py
 # 和 https://pytorch.org/tutorials/intermediate/rpc_tutorial.html 进行相同的编辑

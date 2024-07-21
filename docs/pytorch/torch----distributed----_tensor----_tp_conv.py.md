@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_tp_conv.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # 导入必要的类型声明

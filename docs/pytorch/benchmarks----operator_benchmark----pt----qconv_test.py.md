@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qconv_test.py`
 
-```
+```py
 # 从pt模块中导入configs模块
 from pt import configs
 

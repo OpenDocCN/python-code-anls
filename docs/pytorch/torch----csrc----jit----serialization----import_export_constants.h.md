@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import_export_constants.h`
 
-```
+```py
 #pragma once
 #include <cstddef>
 

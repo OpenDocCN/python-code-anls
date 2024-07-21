@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\utils.py`
 
-```
+```py
 # 导入必要的模块和库
 import functools  # 导入 functools 模块，用于高阶函数和函数工具
 from contextlib import contextmanager  # 导入 contextmanager 类，用于创建上下文管理器

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\function_schema_parser.cpp`
 
-```
+```py
 // 引入 Torch JIT 前端的函数模式解析头文件
 #include <torch/csrc/jit/frontend/function_schema_parser.h>
 

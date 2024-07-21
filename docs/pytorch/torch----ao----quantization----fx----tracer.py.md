@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\tracer.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 from torch.fx._symbolic_trace import Tracer  # 导入Tracer类
 from torch.fx.proxy import Scope  # 导入Scope类

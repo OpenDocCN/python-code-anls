@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\intrinsics.h`
 
-```
+```py
 #pragma once
 #if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 /* 如果是 GCC 或者兼容的 clang 编译器，并且目标平台是 x86/x86-64 */

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\CompositeRandomAccessorCommon.h`
 
-```
+```py
 // <utility> 头文件包含了一些通用的实用工具函数和类模板，如 std::move 和 std::tuple。
 #pragma once
 

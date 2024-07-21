@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\config.cpp`
 
-```
+```py
 // 定义一个名为 torch_lazy_ir_debug 的布尔类型全局变量，默认为 false，用于控制懒惰张量 IR 的调试功能开关
 C10_DEFINE_bool(torch_lazy_ir_debug, false, "Enable lazy tensor IR debugging");
 

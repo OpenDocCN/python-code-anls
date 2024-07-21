@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_python_dispatch.py`
 
-```
+```py
 # Owner(s): ["module: __torch_dispatch__"]
 
 # 导入必要的模块和函数

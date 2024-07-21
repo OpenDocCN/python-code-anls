@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\op.cpp`
 
-```
+```py
 #include <c10/util/irange.h>
 #include <torch/script.h>
 

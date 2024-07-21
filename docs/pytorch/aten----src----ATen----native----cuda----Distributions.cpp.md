@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Distributions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 CUDA 分布相关的头文件和依赖项
 #include <ATen/native/cuda/Distributions.h>

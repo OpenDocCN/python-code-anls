@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\serialized_patterns\bmm_pattern.py`
 
-```
+```py
 # mypy: ignore-errors
 # 禁止 mypy 报告类型错误
 

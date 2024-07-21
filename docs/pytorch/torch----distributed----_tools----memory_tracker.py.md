@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tools\memory_tracker.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import operator  # 导入 operator 模块，用于操作符相关功能
 import pickle  # 导入 pickle 模块，用于序列化和反序列化 Python 对象

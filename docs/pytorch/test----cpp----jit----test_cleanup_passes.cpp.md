@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_cleanup_passes.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/csrc/jit/frontend/ir_emitter.h>  // 包含 Torch JIT 前端的 IR emitter 头文件

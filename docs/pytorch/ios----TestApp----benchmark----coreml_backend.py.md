@@ -1,6 +1,6 @@
 # `.\pytorch\ios\TestApp\benchmark\coreml_backend.py`
 
-```
+```py
 # 导入torchvision模块中的models子模块，用于加载预训练的MobileNetV2模型
 from torchvision import models
 

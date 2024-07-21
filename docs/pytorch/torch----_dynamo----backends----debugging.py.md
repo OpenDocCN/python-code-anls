@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\debugging.py`
 
-```
+```py
 # 忽略类型检查错误，适用于mypy类型检查工具
 # 导入必要的模块和函数
 import dataclasses  # 用于数据类的装饰器

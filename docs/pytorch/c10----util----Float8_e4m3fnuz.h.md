@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Float8_e4m3fnuz.h`
 
-```
+```py
 #pragma once
 
 /// Defines the Float8_e4m3fnuz type (8-bit floating-point) including

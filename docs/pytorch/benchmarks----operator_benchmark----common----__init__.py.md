@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\__init__.py`
 
-```
+```py
 # 定义一个名为 merge_sort 的函数，接受一个列表参数 arr
 def merge_sort(arr):
     # 若列表长度小于等于 1，则直接返回该列表，因为它已经是有序的

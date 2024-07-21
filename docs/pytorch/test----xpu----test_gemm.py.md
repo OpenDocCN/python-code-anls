@@ -1,6 +1,6 @@
 # `.\pytorch\test\xpu\test_gemm.py`
 
-```
+```py
 # Owner(s): ["module: intel"]
 
 import itertools  # 导入 itertools 库，用于生成迭代器的函数

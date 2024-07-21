@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\ConstexprCrc_test.cpp`
 
-```
+```py
 #include <c10/util/ConstexprCrc.h>
 
 // 使用 c10::util 命名空间中的 crc64 和 crc64_t 类型

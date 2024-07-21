@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\FlashAttentionKernel.cpp`
 
-```
+```py
 // 定义宏，指定仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量头文件
@@ -130,7 +130,7 @@ inline void _mul_reduce_max_fusion_kernel(
 # 定义一个函数，接受一个数组a、一个缩放因子scale、一个输出数组out，以及一个用于存储最大值的引用max。
 
   auto vec_size = vec::Vectorized<scalar_t>::size();
-```  
+```py  
 # 使用vec::Vectorized<scalar_t>::size()函数获取标量类型scalar_t的向量化大小，并赋值给vec_size。
 
   auto vec_scale = vec::Vectorized<scalar_t>(scale);
@@ -138,7 +138,7 @@ inline void _mul_reduce_max_fusion_kernel(
 # 使用给定的scale创建一个标量类型scalar_t的向量vec_scale。
 
   scalar_t tmp_max = -std::numeric_limits<scalar_t>::infinity();
-```  
+```py  
 # 使用标量类型scalar_t的负无穷大值初始化一个临时变量tmp_max。
 
   auto vec_tmp_max = vec::Vectorized<scalar_t>(tmp_max);
@@ -146,7 +146,7 @@ inline void _mul_reduce_max_fusion_kernel(
 # 使用临时变量tmp_max创建一个标量类型scalar_t的向量vec_tmp_max。
 
   for (long i = 0; i < vec_size * (size / vec_size); i += vec_size) {
-```  
+```py  
 # 从0到向量大小乘以整除size/vec_size之间的long型i进行迭代。
 
     auto tmp0 = vec::Vectorized<scalar_t>::loadu(a + i);
@@ -154,7 +154,7 @@ inline void _mul_reduce_max_fusion_kernel(
 # 加载a + i中的向量化标量类型scalar_t。
 
     auto tmp1 = tmp0 * vec_scale;
-```  
+```py  
 # vec_scale中的 tmp0 * vec_scale。
 
  in

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\invalid_arguments.h`
 
-```
+```py
 #pragma once
 // 告诉编译器只包含一次该头文件，避免重复定义
 

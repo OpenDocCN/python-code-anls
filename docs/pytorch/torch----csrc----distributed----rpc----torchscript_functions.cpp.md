@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\torchscript_functions.cpp`
 
-```
+```py
 // 包含头文件：ATen/ThreadLocalState.h 提供了线程局部状态管理的支持
 // 包含头文件：fmt/format.h 提供了格式化字符串的支持
 // 包含头文件：torch/csrc/autograd/record_function_ops.h 提供了记录函数调用的操作支持

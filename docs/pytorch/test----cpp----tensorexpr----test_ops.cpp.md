@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_ops.cpp`
 
-```
+```py
 # 包含 Google Test 的头文件
 #include <gtest/gtest.h>
 # 包含 TensorExpr 库的评估和表达式相关的头文件

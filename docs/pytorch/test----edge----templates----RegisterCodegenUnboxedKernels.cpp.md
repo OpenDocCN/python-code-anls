@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\templates\RegisterCodegenUnboxedKernels.cpp`
 
-```
+```py
 #include <operator_registry.h>
 #include <event_tracer_hooks.h>
 #include "${fn_header}" // Generated Function import headers

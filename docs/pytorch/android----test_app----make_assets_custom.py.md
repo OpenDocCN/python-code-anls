@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\make_assets_custom.py`
 
-```
+```py
 """
 This is a script for PyTorch Android custom selective build test. It prepares
 MobileNetV2 TorchScript model, and dumps root ops used by the model for custom

@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\maml_omniglot\maml-omniglot-transforms.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 用于解析命令行参数的库
 import functools  # 用于部分应用（partial application）函数的库

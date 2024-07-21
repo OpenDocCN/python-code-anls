@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\AmpGradScalerKernels.cpp`
 
-```
+```py
 // 定义宏以仅包含方法操作符
 
 #include <ATen/native/AmpKernels.h>  // 包含AMP核心功能的头文件

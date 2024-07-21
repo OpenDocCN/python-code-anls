@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\tensor_setattr.py`
 
-```
+```py
 # 声明允许未标注类型定义的标志
 # mypy: allow-untyped-defs
 # 导入PyTorch库

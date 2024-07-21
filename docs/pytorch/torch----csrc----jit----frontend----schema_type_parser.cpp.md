@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\schema_type_parser.cpp`
 
-```
+```py
 // 引入 Torch 的 JIT 前端模块中的头文件，用于解析类型模式
 #include <torch/csrc/jit/frontend/schema_type_parser.h>
 

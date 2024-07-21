@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\apply_optimizer_in_backward.py`
 
-```
+```py
 # 引入必要的模块和类型定义
 from typing import Any, Dict, Iterable, List, no_type_check, Type
 

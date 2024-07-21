@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_state_dict.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 代码所有者，负责分布式部分的人员
 
 import copy  # 导入复制模块，用于对象的深复制操作

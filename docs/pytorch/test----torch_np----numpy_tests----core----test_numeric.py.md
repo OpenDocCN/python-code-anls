@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_numeric.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的库和模块

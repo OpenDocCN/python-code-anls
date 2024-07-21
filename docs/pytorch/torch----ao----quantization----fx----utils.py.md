@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入copy模块，用于对象复制操作
 import copy

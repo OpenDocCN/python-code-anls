@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\optim.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架头文件
 
 #include <c10/util/irange.h>  // 引入 Caffe2 的 irange 实用工具

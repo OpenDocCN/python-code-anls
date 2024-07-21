@@ -1,6 +1,6 @@
 # `.\pytorch\tools\build_with_debinfo.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Tool quickly rebuild one or two files with debug info
 # Mimics following behavior:

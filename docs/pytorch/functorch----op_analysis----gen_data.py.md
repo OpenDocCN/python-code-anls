@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\op_analysis\gen_data.py`
 
-```
+```py
 import csv  # 导入处理 CSV 文件的模块
 from collections import defaultdict  # 导入 defaultdict 数据结构
 

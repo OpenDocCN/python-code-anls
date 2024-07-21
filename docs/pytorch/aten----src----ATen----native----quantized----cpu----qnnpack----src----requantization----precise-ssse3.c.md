@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\requantization\precise-ssse3.c`
 
-```
+```py
 /*
  * 以下是一个 C++ 函数，用于精确重新量化整数数组到无符号8位整数数组
  * 使用 SSSE3 SIMD 指令集进行加速计算

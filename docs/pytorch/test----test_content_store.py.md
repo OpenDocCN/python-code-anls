@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_content_store.py`
 
-```
+```py
 # Owner(s): ["oncall: pt2"]
 
 # 导入必要的模块和库

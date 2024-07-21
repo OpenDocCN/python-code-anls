@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\processed_node_wrapper.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\serialize\archive.h`
 
-```
+```py
 #pragma once
 
 

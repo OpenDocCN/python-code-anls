@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Module.h`
 
-```
+```py
 #ifndef THCP_CUDA_MODULE_INC
 // 如果未定义 THCP_CUDA_MODULE_INC 宏，则包含以下内容，以避免重复定义
 #define THCP_CUDA_MODULE_INC

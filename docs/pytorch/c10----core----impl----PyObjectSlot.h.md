@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\PyObjectSlot.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/impl/HermeticPyObjectTLS.h>

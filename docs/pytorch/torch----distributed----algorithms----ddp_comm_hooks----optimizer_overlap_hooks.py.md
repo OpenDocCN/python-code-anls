@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\optimizer_overlap_hooks.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和函数，包括数据类定义、部分函数、类型声明和特定的类型检查功能
 from dataclasses import dataclass

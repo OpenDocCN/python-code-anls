@@ -19,7 +19,7 @@ This disables fusion for certain nodes, but allows other nodes to continue being
 
 Given the following script as an example
 
-```
+```py
 import torch
 
 def forward(x):
@@ -48,7 +48,7 @@ Two easy ways to checkout fusion for graph: The first one is to print out graph 
 
 The second way is to turn on graph dumping in profiling executor via command line below:
 
-```
+```py
 PYTORCH_JIT_LOG_LEVEL="profiling_graph_executor_impl" python <your pytorch script>
 ```
 
@@ -56,7 +56,7 @@ PYTORCH_JIT_LOG_LEVEL="profiling_graph_executor_impl" python <your pytorch scrip
 
 Graph print out is straight forward and you should look for `prim::CudaFusionGroup_X` for fused kernels. While profiling executor dumps many things, but the most important part is `Optimized Graph`. In this example, it shows a Fusion Group, which is an indication that fusion is happening and you should be expecting fused kernel!
 
-```
+```py
   Optimized Graph:
   graph(%x.1 : Tensor):
     %12 : bool = prim::CudaFusionGuard[types=[Float(2, 32, 128, 512, strides=[2097152, 65536, 512, 1], requires_grad=0, device=cuda:0)]](%x.1)
@@ -87,7 +87,7 @@ Graph dump could be quite confusing to look at, since it naively dumps all graph
 
 Cuda fusion dump gives the input and output graph to fusion pass. This is a good place to check fusion pass logic.
 
-```
+```py
 PYTORCH_JIT_LOG_LEVEL="graph_fuser" python <your pytorch script>
 ```
 
@@ -95,7 +95,7 @@ PYTORCH_JIT_LOG_LEVEL="graph_fuser" python <your pytorch script>
 
 Running the same script above, in the log, you should be looking for two graphs `Before Fusion` shows the subgraph where fusion pass runs on; `Before Compilation` shows the graph sent to codegen backend, where each `CudaFusionGroup` will trigger codegen runtime system to generate kernel(s) to execute the subgraph.
 
-```
+```py
   Before Fusion:
   graph(%x.1 : Tensor):
     %2 : float = prim::Constant[value=1.]()
@@ -171,7 +171,7 @@ Assuming we have ProfilingExecutor things worked out properly, that is, you see 
     With a larger model that includes multiple fusion patterns, it could be tricky to figure out which exact fusion is causing FALLBACK and build up a minimal python repro.
     One quick thing to try is to run the example with a few knobs turned on:
 
-    ```
+    ```py
     PYTORCH_NVFUSER_DISABLE=fallback \
     PYTORCH_JIT_LOG_LEVEL=">partition:graph_fuser:>>kernel_cache" \
     python your_script.py &> log

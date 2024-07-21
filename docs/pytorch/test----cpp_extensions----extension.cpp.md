@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\extension.cpp`
 
-```
+```py
 #include <torch/extension.h>
 
 // 包含头文件，以便使用 PyTorch 扩展所需的功能

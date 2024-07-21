@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\instancenorm.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/options/instancenorm.h>  // 引入 InstanceNormFuncOptions 相关的头文件
@@ -49,7 +49,7 @@ inline Tensor instance_norm(
 /// namespace F = torch::nn::functional;
 /// F::instance_norm(input,
 /// F::InstanceNormFuncOptions().running_mean(mean).running_var(variance).weight(weight).bias(bias).momentum(0.1).eps(1e-5));
-/// ```
+/// ```py
 /// 示例用法，展示了如何调用 instance_norm 函数并设置各种可选参数。
 
 inline Tensor instance_norm(

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\vadd-microkernel-tester.h`
 
-```
+```py
 /*
  * 版权声明
  * 版权所有（c）Facebook，Inc.及其关联公司。

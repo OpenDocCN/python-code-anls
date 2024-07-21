@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Pow.h`
 
-```
+```py
 #pragma once
 // 如果未定义 __CUDACC__ 或者 __HIPCC__ 宏，则定义 HOST_DEVICE 为空
 #include <ATen/native/DispatchStub.h>

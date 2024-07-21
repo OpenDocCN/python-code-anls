@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\exit_transforms.h`
 
-```
+```py
 #pragma once
 
 // 预处理指令，表示编译器在编译此头文件时，确保此文件仅被包含一次

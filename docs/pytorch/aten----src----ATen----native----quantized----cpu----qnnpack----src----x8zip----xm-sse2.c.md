@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\x8zip\xm-sse2.c`
 
-```
+```py
 /*
  * Copyright (c) Facebook, Inc. and its affiliates.
  * All rights reserved.

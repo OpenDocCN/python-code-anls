@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\propagate_gradients_resp.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/rpc/message.h>  // 包含消息定义的头文件

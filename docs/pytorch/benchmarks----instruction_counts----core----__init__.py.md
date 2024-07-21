@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\core\__init__.py`
 
-```
+```py
 # 导入 Python 内置的 zipfile 模块，用于处理 ZIP 文件
 import zipfile
 

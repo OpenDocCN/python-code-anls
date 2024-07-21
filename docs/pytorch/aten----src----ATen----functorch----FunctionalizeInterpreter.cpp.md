@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\FunctionalizeInterpreter.cpp`
 
-```
+```py
 namespace at::functorch {
 ```  
 
@@ -12,7 +12,7 @@ static void sanityCheckNotFunctional(const c10::OperatorHandle& op, torch::jit::
         return tensor;
       });
 }
-```  
+```py  
 
 void FunctionalizeInterpreterPtr::processImpl(
     const c10::OperatorHandle& op,
@@ -62,7 +62,7 @@ void FunctionalizeInterpreterPtr::sendToNextInterpreterImpl(
   auto ret_size = op.schema().returns().size();
   sanityCheckNotFunctional(op, stack, ret_size);
 }
-```  
+```py  
 
 } // namespace at::functorch
 ```

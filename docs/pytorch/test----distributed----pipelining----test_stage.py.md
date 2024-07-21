@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_stage.py`
 
-```
+```py
 # 引入必要的标准库和第三方库模块
 import os
 import sys

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_optimize_for_mobile_preserve_debug_info.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 import torch  # 导入 PyTorch 库

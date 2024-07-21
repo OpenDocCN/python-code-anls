@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\laplace.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 Number 类型用于类型检查
 from numbers import Number

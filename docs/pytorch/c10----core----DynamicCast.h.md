@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DynamicCast.h`
 
-```
+```py
 #pragma once
 
 #pragma once 是预处理指令，确保头文件在编译单元中只包含一次。

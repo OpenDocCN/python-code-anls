@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\constant_propagation.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/constant_propagation.h>
 
 #include <ATen/core/functional.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\lite_interpreter\__init__.py`
 
-```
+```py
 # 导入Python标准库中的sys模块，用于与Python解释器进行交互
 import sys
 

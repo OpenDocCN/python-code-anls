@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\fail\creation_ops.py`
 
-```
+```py
 # flake8: noqa
 # 导入 torch 库
 import torch

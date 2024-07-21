@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\qat\dynamic\modules\linear.py`
 
-```
+```py
 # 引入torch模块，mypy允许未类型化的定义
 import torch
 

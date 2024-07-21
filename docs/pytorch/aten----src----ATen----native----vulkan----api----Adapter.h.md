@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Adapter.h`
 
-```
+```py
 // @pragma once 指示预处理器只包含此头文件一次，用于避免重复包含
 #pragma once
 

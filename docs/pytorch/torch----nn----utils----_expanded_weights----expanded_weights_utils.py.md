@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\expanded_weights_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入类型提示模块
 from typing import Optional

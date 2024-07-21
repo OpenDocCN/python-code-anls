@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\ao_migration\test_quantization_fx.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 引入 AOMigrationTestCase 类，用于测试迁移情况

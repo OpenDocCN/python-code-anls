@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_symbolic_shape_analysis.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import operator  # 导入操作符模块

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\TypeList_test.cpp`
 
-```
+```py
 #include <c10/util/TypeList.h>  // 包含 C10 库中的 TypeList 头文件
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 #include <memory>  // 包含标准库中的 memory 头文件

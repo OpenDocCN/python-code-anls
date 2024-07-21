@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\cpp\test_cpp_prefix.cpp`
 
-```
+```py
 // 导入相对路径的 C++ 前缀头文件
 #include "../../torchinductor/codegen/cpp_prefix.h"
 // 导入 Google 测试框架的头文件

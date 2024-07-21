@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\MAIAHooksInterface.cpp`
 
-```
+```py
 # 引入 ATen 库中的 MAIAHooksInterface 头文件
 #include <ATen/detail/MAIAHooksInterface.h>
 

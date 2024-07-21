@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\promoted_prim_ops.cpp`
 
-```
+```py
 void tupleIndex(Stack& stack) {
     // 从堆栈中弹出索引值，转换为 int64_t 类型
     int64_t index = pop(stack).toInt();

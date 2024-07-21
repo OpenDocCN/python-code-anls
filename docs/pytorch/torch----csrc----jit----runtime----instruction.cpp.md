@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\instruction.cpp`
 
-```
+```py
 // 引入必要的头文件和命名空间
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/runtime/instruction.h>

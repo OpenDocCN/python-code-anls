@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\builder.py`
 
-```
+```py
 # 忽略类型检查错误的标记，用于静态类型检查工具
 # 导入必要的标准库和第三方库模块
 import abc  # 抽象基类模块

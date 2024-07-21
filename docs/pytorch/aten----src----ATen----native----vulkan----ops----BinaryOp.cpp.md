@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\BinaryOp.cpp`
 
-```
+```py
 // 引入头文件，ATen 是 PyTorch 中的张量库，Vulkan 是一个图形和计算 API
 #include <ATen/ArrayRef.h>
 #include <ATen/native/vulkan/ops/Common.h>

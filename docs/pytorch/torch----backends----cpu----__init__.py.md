@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\cpu\__init__.py`
 
-```
+```py
 # 导入 torch 库，这是 PyTorch 深度学习框架的核心库
 import torch
 

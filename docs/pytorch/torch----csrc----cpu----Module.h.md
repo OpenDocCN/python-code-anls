@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cpu\Module.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/python_headers.h>
 // 使用预处理指令#pragma once确保头文件只被编译一次，防止多重包含的问题

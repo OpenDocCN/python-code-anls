@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_custom_class.cpp`
 
-```
+```py
 /// 包含 Torch JIT 的 C++ 绑定和自定义类相关头文件
 
 #include <torch/csrc/jit/python/pybind_utils.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\lazy.py`
 
-```
+```py
 # mypy: ignore-errors
 # 导入必要的模块
 import collections

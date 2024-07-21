@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import_export_helpers.h`
 
-```
+```py
 #pragma once
 // 声明这个头文件只会被编译一次
 

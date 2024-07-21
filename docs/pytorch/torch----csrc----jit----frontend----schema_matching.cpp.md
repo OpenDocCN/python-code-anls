@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\schema_matching.cpp`
 
-```
+```py
 // 包含 Torch JIT 前端的头文件，用于模式匹配
 #include <torch/csrc/jit/frontend/schema_matching.h>
 

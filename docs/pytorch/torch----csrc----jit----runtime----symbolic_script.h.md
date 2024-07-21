@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\symbolic_script.h`
 
-```
+```py
 #pragma once
 // 这个文件是临时的，直到 native_functions.yaml 和 derivatives.yaml 合并。
 // 理想情况下，这些内容应该全部移入 native_functions.yaml

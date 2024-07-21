@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\custom_class.cpp`
 
-```
+```py
 #include <ATen/core/function_schema.h>
 #include <ATen/core/functional.h>
 #include <ATen/core/jit_type.h>

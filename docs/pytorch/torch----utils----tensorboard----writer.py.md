@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\writer.py`
 
-```
+```py
 """
 Provide an API for writing protocol buffers to event files to be consumed by TensorBoard for visualization.
 """
@@ -332,7 +332,7 @@ class SummaryWriter:
             for i in x:
                 writer.add_scalar('y=2x', i * 2, i)
             writer.close()
-            ```
+            ```py
 
         Expected result:
 

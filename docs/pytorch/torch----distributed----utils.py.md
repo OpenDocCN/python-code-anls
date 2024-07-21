@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\utils.py`
 
-```
+```py
 # 设置类型检查，允许未类型化的函数定义
 # 导入必要的模块和类
 import dataclasses  # 数据类的支持库

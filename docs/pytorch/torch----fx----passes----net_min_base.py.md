@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\net_min_base.py`
 
-```
+```py
 # 设置类型提示中允许未标记的函数定义
 # 导入日志模块
 import logging

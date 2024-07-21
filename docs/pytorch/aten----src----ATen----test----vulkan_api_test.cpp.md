@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\vulkan_api_test.cpp`
 
-```
+```py
 #ifdef USE_VULKAN_API
 // 如果定义了 USE_VULKAN_API 宏，则编译以下代码
 
@@ -3350,7 +3350,7 @@ void test_packed_layer_norm(
 # 定义一个函数，输入参数包括一个浮点数 eps。
 
   c10::InferenceMode mode;
-```  
+```py  
 # 进入 PyTorch C++ 基础设施推断模式。
 
   const auto input_cpu =
@@ -3359,7 +3359,7 @@ void test_packed_layer_norm(
 # 生成一个指定形状和数据类型的随机张量 `input_cpu` 在 CPU 上。
 
   const auto input_vulkan = input_cpu.vulkan();
-```  
+```py  
 # 将 CPU 上的张量 `input_cpu` 转换为 Vulkan 张量 `input_vulkan`。
 
   const auto weight_cpu =
@@ -3369,7 +3369,7 @@ void test_packed_layer_norm(
 
   const auto bias_cpu =
       at::rand(bias_shape, at::device(at::kCPU).dtype(at::kFloat));
-```  
+```py  
 # 生成一个指定形状和数据类型的随机偏置张量 `bias_cpu` 在 CPU 上。
 
   const auto output_cpu = at::layer_norm(
@@ -3381,7 +3381,7 @@ void test_packed_layer_norm(
       "vulkan_prepack::create_layernorm_context",
       "",
       weight_cpu, bias_cpu, eps);
-```  
+```py  
 # 调用 Vulkan 前置打包操作，创建层归一化的上下文 `prepack`，使用给定的 `weight_cpu`、`bias_cpu` 和 `eps`。
 
   auto vulkan_output = callOpByName(
@@ -3392,7 +3392,7 @@ void test_packed_layer_norm(
 # 调用 Vulkan 运行层归一化的上下文，使用 Vulkan 张量 `input_cpu.vulkan()`、`normalized_shape` 和 `prepack[0]`。
 
   auto output_vulkan = vulkan_output[0].toTensor();
-```  
+```py  
 # 将 Vulkan 输出转换为 PyTorch 张量 `output_vulkan`。
 
   const auto check = almostEqual(output_cpu, output_vulkan.cpu());
@@ -3402,7 +3402,7 @@ void test_packed_layer_norm(
   if (!check) {
     showRtol(output_cpu, output_vulkan.cpu());
   }
-```  
+```py  
 # 如果检查不通过，则展示它们的相对误差。
 
   ASSERT_TRUE(check);

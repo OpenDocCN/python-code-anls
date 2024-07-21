@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\qlinear_unpack.cpp`
 
-```
+```py
 /*
 这段代码是针对 fbgemm、qnnpack 和 cudnn 后端的分发注册。
 在运行时通过 packed_weight 指针的多态性确定正确的解包后端函数。

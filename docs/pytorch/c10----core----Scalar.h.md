@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Scalar.h`
 
-```
+```py
 #pragma once
   // 将传入的值 vv 转换为 int64_t 类型，并存储在 v.i 中
   v.i = convert<int64_t, bool>(vv);

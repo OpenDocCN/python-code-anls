@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\serialized_patterns\mm_pattern.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # noqa: F401, E501

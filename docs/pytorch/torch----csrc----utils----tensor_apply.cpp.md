@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_apply.cpp`
 
-```
+```py
 // 包含 Torch 库中的 tensor_apply.h 文件
 
 #include <torch/csrc/utils/tensor_apply.h>

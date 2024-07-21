@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\oss\init.py`
 
-```
+```py
 # 从未来模块中导入注解，以支持类型注解的声明
 from __future__ import annotations
 

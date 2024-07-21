@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\vision_models.py`
 
-```
+```py
 # 导入必要的类型提示工具
 from typing import cast
 

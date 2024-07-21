@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_comptime.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 import collections  # 导入collections模块，用于创建命名元组和其他容器数据类型

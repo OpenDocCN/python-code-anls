@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\requantization\gemmlowp-ssse3.c`
 
-```
+```py
 /*
  * 该函数实现了基于 SSE 指令集的量化神经网络推断中的 Gemmlowp 矩阵乘法和量化过程
  * 以 SSSE3 指令进行优化

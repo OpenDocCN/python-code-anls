@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ThreadLocalState.cpp`
 
-```
+```py
 // 包含 ATen 库中的 ThreadLocalState.h 头文件
 
 #include <ATen/ThreadLocalState.h>

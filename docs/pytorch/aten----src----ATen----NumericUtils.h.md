@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\NumericUtils.h`
 
-```
+```py
 #pragma once
 // 如果正在使用 HIPCC 编译器，包含 HIP 运行时头文件
 #ifdef __HIPCC__

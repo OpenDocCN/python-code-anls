@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\get_python_cmake_flags.py`
 
-```
+```py
 # 导入系统模块
 import sys
 # 导入系统配置模块

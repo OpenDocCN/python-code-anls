@@ -35,7 +35,7 @@ When making changes to the operators, the first thing to identify is if it's BC/
 [Build PyTorch from souce](https://github.com/pytorch/pytorch#from-source) and prepare a test model before making changes to the operator, following the process below. A test model before making the operator changes is needed to test the upgrader. Otherwise, after the change to operator, the new runtime will no longer be able to produce a model with the historic operator and can't test it anymore.
 
     1. Add a test module in `test/jit/fixtures_srcs/fixtures_src.py`. In `test/jit/fixtures_srcs/generate_models.py`,
-  ```
+  ```py
   class TestVersionedLinspaceV7(torch.nn.Module):
       def __init__(self):
           super().__init__()
@@ -48,7 +48,7 @@ When making changes to the operators, the first thing to identify is if it's BC/
         Please make sure the module uses the changed operator and follow the name schema ` TestVersioned{${OpnameOverloadedname}}V${kProducedFileFormatVersion}`. [`kProducedFileFormatVersion`](https://github.com/pytorch/pytorch/blob/master/caffe2/serialize/versions.h#L82) can be found in `versions.h`. The example operator usage can be found on [PyTorch Docs](https://pytorch.org/docs/stable/index.html), like [linspace operator](https://pytorch.org/docs/stable/generated/torch.linspace.html)
      2. Register its corresponding changed operator in ALL_MODULES like following. Use an instance as the key and the changed operator as the value. It will ensure the test model covers everything needed. It's important to check in a valid test model before making the change to the runtime, as it will be really challenging to switch to the revision of the source code and regenerate the test model after the change is merged.
 
-  ```
+  ```py
   # key: test module instance, value: changed operator name
   ALL_MODULES = {
       TestVersionedLinspaceV7(): "aten::linspace",
@@ -58,7 +58,7 @@ When making changes to the operators, the first thing to identify is if it's BC/
         This module should include the changed operator. If the operator isn't covered in the model, the model export process will fail.
 
      3. Export the model to `test/jit/fixtures` by running
-  ```
+  ```py
   python test/jit/fixtures_src/generate_models.py
   ```
 
@@ -73,17 +73,17 @@ When making changes to the operators, the first thing to identify is if it's BC/
             2. If it's impossible to write an upgrader valid for `linspace` before versioning bumping to 8, check the date when the version is bumped to 8  at [`versions.h`](https://github.com/pytorch/pytorch/blob/master/caffe2/serialize/versions.h#L82). If it has been 180 days, write an upgrader `linspace_out_8_{kProducedFileFormatVersion}` for `linspace.out` after bumping to 8, and deprecate the old upgrader. If it hasn't been 180 days, wait until 180 days and do the same changes as above.
 
     To write an upgrader, you would need to know how the new runtime with the new `linspace` operator can handle an old model with the old `linspace` operator. When `linspace` is bumped to 8, the change is to make `step` a required argument, instead of an optional argument. The old schema is:
-  ```
+  ```py
   linspace(start: Union[int, float, complex], end: Union[int, float, complex], steps: Optional[int], dtype: Optional[int], layout: Optional[int],
                     device: Optional[Device], pin_memory: Optional[bool]):
   ```
     And the new schema is:
-  ```
+  ```py
   linspace(start: Union[int, float, complex], end: Union[int, float, complex], steps: int, dtype: Optional[int], layout: Optional[int],
                     device: Optional[Device], pin_memory: Optional[bool]):
   ```
     An upgrader will only be applied to an old model and it won't be applied to a new model. The upgrader can be written with the following logic:
-  ```
+  ```py
   def linspace_0_7(start: Union[int, float, complex], end: Union[int, float, complex], steps: Optional[int], *, dtype: Optional[int], layout: Optional[int],
                     device: Optional[Device], pin_memory: Optional[bool]):
     if (steps is None):
@@ -92,7 +92,7 @@ When making changes to the operators, the first thing to identify is if it's BC/
   ```
 
     The actual upgrader needs to be written as [TorchScript](https://pytorch.org/docs/stable/jit.html), and the below example is the actual upgrader of the operator `linspace.out `and the operator ` linspace` exported at version from 0 to 7.
-  ```
+  ```py
   static std::unordered_map<std::string, std::string> kUpgradersEntryMap(
       {
         {"linspace_0_7", R"SCRIPT(
@@ -107,7 +107,7 @@ When making changes to the operators, the first thing to identify is if it's BC/
     With the upgrader, when a new runtime loads an old model, it will first check the operator version of the old model. If it's older than the current runtime, it will replace the operator from the old model with the upgrader above.
 
     3. Bump [`kMaxSupportedFileFormatVersion`](https://github.com/pytorch/pytorch/blob/master/caffe2/serialize/versions.h#L15) the [`kProducedFileFormatVersion`](https://github.com/pytorch/pytorch/blob/master/caffe2/serialize/versions.h#L82) by 1 and provide the reasons under [`versions.h`](https://github.com/pytorch/pytorch/blob/master/caffe2/serialize/versions.h#L73-L81)
-  ```
+  ```py
 
   constexpr uint64_t kMaxSupportedFileFormatVersion = 0x9L;
 
@@ -125,14 +125,14 @@ When making changes to the operators, the first thing to identify is if it's BC/
   ```
 
     4. In `torch/csrc/jit/operator_upgraders/version_map.cpp`, add changes like below. You will need to make sure that the entry is **SORTED** by the bumped to version number.
-  ```
+  ```py
   {{${operator_name.overloaded_name},
     {{${bump_to_version},
       "${upgrader_name}",
       "${old operator schema}"}}},
   ```
     For the example operator `linspace`, if there are two version bumps, one is bumped to 8 and one is bumped to 12, the sorted result is:
-  ```
+  ```py
   {{"aten::linspace",
     {{12,
       "linspace_0_11",
@@ -144,13 +144,13 @@ When making changes to the operators, the first thing to identify is if it's BC/
 
     5. After [rebuilding PyTorch](https://github.com/pytorch/pytorch#from-source), run the following command to auto update the file [`torch/csrc/jit/mobile/upgrader_mobile.cpp`](https://github.com/pytorch/pytorch/blob/8757e21c6a4fc00e83539aa7f9c28eb11eff53c1/torch/csrc/jit/mobile/upgrader_mobile.cpp). After rebuild PyTorch from source (`python setup.py`), run
 
-  ```
+  ```py
   python pytorch/torchgen/operator_versions/gen_mobile_upgraders.py
   ```
 
     6. Add a test. With the model generated from step 1, you will need to add tests in `test/test_save_load_for_op_versions.py`. Following is an example to write a test
 
-  ```
+  ```py
         @settings(max_examples=10, deadline=200000)  # A total of 10 examples will be generated
         @given(
             sample_input=st.tuples(st.integers(min_value=5, max_value=199), st.floats(min_value=5.0, max_value=199.0))
@@ -215,12 +215,12 @@ You can look at following PRs to get the rough idea of what needs to be done:
 **NOTE**
 
 1. Adding arguments with a default value to an operator is not BC breaking, and thus does not require an upgrader. For example, the following change to operator `foo` is backwards compatible:
-```
+```py
 # before
 def foo(x, y):
     return x, y
 ```
-```
+```py
 # after
 def foo(x, y, z=100):
     return x, y, z

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\detail\LazyNVRTC.cpp`
 
-```
+```py
 #include <ATen/cuda/detail/LazyNVRTC.h>
 
 #include <ATen/cuda/nvrtc_stub/ATenNVRTC.h>

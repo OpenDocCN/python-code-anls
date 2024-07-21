@@ -17,7 +17,7 @@ copies of files in the *PyTorch* source tree are linted using
 the original files.  Thus, for keeping track of the original changes,
 here is the diff between the two sets of files, before linting:
 
-```
+```py
 Only in FasterTransformer/src/fastertransformer/cutlass_extensions/include/cutlass_extensions: compute_occupancy.h
 Only in FasterTransformer/src/fastertransformer/cutlass_extensions/include/cutlass_extensions/epilogue: epilogue_quant_helper.h
 Only in FasterTransformer/src/fastertransformer/cutlass_extensions/include/cutlass_extensions/epilogue: threadblock

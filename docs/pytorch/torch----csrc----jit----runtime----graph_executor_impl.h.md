@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\graph_executor_impl.h`
 
-```
+```py
 #pragma once
 // 包含 Torch JIT 运行时的图执行器头文件
 

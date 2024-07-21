@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\print_handler.h`
 
-```
+```py
 #pragma once
 
 #pragma once 指令：确保头文件只被编译一次，防止多重包含。

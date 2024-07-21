@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\dead_code_elimination.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>

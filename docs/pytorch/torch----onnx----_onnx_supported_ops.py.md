@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_onnx_supported_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入模块 inspect，用于检查对象的特征
 import inspect

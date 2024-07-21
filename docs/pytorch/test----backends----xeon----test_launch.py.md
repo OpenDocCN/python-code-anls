@@ -1,6 +1,6 @@
 # `.\pytorch\test\backends\xeon\test_launch.py`
 
-```
+```py
 # Owner(s): ["module: intel"]
 
 # 导入所需的模块

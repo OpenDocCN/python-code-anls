@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\inductor.py`
 
-```
+```py
 # 忽略 mypy 类型检查错误
 
 # 导入 sys 模块，用于获取系统相关信息

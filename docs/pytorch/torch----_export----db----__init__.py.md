@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\__init__.py`
 
-```
+```py
 # 版权声明，版权归Facebook公司及其关联公司所有。
 # 保留所有权利。
 # 

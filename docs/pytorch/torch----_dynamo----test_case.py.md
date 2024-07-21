@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\test_case.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入上下文管理、模块导入、日志记录等必要模块
 import contextlib

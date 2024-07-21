@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_shards_wrapper.py`
 
-```
+```py
     # 必要的导入声明
     from typing import Any, List, Tuple
 

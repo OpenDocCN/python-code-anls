@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的枚举类和部分函数
 from enum import Enum

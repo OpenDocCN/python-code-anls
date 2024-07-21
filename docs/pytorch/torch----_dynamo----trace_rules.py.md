@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\trace_rules.py`
 
-```
+```py
 # 引入需要的模块和类型定义
 # mypy: allow-untyped-defs 允许未类型化的定义
 import _collections_abc  # 导入 _collections_abc 模块

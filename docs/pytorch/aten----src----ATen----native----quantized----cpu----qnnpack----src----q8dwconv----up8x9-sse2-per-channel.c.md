@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\up8x9-sse2-per-channel.c`
 
-```
+```py
 /*
  * 使用 AVX 指令集实现的深度可分离卷积的 SSE2 版本的微内核函数
  * 实现 8x9 的输入通道扩展，用于逐通道量化的卷积操作

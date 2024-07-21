@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\threadpool\pthreadpool.h`
 
-```
+```py
 // pthreadpool header from https://github.com/Maratyszcza/pthreadpool
 // for NNPACK
 

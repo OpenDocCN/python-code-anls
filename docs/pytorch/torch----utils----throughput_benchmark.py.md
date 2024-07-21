@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\throughput_benchmark.py`
 
-```
+```py
 # mypy: allow-untyped-defs  # 声明允许在类型检查中使用未标注类型的函数和变量
 
 import torch._C  # 导入torch._C模块，通常用于访问底层C++ API

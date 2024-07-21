@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Utils.cpp`
 
-```
+```py
 // 定义宏，仅在 Torch 断言期间启用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 MKLDNN 工具类头文件

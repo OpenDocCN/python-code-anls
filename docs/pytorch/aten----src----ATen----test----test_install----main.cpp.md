@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\test_install\main.cpp`
 
-```
+```py
 #include <ATen/ATen.h>  // 包含 ATen 库的头文件
 
 int main() {

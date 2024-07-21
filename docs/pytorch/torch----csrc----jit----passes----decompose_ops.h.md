@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\decompose_ops.h`
 
-```
+```py
 #pragma once
 
 

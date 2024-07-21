@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\ParamUtils.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 指令，确保头文件只被包含一次，防止多重包含问题
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_fx_to_onnx_with_onnxruntime.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 from __future__ import annotations
 

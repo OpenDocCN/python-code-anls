@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qlayernorm_test.py`
 
-```
+```py
 # 导入operator_benchmark模块作为op_bench
 import operator_benchmark as op_bench
 # 导入torch模块

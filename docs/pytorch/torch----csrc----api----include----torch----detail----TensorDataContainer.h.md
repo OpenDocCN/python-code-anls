@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\detail\TensorDataContainer.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Dispatch.h>
@@ -183,7 +183,7 @@ struct TensorDataContainer {
 // error: no matching function for call to 'tensor(const std::vector<int>&)'
 // no known conversion for argument 1 from 'const std::vector<int>' to
 // 'torch::detail::TensorDataContainer'
-// ```
+// ```py
 //
 // 注意：目前不支持 `torch::tensor(std::vector<bool>)`，因为无法从 std::vector<bool> 位字段构造 ArrayRef<bool>
 #define TENSOR(T, S)                                \

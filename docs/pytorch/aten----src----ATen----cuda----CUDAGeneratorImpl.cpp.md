@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAGeneratorImpl.cpp`
 
-```
+```py
 // 包含 ATen 库中所需的头文件
 #include <ATen/Functions.h>
 #include <ATen/Tensor.h>

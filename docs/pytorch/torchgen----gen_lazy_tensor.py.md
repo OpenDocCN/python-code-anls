@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen_lazy_tensor.py`
 
-```
+```py
 from __future__ import annotations
 # 从未来导入 annotations，以支持使用类名称作为类型提示
 

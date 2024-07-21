@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_resume.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入 torch 库

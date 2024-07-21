@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\type_parser.cpp`
 
-```
+```py
 // 包含 Torch 的移动端类型解析器头文件
 #include <torch/csrc/jit/mobile/type_parser.h>
 

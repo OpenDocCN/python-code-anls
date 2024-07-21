@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_python_functions.py`
 
-```
+```py
 # 为 ATen 函数生成 Python 绑定
 #
 # 这些绑定生成为 python_variable 上的方法，或者作为 torch._C._nn、torch._C._fft、torch._C._linalg、

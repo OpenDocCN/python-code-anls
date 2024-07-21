@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\registry.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/nnc/registry.h>
 // 包含 Torch 库中 NN 模块的注册头文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\sparse.h`
 
-```
+```py
 #pragma once
 
 

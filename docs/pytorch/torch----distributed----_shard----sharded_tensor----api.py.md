@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations  # type: ignore[attr-defined]
 

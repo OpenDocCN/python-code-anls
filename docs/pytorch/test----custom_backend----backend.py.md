@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_backend\backend.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数的模块
 import os.path  # 用于处理文件路径的模块

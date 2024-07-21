@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\prim_ops_registery.h`
 
-```
+```py
 #pragma once
 
 # 定义预处理指令，确保本文件仅被编译一次

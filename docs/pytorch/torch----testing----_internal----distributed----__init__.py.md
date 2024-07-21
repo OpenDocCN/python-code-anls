@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\__init__.py`
 
-```
+```py
 # 定义一个名为get_divisors的函数，用于获取一个整数的所有因子
 def get_divisors(n):
     # 使用列表推导式生成所有可能的因子列表，包括1和n本身

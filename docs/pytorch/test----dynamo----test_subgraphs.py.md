@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_subgraphs.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 from unittest.mock import patch  # 导入 patch 函数用于模拟测试
 

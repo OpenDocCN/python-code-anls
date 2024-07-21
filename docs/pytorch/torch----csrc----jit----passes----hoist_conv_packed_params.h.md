@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\hoist_conv_packed_params.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，确保头文件只被包含一次，避免重复定义的问题

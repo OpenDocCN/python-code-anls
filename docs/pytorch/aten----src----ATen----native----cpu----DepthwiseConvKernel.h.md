@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\DepthwiseConvKernel.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保本文件只被编译一次
 

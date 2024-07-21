@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\instancenorm.cpp`
 
-```
+```py
 #include <torch/nn/options/instancenorm.h>
 // 引入实例归一化选项的头文件
 

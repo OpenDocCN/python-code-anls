@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_streambase.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入ABC抽象基类，用于定义抽象方法
 from abc import ABC, abstractmethod

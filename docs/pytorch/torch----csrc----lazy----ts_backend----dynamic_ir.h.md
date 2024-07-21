@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\dynamic_ir.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/symbol.h>
@@ -39,7 +39,7 @@ namespace lazy {
  * Consider the following example:
  * ```
  * numel = x.shape()[0] * x.shape()[1]
- * ```
+ * ```py
  *
  * Here, `x.shape()[i]` will be a SizeNode (subclass of DimensionNode),
  * and the multiplication of the two SizeNodes will be represented by

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\testing\init.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 头文件
 #include <torch/csrc/python_headers.h>
 

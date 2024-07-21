@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\static_runtime\__init__.py`
 
-```
+```py
 # 导入所需的模块：json（处理 JSON 数据）、urllib.request（进行 HTTP 请求）
 import json
 import urllib.request

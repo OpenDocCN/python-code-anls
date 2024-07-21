@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_subclasses\fake_impls.py`
 
-```
+```py
 # 忽略 mypy 的类型检查错误
 # 导入必要的模块和函数
 import functools  # 导入 functools 模块，用于实现函数的装饰器等工具

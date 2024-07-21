@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\samplers\serialize.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/samplers/base.h>  // 包含 Torch 库中的数据采样器基类头文件

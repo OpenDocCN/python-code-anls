@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\common_utils.py`
 
-```
+```py
 # 导入所需的模块和库
 import itertools  # 导入 itertools 模块，用于迭代操作
 import os  # 导入 os 模块，用于操作系统相关功能

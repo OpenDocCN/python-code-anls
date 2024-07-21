@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qconv_dynamic.cpp`
 
-```
+```py
 #ifdef USE_PYTORCH_QNNPACK
 
 template <int kSpatialDim>

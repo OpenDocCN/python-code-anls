@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\chunk.h`
 
-```
+```py
     // 等待直到队列中有可用数据或者所有数据块已加载（即当前轮次数据集已耗尽）
     cv_read_.wait(lock, [this] {
       return (

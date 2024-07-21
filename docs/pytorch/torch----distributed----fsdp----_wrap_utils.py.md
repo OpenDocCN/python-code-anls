@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_wrap_utils.py`
 
-```
+```py
 # 添加类型检查允许未类型化的定义
 # 导入标准库模块
 import collections

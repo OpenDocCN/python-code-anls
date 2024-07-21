@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\types\types_base.py`
 
-```
+```py
 """
 Where should I add a new type? `types_base.py` vs `types.py`
 

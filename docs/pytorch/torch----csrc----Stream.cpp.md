@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Stream.cpp`
 
-```
+```py
 // 导入必要的头文件，包括 pybind11 和 Torch 相关的头文件
 #include <pybind11/pybind11.h>
 #include <torch/csrc/Device.h>

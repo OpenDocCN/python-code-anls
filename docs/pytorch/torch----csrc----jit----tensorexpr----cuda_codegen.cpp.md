@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\cuda_codegen.cpp`
 
-```
+```py
 // 引入 Torch 的 CUDA Tensor 表达式相关头文件
 #include <torch/csrc/jit/tensorexpr/cuda_codegen.h>
 #include <torch/csrc/jit/tensorexpr/half_support.h>

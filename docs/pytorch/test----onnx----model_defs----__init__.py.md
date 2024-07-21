@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\__init__.py`
 
-```
+```py
 # 导入当前目录下的 op_test 模块的所有内容，禁止 F403 错误检查
 from .op_test import *  # noqa: F403
 # 导入当前目录下的 squeezenet 模块的所有内容，禁止 F403 错误检查

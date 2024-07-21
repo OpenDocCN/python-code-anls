@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 sys 模块，用于访问系统相关功能
 import sys

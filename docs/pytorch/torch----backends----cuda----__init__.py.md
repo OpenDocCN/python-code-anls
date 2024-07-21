@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\cuda\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入上下文管理模块
 import contextlib

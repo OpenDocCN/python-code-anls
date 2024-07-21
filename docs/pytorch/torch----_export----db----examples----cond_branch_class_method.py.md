@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\cond_branch_class_method.py`
 
-```
+```py
 # 引入torch模块，这是PyTorch深度学习框架的主要模块之一
 import torch
 

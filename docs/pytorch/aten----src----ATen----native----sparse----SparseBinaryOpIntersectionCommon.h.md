@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseBinaryOpIntersectionCommon.h`
 
-```
+```py
 #pragma once
 // 包含头文件 <ATen/Tensor.h>，定义了张量操作相关的函数和结构
 #include <ATen/Tensor.h>

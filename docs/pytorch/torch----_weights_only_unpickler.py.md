@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_weights_only_unpickler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 指定不强制类型定义的配置，用于类型检查工具mypy
 

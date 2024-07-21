@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Copy.cpp`
 
-```
+```py
 // 定义宏，仅在编译 Torch 时启用特定方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库的 Copy.h 文件

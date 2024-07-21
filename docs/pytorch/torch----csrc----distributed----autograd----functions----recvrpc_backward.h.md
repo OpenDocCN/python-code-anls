@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\functions\recvrpc_backward.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/autograd/function.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\tensor\python_tensor.h`
 
-```
+```py
 // 预处理指令，确保本头文件只被编译一次
 #pragma once
 

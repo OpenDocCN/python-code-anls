@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\MaxPooling.cpp`
 
-```
+```py
   // 如果定义了宏 USE_XNNPACK，编译以下代码块
 
   // 包含 XNNPACK 相关头文件

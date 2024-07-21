@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\upsampling.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>  // 包含 Cloneable 类定义
@@ -31,7 +31,7 @@ namespace nn {
 /// ```
 /// Upsample
 /// model(UpsampleOptions().scale_factor({3}).mode(torch::kLinear).align_corners(false));
-/// ```
+/// ```py
 class TORCH_API UpsampleImpl : public Cloneable<UpsampleImpl> {
  public:
   explicit UpsampleImpl(const UpsampleOptions& options_ = {});  // 构造函数声明

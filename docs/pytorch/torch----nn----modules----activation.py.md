@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\activation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入警告模块，用于处理警告信息
 import warnings

@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_qlinear_packed_params.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: mobile"]
 

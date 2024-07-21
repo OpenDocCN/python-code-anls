@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\gemm\threadblock\dq_mma_multistage.h`
 
-```
+```py
 /***************************************************************************************************
  * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause

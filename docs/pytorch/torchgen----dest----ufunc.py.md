@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\dest\ufunc.py`
 
-```
+```py
 # 引入未来版本的注释，使得 Python 2.7 中的类型提示支持使用注解
 from __future__ import annotations
 

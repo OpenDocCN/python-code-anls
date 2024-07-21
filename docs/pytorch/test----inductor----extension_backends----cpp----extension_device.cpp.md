@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\extension_backends\cpp\extension_device.cpp`
 
-```
+```py
 // 包含 C10 库中的 CPU 内存分配和 Allocator 头文件
 #include <c10/core/impl/alloc_cpu.h>
 #include <c10/core/Allocator.h>

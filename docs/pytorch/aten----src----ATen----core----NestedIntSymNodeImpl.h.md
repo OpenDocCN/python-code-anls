@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\NestedIntSymNodeImpl.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/ConstantSymNodeImpl.h>

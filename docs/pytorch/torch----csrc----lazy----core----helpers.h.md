@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\helpers.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Scalar.h>  // 包含标量相关的头文件

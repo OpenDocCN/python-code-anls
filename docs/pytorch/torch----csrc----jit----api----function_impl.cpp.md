@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\function_impl.cpp`
 
-```
+```py
 #include <c10/util/Flags.h>
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/api/function_impl.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\_remove_auto_functionalized_pass.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 # All rights reserved.

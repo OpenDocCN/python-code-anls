@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rpc_with_profiling_req.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 的自动微分库中的性能分析器头文件
 #include <torch/csrc/autograd/profiler.h>

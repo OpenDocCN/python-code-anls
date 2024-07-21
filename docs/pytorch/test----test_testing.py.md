@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_testing.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 # 引入所需的模块和库

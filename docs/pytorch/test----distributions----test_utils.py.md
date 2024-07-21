@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributions\test_utils.py`
 
-```
+```py
 # Owner(s): ["module: distributions"]
 
 # 导入 pytest 库，用于测试框架

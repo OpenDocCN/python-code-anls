@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\multipledispatch\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入OrderedDict，用于确保字典的有序性
 from collections import OrderedDict

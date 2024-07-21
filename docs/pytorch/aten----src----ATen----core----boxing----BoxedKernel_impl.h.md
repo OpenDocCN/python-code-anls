@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\BoxedKernel_impl.h`
 
-```
+```py
 #pragma once
 
 namespace c10 {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\upsampling.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 包含 Torch 库中的参数定义
@@ -20,7 +20,7 @@ namespace nn {
 /// ```
 /// Upsample
 /// model(UpsampleOptions().scale_factor(std::vector<double>({3})).mode(torch::kLinear).align_corners(false));
-/// ```
+/// ```py
 struct TORCH_API UpsampleOptions {
   /// output spatial sizes.
   TORCH_ARG(std::optional<std::vector<int64_t>>, size) = c10::nullopt;  // 可选的输出空间大小
@@ -55,7 +55,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::interpolate(input,
 /// F::InterpolateFuncOptions().size(std::vector<int64_t>({4})).mode(torch::kNearest));
-/// ```
+/// ```py
 struct TORCH_API InterpolateFuncOptions {
   typedef std::variant<
       enumtype::kNearest,                        // 定义枚举类型 `mode_t`，包含插值方法的不同选项

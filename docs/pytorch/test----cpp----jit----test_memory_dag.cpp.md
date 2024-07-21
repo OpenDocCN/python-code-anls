@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_memory_dag.cpp`
 
-```
+```py
 // 包含 Google Test 框架头文件
 #include <gtest/gtest.h>
 

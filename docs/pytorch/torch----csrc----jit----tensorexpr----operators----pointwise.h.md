@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\pointwise.h`
 
-```
+```py
 #pragma once
 // 引入 Torch TensorExpr 框架的核心头文件
 

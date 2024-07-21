@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_conv_add_relu_fusion_cuda.cpp`
 
-```
+```py
 # 包含 ATen 库中的必要头文件和命名空间
 #include <ATen/Utils.h>
 

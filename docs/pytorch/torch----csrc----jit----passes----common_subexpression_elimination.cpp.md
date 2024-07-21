@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\common_subexpression_elimination.cpp`
 
-```
+```py
 // 引入 Torch 的常见子表达式消除头文件
 #include <torch/csrc/jit/passes/common_subexpression_elimination.h>
 

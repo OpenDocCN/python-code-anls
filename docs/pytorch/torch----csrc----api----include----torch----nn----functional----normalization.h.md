@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\normalization.h`
 
-```
+```py
 ```cpp`
 #pragma once
 
@@ -42,7 +42,7 @@ inline Tensor normalize(
 /// 查看 torch::nn::functional::NormalizeFuncOptions 类文档，了解该函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::normalize(input, F::NormalizeFuncOptions().p(1).dim(-1));
 /// ```
@@ -76,7 +76,7 @@ inline Tensor layer_norm(
 /// 查看 torch::nn::functional::LayerNormFuncOptions 类文档，了解该函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::layer_norm(input, F::LayerNormFuncOptions({2, 2}).eps(2e-5));
 /// ```
@@ -160,7 +160,7 @@ inline Tensor local_response_norm(
 /// 查看 `torch::nn::functional::LocalResponseNormFuncOptions` 类的文档，了解此功能支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::local_response_norm(x, F::LocalResponseNormFuncOptions(2));
 /// ```
@@ -199,7 +199,7 @@ inline Tensor group_norm(
 /// 查看 `torch::nn::functional::GroupNormFuncOptions` 类的文档，了解此功能支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::group_norm(input, F::GroupNormFuncOptions(2).eps(2e-5));
 /// ```

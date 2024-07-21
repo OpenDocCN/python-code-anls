@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\optimizer.py`
 
-```
+```py
 # 设置类型别名，用于更清晰地表示不同类型的参数和数据结构
 Args: TypeAlias = Tuple[Any, ...]
 Kwargs: TypeAlias = Dict[str, Any]

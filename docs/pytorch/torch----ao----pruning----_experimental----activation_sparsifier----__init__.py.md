@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\activation_sparsifier\__init__.py`
 
-```
+```py
 # 导入需要使用的模块：os 模块用于操作文件系统，re 模块用于正则表达式的匹配
 import os
 import re

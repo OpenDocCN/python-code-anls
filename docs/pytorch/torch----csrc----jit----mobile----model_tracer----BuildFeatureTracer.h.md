@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\BuildFeatureTracer.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/record_function.h>  // 引入 ATen 记录函数的头文件

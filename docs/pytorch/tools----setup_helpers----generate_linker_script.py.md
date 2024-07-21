@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\generate_linker_script.py`
 
-```
+```py
 import subprocess  # 导入subprocess模块，用于执行外部命令
 
 def gen_linker_script(

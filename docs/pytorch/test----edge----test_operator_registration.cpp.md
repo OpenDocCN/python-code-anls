@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\test_operator_registration.cpp`
 
-```
+```py
 // 包含自定义的头文件 "kernel_runtime_context.h" 和 "operator_registry.h"
 #include "kernel_runtime_context.h"
 #include "operator_registry.h"

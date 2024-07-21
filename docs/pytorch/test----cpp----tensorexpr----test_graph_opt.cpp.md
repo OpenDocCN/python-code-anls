@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_graph_opt.cpp`
 
-```
+```py
   graph(%x : Float(10, strides=[1], device=cpu),
         %y : Float(20, strides=[1], device=cpu),
         %z : Float(30, strides=[1], device=cpu)):

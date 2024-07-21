@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\serialize\tensor.h`
 
-```
+```py
 #pragma once
 
 该指令告诉编译器只包含当前头文件一次，避免重复包含。

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\internal\test_beartype.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 """Unit tests for the internal beartype wrapper module."""
 

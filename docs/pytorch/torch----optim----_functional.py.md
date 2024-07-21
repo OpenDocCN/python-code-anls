@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\_functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的库和模块
 r"""Functional interface."""  # 模块文档字符串，描述了本模块的功能

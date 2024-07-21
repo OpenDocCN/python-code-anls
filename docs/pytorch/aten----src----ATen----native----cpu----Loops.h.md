@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\Loops.h`
 
-```
+```py
 #pragma once
 // 这个文件提供了两个函数来帮助编写逐元素内核：
 //

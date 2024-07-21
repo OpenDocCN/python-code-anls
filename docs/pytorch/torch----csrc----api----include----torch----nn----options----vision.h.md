@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\vision.h`
 
-```
+```py
 #pragma once
 
 // `#pragma once` 指令确保头文件只被编译一次，用于防止多重包含
@@ -28,7 +28,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::grid_sample(input, grid,
 /// F::GridSampleFuncOptions().mode(torch::kBilinear).padding_mode(torch::kZeros).align_corners(true));
-/// ```
+/// ```py
 
 // 对 `torch::nn::functional::grid_sample` 的选项进行了文档说明和示例，展示了如何使用这些选项
 

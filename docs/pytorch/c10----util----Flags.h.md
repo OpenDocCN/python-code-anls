@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Flags.h`
 
-```
+```py
 #ifndef C10_UTIL_FLAGS_H_
 #define C10_UTIL_FLAGS_H_
 

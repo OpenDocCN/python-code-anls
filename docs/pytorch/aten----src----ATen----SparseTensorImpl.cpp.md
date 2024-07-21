@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\SparseTensorImpl.cpp`
 
-```
+```py
 // 匿名命名空间中定义了一个函数，根据分发键集返回稀疏张量的设备类型
 DeviceType sparseTensorSetToDeviceType(DispatchKeySet key_set) {
   // 获取具有最高优先级的后端类型 ID

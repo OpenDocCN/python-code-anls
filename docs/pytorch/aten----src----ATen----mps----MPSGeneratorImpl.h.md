@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSGeneratorImpl.h`
 
-```
+```py
 //  Copyright © 2022 Apple Inc. 
 
 #pragma once

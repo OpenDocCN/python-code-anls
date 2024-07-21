@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\xpu.cpp`
 
-```
+```py
 /// 包含 ATen 库的 Context 头文件
 /// 包含 torch/xpu 头文件
 #include <ATen/Context.h>

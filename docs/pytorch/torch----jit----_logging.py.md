@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_logging.py`
 
-```
+```py
 # 导入 torch 库，用于后续操作
 import torch
 

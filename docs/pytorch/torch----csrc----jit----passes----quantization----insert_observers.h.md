@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\insert_observers.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/api/module.h>

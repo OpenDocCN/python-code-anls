@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\chi2.py`
 
-```
+```py
 # 引入 torch 中的约束和 Gamma 分布
 from torch.distributions import constraints
 from torch.distributions.gamma import Gamma

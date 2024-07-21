@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\include\pack_block_sparse.h`
 
-```
+```py
 /*
  * 版权所有（c）Facebook, Inc. 及其关联公司。
  * 保留所有权利。

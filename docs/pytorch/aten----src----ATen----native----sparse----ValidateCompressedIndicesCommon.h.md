@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\ValidateCompressedIndicesCommon.h`
 
-```
+```py
 #pragma once
 #include <ATen/Dispatch.h>  // ATen 分发机制的头文件
 #include <ATen/Tensor.h>  // ATen 张量的头文件

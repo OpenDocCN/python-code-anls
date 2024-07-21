@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\debug_util.cpp`
 
-```
+```py
 // 包含头文件，用于C++的范围迭代器和Torch的调试工具
 #include <c10/util/irange.h>
 #include <torch/csrc/lazy/core/debug_util.h>

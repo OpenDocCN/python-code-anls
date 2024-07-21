@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\mtia\Module.cpp`
 
-```
+```py
 // 引入 Torch 的 ATen 库
 #include <ATen/ATen.h>
 // 引入 C10 库中的 CallOnce 工具

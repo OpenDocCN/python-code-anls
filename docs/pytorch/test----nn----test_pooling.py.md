@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_pooling.py`
 
-```
+```py
 # 导入必要的模块和库
 # Owner(s): ["module: nn"]
 import itertools  # 导入 itertools 模块，用于生成迭代器的函数

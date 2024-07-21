@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch._C 模块和 torch._C._onnx 模块下的特定成员
 from torch import _C

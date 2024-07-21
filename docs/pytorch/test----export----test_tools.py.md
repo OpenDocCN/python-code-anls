@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_tools.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 import torch  # 导入 PyTorch 库

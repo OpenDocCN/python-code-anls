@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\script_object.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools 模块，用于装饰器功能
 import functools

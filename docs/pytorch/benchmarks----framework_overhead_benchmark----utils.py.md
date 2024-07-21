@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\framework_overhead_benchmark\utils.py`
 
-```
+```py
 #`
 # 导入时间模块
 import time

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\heuristics\__init__.py`
 
-```
+```py
 # 定义一个函数，名称为 `calculate_factors`，接收一个整数 `n` 作为参数
 def calculate_factors(n):
     # 初始化一个空列表，用于存放因子

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块，用于创建偏函数
 import functools

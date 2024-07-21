@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cuda_template.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import functools  # functools 模块用于高阶函数操作

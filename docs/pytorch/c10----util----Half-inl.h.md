@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Half-inl.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h> // 包含宏定义

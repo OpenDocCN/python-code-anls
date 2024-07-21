@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\transformer.cpp`
 
-```
+```py
 // 引入 Transformer 编码器选项头文件
 #include <torch/nn/options/transformer.h>
 // 引入 Transformer 编码器层选项头文件

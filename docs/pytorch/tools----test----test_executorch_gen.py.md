@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_executorch_gen.py`
 
-```
+```py
 # 从未来导入注释，使得代码在较旧的 Python 版本中也能使用注释功能
 from __future__ import annotations
 

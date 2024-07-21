@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\LinearUnpackImpl.cpp`
 
-```
+```py
 #ifdef USE_PYTORCH_QNNPACK
 // 定义 unpack 方法，解压缩量化后的线性权重和偏置
 std::tuple<at::Tensor, std::optional<at::Tensor>> PackedLinearWeightsQnnp::

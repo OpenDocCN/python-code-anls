@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset14.py`
 
-```
+```py
 """
 This file exports ONNX ops for opset 14.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\driver_api.cpp`
 
-```
+```py
 #if !defined(USE_ROCM) && defined(PYTORCH_C10_DRIVER_API_SUPPORTED)
 #include <c10/cuda/driver_api.h>
 #include <c10/util/CallOnce.h>

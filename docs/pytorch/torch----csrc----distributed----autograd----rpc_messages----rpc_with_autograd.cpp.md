@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rpc_with_autograd.cpp`
 
-```
+```py
 // 包含需要的头文件：RPC 消息定义、RPC 代理、RPC 工具、序列化相关工具、字节序工具
 #include <torch/csrc/distributed/autograd/rpc_messages/rpc_with_autograd.h>
 #include <torch/csrc/distributed/rpc/rpc_agent.h>

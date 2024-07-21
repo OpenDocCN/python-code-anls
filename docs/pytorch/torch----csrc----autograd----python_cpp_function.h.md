@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_cpp_function.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只包含一次
 

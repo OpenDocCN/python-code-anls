@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\distributed.py`
 
-```
+```py
 import math  # 导入math库，用于数学运算
 from typing import Iterator, Optional, TypeVar  # 导入类型提示相关的模块
 

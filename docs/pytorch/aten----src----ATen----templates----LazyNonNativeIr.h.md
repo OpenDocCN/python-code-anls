@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\LazyNonNativeIr.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 指令，确保此头文件在编译时只包含一次，避免重复包含
 

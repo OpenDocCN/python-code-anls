@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\gen_pyi.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import os

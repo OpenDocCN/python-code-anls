@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\COW.cpp`
 
-```
+```py
 // 包含 COW（Copy-On-Write）实现的头文件
 #include <c10/core/impl/COW.h>
 

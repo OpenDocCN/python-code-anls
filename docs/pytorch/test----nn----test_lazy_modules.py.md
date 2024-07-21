@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_lazy_modules.py`
 
-```
+```py
 # 导入pickle模块，用于对象序列化和反序列化
 import pickle
 # 导入unittest模块，用于编写和运行单元测试

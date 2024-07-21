@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\activation.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>
@@ -26,7 +26,7 @@ namespace nn {
 /// Example:
 /// ```
 /// ELU model(ELUOptions().alpha(42.42).inplace(true));
-/// ```
+/// ```py
 class TORCH_API ELUImpl : public torch::nn::Cloneable<ELUImpl> {
  public:
   /// Constructor for initializing ELU module with given options.
@@ -64,7 +64,7 @@ TORCH_MODULE(ELU);
 /// Example:
 /// ```
 /// SELU model(SELUOptions().inplace(true));
-/// ```
+/// ```py
 class TORCH_API SELUImpl : public torch::nn::Cloneable<SELUImpl> {
  public:
   /// Constructor for initializing SELU module with given options.
@@ -102,7 +102,7 @@ TORCH_MODULE(SELU);
 /// Example:
 /// ```
 /// Hardshrink model(HardshrinkOptions().lambda(0.5));
-/// ```
+/// ```py
 class TORCH_API HardshrinkImpl : public torch::nn::Cloneable<HardshrinkImpl> {
  public:
   /// Constructor for initializing Hardshrink module with given options.
@@ -135,7 +135,7 @@ TORCH_MODULE(Hardshrink);
 /// Example:
 /// ```
 /// Hardshrink model(HardshrinkOptions().lambda(42.42));
-/// ```
+/// ```py
 class TORCH_API HardshrinkImpl : public torch::nn::Cloneable<HardshrinkImpl> {
  public:
   /// Constructor initializing Hardshrink with given options.
@@ -173,7 +173,7 @@ TORCH_MODULE(Hardshrink);
 /// Example:
 /// ```
 /// Hardtanh model(HardtanhOptions().min_val(-42.42).max_val(0.42).inplace(true));
-/// ```
+/// ```py
 class TORCH_API HardtanhImpl : public torch::nn::Cloneable<HardtanhImpl> {
  public:
   /// Constructor initializing Hardtanh with given options.
@@ -211,7 +211,7 @@ TORCH_MODULE(Hardtanh);
 /// Example:
 /// ```
 /// LeakyReLU model(LeakyReLUOptions().negative_slope(0.42).inplace(true));
-/// ```
+/// ```py
 /// 定义 LeakyReLU 激活函数模块的实现，继承自 `torch::nn::Cloneable<LeakyReLUImpl>`。
 /// 此类提供了 LeakyReLU 模块的前向传播功能和重置方法。
 class TORCH_API LeakyReLUImpl : public torch::nn::Cloneable<LeakyReLUImpl> {
@@ -267,7 +267,7 @@ TORCH_MODULE(LogSigmoid);
 /// 示例：
 /// ```
 /// Softmax model(SoftmaxOptions(1));
-/// ```
+/// ```py
 class TORCH_API SoftmaxImpl : public torch::nn::Cloneable<SoftmaxImpl> {
  public:
   /// 构造函数，允许指定 SoftmaxOptions 对象的选项。
@@ -306,7 +306,7 @@ TORCH_MODULE(Softmax);
 /// Example:
 /// ```
 /// Softmin model(SoftminOptions(1));
-/// ```
+/// ```py
 class TORCH_API SoftminImpl : public torch::nn::Cloneable<SoftminImpl> {
  public:
   /// Constructor that initializes the Softmin module with a specified dimension.
@@ -347,7 +347,7 @@ TORCH_MODULE(Softmin);
 /// Example:
 /// ```
 /// LogSoftmax model(LogSoftmaxOptions(1));
-/// ```
+/// ```py
 class TORCH_API LogSoftmaxImpl : public torch::nn::Cloneable<LogSoftmaxImpl> {
  public:
   /// Constructor that initializes the LogSoftmax module with a specified dimension.
@@ -409,7 +409,7 @@ TORCH_MODULE(Softmax2d);
 /// 示例：
 /// ```
 /// PReLU model(PReLUOptions().num_parameters(42));
-/// ```
+/// ```py
 class TORCH_API PReLUImpl : public torch::nn::Cloneable<PReLUImpl> {
  public:
   // 默认构造函数，使用给定的选项进行初始化
@@ -446,7 +446,7 @@ TORCH_MODULE(PReLU);
 /// 示例：
 /// ```
 /// ReLU model(ReLUOptions().inplace(true));
-/// ```
+/// ```py
 class TORCH_API ReLUImpl : public torch::nn::Cloneable<ReLUImpl> {
  public:
   // 默认构造函数，使用给定的选项进行初始化
@@ -480,7 +480,7 @@ TORCH_MODULE(ReLU);
 /// 示例：
 /// ```
 /// ReLU6 model(ReLU6Options().inplace(true));
-/// ```
+/// ```py
 /// ```
 /// 定义了一个名为 ReLU6Impl 的类，它是 torch::nn::Cloneable<ReLU6Impl> 的子类
 class TORCH_API ReLU6Impl : public torch::nn::Cloneable<ReLU6Impl> {
@@ -514,7 +514,7 @@ TORCH_MODULE(ReLU6);
 /// 查看 `torch::nn::RReLUOptions` 类的文档，了解支持该模块的构造函数参数
 ///
 /// 示例：
-/// ```
+/// ```py
 /// RReLU model(RReLUOptions().lower(0.24).upper(0.42).inplace(true));
 /// ```
 class TORCH_API RReLUImpl : public torch::nn::Cloneable<RReLUImpl> {
@@ -548,7 +548,7 @@ TORCH_MODULE(RReLU);
 /// 查看 `torch::nn::CELUOptions` 类的文档，了解支持该模块的构造函数参数
 ///
 /// 示例：
-/// ```
+/// ```py
 /// CELU model(CELUOptions().alpha(42.42).inplace(true));
 /// ```
 class TORCH_API CELUImpl : public torch::nn::Cloneable<CELUImpl> {
@@ -581,7 +581,7 @@ TORCH_MODULE(CELU);
 /// 参见 `torch::nn::GLUOptions` 类的文档以了解如何使用构造函数参数。
 ///
 /// 示例:
-/// ```
+/// ```py
 /// GLU model(GLUOptions(1));
 /// ```
 class TORCH_API GLUImpl : public torch::nn::Cloneable<GLUImpl> {
@@ -697,7 +697,7 @@ TORCH_MODULE(Sigmoid);
 /// 参见 `torch::nn::SoftplusOptions` 类的文档以了解此模块支持哪些构造参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// Softplus model(SoftplusOptions().beta(0.24).threshold(42.42));
 /// ```
 class TORCH_API SoftplusImpl : public torch::nn::Cloneable<SoftplusImpl> {

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorGeometry.cpp`
 
-```
+```py
 // 包含 ATen 库中的 TensorGeometry.h 文件
 
 #include <ATen/TensorGeometry.h>

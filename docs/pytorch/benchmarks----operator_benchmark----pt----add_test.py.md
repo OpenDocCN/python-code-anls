@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\add_test.py`
 
-```
+```py
 # 导入operator_benchmark和torch库
 import operator_benchmark as op_bench
 import torch

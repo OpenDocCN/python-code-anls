@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_graph_optimizations.h`
 
-```
+```py
 #pragma once
 // 使用预处理命令#pragma once，确保头文件只被编译一次
 

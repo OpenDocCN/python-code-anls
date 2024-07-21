@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\generate_numeric_debug_handle.py`
 
-```
+```py
 # 导入所需模块中的特定类和函数
 from torch.fx import GraphModule, Node
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\vscode_settings.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定 Python 解释器路径，使脚本可以在环境中独立运行
 

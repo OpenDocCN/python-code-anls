@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\lift_closures.h`
 
-```
+```py
 #pragma once
 
 该指令告诉编译器只包含本文件一次，避免重复包含。

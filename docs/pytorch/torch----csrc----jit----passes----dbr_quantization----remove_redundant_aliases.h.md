@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\dbr_quantization\remove_redundant_aliases.h`
 
-```
+```py
 #pragma once
 
 # 防止头文件被多次包含，确保只在编译单元中被包含一次

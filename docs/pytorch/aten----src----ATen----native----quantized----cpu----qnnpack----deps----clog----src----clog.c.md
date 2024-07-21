@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\deps\clog\src\clog.c`
 
-```
+```py
 /*
  * 版权声明：
  * Copyright (c) Facebook, Inc. and its affiliates.

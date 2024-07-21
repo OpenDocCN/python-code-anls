@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\string_utils.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件只被编译一次
 

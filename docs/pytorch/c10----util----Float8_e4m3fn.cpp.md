@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Float8_e4m3fn.cpp`
 
-```
+```py
 #include <c10/util/Float8_e4m3fn.h>  // 包含 Float8_e4m3fn 类型的头文件
 
 #include <type_traits>  // 包含类型特性库，用于检查类型特性

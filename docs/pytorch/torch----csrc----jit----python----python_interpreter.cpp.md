@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_interpreter.cpp`
 
-```
+```py
 // 包含Torch C++ API头文件
 #include <torch/csrc/jit/runtime/interpreter.h>
 #include <torch/csrc/python_headers.h>

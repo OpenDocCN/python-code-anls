@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\__init__.py`
 
-```
+```py
 # 从torch.distributed._shard.metadata模块中导入ShardMetadata类
 from torch.distributed._shard.metadata import ShardMetadata
 

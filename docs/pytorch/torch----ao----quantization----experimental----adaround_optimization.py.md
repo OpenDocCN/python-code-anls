@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\adaround_optimization.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的库和模块
 import copy  # 引入copy模块，用于对象深拷贝

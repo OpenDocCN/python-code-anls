@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\logging.h`
 
-```
+```py
 #pragma once
 
 #include <chrono>  // 引入时间相关的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\quantized_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架头文件
 
 #include <ATen/ATen.h>  // 引入 PyTorch ATen 库

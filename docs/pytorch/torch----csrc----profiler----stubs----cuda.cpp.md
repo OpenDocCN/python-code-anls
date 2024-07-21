@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\stubs\cuda.cpp`
 
-```
+```py
 namespace torch {
 namespace profiler {
 namespace impl {

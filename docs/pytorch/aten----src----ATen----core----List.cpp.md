@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\List.cpp`
 
-```
+```py
 // 定义 c10::detail 命名空间
 namespace c10::detail {
     // 比较两个 ListImpl 对象是否相等的运算符重载函数

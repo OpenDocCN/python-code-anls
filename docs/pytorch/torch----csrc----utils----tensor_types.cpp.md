@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_types.cpp`
 
-```
+```py
 // 包含 Python.h 头文件，用于与 Python 解释器交互
 #include <Python.h>
 

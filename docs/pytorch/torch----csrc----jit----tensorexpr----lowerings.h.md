@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\lowerings.h`
 
-```
+```py
 // This file defines classes for registering standard lowerings from JIT to TE
 // IR.
 #pragma once

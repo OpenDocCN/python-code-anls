@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\examples\parameter_server_test.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 如果需要修改此文件以使测试通过，请同样地修改以下文件：

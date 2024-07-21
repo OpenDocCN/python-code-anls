@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rref_context.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Optional.h>

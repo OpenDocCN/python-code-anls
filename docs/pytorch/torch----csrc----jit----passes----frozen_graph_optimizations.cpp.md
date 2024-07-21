@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_graph_optimizations.cpp`
 
-```
+```py
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/ir/alias_analysis.h>
 #include <torch/csrc/jit/ir/ir_views.h>

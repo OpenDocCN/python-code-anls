@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\moments_utils.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once确保头文件只被编译一次
 

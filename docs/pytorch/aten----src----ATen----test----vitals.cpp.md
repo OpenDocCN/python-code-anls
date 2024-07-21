@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\vitals.cpp`
 
-```
+```py
 #include <gmock/gmock.h>  // 引入 Google Mock 测试框架的头文件
 #include <gtest/gtest.h>  // 引入 Google Test 测试框架的头文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\reducer_timer.hpp`
 
-```
+```py
 #pragma once
 // 包含头文件，用于时间近似计算
 #include <c10/util/ApproximateClock.h>

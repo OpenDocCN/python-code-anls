@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\quantized\modules\linear_relu.py`
 
-```
+```py
 # 从 torch 库的 torch.ao.nn.intrinsic.quantized 模块中导入 LinearReLU 类
 from torch.ao.nn.intrinsic.quantized import LinearReLU
 

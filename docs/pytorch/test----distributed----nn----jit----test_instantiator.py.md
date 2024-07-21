@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\nn\jit\test_instantiator.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: distributed"]
 

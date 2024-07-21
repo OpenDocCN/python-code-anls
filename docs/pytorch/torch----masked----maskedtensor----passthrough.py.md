@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\maskedtensor\passthrough.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # mypy选项：允许未标记类型的函数定义
 # Copyright (c) Meta Platforms, Inc. and affiliates

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\kineto_client_interface.cpp`
 
-```
+```py
 #ifdef USE_KINETO
 #include <ATen/Context.h>
 #include <libkineto.h>

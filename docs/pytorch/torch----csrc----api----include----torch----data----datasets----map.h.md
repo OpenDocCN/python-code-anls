@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\map.h`
 
-```
+```py
   /// 根据模板参数C的值，选择性地使用torch::optional包装类型T
   template <bool C, typename T>
   using optional_if_t = typename std::conditional<C, torch::optional<T>, T>::type;

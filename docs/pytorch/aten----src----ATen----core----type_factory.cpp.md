@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\type_factory.cpp`
 
-```
+```py
 // 包含 ATen 库中的类型工厂相关头文件
 #include <ATen/core/type_factory.h>
 

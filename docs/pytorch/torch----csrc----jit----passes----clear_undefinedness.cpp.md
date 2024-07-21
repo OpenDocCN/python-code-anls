@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\clear_undefinedness.cpp`
 
-```
+```py
 // 包含 Torch 中用于清除未定义值的 Pass 所需的头文件
 #include <torch/csrc/jit/passes/clear_undefinedness.h>
 

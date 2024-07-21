@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\lower_graph.cpp`
 
-```
+```py
 // 包含 Torch 库中的头文件 lower_graph.h，提供了图降级操作的功能
 #include <torch/csrc/jit/passes/lower_graph.h>
 

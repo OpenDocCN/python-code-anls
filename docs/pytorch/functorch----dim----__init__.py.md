@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\__init__.py`
 
-```
+```py
 import dis
 import inspect
 from typing import Sequence, Union

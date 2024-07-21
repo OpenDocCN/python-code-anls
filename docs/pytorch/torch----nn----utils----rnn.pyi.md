@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\rnn.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型相关的模块和声明，包括 Any、Iterable、NamedTuple、overload 和 Sequence
 from typing import Any, Iterable, NamedTuple, overload, Sequence

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\alias_info.h`
 
-```
+```py
 #pragma once
 #include <unordered_set>  // 引入无序集合（哈希集合）头文件
 #include <vector>         // 引入向量头文件

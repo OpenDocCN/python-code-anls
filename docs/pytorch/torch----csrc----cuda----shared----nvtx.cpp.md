@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\shared\nvtx.cpp`
 
-```
+```py
 #ifdef _WIN32
 #include <wchar.h> // _wgetenv for nvtx
 #endif

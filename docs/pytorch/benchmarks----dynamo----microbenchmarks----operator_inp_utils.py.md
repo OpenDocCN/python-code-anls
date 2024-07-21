@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\operator_inp_utils.py`
 
-```
+```py
 import functools
 import logging
 import math

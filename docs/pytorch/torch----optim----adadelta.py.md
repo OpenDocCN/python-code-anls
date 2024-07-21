@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\adadelta.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型和函数
 from typing import Any, Dict, List, Optional

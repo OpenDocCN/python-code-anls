@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\distance.cpp`
 
-```
+```py
 // 包含 torch 库中的 distance.h 头文件，提供了距离计算的相关功能
 #include <torch/nn/modules/distance.h>
 

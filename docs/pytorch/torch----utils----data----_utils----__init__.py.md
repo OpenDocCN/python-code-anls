@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\_utils\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Utility classes & functions for data loading. Code in this folder is mostly used by ../dataloder.py.
 

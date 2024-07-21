@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\hook_states.py`
 
-```
+```py
 class BasicHookState:
     # 初始化方法，创建一个包含通信钩子在训练过程中所需状态信息的类
     def __init__(self, cref, process_group):

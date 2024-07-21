@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\__init__.py`
 
-```
+```py
 # 定义一个名为`average`的函数，接受一个参数`nums`，这个参数是一个列表
 def average(nums):
     # 如果列表`nums`为空，则返回0.0作为平均值

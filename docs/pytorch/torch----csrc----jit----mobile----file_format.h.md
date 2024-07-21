@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\file_format.h`
 
-```
+```py
 #pragma once
 
 #include <array>  // 引入数组容器

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\python_nccl.h`
 
-```
+```py
 #pragma once
 在这里使用了预处理指令 `#pragma once`，用于确保头文件只被包含一次，避免多重包含问题。
 

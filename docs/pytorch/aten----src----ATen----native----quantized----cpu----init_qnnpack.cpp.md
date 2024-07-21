@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\init_qnnpack.cpp`
 
-```
+```py
 #ifdef USE_PYTORCH_QNNPACK
 // 如果定义了 USE_PYTORCH_QNNPACK 宏，则编译以下代码块
 

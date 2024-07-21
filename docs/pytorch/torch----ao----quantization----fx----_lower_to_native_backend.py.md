@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\_lower_to_native_backend.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库中的相关模块和函数
 import torch

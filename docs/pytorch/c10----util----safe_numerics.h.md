@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\safe_numerics.h`
 
-```
+```py
 #pragma once
 #include <c10/macros/Macros.h>  // 包含 c10 库的宏定义
 

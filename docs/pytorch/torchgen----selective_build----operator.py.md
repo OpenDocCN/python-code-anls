@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\selective_build\operator.py`
 
-```
+```py
 # 引入未来版本的注解支持
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_dtensor_state_dict.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 引入所需模块和类

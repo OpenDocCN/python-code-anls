@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\dropout.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -15,7 +15,7 @@ namespace nn {
 /// Example:
 /// ```
 /// Dropout model(DropoutOptions().p(0.42).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API DropoutOptions {
   /* implicit */ DropoutOptions(double p = 0.5);
 
@@ -31,7 +31,7 @@ struct TORCH_API DropoutOptions {
 /// Example:
 /// ```
 /// Dropout2d model(Dropout2dOptions().p(0.42).inplace(true));
-/// ```
+/// ```py
 using Dropout2dOptions = DropoutOptions;
 
 /// Options for the `Dropout3d` module.
@@ -39,7 +39,7 @@ using Dropout2dOptions = DropoutOptions;
 /// Example:
 /// ```
 /// Dropout3d model(Dropout3dOptions().p(0.42).inplace(true));
-/// ```
+/// ```py
 using Dropout3dOptions = DropoutOptions;
 
 /// Options for the `AlphaDropout` module.
@@ -47,7 +47,7 @@ using Dropout3dOptions = DropoutOptions;
 /// Example:
 /// ```
 /// AlphaDropout model(AlphaDropoutOptions(0.2).inplace(true));
-/// ```
+/// ```py
 using AlphaDropoutOptions = DropoutOptions;
 
 /// Options for the `FeatureAlphaDropout` module.
@@ -55,7 +55,7 @@ using AlphaDropoutOptions = DropoutOptions;
 /// Example:
 /// ```
 /// FeatureAlphaDropout model(FeatureAlphaDropoutOptions(0.2).inplace(true));
-/// ```
+/// ```py
 using FeatureAlphaDropoutOptions = DropoutOptions;
 
 namespace functional {
@@ -66,7 +66,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::dropout(input, F::DropoutFuncOptions().p(0.5));
-/// ```
+/// ```py
 struct TORCH_API DropoutFuncOptions {
   /// The probability of an element to be zeroed. Default: 0.5
   TORCH_ARG(double, p) = 0.5;
@@ -84,7 +84,7 @@ struct TORCH_API DropoutFuncOptions {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::dropout2d(input, F::Dropout2dFuncOptions().p(0.5));
-/// ```
+/// ```py
 using Dropout2dFuncOptions = DropoutFuncOptions;
 
 /// Options for `torch::nn::functional::dropout3d`.
@@ -93,7 +93,7 @@ using Dropout2dFuncOptions = DropoutFuncOptions;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::dropout3d(input, F::Dropout3dFuncOptions().p(0.5));
-/// ```
+/// ```py
 using Dropout3dFuncOptions = DropoutFuncOptions;
 
 /// Options for `torch::nn::functional::alpha_dropout`.
@@ -102,7 +102,7 @@ using Dropout3dFuncOptions = DropoutFuncOptions;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::alpha_dropout(input, F::AlphaDropoutFuncOptions().p(0.5).training(false));
-/// ```
+/// ```py
 struct TORCH_API AlphaDropoutFuncOptions {
   /// The probability of an element to be zeroed. Default: 0.5
   TORCH_ARG(double, p) = 0.5;
@@ -120,7 +120,7 @@ struct TORCH_API AlphaDropoutFuncOptions {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::feature_alpha_dropout(input, F::FeatureAlphaDropoutFuncOptions().p(0.5).training(false));
-/// ```
+/// ```py
 struct TORCH_API FeatureAlphaDropoutFuncOptions {
   /// The probability of an element to be zeroed. Default: 0.5
   TORCH_ARG(double, p) = 0.5;

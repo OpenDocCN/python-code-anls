@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\custom_tensor.py`
 
-```
+```py
 # 忽略 mypy 的错误，通常用于在类型检查工具中排除特定的错误或警告
 # Import torch 模块，用于科学计算和机器学习任务
 import torch

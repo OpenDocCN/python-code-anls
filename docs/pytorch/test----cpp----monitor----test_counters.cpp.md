@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\monitor\test_counters.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <thread>  // 引入线程相关的头文件

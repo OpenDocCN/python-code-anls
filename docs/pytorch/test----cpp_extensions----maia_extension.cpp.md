@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\maia_extension.cpp`
 
-```
+```py
 // 引入 Torch 扩展和库文件
 #include <torch/extension.h>
 #include <torch/library.h>

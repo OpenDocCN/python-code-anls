@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\disable_torch_function.cpp`
 
-```
+```py
     nullptr, /* tp_richcompare */
     0, /* tp_weaklistoffset */
     nullptr, /* tp_iter */

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\launcher\__init__.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定这个脚本使用 Python 3 解释器来执行
 

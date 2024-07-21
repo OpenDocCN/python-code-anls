@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\insert_observers.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/passes/quantization/insert_observers.h>

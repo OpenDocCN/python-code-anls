@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalContext.h`
 
-```
+```py
 ```objective-c
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>

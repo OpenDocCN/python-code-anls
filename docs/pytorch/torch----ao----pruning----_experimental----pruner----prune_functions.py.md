@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\prune_functions.py`
 
-```
+```py
 """
 Collection of conversion functions for linear / conv2d structured pruning
 Also contains utilities for bias propagation

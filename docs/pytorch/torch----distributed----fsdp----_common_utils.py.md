@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_common_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 This file includes private common utilities for FSDP.

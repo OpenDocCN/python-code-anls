@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\setup.py`
 
-```
+```py
 # 导入必要的标准库和模块
 import os
 import sys

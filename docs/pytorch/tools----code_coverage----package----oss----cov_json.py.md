@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\oss\cov_json.py`
 
-```
+```py
 # 导入所需模块和函数，包括从上级目录的 tool 模块导入 clang_coverage
 from ..tool import clang_coverage
 # 导入枚举类型和配置项，从上级目录的 util.setting 中分别导入 CompilerType, Option, TestList, TestPlatform

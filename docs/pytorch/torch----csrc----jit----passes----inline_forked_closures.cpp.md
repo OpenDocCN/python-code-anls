@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\inline_forked_closures.cpp`
 
-```
+```py
 // 包含 Torch 库中的头文件：用于 JIT 编译器的内联分叉闭包
 #include <torch/csrc/jit/passes/inline_forked_closures.h>
 

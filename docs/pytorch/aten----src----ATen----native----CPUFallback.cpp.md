@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\CPUFallback.cpp`
 
-```
+```py
 // 定义预处理器指令，用于仅包含方法操作符的Torch模式
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含CPU回退相关的头文件

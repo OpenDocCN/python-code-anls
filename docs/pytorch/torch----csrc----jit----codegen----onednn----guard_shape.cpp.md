@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\guard_shape.cpp`
 
-```
+```py
 //! [ Note -- prepareFusionGroupAndGuardOutputs implementation ]
 //! shamelessly copying code from NNC (tensorexpr_fuser)  with very little
 //! modification, original code at:

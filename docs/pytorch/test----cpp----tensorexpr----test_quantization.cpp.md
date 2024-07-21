@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_quantization.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <ATen/native/quantized/PackedParams.h>  // 包含 ATen 库的量化参数处理相关头文件

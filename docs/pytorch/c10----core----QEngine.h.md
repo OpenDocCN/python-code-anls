@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\QEngine.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Exception.h>

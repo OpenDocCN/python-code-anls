@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\VariableTypeUtils.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>  // 包含 c10 库中的整数范围工具

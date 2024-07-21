@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_caffe2.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import importlib  # 导入模块动态加载库

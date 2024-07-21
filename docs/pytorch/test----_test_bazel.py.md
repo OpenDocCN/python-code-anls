@@ -1,6 +1,6 @@
 # `.\pytorch\test\_test_bazel.py`
 
-```
+```py
 """
 This test module contains a minimalistic "smoke tests" for the bazel build.
 

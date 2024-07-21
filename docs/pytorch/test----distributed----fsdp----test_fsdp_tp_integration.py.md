@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_tp_integration.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入深拷贝模块
 import sys  # 导入系统模块

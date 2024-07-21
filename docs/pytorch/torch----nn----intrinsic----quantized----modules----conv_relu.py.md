@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\quantized\modules\conv_relu.py`
 
-```
+```py
 # 导入 torch 中量化的 1 维、2 维和 3 维卷积加ReLU模块
 from torch.ao.nn.intrinsic.quantized import ConvReLU1d
 from torch.ao.nn.intrinsic.quantized import ConvReLU2d

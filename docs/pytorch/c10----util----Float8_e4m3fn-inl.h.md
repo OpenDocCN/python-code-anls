@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Float8_e4m3fn-inl.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h> // 引入C10库中的宏定义

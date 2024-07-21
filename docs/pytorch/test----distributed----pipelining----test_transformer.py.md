@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_transformer.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 从torch.distributed.pipelining模块中导入pipeline和SplitPoint

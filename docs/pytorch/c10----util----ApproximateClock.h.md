@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ApproximateClock.h`
 
-```
+```py
 // 版权声明，声明代码版权归Facebook所有，仅限2023年以及之后使用。
 #pragma once
 

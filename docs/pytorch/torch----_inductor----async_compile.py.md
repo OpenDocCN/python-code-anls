@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\async_compile.py`
 
-```
+```py
 # 导入必要的模块和函数
 # 允许未类型化的函数定义
 from __future__ import annotations

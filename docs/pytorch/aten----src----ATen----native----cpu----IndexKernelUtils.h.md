@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\IndexKernelUtils.h`
 
-```
+```py
 #pragma once
 #include <ATen/native/TensorIterator.h>
 #include <c10/util/irange.h>

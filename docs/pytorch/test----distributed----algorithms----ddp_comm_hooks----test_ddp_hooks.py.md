@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\algorithms\ddp_comm_hooks\test_ddp_hooks.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import os  # 导入操作系统相关功能模块

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\metal\Context.h`
 
-```
+```py
 #ifndef MetalContext_h
 #define MetalContext_h
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAAlgorithm.h`
 
-```
+```py
 #ifdef THRUST_DEVICE_LOWER_BOUND_WORKS
 #include <thrust/binary_search.h>
 #include <thrust/device_vector.h>

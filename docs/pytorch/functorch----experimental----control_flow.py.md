@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\experimental\control_flow.py`
 
-```
+```py
 # 导入 torch 模块中的 cond 函数，防止 Flake8 检查 F401（未使用导入）警告
 from torch import cond  # noqa: F401
 

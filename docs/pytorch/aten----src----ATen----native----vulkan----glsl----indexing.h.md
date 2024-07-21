@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\glsl\indexing.h`
 
-```
+```py
 /*
  * 根据线性化的索引计算4维张量的坐标
  */

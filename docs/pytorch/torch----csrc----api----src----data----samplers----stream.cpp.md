@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\data\samplers\stream.cpp`
 
-```
+```py
 // 包含必要的头文件以及命名空间声明
 #include <torch/data/samplers/stream.h>
 #include <torch/serialize/archive.h>

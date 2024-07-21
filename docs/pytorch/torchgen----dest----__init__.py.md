@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\dest\__init__.py`
 
-```
+```py
 # 导入生成非本地惰性 IR 节点的函数和类
 from torchgen.dest.lazy_ir import (
     generate_non_native_lazy_ir_nodes as generate_non_native_lazy_ir_nodes,

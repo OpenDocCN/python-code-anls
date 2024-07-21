@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_double_vsx.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/cpu/vec/intrinsics.h>

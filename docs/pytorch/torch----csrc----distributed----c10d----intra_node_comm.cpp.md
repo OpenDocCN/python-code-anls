@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\intra_node_comm.cpp`
 
-```
+```py
 /**
  * 包含所需的头文件
  */

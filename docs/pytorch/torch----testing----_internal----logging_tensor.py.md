@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\logging_tensor.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入PyTorch库

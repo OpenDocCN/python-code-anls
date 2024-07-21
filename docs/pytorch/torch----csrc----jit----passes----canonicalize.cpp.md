@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\canonicalize.cpp`
 
-```
+```py
 // 引入 Torch 的 JIT 模块中的标准头文件和类
 #include <torch/csrc/jit/passes/canonicalize.h>
 

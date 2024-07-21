@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Random.cpp`
 
-```
+```py
 Tensor& normal_(
     Tensor& self,
     const double mean,

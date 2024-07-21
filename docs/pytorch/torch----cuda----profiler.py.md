@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\profiler.py`
 
-```
+```py
 # 指定不要检查未定义的函数和方法
 mypy: allow-untyped-defs
 

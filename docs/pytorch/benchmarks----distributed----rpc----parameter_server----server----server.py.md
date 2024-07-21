@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\server\server.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于高阶函数的支持
 import threading  # 导入 threading 模块，用于多线程编程的支持
 import time  # 导入 time 模块，用于时间相关操作的支持

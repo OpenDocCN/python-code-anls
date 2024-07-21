@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\android_api_module.py`
 
-```
+```py
     @torch.jit.script_method
     def testNonContiguous(self):
         # 创建一个非连续的张量

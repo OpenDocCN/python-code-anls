@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rpc_agent.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/rpc/message.h>

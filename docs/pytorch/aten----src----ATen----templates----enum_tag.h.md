@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\enum_tag.h`
 
-```
+```py
 #pragma once
 // 声明这个文件只被编译一次，以防止头文件重复包含
 

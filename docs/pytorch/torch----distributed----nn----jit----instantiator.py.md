@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\jit\instantiator.py`
 
-```
+```py
 #!/usr/bin/python3
 # mypy: allow-untyped-defs
 # 导入必要的库和模块

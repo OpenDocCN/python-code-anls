@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules.h`
 
-```
+```py
 // 一次性导入所有常用的 Torch 库中的模块
 
 // Common

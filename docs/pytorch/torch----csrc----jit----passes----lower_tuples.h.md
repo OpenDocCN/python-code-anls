@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\lower_tuples.h`
 
-```
+```py
 #pragma once
 
 // 指令，确保此头文件在编译过程中只包含一次，防止重复定义

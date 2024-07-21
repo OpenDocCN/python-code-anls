@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_quantization.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import logging  # 导入日志模块，用于记录程序运行时的信息

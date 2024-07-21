@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\modules\__init__.py`
 
-```
+```py
 r"""Quantized Modules.
 
 Note::

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\cumsum.cpp`
 
-```
+```py
 // 包含Vulkan操作的常用头文件和实用程序
 #include <ATen/native/vulkan/ops/Common.h>
 #include <ATen/native/vulkan/ops/Utils.h>

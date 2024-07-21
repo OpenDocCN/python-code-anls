@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\TensorFactories.cpp`
 
-```
+```py
 // 引入 ATen 库中所需的头文件
 #include <ATen/ATen.h>
 #include <ATen/quantized/Quantizer.h>

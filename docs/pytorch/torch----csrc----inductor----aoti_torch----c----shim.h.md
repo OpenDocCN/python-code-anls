@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\c\shim.h`
 
-```
+```py
 // 如果未定义 AOTI_TORCH_SHIM 宏，则定义它，以防止多次包含
 #ifndef AOTI_TORCH_SHIM
 #define AOTI_TORCH_SHIM

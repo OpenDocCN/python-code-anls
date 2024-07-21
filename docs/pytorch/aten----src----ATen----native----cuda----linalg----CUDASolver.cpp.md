@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\CUDASolver.cpp`
 
-```
+```py
 #include <ATen/Context.h>
 #include <ATen/NativeFunctions.h>
 #include <ATen/native/cuda/linalg/CUDASolver.h>

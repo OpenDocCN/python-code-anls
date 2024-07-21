@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\miopen\Types.cpp`
 
-```
+```py
 #include <ATen/miopen/Types.h>  // 引入 miopen 的数据类型定义
 
 #include <ATen/ATen.h>  // 引入 PyTorch ATen 库

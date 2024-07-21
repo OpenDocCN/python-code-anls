@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\optim\test_named_optimizer.py`
 
-```
+```py
 # 导入unittest模块，用于编写和运行测试
 import unittest
 

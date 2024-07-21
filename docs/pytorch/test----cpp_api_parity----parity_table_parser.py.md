@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\parity_table_parser.py`
 
-```
+```py
 # 导入命名元组模块
 from collections import namedtuple
 

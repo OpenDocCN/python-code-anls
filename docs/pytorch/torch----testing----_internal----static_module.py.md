@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\static_module.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["module: unknown"]
 

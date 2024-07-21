@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\standalone\nvtx_observer.cpp`
 
-```
+```py
 // 包含 Torch 的 NVTX 观察器头文件
 #include <torch/csrc/profiler/standalone/nvtx_observer.h>
 

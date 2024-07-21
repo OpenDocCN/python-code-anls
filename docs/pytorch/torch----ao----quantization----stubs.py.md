@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\stubs.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入 torch 的 nn 模块

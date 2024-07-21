@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\NegateFallback.cpp`
 
-```
+```py
 // 定义编译器标识符，仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

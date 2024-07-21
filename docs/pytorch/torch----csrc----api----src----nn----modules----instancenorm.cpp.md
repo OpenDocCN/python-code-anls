@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\instancenorm.cpp`
 
-```
+```py
 # 包含 Torch 实例归一化操作所需的头文件
 #include <torch/nn/functional/instancenorm.h>
 

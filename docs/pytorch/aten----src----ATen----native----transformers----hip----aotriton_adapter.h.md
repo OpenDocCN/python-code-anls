@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\hip\aotriton_adapter.h`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_ROCM 宏，则包含下列头文件
 #ifdef USE_ROCM

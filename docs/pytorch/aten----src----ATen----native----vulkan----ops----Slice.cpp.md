@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Slice.cpp`
 
-```
+```py
 // 包含 ATen 库中相关头文件
 #include <ATen/NamedTensorUtils.h>
 #include <ATen/native/vulkan/ops/Common.h>

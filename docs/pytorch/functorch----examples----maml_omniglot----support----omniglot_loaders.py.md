@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\maml_omniglot\support\omniglot_loaders.py`
 
-```
+```py
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

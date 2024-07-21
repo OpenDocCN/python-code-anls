@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\layer_norm_expanded_weights.py`
 
-```
+```py
     # 设置类型检查时允许未类型化的定义
     # 导入所需的类型声明
     from typing import List, Optional

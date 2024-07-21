@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\__init__.py`
 
-```
+```py
 # 定义一个名为 calculate_mean 的函数，计算给定列表的平均值
 def calculate_mean(numbers):
     # 如果列表为空，则返回 None

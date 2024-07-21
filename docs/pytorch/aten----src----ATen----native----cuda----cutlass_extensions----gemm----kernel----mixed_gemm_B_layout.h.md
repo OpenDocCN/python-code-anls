@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\gemm\kernel\mixed_gemm_B_layout.h`
 
-```
+```py
 /*
   This file exists so that we use the same weight layout for MoE grouped gemm and regular gemm when the weight is
   quantized. The preprocessing code reads this template to know how to organize the quantized weight matrices

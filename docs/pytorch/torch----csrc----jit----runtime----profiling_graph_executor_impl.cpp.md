@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\profiling_graph_executor_impl.cpp`
 
-```
+```py
 // 引入Torch JIT运行时的头文件，实现了性能分析相关的图执行器功能
 #include <torch/csrc/jit/runtime/profiling_graph_executor_impl.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\gen_example.py`
 
-```
+```py
 # 导入必要的标准库模块
 import os
 import sys

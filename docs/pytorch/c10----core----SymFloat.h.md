@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymFloat.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/SymBool.h>

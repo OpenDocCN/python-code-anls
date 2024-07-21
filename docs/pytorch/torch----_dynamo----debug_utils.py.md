@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\debug_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # mypy: disable-error-code="method-assign"
 

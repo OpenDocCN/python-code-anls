@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\llm.py`
 
-```
+```py
 # 从未来版本导入类型注解的支持
 from __future__ import annotations
 

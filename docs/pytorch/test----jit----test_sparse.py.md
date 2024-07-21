@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_sparse.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import io  # 导入 io 模块，用于处理字节流

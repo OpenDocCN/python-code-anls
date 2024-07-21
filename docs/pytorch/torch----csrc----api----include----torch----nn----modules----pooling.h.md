@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\pooling.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 
@@ -57,7 +57,7 @@ class TORCH_API AvgPoolImpl : public torch::nn::Cloneable<Derived> {
 /// Example:
 /// ```
 /// AvgPool1d model(AvgPool1dOptions(3).stride(2));
-/// ```
+/// ```py
 // 示例用法
 
 class TORCH_API AvgPool1dImpl : public AvgPoolImpl<1, AvgPool1dImpl> {
@@ -97,7 +97,7 @@ TORCH_MODULE(AvgPool1d);
 /// Example:
 /// ```
 /// AvgPool2d model(AvgPool2dOptions({3, 2}).stride({2, 2}));
-/// ```
+/// ```py
 // 示例用法
 
 class TORCH_API AvgPool2dImpl : public AvgPoolImpl<2, AvgPool2dImpl> {
@@ -134,7 +134,7 @@ TORCH_MODULE(AvgPool2d);
 /// Example:
 /// ```
 /// AvgPool3d model(AvgPool3dOptions(5).stride(2));
-/// ```
+/// ```py
 class TORCH_API AvgPool3dImpl : public AvgPoolImpl<3, AvgPool3dImpl> {
  public:
   using AvgPoolImpl<3, AvgPool3dImpl>::AvgPoolImpl;
@@ -185,7 +185,7 @@ class TORCH_API MaxPoolImpl : public torch::nn::Cloneable<Derived> {
 /// Example:
 /// ```
 /// MaxPool1d model(MaxPool1dOptions(3).stride(2));
-/// ```
+/// ```py
 class TORCH_API MaxPool1dImpl : public MaxPoolImpl<1, MaxPool1dImpl> {
  public:
   using MaxPoolImpl<1, MaxPool1dImpl>::MaxPoolImpl;
@@ -218,7 +218,7 @@ TORCH_MODULE(MaxPool1d);
 /// Example:
 /// ```
 /// MaxPool2d model(MaxPool2dOptions(3).stride(2));
-/// ```
+/// ```py
 /// Base class for all (dimension-specialized) adaptive maxpool modules.
 template <size_t D, typename output_size_t, typename Derived>
 class TORCH_API AdaptiveMaxPoolImpl : public torch::nn::Cloneable<Derived> {
@@ -257,7 +257,7 @@ class TORCH_API AdaptiveMaxPoolImpl : public torch::nn::Cloneable<Derived> {
 // 示例：
 // ```
 // AdaptiveMaxPool1d model(AdaptiveMaxPool1dOptions(3));
-// ```
+// ```py
 class TORCH_API AdaptiveMaxPool1dImpl
     : public AdaptiveMaxPoolImpl<1, ExpandingArray<1>, AdaptiveMaxPool1dImpl> {
  public:
@@ -287,7 +287,7 @@ TORCH_MODULE(AdaptiveMaxPool1d);
 // 示例：
 // ```
 // AdaptiveMaxPool2d model(AdaptiveMaxPool2dOptions({3, 2}));
-// ```
+// ```py
 class TORCH_API AdaptiveMaxPool2dImpl : public AdaptiveMaxPoolImpl<
                                             2,
                                             ExpandingArrayWithOptionalElem<2>,
@@ -324,7 +324,7 @@ TORCH_MODULE(AdaptiveMaxPool2d);
 /// Example:
 /// ```
 /// AdaptiveMaxPool3d model(AdaptiveMaxPool3dOptions(3));
-/// ```
+/// ```py
 class TORCH_API AdaptiveMaxPool3dImpl : public AdaptiveMaxPoolImpl<
                                             3,
                                             ExpandingArrayWithOptionalElem<3>,
@@ -389,7 +389,7 @@ class TORCH_API AdaptiveAvgPoolImpl : public torch::nn::Cloneable<Derived> {
 /// Example:
 /// ```
 /// AdaptiveAvgPool1d model(AdaptiveAvgPool1dOptions(5));
-/// ```
+/// ```py
 class TORCH_API AdaptiveAvgPool1dImpl
     : public AdaptiveAvgPoolImpl<1, ExpandingArray<1>, AdaptiveAvgPool1dImpl> {
 
@@ -434,7 +434,7 @@ TORCH_MODULE(AdaptiveAvgPool1d);
 /// Example:
 /// ```
 /// AdaptiveAvgPool2d model(AdaptiveAvgPool2dOptions({3, 2}));
-/// ```
+/// ```py
 class TORCH_API AdaptiveAvgPool2dImpl : public AdaptiveAvgPoolImpl<
                                             2,
                                             ExpandingArrayWithOptionalElem<2>,
@@ -470,7 +470,7 @@ TORCH_MODULE(AdaptiveAvgPool2d);
 /// Example:
 /// ```
 /// AdaptiveAvgPool3d model(AdaptiveAvgPool3dOptions(3));
-/// ```
+/// ```py
 class TORCH_API AdaptiveAvgPool3dImpl : public AdaptiveAvgPoolImpl<
                                             3,
                                             ExpandingArrayWithOptionalElem<3>,
@@ -528,7 +528,7 @@ class TORCH_API MaxUnpoolImpl : public torch::nn::Cloneable<Derived> {
 /// 示例：
 /// ```
 /// MaxUnpool1d model(MaxUnpool1dOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 class TORCH_API MaxUnpool1dImpl : public MaxUnpoolImpl<1, MaxUnpool1dImpl> {
  public:
   using MaxUnpoolImpl<1, MaxUnpool1dImpl>::MaxUnpoolImpl;
@@ -559,7 +559,7 @@ TORCH_MODULE(MaxUnpool1d);
 /// 示例：
 /// ```
 /// MaxUnpool2d model(MaxUnpool2dOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 class TORCH_API MaxUnpool2dImpl : public MaxUnpoolImpl<2, MaxUnpool2dImpl> {
  public:
   using MaxUnpoolImpl<2, MaxUnpool2dImpl>::MaxUnpoolImpl;
@@ -591,7 +591,7 @@ TORCH_MODULE(MaxUnpool2d);
 /// 示例：
 /// ```
 /// MaxUnpool3d model(MaxUnpool3dOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 class TORCH_API MaxUnpool3dImpl : public MaxUnpoolImpl<3, MaxUnpool3dImpl> {
  public:
   using MaxUnpoolImpl<3, MaxUnpool3dImpl>::MaxUnpoolImpl;
@@ -623,7 +623,7 @@ TORCH_MODULE(MaxUnpool3d);
 /// 示例：
 /// ```
 /// FractionalMaxPool2d model(FractionalMaxPool2dOptions(5).output_size(1));
-/// ```
+/// ```py
 class TORCH_API FractionalMaxPool2dImpl
     : public torch::nn::Cloneable<FractionalMaxPool2dImpl> {
  public:
@@ -674,7 +674,7 @@ TORCH_MODULE(FractionalMaxPool2d);
 /// 示例：
 /// ```
 /// FractionalMaxPool3d model(FractionalMaxPool3dOptions(5).output_size(1));
-/// ```
+/// ```py
 class TORCH_API FractionalMaxPool3dImpl
     : public torch::nn::Cloneable<FractionalMaxPool3dImpl> {
  public:
@@ -743,14 +743,14 @@ class TORCH_API LPPoolImpl : public torch::nn::Cloneable<Derived> {
 /// 示例：
 /// ```
 /// LPPool1d model(LPPool1dOptions(2.0, 3).stride(2));
-/// ```
+/// ```py
 /// See the documentation for `torch::nn::LPPool1dOptions` class to learn what
 /// constructor arguments are supported for this module.
 ///
 /// Example:
 /// ```
 /// LPPool1d model(LPPool1dOptions(1, 2).stride(5).ceil_mode(true));
-/// ```
+/// ```py
 class TORCH_API LPPool1dImpl : public LPPoolImpl<1, LPPool1dImpl> {
  public:
   /// Inherit constructors from LPPoolImpl<1, LPPool1dImpl>.
@@ -781,7 +781,7 @@ TORCH_MODULE(LPPool1d);
 /// ```
 /// LPPool2d model(LPPool2dOptions(1, std::vector<int64_t>({3, 4})).stride({5,
 /// 6}).ceil_mode(true));
-/// ```
+/// ```py
 class TORCH_API LPPool2dImpl : public LPPoolImpl<2, LPPool2dImpl> {
  public:
   /// Inherit constructors from LPPoolImpl<2, LPPool2dImpl>.
@@ -812,7 +812,7 @@ TORCH_MODULE(LPPool2d);
 /// ```
 /// LPPool3d model(LPPool3dOptions(1, std::vector<int64_t>({3, 4, 5})).stride(
 /// {5, 6, 7}).ceil_mode(true));
-/// ```
+/// ```py
 class TORCH_API LPPool3dImpl : public LPPoolImpl<3, LPPool3dImpl> {
  public:
   /// Inherit constructors from LPPoolImpl<3, LPPool3dImpl>.

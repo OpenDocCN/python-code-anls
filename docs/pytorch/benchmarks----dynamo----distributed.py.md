@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\distributed.py`
 
-```
+```py
 import argparse  # 导入用于解析命令行参数的模块
 import logging  # 导入日志记录模块
 import os  # 导入操作系统相关的功能

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\dist_optimizer_test.py`
 
-```
+```py
 # 忽略 mypy 类型检查中的错误
 # 导入多线程模块
 import threading

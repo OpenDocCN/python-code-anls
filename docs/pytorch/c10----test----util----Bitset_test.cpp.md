@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\Bitset_test.cpp`
 
-```
+```py
 # 包含 Google 测试框架的头文件
 #include <gtest/gtest.h>
 

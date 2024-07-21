@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_tree_views.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once，确保头文件只被包含一次，避免重复定义错误
 

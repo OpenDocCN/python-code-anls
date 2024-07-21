@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Stream.h`
 
-```
+```py
 #ifndef THP_STREAM_INC
 #define THP_STREAM_INC
 

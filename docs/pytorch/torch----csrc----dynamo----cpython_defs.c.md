@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\cpython_defs.c`
 
-```
+```py
 // 包含头文件 torch/csrc/dynamo/cpython_defs.h
 #include <torch/csrc/dynamo/cpython_defs.h>
 

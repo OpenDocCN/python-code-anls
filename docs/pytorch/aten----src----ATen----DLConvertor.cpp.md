@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\DLConvertor.cpp`
 
-```
+```py
 // 包含 ATen 库中的 DLConvertor.h 和 Functions.h 头文件
 #include <ATen/DLConvertor.h>
 #include <ATen/Functions.h>

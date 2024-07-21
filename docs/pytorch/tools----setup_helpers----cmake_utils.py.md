@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\cmake_utils.py`
 
-```
+```py
 """
 This is refactored from cmake.py to avoid circular imports issue with env.py,
 which calls get_cmake_cache_variables_from_file

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\_node_metadata_hook.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块
 import contextlib
@@ -23,7 +23,7 @@ def _node_metadata_hook(node: torch.fx.Node, stack_trace: str) -> None:
         functools.partial(_node_metadata_hook, stack_trace="file")
     ):
         pass(gm)
-    ```
+    ```py
 
     该钩子函数仅适用于特定情况 -- 假设被添加的节点只是 call_function 节点，并复制第一个参数节点的 nn_module_stack。
     """

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_reductions.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 import contextlib  # 引入上下文管理模块

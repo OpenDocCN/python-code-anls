@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\kineto_shim.cpp`
 
-```
+```py
 namespace torch {
 
 namespace profiler::impl::kineto {

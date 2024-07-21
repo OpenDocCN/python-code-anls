@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\_functions.cpp`
 
-```
+```py
 // 引入必要的头文件，包括C++标准库和PyTorch相关库的头文件
 #include <c10/util/irange.h>
 #include <torch/nn/modules/_functions.h>

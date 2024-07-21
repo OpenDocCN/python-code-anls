@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Context.h`
 
-```
+```py
   // 预处理指令，用于仅在定义了宏 USE_VULKAN_API 时编译此部分代码
 #pragma once
 

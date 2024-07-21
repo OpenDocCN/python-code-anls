@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\UpSampleKernel.cpp`
 
-```
+```py
 // 定义预处理器宏，用于仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量类相关的头文件

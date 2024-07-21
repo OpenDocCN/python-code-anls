@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Backtrace.h`
 
-```
+```py
 #include <c10/util/Backtrace.h>
 #include <c10/util/Type.h>
 

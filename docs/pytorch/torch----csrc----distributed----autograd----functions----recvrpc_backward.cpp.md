@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\functions\recvrpc_backward.cpp`
 
-```
+```py
 // 包含头文件，用于 ATen 核心功能、C10 实用工具和 Torch 分布式自动求导相关模块
 #include <ATen/core/functional.h>
 #include <c10/util/irange.h>

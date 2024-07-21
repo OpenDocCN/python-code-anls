@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\env.py`
 
-```
+```py
 # 从未来模块导入 annotations 特性，使得类型提示中的字符串可以是字符串字面值或者类型名称。
 from __future__ import annotations
 

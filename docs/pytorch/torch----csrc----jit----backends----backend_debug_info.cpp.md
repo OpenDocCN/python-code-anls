@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_debug_info.cpp`
 
-```
+```py
 // 包含头文件<c10/macros/Macros.h>，定义了一些常用的宏
 #include <c10/macros/Macros.h>
 // 包含头文件<torch/csrc/jit/backends/backend_debug_info.h>，提供了后端调试信息的接口

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\sparse\_semi_structured_conversions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import torch
 

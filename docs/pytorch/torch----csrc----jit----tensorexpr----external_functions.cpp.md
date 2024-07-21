@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\external_functions.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，用于 JIT 引擎的张量表达式外部函数
 #include <torch/csrc/jit/tensorexpr/external_functions.h>
 

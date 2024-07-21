@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ParallelOpenMP.h`
 
-```
+```py
 #pragma once
 
 #include <algorithm>  // 包含算法标准库，用于使用 std::min

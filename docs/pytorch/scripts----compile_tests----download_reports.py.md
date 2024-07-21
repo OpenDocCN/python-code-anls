@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\compile_tests\download_reports.py`
 
-```
+```py
 import json  # 导入处理 JSON 数据的模块
 import os  # 导入操作系统相关功能的模块
 import pprint  # 导入用于漂亮打印数据结构的模块

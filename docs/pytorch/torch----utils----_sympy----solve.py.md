@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\solve.py`
 
-```
+```py
 # 导入 logging 模块，用于记录日志
 import logging
 

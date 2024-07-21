@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\CheckMemoryFormat.h`
 
-```
+```py
 #include <c10/core/TensorOptions.h>  // 包含 c10 库中的 TensorOptions 头文件
 
 namespace c10::impl {

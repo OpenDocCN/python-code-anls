@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\symbol.h`
 
-```
+```py
 #pragma once
 // 指令，确保头文件只被包含一次
 

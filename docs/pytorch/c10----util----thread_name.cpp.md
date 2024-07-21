@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\thread_name.cpp`
 
-```
+```py
 // 包含 c10/util/thread_name.h 头文件，提供了与线程命名相关的功能
 
 #include <c10/util/thread_name.h>

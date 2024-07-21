@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\engine\dist_engine.h`
 
-```
+```py
 #pragma once
 
 #include <mutex> // 包含互斥量（mutex）的头文件

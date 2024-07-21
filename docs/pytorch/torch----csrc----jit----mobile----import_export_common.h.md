@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\import_export_common.h`
 
-```
+```py
 #pragma once
 /**
  * @file

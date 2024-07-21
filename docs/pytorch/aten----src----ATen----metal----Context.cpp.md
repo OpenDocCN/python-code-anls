@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\metal\Context.cpp`
 
-```
+```py
 #include <atomic>  // 包含 C++ 标准库中的原子操作支持
 
 #include <ATen/Tensor.h>  // 包含 PyTorch 的 Tensor 类定义

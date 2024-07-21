@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_strobelight\compile_time_profiler.py`
 
-```
+```py
 # Import logging and os modules for logging configuration and environment variable handling
 import logging
 import os

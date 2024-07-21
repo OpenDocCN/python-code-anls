@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_pruning.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # Owner(s): ["module: unknown"]

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\pad_mm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools、itertools、operator 和 typing 等模块
 import functools

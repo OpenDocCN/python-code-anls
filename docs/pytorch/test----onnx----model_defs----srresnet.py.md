@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\srresnet.py`
 
-```
+```py
 import math  # 导入数学库，用于数学运算
 
 from torch import nn  # 从 torch 库中导入神经网络模块

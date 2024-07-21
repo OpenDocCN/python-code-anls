@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\Intrinsics.h`
 
-```
+```py
 #pragma once
 // 如果使用的是 Clang 编译器，并且目标是 x86/x86-64 架构
 #if defined(__clang__) && (defined(__x86_64__) || defined(__i386__))

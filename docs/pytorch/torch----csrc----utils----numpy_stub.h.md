@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\numpy_stub.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令确保头文件只被包含一次，避免重复定义

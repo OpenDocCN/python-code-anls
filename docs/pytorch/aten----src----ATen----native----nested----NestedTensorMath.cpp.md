@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\nested\NestedTensorMath.cpp`
 
-```
+```py
 namespace at {
 namespace native {
 namespace {

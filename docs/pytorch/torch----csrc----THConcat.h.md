@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\THConcat.h`
 
-```
+```py
 #pragma once
 // 宏定义：将两个参数 x 和 y 连接成一个字符串
 #define TH_CONCAT_STRING_2(x, y) TH_CONCAT_STRING_2_EXPAND(x, y)

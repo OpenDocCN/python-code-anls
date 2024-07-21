@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\cat_test.py`
 
-```
+```py
 # 引入必要的库和模块
 import random  # 导入random模块，用于生成随机数
 from typing import List  # 导入typing模块中的List类型

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\embeddingbag_test.py`
 
-```
+```py
 # 导入NumPy库
 import numpy
 # 导入pt模块中的configs模块

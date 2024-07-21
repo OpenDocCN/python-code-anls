@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_convolution.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 # 引入必要的模块和库
 import itertools  # 引入迭代工具模块

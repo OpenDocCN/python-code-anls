@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Exceptions.h`
 
-```
+```py
 /// NOTE [ Conversion Cpp Python Warning ]
 /// 警告处理程序无法立即设置 Python 警告，因为需要获取 GIL（可能死锁），
 /// 如果警告引发 Python 错误，则需要干净地退出。因此，我们缓冲警告并在返回到 Python 时处理它们。

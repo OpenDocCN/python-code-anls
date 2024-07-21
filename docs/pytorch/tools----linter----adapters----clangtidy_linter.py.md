@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\clangtidy_linter.py`
 
-```
+```py
 # 引入未来的注释语法支持，使得 Annotations 可以作为类型提示使用
 from __future__ import annotations
 

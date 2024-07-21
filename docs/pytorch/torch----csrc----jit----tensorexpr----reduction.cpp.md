@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\reduction.cpp`
 
-```
+```py
 // 包含头文件 <torch/csrc/jit/tensorexpr/reduction.h>
 // 包含头文件 <torch/csrc/jit/tensorexpr/tensor.h>
 #include <torch/csrc/jit/tensorexpr/reduction.h>

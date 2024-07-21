@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\DeviceAccelerator.cpp`
 
-```
+```py
 namespace at {
 
 # 定义 at 命名空间，包含了后续的函数和宏定义

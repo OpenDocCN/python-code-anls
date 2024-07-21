@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\dynamic\modules\__init__.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""Quantized Dynamic Modules.
 

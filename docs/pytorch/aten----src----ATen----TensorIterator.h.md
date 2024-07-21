@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorIterator.h`
 
-```
+```py
 // 防止头文件被多次包含，保证在单个编译单元中只包含一次
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runtime\scalar_to_tensor.h`
 
-```
+```py
 #pragma once
 
 #pragma once 指令确保头文件只被编译一次，防止多重包含的问题。

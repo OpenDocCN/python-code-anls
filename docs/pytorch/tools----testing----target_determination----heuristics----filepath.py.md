@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\filepath.py`
 
-```
+```py
 # 从未来模块中导入注释标注，使得代码兼容未来 Python 版本的类型标注
 from __future__ import annotations
 

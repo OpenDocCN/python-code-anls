@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\flatbuffer_serializer.h`
 
-```
+```py
 /**
  * @file
  * @brief Defines the public API for serializing mobile modules to flatbuffer.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\agent\server\api.py`
 
-```
+```py
 # 忽略类型检查错误（这里是针对mypy类型检查工具的声明）
 # 版权声明，版权归Facebook及其关联公司所有
 # 保留所有权利

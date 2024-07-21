@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\script_resp.cpp`
 
-```
+```py
 # 引入 Torch 分布式 RPC 模块中的 ScriptResp 类的头文件
 #include <torch/csrc/distributed/rpc/script_resp.h>
 

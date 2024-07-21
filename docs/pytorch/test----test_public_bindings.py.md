@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_public_bindings.py`
 
-```
+```py
 # Owner(s): ["module: autograd"]
 
 # 导入必要的模块和函数

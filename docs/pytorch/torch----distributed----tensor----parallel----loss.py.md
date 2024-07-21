@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\loss.py`
 
-```
+```py
 # 设置 mypy 不强制要求定义类型
 # 代码版权声明，属于 Meta Platforms, Inc. 及其关联公司
 import contextlib  # 导入上下文管理模块

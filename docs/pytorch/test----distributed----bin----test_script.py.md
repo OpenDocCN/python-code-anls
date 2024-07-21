@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\bin\test_script.py`
 
-```
+```py
 # 设置脚本解释器为 Python 3
 #!/usr/bin/env python3
 

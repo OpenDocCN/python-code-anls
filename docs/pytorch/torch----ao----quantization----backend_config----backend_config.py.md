@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\backend_config.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来导入类型注解支持，允许未标记的函数定义
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Sort.cpp`
 
-```
+```py
 // 定义宏，用于在头文件中声明仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 CUDA 排序所需的头文件

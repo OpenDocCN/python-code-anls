@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\guards.cpp`
 
-```
+```py
 // 定义宏以确保使用清理的 ssize_t 值
 #define PY_SSIZE_T_CLEAN
 // 包含空张量相关的头文件

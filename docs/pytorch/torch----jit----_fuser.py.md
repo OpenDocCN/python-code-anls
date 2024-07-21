@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_fuser.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import contextlib  # 导入上下文管理模块
 from typing import List, Tuple  # 导入类型提示相关模块

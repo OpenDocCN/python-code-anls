@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_logging.py`
 
-```
+```py
 # Owner(s): ["module: fsdp"]
 # 导入 functools 模块，用于部分应用测试跳过装饰器的函数
 import functools

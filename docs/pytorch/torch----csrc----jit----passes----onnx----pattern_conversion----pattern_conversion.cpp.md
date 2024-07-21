@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\pattern_conversion\pattern_conversion.cpp`
 
-```
+```py
 // 包含头文件：c10/util/irange.h，提供范围迭代功能
 #include <c10/util/irange.h>
 // 包含头文件：torch/csrc/jit/passes/dead_code_elimination.h，定义了消除死代码的优化

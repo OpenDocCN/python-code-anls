@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\PinnedMemoryAllocator.h`
 
-```
+```py
 #pragma once
 
 这行指令确保头文件只被编译一次，避免多重包含的问题。

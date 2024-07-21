@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\maskedtensor\__init__.py`
 
-```
+```py
 # 版权声明，指明代码版权归 Meta Platforms, Inc. 及其关联公司所有
 # flake8: noqa
 

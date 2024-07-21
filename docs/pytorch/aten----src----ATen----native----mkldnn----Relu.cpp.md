@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Relu.cpp`
 
-```
+```py
 #ifndef AT_PER_OPERATOR_HEADERS
 #include <ATen/NativeFunctions.h>
 #else

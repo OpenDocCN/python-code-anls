@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\check_csv.py`
 
-```
+```py
 # 导入必要的模块：命令行参数解析、系统交互、文本包装、Pandas 数据处理库
 import argparse
 import sys

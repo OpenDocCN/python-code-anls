@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\arg.h`
 
-```
+```py
 #pragma once
 
 #include <utility>

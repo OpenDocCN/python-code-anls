@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\runtime\hints.py`
 
-```
+```py
 # 设置 mypy：允许未打印的定义，这允许在未显式声明类型的情况下使用函数。
 import collections
 import typing

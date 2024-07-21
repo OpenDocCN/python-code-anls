@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_redistribute.py`
 
-```
+```py
     @property
     def world_size(self):
         # 返回集群的大小，这里设定为4

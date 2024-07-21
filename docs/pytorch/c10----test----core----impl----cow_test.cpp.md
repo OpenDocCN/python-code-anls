@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\impl\cow_test.cpp`
 
-```
+```py
 // 引入所需的头文件：COW.h 和 COWDeleter.h 提供了与 Copy-On-Write 相关的实现。
 #include <c10/core/impl/COW.h>
 #include <c10/core/impl/COWDeleter.h>

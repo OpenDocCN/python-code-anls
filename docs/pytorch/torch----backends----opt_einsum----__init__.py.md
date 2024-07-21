@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\opt_einsum\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入系统相关的模块
 import sys

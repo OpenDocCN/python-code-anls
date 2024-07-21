@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_simplifier.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/bounds_overlap.h>

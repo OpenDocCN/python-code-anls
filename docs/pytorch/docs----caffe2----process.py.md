@@ -1,6 +1,6 @@
 # `.\pytorch\docs\caffe2\process.py`
 
-```
+```py
 #!/usr/bin/env python3
 ## @package process
 # Module doxygen.process

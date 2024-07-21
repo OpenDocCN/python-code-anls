@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\overheads.py`
 
-```
+```py
 # 导入时间相关模块
 import time
 import timeit

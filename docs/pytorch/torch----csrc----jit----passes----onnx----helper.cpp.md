@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\helper.cpp`
 
-```
+```py
 #include <torch/csrc/jit/jit_log.h>
 #include <torch/csrc/jit/passes/onnx/helper.h>
 #include <torch/csrc/onnx/back_compat.h>

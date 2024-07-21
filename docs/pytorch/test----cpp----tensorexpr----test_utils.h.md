@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_utils.h`
 
-```
+```py
 #pragma once
 
 #include <memory>  // 包含智能指针和其他标准库头文件

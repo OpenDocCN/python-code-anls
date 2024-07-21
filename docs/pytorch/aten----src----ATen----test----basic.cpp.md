@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\basic.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/ATen.h>  // 引入 ATen 库的头文件

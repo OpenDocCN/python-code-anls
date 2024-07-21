@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\CUDASolver.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/cuda/CUDAContext.h>  // 包含 CUDA 上下文的头文件

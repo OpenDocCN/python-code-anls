@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\aoti_runtime\implementation.cpp`
 
-```
+```py
 // NOTE: Like interface.cpp, this file will be copied into AOTInductor
 // generated output. This file is intended to keep implementation
 // details separate from the implementation of the AOTI public

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\DynamicTypes.h`
 
-```
+```py
 #pragma once
 // 声明此头文件为单次包含（once include），防止重复引用
 

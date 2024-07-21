@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_numpy.cpp`
 
-```
+```py
 #ifndef USE_NUMPY
 // 如果没有启用 NumPy 支持，则定义以下命名空间
 namespace torch::utils {

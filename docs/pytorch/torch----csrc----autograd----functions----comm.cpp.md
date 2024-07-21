@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\comm.cpp`
 
-```
+```py
 namespace torch {
 namespace autograd {
 // 定义 Scatter 类的构造函数，初始化成员变量

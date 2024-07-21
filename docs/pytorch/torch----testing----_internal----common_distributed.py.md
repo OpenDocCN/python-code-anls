@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_distributed.py`
 
-```
+```py
 # 忽略类型检查错误的标记
 # 导入必要的模块
 import abc  # 抽象基类模块

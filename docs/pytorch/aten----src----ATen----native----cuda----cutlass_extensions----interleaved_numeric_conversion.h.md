@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\interleaved_numeric_conversion.h`
 
-```
+```py
 /*!
     \file
     \brief Boost-like numeric conversion operator for int8 and CUTLASS int4b_t interleaved in a register

@@ -35,13 +35,13 @@ Tuple patterns are treated as sequential patterns, and currently only tuples of 
 ### Advanced Pattern Specification
 
 The above format should satisfy the vast majority of use cases. However, it does not handle more complex scenarios such as graph patterns. For these use cases, the BackendConfig API offers an alternative "reverse nested tuple" pattern format, enabled through `BackendPatternConfig()._set_pattern_complex_format(...)`. Note that this format is deprecated and will be replaced in a future version of PyTorch.
-```
+```py
 operator = module_type | functional | torch op | native op | MatchAllNode
 Pattern = (operator, Pattern, Pattern, ...) | operator
 ```
 where the first item for each Pattern is the operator, and the rest are the patterns for the arguments of the operator.
 For example, the pattern (nn.ReLU, (operator.add, MatchAllNode, (nn.BatchNorm2d, nn.Conv2d))) would match the following graph:
-```
+```py
 tensor_1            tensor_2
  |                    |
  *(MatchAllNode)  nn.Conv2d
@@ -59,7 +59,7 @@ During prepare and convert, we’ll match the last node, which will be the ancho
 
 The BackendConfig is comprised of a list of BackendPatternConfigs, each of which define the specifications and the requirements for an operator pattern. Here is an example usage:
 
-```
+```py
 import torch
 from torch.ao.quantization.backend_config import (
     BackendConfig,
@@ -142,7 +142,7 @@ Relevant APIs:
 
 DTypeConfig specifies a set of supported data types for input/output/weight/bias along with the associated constraints, if any. There are two ways of specifying `input_dtype`, `output_dtype`, and `weight_dtype`, as simple `torch.dtype`s or as `DTypeWithConstraints`, e.g.:
 
-```
+```py
 import torch
 from torch.ao.quantization.backend import DTypeConfig, DTypeWithConstraints
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_ufuncs_basic.py`
 
-```
+```py
 """
 Poking around ufunc casting/broadcasting/dtype/out behavior.
 

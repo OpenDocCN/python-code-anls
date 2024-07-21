@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\conv.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 包含 Torch 库的参数处理头文件
@@ -177,7 +177,7 @@ struct ConvOptions {
 /// Example:
 /// ```
 /// Conv1d model(Conv1dOptions(3, 2, 3).stride(1).bias(false));
-/// ```
+/// ```py
 using Conv1dOptions = ConvOptions<1>; // Conv1d 模块的特化选项
 
 /// `ConvOptions` specialized for the `Conv2d` module.
@@ -185,7 +185,7 @@ using Conv1dOptions = ConvOptions<1>; // Conv1d 模块的特化选项
 /// Example:
 /// ```
 /// Conv2d model(Conv2dOptions(3, 2, 3).stride(1).bias(false));
-/// ```
+/// ```py
 using Conv2dOptions = ConvOptions<2>; // Conv2d 模块的特化选项
 
 /// `ConvOptions` specialized for the `Conv3d` module.
@@ -193,7 +193,7 @@ using Conv2dOptions = ConvOptions<2>; // Conv2d 模块的特化选项
 /// Example:
 /// ```
 /// Conv3d model(Conv3dOptions(3, 2, 3).stride(1).bias(false));
-/// ```
+/// ```py
 using Conv3dOptions = ConvOptions<3>; // Conv3d 模块的特化选项
 // ============================================================================
 
@@ -241,7 +241,7 @@ struct ConvFuncOptions {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv1d(x, weight, F::Conv1dFuncOptions().stride(1));
-/// ```
+/// ```py
 using Conv1dFuncOptions = ConvFuncOptions<1>;
 
 /// `ConvFuncOptions` specialized for `torch::nn::functional::conv2d`.
@@ -250,7 +250,7 @@ using Conv1dFuncOptions = ConvFuncOptions<1>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv2d(x, weight, F::Conv2dFuncOptions().stride(1));
-/// ```
+/// ```py
 using Conv2dFuncOptions = ConvFuncOptions<2>;
 
 /// `ConvFuncOptions` specialized for `torch::nn::functional::conv3d`.
@@ -259,7 +259,7 @@ using Conv2dFuncOptions = ConvFuncOptions<2>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv3d(x, weight, F::Conv3dFuncOptions().stride(1));
-/// ```
+/// ```py
 using Conv3dFuncOptions = ConvFuncOptions<3>;
 
 } // namespace functional
@@ -335,7 +335,7 @@ struct ConvTransposeOptions {
 /// ```
 /// ConvTranspose1d model(ConvTranspose1dOptions(3, 2,
 /// 3).stride(1).bias(false));
-/// ```
+/// ```py
 using ConvTranspose1dOptions = ConvTransposeOptions<1>;  // Alias for 1-dimensional transposed convolution options.
 
 /// `ConvTransposeOptions` specialized for the `ConvTranspose2d` module.
@@ -344,7 +344,7 @@ using ConvTranspose1dOptions = ConvTransposeOptions<1>;  // Alias for 1-dimensio
 /// ```
 /// ConvTranspose2d model(ConvTranspose2dOptions(3, 2,
 /// 3).stride(1).bias(false));
-/// ```
+/// ```py
 using ConvTranspose2dOptions = ConvTransposeOptions<2>;  // Alias for 2-dimensional transposed convolution options.
 
 /// `ConvTransposeOptions` specialized for the `ConvTranspose3d` module.
@@ -353,7 +353,7 @@ using ConvTranspose2dOptions = ConvTransposeOptions<2>;  // Alias for 2-dimensio
 /// ```
 /// ConvTranspose3d model(ConvTranspose3dOptions(3, 2,
 /// 3).stride(1).bias(false));
-/// ```
+/// ```py
 using ConvTranspose3dOptions = ConvTransposeOptions<3>;  // Alias for 3-dimensional transposed convolution options.
 /// 使用 ConvTranspose3dOptions 类创建 ConvTranspose3d 模型，设置为 2x2x2 的卷积转置操作，
 /// 并且不使用偏置。
@@ -395,7 +395,7 @@ struct ConvTransposeFuncOptions {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv_transpose1d(x, weight, F::ConvTranspose1dFuncOptions().stride(1));
-/// ```
+/// ```py
 using ConvTranspose1dFuncOptions = ConvTransposeFuncOptions<1>;
 
 /// `ConvTransposeFuncOptions` 专门用于 `torch::nn::functional::conv_transpose2d`。
@@ -404,7 +404,7 @@ using ConvTranspose1dFuncOptions = ConvTransposeFuncOptions<1>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv_transpose2d(x, weight, F::ConvTranspose2dFuncOptions().stride(1));
-/// ```
+/// ```py
 using ConvTranspose2dFuncOptions = ConvTransposeFuncOptions<2>;
 
 /// `ConvTransposeFuncOptions` 专门用于 `torch::nn::functional::conv_transpose3d`。
@@ -413,7 +413,7 @@ using ConvTranspose2dFuncOptions = ConvTransposeFuncOptions<2>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv_transpose3d(x, weight, F::ConvTranspose3dFuncOptions().stride(1));
-/// ```
+/// ```py
 using ConvTranspose3dFuncOptions = ConvTransposeFuncOptions<3>;
 
 } // namespace functional

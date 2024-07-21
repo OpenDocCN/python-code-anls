@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_qschemes.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 指令确保头文件只被编译一次，防止多重包含的问题
 

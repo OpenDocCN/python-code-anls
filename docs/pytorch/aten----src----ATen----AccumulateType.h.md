@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\AccumulateType.h`
 
-```
+```py
 #pragma once
 #include <ATen/Config.h>
 #include <c10/core/DeviceType.h>

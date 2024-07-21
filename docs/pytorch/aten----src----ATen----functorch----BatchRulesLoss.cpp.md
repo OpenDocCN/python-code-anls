@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesLoss.cpp`
 
-```
+```py
 // 包含头文件：BatchRulesHelper.h, PlumbingHelper.h, BatchedFallback.h, Dispatcher.h
 #include <ATen/functorch/BatchRulesHelper.h>
 #include <ATen/functorch/PlumbingHelper.h>

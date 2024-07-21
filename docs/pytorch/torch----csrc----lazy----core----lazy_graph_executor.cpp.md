@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\lazy_graph_executor.cpp`
 
-```
+```py
 #include <torch/csrc/lazy/core/lazy_graph_executor.h>
 
 #include <ATen/ScalarOps.h>

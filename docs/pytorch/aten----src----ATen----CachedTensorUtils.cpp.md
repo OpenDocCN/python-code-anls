@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\CachedTensorUtils.cpp`
 
-```
+```py
 // 引入 ATen 库的头文件
 #include <ATen/ATen.h>
 // 引入 ATen 库的 CachedTensorUtils 头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\open_registration_extension.cpp`
 
-```
+```py
 // 引入头文件：无序映射、C10核心分配器、分配器、标量类型、数组引用
 #include <unordered_map>
 #include <c10/core/impl/alloc_cpu.h>

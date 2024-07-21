@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\port_metadata_pass.py`
 
-```
+```py
 # 添加类型提示和声明允许未类型化的函数定义
 # 导入日志模块
 import logging

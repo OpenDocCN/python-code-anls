@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_dtensor.py`
 
-```
+```py
     @with_comms
     # 使用装饰器确保在测试中启用通信模拟环境
     def test_dtensor_constructor(self):

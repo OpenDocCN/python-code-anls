@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\AdaptiveAveragePooling.cpp`
 
-```
+```py
 // 定义宏，仅启用 Torch 的断言方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

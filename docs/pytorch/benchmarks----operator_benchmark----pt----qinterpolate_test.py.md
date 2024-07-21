@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qinterpolate_test.py`
 
-```
+```py
 import operator_benchmark as op_bench  # 导入 operator_benchmark 库，重命名为 op_bench
 import torch  # 导入 PyTorch 库
 

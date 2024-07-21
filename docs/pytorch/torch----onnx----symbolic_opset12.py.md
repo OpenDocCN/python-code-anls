@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset12.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 

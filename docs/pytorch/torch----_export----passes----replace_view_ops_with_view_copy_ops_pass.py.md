@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\replace_view_ops_with_view_copy_ops_pass.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型引用
 from typing import Dict, Optional, Set

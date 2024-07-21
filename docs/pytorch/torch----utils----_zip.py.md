@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_zip.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块
 import argparse  # 用于解析命令行参数的模块

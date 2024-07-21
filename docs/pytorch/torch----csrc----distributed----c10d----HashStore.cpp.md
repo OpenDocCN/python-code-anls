@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\HashStore.cpp`
 
-```
+```py
 // 包含 HashStore 类的实现文件
 #include <torch/csrc/distributed/c10d/HashStore.hpp>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_representation.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 # 导入必要的库和模块
 import copy  # 导入copy模块，用于深拷贝对象

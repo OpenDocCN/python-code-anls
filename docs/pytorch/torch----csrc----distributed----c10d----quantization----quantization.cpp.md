@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\quantization\quantization.cpp`
 
-```
+```py
 // 包含头文件：Torch的分布式量化模块的相关头文件
 #include <torch/csrc/distributed/c10d/quantization/quantization.h>
 #include <torch/csrc/distributed/c10d/quantization/quantization_utils.h>

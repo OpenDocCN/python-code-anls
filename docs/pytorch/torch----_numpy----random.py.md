@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\random.py`
 
-```
+```py
 # mypy: ignore-errors
 
 """Wrapper to mimic (parts of) np.random API surface.

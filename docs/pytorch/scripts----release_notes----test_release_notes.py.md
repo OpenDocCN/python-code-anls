@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\release_notes\test_release_notes.py`
 
-```
+```py
 # 导入必要的模块tempfile和unittest
 
 import tempfile

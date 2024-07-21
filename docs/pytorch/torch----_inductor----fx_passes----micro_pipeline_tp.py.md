@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\micro_pipeline_tp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入运算符模块，用于操作符号
 import operator

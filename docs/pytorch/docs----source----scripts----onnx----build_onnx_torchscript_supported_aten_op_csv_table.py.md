@@ -1,6 +1,6 @@
 # `.\pytorch\docs\source\scripts\onnx\build_onnx_torchscript_supported_aten_op_csv_table.py`
 
-```
+```py
 """
 This script generates a CSV table with all ATen operators
 supported by `torch.onnx.export`. The generated table is included by

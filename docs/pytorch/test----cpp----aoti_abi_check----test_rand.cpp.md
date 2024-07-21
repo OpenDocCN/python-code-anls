@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_abi_check\test_rand.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <ATen/core/PhiloxRNGEngine.h>  // 包含 PyTorch 的随机数生成引擎头文件

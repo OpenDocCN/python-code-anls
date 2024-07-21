@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\jit\log_extract.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块和类型声明
 from contextlib import contextmanager

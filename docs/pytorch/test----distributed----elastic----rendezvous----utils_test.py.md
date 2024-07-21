@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\utils_test.py`
 
-```
+```py
 # 导入必要的模块和库
 import socket  # 提供网络通信的基础功能
 import threading  # 提供多线程支持

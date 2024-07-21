@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\benchmarks\per_sample_grads.py`
 
-```
+```py
 import time  # 导入时间模块
 
 import torchvision.models as models  # 导入PyTorch视觉模型

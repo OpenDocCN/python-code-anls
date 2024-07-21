@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\extension_backends\triton\device_interface.py`
 
-```
+```py
 from __future__ import annotations
 
 import time  # 导入时间模块

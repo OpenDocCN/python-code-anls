@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\_pattern_matcher.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块
 import json  # 导入 JSON 模块

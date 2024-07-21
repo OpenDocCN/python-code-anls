@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\prune.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Pruning methods."""
 import numbers  # 导入用于数字处理的模块

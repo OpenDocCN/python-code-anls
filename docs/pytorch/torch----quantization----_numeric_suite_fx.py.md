@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\_numeric_suite_fx.py`
 
-```
+```py
 # 禁用 flake8 的 F401 错误检查，允许未使用的导入（用于兼容性和迁移）
 r"""
 This file is in the process of migration to `torch/ao/quantization`, and

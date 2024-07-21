@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\EmptyTensor.h`
 
-```
+```py
 //  Copyright © 2022 Apple Inc.
 // 包含 ATen 库中的 TensorBase 类的头文件
 #pragma once

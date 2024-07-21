@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_linalg_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Various linear algebra utility methods for internal use.
 

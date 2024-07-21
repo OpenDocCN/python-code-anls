@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\tests\test_pass_manager.py`
 
-```
+```py
 import unittest
 
 # 从 pass_manager 模块导入所需的类和函数

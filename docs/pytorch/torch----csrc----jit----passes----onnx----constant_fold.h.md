@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\constant_fold.h`
 
-```
+```py
 #pragma once
 
 

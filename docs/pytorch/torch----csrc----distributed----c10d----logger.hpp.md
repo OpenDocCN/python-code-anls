@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\logger.hpp`
 
-```
+```py
 // 包含头文件 Logging.h 和 reducer.hpp，这些文件提供了日志和分布式减少器的定义
 #include <c10/util/Logging.h>
 #include <torch/csrc/distributed/c10d/reducer.hpp>

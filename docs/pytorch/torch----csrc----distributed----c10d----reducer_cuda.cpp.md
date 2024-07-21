@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\reducer_cuda.cpp`
 
-```
+```py
 // 包含头文件：CUDA 器件事件和设备守卫
 #include <torch/csrc/distributed/c10d/reducer_timer.hpp>
 #include <ATen/cuda/CUDAEvent.h>

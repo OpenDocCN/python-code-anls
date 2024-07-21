@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_use_orig_params.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import copy  # 导入 copy 模块，用于对象的深拷贝操作

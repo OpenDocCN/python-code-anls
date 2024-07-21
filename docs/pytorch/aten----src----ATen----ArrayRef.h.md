@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ArrayRef.h`
 
-```
+```py
 // 使用 pragma once 预处理指令，确保本文件在编译时只被包含一次，防止重复定义错误
 #pragma once
 

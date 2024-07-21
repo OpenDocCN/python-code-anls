@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\qat\modules\conv.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch库及相关模块
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\test\error_messages\storage.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 

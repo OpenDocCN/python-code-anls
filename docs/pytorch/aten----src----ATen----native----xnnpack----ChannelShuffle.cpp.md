@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\ChannelShuffle.cpp`
 
-```
+```py
 #ifdef USE_XNNPACK
 // 如果定义了 USE_XNNPACK 宏，则包含以下头文件
 #include <ATen/native/xnnpack/Common.h>

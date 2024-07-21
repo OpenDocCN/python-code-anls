@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_models_onnxruntime.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 引入必要的库和模块

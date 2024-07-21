@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\range_table.h`
 
-```
+```py
 #pragma once
 // 包含 unwind_error.h 文件，这是 Torch Profiler 的堆栈解析器相关错误处理头文件
 #include <torch/csrc/profiler/unwind/unwind_error.h>

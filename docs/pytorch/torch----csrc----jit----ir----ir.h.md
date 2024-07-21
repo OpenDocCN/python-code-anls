@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\ir.h`
 
-```
+```py
 #pragma once
 
 // 包含头文件，这些头文件提供了 JIT 编译器 IR 层级的各种功能和定义

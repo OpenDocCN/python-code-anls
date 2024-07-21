@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_device_type.py`
 
-```
+```py
 # 忽略类型检查错误的标志，用于禁止 MyPy 对导入的模块进行类型检查
 # 进行必要的导入
 import copy  # 导入复制模块

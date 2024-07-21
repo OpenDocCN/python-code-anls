@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\testing\hooks_for_testing.cpp`
 
-```
+```py
 // 引入 Torch 的 JIT 测试钩子函数头文件
 #include <torch/csrc/jit/testing/hooks_for_testing.h>
 

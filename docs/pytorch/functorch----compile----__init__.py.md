@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\compile\__init__.py`
 
-```
+```py
 # 导入必要的 Torch Functorch 模块和函数
 
 from torch._functorch import config  # 导入 Functorch 的配置模块

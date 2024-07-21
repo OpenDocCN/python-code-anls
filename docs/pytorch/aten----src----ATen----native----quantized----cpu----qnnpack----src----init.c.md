@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\init.c`
 
-```
+```py
 /*
  * 包含必要的头文件和库
  */

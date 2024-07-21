@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\types\__init__.py`
 
-```
+```py
 # 从 torchgen.api.types.types 模块中导入所有内容
 # types 模块通常定义了一些特定类型或类，可能用于数据处理或模型定义
 from torchgen.api.types.types import *

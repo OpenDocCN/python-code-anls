@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\log_utils.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入日志配置模块

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\linear_unpack_fp16_test.py`
 
-```
+```py
 # 导入名为 operator_benchmark 的模块，命名为 op_bench
 # 导入 torch 库
 import operator_benchmark as op_bench

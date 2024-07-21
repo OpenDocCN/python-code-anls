@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\execution\work.py`
 
-```
+```py
 # 导入需要的模块和库
 import dataclasses  # 用于定义数据类
 import json  # 用于处理 JSON 格式数据

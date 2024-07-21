@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_fx.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 引入必要的内置模块和第三方库

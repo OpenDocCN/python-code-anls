@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\MapAllocator.cpp`
 
-```
+```py
 #include <ATen/MapAllocator.h>
 
 #include <atomic>

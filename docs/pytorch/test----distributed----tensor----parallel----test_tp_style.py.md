@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_tp_style.py`
 
-```
+```py
 # 从 copy 模块中导入 deepcopy 函数
 from copy import deepcopy
 

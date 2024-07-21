@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Backend.hpp`
 
-```
+```py
 #pragma once
 
 #include <memory> // 包含标准库头文件memory，用于智能指针等功能

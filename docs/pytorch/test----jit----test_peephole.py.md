@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_peephole.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入单元测试模块

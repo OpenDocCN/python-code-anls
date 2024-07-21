@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_spmd\test_graph_utils.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 

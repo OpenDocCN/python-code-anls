@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_conv.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <torch/csrc/jit/tensorexpr/ir_simplifier.h>
 #include <torch/csrc/jit/tensorexpr/llvm_codegen.h>

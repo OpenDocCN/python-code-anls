@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\dynamo_microbenchmarks.py`
 
-```
+```py
 import cProfile
 import pstats
 import timeit

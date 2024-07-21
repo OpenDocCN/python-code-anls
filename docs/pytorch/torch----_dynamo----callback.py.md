@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\callback.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 定义一个编译回调处理器类
 class CompilationCallbackHandler:

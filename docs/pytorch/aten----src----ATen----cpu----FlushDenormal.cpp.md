@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\FlushDenormal.cpp`
 
-```
+```py
 namespace at::cpu {
 
 #if defined(__SSE__) || defined(_M_X64) || (defined(_M_IX86_FP) && _M_IX86_FP >= 1)

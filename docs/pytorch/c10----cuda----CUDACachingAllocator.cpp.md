@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDACachingAllocator.cpp`
 
-```
+```py
 // 包含 CUDA 缓存分配器的头文件
 #include <c10/cuda/CUDACachingAllocator.h>
 

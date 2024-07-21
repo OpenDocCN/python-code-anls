@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_builtins.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入复数数学运算模块
 import cmath

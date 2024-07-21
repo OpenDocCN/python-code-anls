@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\sparse\fuzzer.py`
 
-```
+```py
 # 设置 mypy 工具允许未定义的函数
 """Timer 和 Sparse Fuzzer API 的示例：
 

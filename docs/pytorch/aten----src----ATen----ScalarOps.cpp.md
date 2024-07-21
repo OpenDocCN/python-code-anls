@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ScalarOps.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/Dispatch.h>
 #include <ATen/Dispatch_v2.h>

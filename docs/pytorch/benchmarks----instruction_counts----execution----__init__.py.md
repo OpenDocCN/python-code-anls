@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\execution\__init__.py`
 
-```
+```py
 # 导入所需模块：os 模块用于操作文件和目录，shutil 模块用于高级文件操作，tempfile 模块用于创建临时文件和目录
 import os
 import shutil

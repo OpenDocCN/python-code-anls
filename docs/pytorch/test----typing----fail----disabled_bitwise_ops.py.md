@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\fail\disabled_bitwise_ops.py`
 
-```
+```py
 # 导入 torch 库，用于科学计算和机器学习任务
 import torch
 

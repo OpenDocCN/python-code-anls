@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_logging.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入 torch 库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\_reference\modules\sparse.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""Quantized Reference Modules.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\common\main.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/cuda.h>  // 包含 PyTorch CUDA 相关的头文件

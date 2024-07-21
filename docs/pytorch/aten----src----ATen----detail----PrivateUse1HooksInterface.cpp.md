@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\PrivateUse1HooksInterface.cpp`
 
-```
+```py
 // 包含 ATen 库的私有使用接口头文件
 #include <ATen/detail/PrivateUse1HooksInterface.h>
 

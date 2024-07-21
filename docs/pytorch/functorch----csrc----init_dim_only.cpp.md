@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\csrc\init_dim_only.cpp`
 
-```
+```py
 // 包含 Torch 扩展的头文件
 #include <torch/extension.h>
 // 包含 functorch 库中的维度处理相关头文件

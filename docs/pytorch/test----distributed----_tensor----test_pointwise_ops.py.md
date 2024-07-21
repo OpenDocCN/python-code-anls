@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_pointwise_ops.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Any, Callable, Dict, Optional, Sequence
 from unittest import skip

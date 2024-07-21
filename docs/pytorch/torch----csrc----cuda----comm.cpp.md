@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\comm.cpp`
 
-```
+```py
 // 引入 Torch CUDA 通信头文件
 #include <torch/csrc/cuda/comm.h>
 

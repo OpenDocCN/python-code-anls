@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\more.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 unify 和 reify 函数，从 core 模块中，忽略类型检查的属性定义
 from .core import unify, reify  # type: ignore[attr-defined]

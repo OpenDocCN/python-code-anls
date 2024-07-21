@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\IsContiguous.h`
 
-```
+```py
 #pragma once
 
 namespace at { namespace native { inline namespace CPU_CAPABILITY {

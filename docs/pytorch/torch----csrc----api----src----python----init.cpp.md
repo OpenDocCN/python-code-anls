@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\python\init.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 头文件
 #include <torch/python.h>
 // 包含 Torch 初始化相关头文件

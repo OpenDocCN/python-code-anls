@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\reducer.cpp`
 
-```
+```py
 // 引入 Torch 分布式相关的头文件
 #include <torch/csrc/distributed/c10d/reducer.hpp>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\do_target_determination_for_s3.py`
 
-```
+```py
 # 导入必要的模块
 import json  # 导入处理 JSON 数据的模块
 import os  # 导入操作系统功能的模块

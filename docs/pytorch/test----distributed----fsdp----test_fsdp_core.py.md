@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_core.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的模块和库

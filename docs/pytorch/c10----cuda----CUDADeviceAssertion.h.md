@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDADeviceAssertion.h`
 
-```
+```py
 #pragma once
 
 #include <c10/cuda/CUDAException.h>

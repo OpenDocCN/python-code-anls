@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_schema.py`
 
-```
+```py
 # 导入必要的模块和函数
 from torch._export.serde.schema_check import (
     _Commit,            # 导入 _Commit 类

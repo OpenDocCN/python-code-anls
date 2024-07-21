@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\xpu\detail\Deconv.cpp`
 
-```
+```py
 // 包含C10库中的XPU函数声明和ATen库
 #include <c10/xpu/XPUFunctions.h>
 #include <ATen/ATen.h>

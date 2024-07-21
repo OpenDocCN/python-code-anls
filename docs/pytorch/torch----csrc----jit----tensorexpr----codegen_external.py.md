@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\codegen_external.py`
 
-```
+```py
 # 忽略类型检查错误，这是为了在运行时不对类型进行强制检查
 # 导入 argparse 库，用于解析命令行参数
 import argparse

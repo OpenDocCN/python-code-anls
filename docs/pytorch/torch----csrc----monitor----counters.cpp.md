@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\monitor\counters.cpp`
 
-```
+```py
 // 引入 Torch 的计数器头文件
 #include <torch/csrc/monitor/counters.h>
 

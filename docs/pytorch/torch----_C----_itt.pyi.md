@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_itt.pyi`
 
-```
+```py
 # 在 torch/csrc/itt.cpp 中定义的函数 is_available()，声明不返回任何值
 def is_available() -> None: ...
 

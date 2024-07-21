@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Synchronized.h`
 
-```
+```py
 #pragma`
 /**
  * @file

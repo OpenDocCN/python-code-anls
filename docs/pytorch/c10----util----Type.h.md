@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Type.h`
 
-```
+```py
 #ifndef C10_UTIL_TYPE_H_
 #define C10_UTIL_TYPE_H_
 

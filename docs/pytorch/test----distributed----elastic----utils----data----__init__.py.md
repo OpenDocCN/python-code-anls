@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\utils\data\__init__.py`
 
-```
+```py
 # 指定脚本使用 Python 3 运行
 
 #!/usr/bin/env python3

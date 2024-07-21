@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\python_comm_hook.cpp`
 
-```
+```py
 // 引入必要的头文件，包括Python通信钩子的定义
 #include <torch/csrc/distributed/c10d/python_comm_hook.h>
 

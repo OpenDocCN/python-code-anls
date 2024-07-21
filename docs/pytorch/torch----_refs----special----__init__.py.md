@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_refs\special\__init__.py`
 
-```
+```py
 # 导入必要的数学模块和类型提示模块
 import math
 from typing import Optional, Union

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_fuser.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/ATen.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\backend_device.cpp`
 
-```
+```py
 // 引入 Torch Lazy 模块的设备后端相关头文件
 #include <torch/csrc/lazy/backend/backend_device.h>
 

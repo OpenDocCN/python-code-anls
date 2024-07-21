@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mkl\Limits.h`
 
-```
+```py
 #pragma once
 // 包含 MKL 库的类型定义头文件
 #include <mkl_types.h>

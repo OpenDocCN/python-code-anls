@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\compilation\fuse_module.py`
 
-```
+```py
 # 导入计时模块
 import timeit
 

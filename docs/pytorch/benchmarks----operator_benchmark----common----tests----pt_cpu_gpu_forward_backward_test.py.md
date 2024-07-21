@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\tests\pt_cpu_gpu_forward_backward_test.py`
 
-```
+```py
 # 导入名为 operator_benchmark 的模块，并将其重命名为 op_bench
 import operator_benchmark as op_bench
 

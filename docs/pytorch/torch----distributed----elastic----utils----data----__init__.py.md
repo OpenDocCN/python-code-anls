@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\utils\data\__init__.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定此脚本在 Python 3 环境下执行
 

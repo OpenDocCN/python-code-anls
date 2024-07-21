@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_planner.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统相关模块

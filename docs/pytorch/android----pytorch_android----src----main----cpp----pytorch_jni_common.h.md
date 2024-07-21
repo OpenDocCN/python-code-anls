@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\cpp\pytorch_jni_common.h`
 
-```
+```py
 #pragma once
 // 使用预处理器指令#pragma once确保头文件只被包含一次
 

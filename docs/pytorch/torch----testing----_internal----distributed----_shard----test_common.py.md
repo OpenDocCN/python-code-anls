@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\_shard\test_common.py`
 
-```
+```py
 # 忽略 mypy 的错误，mypy 是一个用于检查 Python 类型的工具
 # 导入 PyTorch 库
 import torch

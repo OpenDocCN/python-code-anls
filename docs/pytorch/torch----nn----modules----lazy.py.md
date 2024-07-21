@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\lazy.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 itertools 库，用于迭代操作
 import itertools

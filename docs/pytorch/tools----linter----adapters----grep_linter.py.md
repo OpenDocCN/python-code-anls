@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\grep_linter.py`
 
-```
+```py
 """
 Generic linter that greps for a pattern and optionally suggests replacements.
 """

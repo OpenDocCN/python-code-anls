@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TopKImpl.h`
 
-```
+```py
   // 如果 k 等于 0，则输出的值和索引是空张量，因此在其他维度上的迭代是没有意义的
   if (k == 0) {
     return;

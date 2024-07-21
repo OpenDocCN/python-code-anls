@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\androidTest\java\org\pytorch\PytorchTestBase.java`
 
-```
+```py
 // 引入静态方法，用于断言的静态导入
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;

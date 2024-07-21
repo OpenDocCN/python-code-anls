@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\padding.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件只被编译一次
 
@@ -63,7 +63,7 @@ class TORCH_API ReflectionPadImpl : public torch::nn::Cloneable<Derived> {
 /// Example:
 /// ```
 /// ReflectionPad1d model(ReflectionPad1dOptions({3, 1}));
-/// ```
+/// ```py
 // 示例：创建一个ReflectionPad1d模型，使用ReflectionPad1dOptions指定参数
 
 class TORCH_API ReflectionPad1dImpl
@@ -103,7 +103,7 @@ TORCH_MODULE(ReflectionPad1d);
 /// Example:
 /// ```
 /// ReflectionPad2d model(ReflectionPad2dOptions({1, 1, 2, 0}));
-/// ```
+/// ```py
 // 示例：创建一个ReflectionPad2d模型，使用ReflectionPad2dOptions指定参数
 
 class TORCH_API ReflectionPad2dImpl
@@ -138,7 +138,7 @@ TORCH_MODULE(ReflectionPad2d);
 /// Example:
 /// ```
 /// ReplicationPad2d model(ReplicationPad2dOptions({1, 1, 2, 2}));
-/// ```
+/// ```py
 class TORCH_API ReplicationPad2dImpl
     : public ReplicationPadImpl<2, ReplicationPad2dImpl> {
  public:
@@ -218,7 +218,7 @@ class TORCH_API ConstantPadImpl : public torch::nn::Cloneable<Derived> {
 /// Example:
 /// ```
 /// ConstantPad1d model(ConstantPad1dOptions({3, 1}, 3.5));
-/// ```
+/// ```py
 class TORCH_API ConstantPad1dImpl : public ConstantPadImpl<1, ConstantPad1dImpl> {
  public:
   using ConstantPadImpl<1, ConstantPad1dImpl>::ConstantPadImpl;
@@ -250,7 +250,7 @@ TORCH_MODULE(ConstantPad1d);
 /// Example:
 /// ```
 /// ConstantPad2d model(ConstantPad2dOptions({3, 0, 2, 1}, 3.5));
-/// ```
+/// ```py
 class TORCH_API ConstantPad2dImpl
     : public ConstantPadImpl<2, ConstantPad2dImpl> {
  public:
@@ -276,7 +276,7 @@ TORCH_MODULE(ConstantPad2d);
 /// Example:
 /// ```
 /// ConstantPad3d model(ConstantPad3dOptions({1, 2, 1, 2, 1, 2}, 3.5));
-/// ```
+/// ```py
 class TORCH_API ConstantPad3dImpl
     : public ConstantPadImpl<3, ConstantPad3dImpl> {
  public:

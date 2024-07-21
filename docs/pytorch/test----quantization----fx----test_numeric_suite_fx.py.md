@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\fx\test_numeric_suite_fx.py`
 
-```
+```py
 # 导入必要的库和模块，用于量化（quantization）相关的功能测试和操作
 # 这些模块包括了复制、数学计算、操作符等标准库，以及 PyTorch 中的量化模块和测试工具
 

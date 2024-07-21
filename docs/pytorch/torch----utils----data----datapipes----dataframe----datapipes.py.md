@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\dataframe\datapipes.py`
 
-```
+```py
 # 导入必要的模块和函数
 # mypy: allow-untyped-defs
 import random

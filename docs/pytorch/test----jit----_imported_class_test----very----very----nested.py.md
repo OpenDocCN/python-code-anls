@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\_imported_class_test\very\very\nested.py`
 
-```
+```py
 import torch  # 导入 torch 库
 
 # This file contains definitions of script classes.

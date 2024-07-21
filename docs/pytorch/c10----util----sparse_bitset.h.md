@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\sparse_bitset.h`
 
-```
+```py
   // 元素的索引，表示第一个位的起始位置
   unsigned ElementIndex;
   // 位向量元素的位字，每个字有 sizeof(BitWord) * CHAR_BIT 位

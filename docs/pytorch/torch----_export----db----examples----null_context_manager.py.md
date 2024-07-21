@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\null_context_manager.py`
 
-```
+```py
 # 引入名为 `mypy` 的注释，允许未类型化的定义
 # 引入 `contextlib` 模块，用于创建上下文管理器
 import contextlib

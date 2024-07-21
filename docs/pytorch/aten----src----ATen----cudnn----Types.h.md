@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cudnn\Types.h`
 
-```
+```py
 #pragma once
 // 指令，确保此头文件只被编译一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\maml_omniglot\maml-omniglot-higher.py`
 
-```
+```py
     # 导入必要的库和模块
     import argparse  # 用于解析命令行参数
     import time  # 用于时间相关操作

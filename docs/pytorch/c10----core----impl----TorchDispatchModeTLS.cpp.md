@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\TorchDispatchModeTLS.cpp`
 
-```
+```py
 namespace c10::impl {
 
 // 进入 c10::impl 命名空间

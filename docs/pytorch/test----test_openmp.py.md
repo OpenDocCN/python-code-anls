@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_openmp.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入必要的模块和类

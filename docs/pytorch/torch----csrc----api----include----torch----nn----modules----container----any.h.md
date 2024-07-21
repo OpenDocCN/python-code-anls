@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\container\any.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保头文件只被编译一次
 

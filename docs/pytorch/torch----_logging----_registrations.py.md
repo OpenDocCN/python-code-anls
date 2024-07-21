@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_logging\_registrations.py`
 
-```
+```py
 # 导入模块内部的注册函数
 from ._internal import register_artifact, register_log
 

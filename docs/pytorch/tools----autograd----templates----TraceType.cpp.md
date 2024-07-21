@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\TraceType.cpp`
 
-```
+```py
 // 定义预处理宏，用于指示仅为方法操作符生成代码
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

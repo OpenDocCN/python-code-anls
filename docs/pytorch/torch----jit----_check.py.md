@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_check.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块
 import ast  # 提供对Python代码的抽象语法树的解析和操作

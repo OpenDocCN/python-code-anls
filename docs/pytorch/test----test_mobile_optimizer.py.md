@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_mobile_optimizer.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qthreshold.cpp`
 
-```
+```py
 // 定义宏，用于在 Torch 库中仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 核心 Tensor 类定义头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\bfloat16_test.cpp`
 
-```
+```py
 // 包含BFloat16类型定义和相关数学函数头文件
 #include <c10/util/BFloat16.h>
 #include <c10/util/BFloat16-math.h>

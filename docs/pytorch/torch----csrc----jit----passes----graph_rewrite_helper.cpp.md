@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\graph_rewrite_helper.cpp`
 
-```
+```py
 // 包含 Torch 的图形重写助手相关头文件
 #include <torch/csrc/jit/passes/graph_rewrite_helper.h>
 

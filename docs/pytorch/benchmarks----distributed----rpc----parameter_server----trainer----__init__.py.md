@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\__init__.py`
 
-```
+```py
 # 导入自定义模块中的特定函数或类
 from .criterions import cel
 from .ddp_models import basic_ddp_model

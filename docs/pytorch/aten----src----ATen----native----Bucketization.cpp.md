@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Bucketization.cpp`
 
-```
+```py
 // 定义编译选项，仅允许方法操作符使用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\boxing.h`
 
-```
+```py
 #pragma once
 
 // This file contains boxing (not unboxing) logic,

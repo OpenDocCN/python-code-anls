@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\add_if_then_else.h`
 
-```
+```py
 #pragma once
 
 

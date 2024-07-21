@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_bind.h`
 
-```
+```py
 // 如果 NNAPI_BIND_H_ 未定义，则定义 NNAPI_BIND_H_，以避免重复包含
 #ifndef NNAPI_BIND_H_
 #define NNAPI_BIND_H_

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_monitor.py`
 
-```
+```py
 # Owner(s): ["oncall: r2p"]
 
 # 从 torch.testing._internal.common_utils 导入必要的模块和函数

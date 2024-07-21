@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\debug\test_comm_mode.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import torch

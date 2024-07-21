@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_multiarray.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入内置模块和第三方库

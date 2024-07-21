@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_type_promotion.py`
 
-```
+```py
 # Owner(s): ["module: type promotion"]
 
 # 导入必要的模块和函数装饰器

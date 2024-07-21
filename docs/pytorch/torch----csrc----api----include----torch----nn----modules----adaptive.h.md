@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\adaptive.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 
@@ -60,7 +60,7 @@ struct TORCH_API ASMoutput {
 /// ```
 /// AdaptiveLogSoftmaxWithLoss model(AdaptiveLogSoftmaxWithLossOptions(8, 10,
 /// {4, 8}).div_value(2.).head_bias(true));
-/// ```
+/// ```py
 /// 高效的 softmax 近似方法，详见 Edouard Grave 等人的论文《Efficient softmax approximation for GPUs》。
 /// 请参阅 https://pytorch.org/docs/main/nn.html#torch.nn.AdaptiveLogSoftmaxWithLoss 了解模块的确切行为。
 /// 查看 `torch::nn::AdaptiveLogSoftmaxWithLossOptions` 类的文档，了解此模块支持的构造参数。
@@ -69,7 +69,7 @@ struct TORCH_API ASMoutput {
 /// ```
 /// AdaptiveLogSoftmaxWithLoss model(AdaptiveLogSoftmaxWithLossOptions(8, 10,
 /// {4, 8}).div_value(2.).head_bias(true));
-/// ```
+/// ```py
 class TORCH_API AdaptiveLogSoftmaxWithLossImpl
     /// `AdaptiveLogSoftmaxWithLossImpl` 类定义，公开继承自 `Cloneable<AdaptiveLogSoftmaxWithLossImpl>` 接口
     /// 该类用于实现自适应的带损失的 LogSoftmax 模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\utils\decoder.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 声明允许有未注释的类型定义
 

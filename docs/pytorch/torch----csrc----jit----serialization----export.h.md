@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\export.h`
 
-```
+```py
 #pragma once
 
 // 包含头文件：caffe2 序列化中的内联容器

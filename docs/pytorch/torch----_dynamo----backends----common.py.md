@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\common.py`
 
-```
+```py
 # 忽略类型检查错误，这通常用于在类型检查工具（如mypy）中禁用特定的错误报告
 # 模块导入：导入需要的Python模块
 import contextlib  # 上下文管理器，用于创建轻量级的上下文管理器

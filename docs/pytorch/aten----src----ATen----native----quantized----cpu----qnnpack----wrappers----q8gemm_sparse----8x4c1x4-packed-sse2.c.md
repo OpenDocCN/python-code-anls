@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\wrappers\q8gemm_sparse\8x4c1x4-packed-sse2.c`
 
-```
+```py
 #if defined(__i386__) || defined(__i686__) || defined(__x86_64__)
     # 如果编译目标是 __i386__、__i686__ 或者 __x86_64__ 中的任何一个，则编译以下代码片段
 

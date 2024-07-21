@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\zmath.h`
 
-```
+```py
 #pragma once
 // 用于复杂数的数学运算，对于其他数据类型则不执行任何操作。
 

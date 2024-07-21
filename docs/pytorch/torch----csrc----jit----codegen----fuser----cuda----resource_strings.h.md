@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cuda\resource_strings.h`
 
-```
+```py
 // 预处理指令，确保头文件只被包含一次
 #pragma once
 

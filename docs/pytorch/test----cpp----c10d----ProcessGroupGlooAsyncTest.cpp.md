@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\ProcessGroupGlooAsyncTest.cpp`
 
-```
+```py
 // 包含 CUDA 相关的头文件
 #include <c10/cuda/CUDAGuard.h>
 // 包含用于循环的工具函数

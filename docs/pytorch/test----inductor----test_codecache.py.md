@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_codecache.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入所需的标准库和第三方库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\upgrader_mobile.cpp`
 
-```
+```py
 /**
  * @generated
  * This is an auto-generated file. Please do not modify it by hand.

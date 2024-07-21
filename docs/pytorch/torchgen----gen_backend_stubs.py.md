@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen_backend_stubs.py`
 
-```
+```py
 # 从__future__模块导入annotations特性，使得可以在函数参数和返回值中使用类型提示
 from __future__ import annotations
 

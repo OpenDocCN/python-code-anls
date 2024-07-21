@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\__init__.py`
 
-```
+```py
 # 导入需要的模块
 import os
 import sys

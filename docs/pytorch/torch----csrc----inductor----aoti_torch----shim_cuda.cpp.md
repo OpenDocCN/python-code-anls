@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\shim_cuda.cpp`
 
-```
+```py
 // 包含 Torch 的头文件 shim.h 和 utils.h
 #include <torch/csrc/inductor/aoti_torch/c/shim.h>
 #include <torch/csrc/inductor/aoti_torch/utils.h>

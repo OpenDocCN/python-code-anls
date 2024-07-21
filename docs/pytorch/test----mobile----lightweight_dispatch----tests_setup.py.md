@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\lightweight_dispatch\tests_setup.py`
 
-```
+```py
 # 导入 functools 模块，用于创建包装函数
 # 导入 os 模块，提供对操作系统功能的访问
 # 导入 shutil 模块，用于高级文件操作

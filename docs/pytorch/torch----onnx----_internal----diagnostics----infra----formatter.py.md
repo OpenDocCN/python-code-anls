@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\formatter.py`
 
-```
+```py
 # 引入 Python 未来兼容性模块，用于支持注解类型
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def lazy_format_exception(exception: Exception) -> LazyString:
                 *traceback.format_exception(
                     type(exception), exception, exception.__traceback__
                 ),
-                "```",
+                "```py",
             )
         ),
     )

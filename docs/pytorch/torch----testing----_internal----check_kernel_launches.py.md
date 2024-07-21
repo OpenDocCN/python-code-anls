@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\check_kernel_launches.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入必要的库

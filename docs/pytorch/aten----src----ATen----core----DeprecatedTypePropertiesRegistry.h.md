@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\DeprecatedTypePropertiesRegistry.h`
 
-```
+```py
 #pragma once
 
 // 为了保留 BC（兼容性），我们使 DeprecatedTypeProperties 实例像 Type 一样唯一。

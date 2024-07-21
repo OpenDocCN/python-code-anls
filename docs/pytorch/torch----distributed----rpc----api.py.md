@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入必要的模块和库

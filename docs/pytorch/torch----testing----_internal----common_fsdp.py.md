@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_fsdp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["oncall: distributed"]
 

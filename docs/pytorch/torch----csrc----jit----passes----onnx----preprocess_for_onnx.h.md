@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\preprocess_for_onnx.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 预处理指令，确保此头文件在同一个编译单元中只被包含一次

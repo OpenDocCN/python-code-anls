@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\CUDAHooksInterface.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Allocator.h>

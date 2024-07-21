@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\generic_math_test.cpp`
 
-```
+```py
 // 依赖声明，包含 C10 的通用数学库
 #include <c10/util/generic_math.h>
 

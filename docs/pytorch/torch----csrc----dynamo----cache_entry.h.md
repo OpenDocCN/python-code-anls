@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\cache_entry.h`
 
-```
+```py
 #pragma once
 // 告诉编译器只包含一次这个头文件
 

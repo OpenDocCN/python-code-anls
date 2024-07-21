@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_triton_extension_backend.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入所需的库和模块
 import random  # 导入随机数生成模块

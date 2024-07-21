@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\stubs\base.cpp`
 
-```
+```py
 #include <torch/csrc/profiler/stubs/base.h>
 
 #include <c10/util/Exception.h>

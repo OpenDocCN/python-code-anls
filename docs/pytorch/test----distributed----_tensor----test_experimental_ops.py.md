@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_experimental_ops.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 

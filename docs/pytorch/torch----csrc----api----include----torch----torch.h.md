@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\torch.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once指令确保头文件只被包含一次，防止重复定义
 

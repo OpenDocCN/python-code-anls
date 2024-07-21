@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\metal_rewrite.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件，定义了 JIT 类型
 #include <ATen/core/jit_type.h>
 // 包含 c10 实用工具中的整数范围处理

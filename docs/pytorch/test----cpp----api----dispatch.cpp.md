@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\dispatch.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/native/Pow.h>  // 引入 PyTorch 的 ATen 模块中的 Pow 头文件

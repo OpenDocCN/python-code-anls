@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\QueryPool.cpp`
 
-```
+```py
 // 引入Vulkan的查询池相关头文件
 #include <ATen/native/vulkan/api/QueryPool.h>
 #include <ATen/native/vulkan/api/Utils.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\qat\dynamic\modules\__init__.py`
 
-```
+```py
 # 从当前包中导入 linear 模块中的 Linear 类
 from .linear import Linear
 

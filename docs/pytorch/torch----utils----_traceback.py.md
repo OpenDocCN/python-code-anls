@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_traceback.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需的模块和类型
 from types import TracebackType

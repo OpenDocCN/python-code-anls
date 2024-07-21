@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\definitions\setup.py`
 
-```
+```py
 """Define some common setup blocks which benchmarks can reuse."""
 
 import enum  # 导入枚举类型模块

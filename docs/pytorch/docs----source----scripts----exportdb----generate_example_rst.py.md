@@ -1,6 +1,6 @@
 # `.\pytorch\docs\source\scripts\exportdb\generate_example_rst.py`
 
-```
+```py
 # 导入模块inspect、os、re以及Path类
 import inspect
 import os

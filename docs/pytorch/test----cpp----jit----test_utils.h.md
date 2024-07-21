@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_utils.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/irparser.h>

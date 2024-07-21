@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\guards.h`
 
-```
+```py
 #pragma once
 #include <c10/core/GradMode.h>
 #include <torch/csrc/python_headers.h>

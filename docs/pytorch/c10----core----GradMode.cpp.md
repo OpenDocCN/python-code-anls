@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\GradMode.cpp`
 
-```
+```py
 # 包含 C10 核心库中的 GradMode 头文件
 #include <c10/core/GradMode.h>
 

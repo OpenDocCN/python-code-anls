@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\TensorImpl.cpp`
 
-```
+```py
 #include <c10/core/TensorImpl.h>
 
 #include <c10/core/Contiguity.h>

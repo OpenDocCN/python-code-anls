@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\model.py`
 
-```
+```py
 # 定义了 ResNet-50 网络的各层参数
 resnet50_layers = (
     # 第一层：输入尺寸为 224x224，3个通道，使用7x7的卷积核，输出64个特征图，步长为2，无填充

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\loss.cpp`
 
-```
+```py
 // 包含 Torch 库中的损失函数模块头文件
 #include <torch/nn/modules/loss.h>
 

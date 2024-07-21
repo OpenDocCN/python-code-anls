@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\serialized_patterns\__init__.py`
 
-```
+```py
 # 定义一个函数 parse_csv，接收一个文件名作为参数
 def parse_csv(filename):
     # 打开文件，模式为只读文本模式，获取文件对象

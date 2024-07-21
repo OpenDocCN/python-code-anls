@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\graph_helper.cpp`
 
-```
+```py
 // 引入 Torch 库中的相关头文件
 #include <torch/csrc/jit/codegen/onednn/LlgaTensorImpl.h>
 #include <torch/csrc/jit/codegen/onednn/graph_helper.h>

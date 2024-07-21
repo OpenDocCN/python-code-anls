@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Logging.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <c10/util/Backtrace.h>
 #include <c10/util/Flags.h>

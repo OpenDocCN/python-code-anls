@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\benchmark_helper.py`
 
-```
+```py
 # 从 torch.utils.benchmark 模块中导入 Timer 类
 from torch.utils.benchmark import Timer
 

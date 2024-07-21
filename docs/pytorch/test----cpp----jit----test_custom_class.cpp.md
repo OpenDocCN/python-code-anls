@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_custom_class.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <test/cpp/jit/test_custom_class_registrations.h>  // 包含自定义类注册测试的头文件

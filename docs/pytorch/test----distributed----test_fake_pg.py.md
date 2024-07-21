@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_fake_pg.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import sys  # 导入 sys 模块，用于访问系统相关功能

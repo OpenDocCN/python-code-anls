@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_digraph.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入 DiGraph 类，用于创建有向图

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_store.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的标准库和第三方库

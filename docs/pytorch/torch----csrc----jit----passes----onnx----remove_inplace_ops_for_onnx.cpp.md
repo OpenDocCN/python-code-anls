@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\remove_inplace_ops_for_onnx.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 模块中的头文件
 #include <torch/csrc/jit/passes/onnx/helper.h>
 #include <torch/csrc/jit/passes/onnx/remove_inplace_ops_for_onnx.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_tp_checkpoint.py`
 
-```
+```py
 # 导入所需模块和类，声明代码的所有者信息
 from copy import deepcopy  # 导入深拷贝函数
 

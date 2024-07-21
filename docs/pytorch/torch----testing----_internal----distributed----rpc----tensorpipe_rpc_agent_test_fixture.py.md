@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\tensorpipe_rpc_agent_test_fixture.py`
 
-```
+```py
 # mypy: ignore-errors
 # 导入必要的模块和函数
 import torch.distributed.rpc as rpc  # 导入分布式 RPC 的 torch 实现

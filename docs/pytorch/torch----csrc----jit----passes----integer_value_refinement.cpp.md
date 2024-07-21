@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\integer_value_refinement.cpp`
 
-```
+```py
 # 包含 ATen 核心的 JIT 类型头文件
 #include <ATen/core/jit_type.h>
 # 包含 Torch JIT IR 的头文件

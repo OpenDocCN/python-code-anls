@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\LegacyVmapTransforms.cpp`
 
-```
+```py
 // 包含版权声明和头文件引用，声明所使用的许可证和依赖的头文件
 #include <ATen/functorch/LegacyVmapTransforms.h>
 #include <ATen/functorch/DynamicLayer.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\_docs.py`
 
-```
+```py
 # This file is generated, do not modify it!
 #
 # To update this file, run the update masked docs script as follows:

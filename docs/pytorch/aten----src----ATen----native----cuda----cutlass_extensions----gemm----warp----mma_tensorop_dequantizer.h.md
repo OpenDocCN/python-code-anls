@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\gemm\warp\mma_tensorop_dequantizer.h`
 
-```
+```py
 `
 /*
  * 文件描述：定义用于针对张量核心进行矩阵乘法操作的warp级迭代器。

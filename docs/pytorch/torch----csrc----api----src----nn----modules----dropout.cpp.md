@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\dropout.cpp`
 
-```
+```py
 // 引入 Torch 库中的 dropout 功能头文件
 #include <torch/nn/functional/dropout.h>
 // 引入 Torch 库中的 dropout 模块头文件

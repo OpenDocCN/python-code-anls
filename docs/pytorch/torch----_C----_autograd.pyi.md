@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_autograd.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从枚举模块导入枚举类型和任意类型、可调用类型
 from enum import Enum

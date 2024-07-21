@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_torch_functions.h`
 
-```
+```py
 // 包含 Python.h 头文件，用于与 Python 解释器进行交互
 #include <Python.h>
 

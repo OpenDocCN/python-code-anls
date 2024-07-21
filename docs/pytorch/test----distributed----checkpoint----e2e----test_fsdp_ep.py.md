@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\e2e\test_fsdp_ep.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入PyTorch库中的相关模块和类

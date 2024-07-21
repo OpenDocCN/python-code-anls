@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\RNN.cpp`
 
-```
+```py
 // 定义宏，用于仅包含方法运算符的 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库的 RNN 相关头文件
@@ -1036,7 +1036,7 @@ struct FullBidirectionalLayer
 # 定义继承自 `Layer` 的模板类 `FullBidirectionalLayer`，使用模板参数 `Tensor`、`pair_of<dir_hidden_type>` 和 `pair_of<cell_params>`。
 
   using hidden_type = pair_of<dir_hidden_type>;
-```  
+```py  
 # 定义类型别名 `hidden_type`，表示 `pair_of<dir_hidden_type>`。
 
   using param_type = pair_of<cell_params>;
@@ -1044,7 +1044,7 @@ struct FullBidirectionalLayer
 # 定义类型别名 `param_type`，表示 `pair_of<cell_params>`。
 
   using output_type = typename Layer<Tensor, hidden_type, param_type>::output_type;
-```  
+```py  
 # 定义类型别名 `output_type`，表示 `Layer<Tensor, hidden_type, param_type>` 类的 `output_type`。
 
   FullBidirectionalLayer(Cell<dir_hidden_type, cell_params>& cell)
@@ -1056,7 +1056,7 @@ struct FullBidirectionalLayer
       const Tensor& input,
       const hidden_type& input_hidden,
       const param_type& params) const override {
-```  
+```py  
 # 重载 `operator()` 函数，接受参数 `input`（类型为 `Tensor`）、`input_hidden`（类型为 `hidden_type`）、`params`（类型为 `param_type`），并返回 `output_type`。
 
     std::vector<Tensor> step_inputs;
@@ -1064,7 +1064,7 @@ struct FullBidirectionalLayer
 # 声明 `std::vector<Tensor>` 类型的变量 `step_inputs`。
 
     if (input.device().is_cpu()) {
-```  
+```py  
 # 如果 `input` 的设备类型是 CPU。
 
       auto input_w = params.first.linear_ih(input);
@@ -1072,7 +1072,7 @@ struct FullBidirectionalLayer
 # 使用 `params.first` 中的 `linear_ih` 函数对 `input` 进行线性变换，结果存储在 `input_w` 中。
 
       step_inputs = input_w.unbind(0);
-```  
+```py  
 # 将 `input_w` 沿着维度 0 解绑，并赋值给 `step_inputs`。
 
       auto fw_result = layer_(
@@ -1081,7 +1081,7 @@ struct FullBidirectionalLayer
 # 调用 `layer_` 对象的函数调用运算符，传递 `step_inputs`、`input_hidden.first`、`params.first` 和 `true` 作为参数，存储结果在 `fw_result` 中。
 
       TORCH_CHECK(fw_result.outputs.size() > 0, "Expected sequence length to be larger than 0 in RNN");
-```  
+```py  
 # 使用 `TORCH_CHECK` 断言 `fw_result.outputs.size()` 大于 0，如果不满足则抛出错误信息 "Expected sequence length to be larger than 0 in RNN"。
 
       auto fw_output = at::stack(fw_result.outputs, 0);
@@ -1089,7 +1089,7 @@ struct FullBidirectionalLayer
 # 使用 `at::stack` 将 `fw_result.outputs` 沿着维度 0 堆叠，结果存储在 `fw_output` 中。
 
       input_w = params.second.linear_ih(input);
-```  
+```py  
 # 使用 `params.second` 中的 `linear_ih` 函数对 `input` 进行线性变换，结果存储在 `input_w` 中。
 
       step_inputs = input_w.unbind(0);
@@ -1097,7 +1097,7 @@ struct FullBidirectionalLayer
 # 将 `input_w` 沿着维度 0 解绑，并赋值给 `step_inputs`。
 
       auto rev_step_inputs = reverse(std::move(step_inputs));
-```  
+```py  
 # 调用 `reverse` 函数对 `step_inputs` 进行反转操作，并将结果移动给 `rev_step_inputs`。
 
       auto rev_result =
@@ -1106,7 +1106,7 @@ struct FullBidirectionalLayer
 # 调用 `layer_` 对象的函数调用运算符，传递 `rev_step_inputs`、`input_hidden.second`、`params.second` 和 `true` 作为参数，存储结果在 `rev_result` 中。
 
       std::reverse(rev_result.outputs.begin(), rev_result.outputs.end());
-```  
+```py  
 # 反转 `rev_result.outputs` 容器中的元素。
 
       auto rev_output = at::stack(rev_result.outputs, 0);
@@ -1115,7 +1115,7 @@ struct FullBidirectionalLayer
 
       return {at::cat({fw_output, rev_output}, fw_output.dim() - 1),
               std::make_pair(fw_result.final_hidden, rev_result.final_hidden)};
-```  
+```py  
 # 返回一个 `std::pair`，包含两个元素：1. 使用 `at::cat` 沿着 `fw_output.dim() - 1` 维度连接 `fw_output` 和 `rev_output`；2. 一个 `std::pair` 包含 `fw_result.final_hidden` 和 `rev_result.final_hidden`。
 
     }
@@ -1125,7 +1125,7 @@ struct FullBidirectionalLayer
 # 如果 `input` 设备类型不是 CPU，则将 `input` 沿着维度 0 解绑，并赋值给 `step_inputs`。
 
     auto fw_result = layer_(step_inputs, input_hidden.first, params.first);
-```  
+```py  
 # 调用 `layer_` 对象的函数调用运算符，传递 `step_inputs`、`input_hidden.first` 和 `params.first` 作为参数，存储结果在 `fw_result` 中。
 
     TORCH_CHECK(fw_result.outputs.size() > 0, "Expected sequence length to be larger than 0 in RNN");
@@ -1133,7 +1133,7 @@ struct FullBidirectionalLayer
 # 使用 `TORCH_CHECK` 断言 `fw_result.outputs.size()` 大于 0，如果不满足则抛出错误信息 "Expected sequence length to be larger than 0 in RNN"。
 
     auto fw_output = at::stack(fw_result.outputs, 0);
-```  
+```py  
 # 使用 `at::stack` 将 `fw_result.outputs` 沿着维度 0 堆叠，结果存储在 `fw_output` 中。
 
     auto rev_step_inputs = reverse(std::move(step_inputs));
@@ -1142,7 +1142,7 @@ struct FullBidirectionalLayer
 
     auto rev_result =
         layer_(rev_step_inputs, input_hidden.second, params.second);
-```  
+```py  
 # 调用 `layer_` 对象的函数调用运算符，传递 `rev_step_inputs`、`input_hidden.second` 和 `params.second` 作为参数，存储结果在 `rev_result` 中。
 
     std::reverse(rev_result.outputs.begin(), rev_result.outputs.end());
@@ -1150,7 +1150,7 @@ struct FullBidirectionalLayer
 # 反转 `rev_result.outputs` 容器中的元素。
 
     auto rev_output = at::stack(rev_result.outputs, 0);
-```  
+```py  
 # 使用 `at::stack` 将 `rev_result.outputs` 沿着维度 0 堆叠，结果存储在 `rev_output` 中。
 
     return {at::cat({fw_output, rev_output}, fw_output.dim() - 1),
@@ -1161,7 +1161,7 @@ struct FullBidirectionalLayer
   }
 
   std::vector<Tensor> reverse(std::vector<Tensor>&& x) const {
-```  
+```py  
 # 定义 `reverse` 函数，接受右值引用 `std::vector<Tensor>&& x`，返回 `std::vector<Tensor>`。
 
     std::reverse(x.begin(), x.end());
@@ -1169,7 +1169,7 @@ struct FullBidirectionalLayer
 # 反转 `x` 中元素的顺序。
 
     return std::move(x);
-```  
+```py  
 # 返回移动后的 `x`。
 
   }

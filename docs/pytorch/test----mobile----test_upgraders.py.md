@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\test_upgraders.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入必要的模块和函数

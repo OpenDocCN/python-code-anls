@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\MagmaUtils.h`
 
-```
+```py
 #pragma once
 #include <ATen/cuda/CUDAConfig.h>
 

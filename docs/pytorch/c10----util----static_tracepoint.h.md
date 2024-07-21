@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\static_tracepoint.h`
 
-```
+```py
 #pragma once
 
 #if defined(__ELF__) && (defined(__x86_64__) || defined(__i386__)) && \

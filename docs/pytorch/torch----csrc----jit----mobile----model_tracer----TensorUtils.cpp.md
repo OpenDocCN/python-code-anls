@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\TensorUtils.cpp`
 
-```
+```py
 namespace torch {
 namespace jit {
 namespace mobile {

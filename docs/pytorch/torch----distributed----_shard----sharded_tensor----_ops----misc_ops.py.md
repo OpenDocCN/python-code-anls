@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\_ops\misc_ops.py`
 
-```
+```py
 # 引入 torch 库，用于深度学习任务
 import torch
 # 从 torch 分布式模块中导入 _sharded_op_impl 函数

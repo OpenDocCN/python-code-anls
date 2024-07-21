@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_lazy.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入来自 torch 模块的 Tensor 类型
 from torch import Tensor

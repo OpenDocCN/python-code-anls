@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_upgrader_utils.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件
 #include <gtest/gtest.h>
 // 包含 Torch JIT 中升级操作符的实用工具函数的头文件

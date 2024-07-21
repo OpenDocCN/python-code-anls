@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\tunable\StreamTimer.h`
 
-```
+```py
 // 原始 TunableOp 来自 onnxruntime。
 // 可在以下链接找到原始代码：
 // https://github.com/microsoft/onnxruntime/blob/main/onnxruntime/core/framework/tunable.h

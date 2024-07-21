@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\BoxedKernel.h`
 
-```
+```py
 // 使用 #pragma once 指令确保头文件只被编译一次，防止重复包含
 #pragma once
 

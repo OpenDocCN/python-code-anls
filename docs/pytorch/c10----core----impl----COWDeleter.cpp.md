@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\COWDeleter.cpp`
 
-```
+```py
 namespace c10::impl {
     // 定义静态函数，用于释放引用计数上下文中的资源
     void cow::cow_deleter(void* ctx) {

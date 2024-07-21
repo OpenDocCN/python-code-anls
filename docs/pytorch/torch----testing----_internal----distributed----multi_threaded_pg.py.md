@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\multi_threaded_pg.py`
 
-```
+```py
 # 忽略 mypy 的错误提示
 # 导入必要的库和模块
 import sys

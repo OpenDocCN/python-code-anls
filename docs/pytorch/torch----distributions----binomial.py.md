@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\binomial.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库
 import torch

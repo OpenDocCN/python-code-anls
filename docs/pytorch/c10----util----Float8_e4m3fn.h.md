@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Float8_e4m3fn.h`
 
-```
+```py
 /*
  * Define the Float8_e4m3fn type (8-bit floating-point) including conversions
  * to standard C types and basic arithmetic operations. Note that arithmetic

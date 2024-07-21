@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\Conv_v8.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，仅包含操作符的断言
 

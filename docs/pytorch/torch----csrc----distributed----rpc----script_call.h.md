@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\script_call.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次引用
 

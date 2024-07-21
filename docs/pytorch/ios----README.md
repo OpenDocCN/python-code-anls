@@ -5,7 +5,7 @@
 
 PyTorch is now available via Cocoapods, to integrate it to your project, simply add the following line to your `Podfile` and run `pod install`
 
-```ruby
+```py
 pod 'LibTorch-Lite'
 ```
 
@@ -13,7 +13,7 @@ pod 'LibTorch-Lite'
 
 For Objective-C developers, simply import the umbrella header
 
-```
+```py
 #import <LibTorch-Lite.h>
 ```
 

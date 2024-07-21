@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_view.py`
 
-```
+```py
 # 引入 torch 库，用于科学计算和机器学习
 import torch
 

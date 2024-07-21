@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\ATenOpList.cpp`
 
-```
+```py
 // 包含 ATen 操作列表的头文件
 #include <ATen/core/ATenOpList.h>
 

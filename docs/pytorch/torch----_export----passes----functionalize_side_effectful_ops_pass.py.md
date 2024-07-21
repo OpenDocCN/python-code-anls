@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\functionalize_side_effectful_ops_pass.py`
 
-```
+```py
 import copy  # 导入copy模块，用于深拷贝对象
 from typing import Dict, Optional, Tuple, List  # 引入类型提示，用于静态类型检查
 
@@ -28,7 +28,7 @@ class _FunctionalizeSideEffectfulOpsPass(_ExportPassBaseDeprecatedDoNotUse):
     def f(x):
         sym_constrain_range(x.shape[0], min=1, max=3)
         return x.add(3)
-    ```
+    ```py
     Will be transformed to:
     ```
     def f(x):
@@ -38,7 +38,7 @@ class _FunctionalizeSideEffectfulOpsPass(_ExportPassBaseDeprecatedDoNotUse):
         )
 
         return x.add(3), dep_token1
-    ```
+    ```py
     """
     def __init__(self) -> None:
         super().__init__()  # 调用父类构造函数

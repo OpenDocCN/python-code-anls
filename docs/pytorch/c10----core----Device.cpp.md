@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Device.cpp`
 
-```
+```py
 // 匿名命名空间内定义的函数，用于将设备字符串解析为 DeviceType 枚举值
 namespace {
 DeviceType parse_type(const std::string& device_string) {

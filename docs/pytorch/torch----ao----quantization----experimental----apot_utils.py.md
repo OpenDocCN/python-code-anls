@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\apot_utils.py`
 
-```
+```py
 r"""
 This file contains utility functions to convert values
 using APoT nonuniform quantization methods.

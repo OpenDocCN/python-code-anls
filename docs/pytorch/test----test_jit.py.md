@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入PyTorch库

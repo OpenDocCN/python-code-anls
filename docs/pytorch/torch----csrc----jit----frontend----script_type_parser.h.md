@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\script_type_parser.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/jit_type.h>
 #include <torch/csrc/Export.h>

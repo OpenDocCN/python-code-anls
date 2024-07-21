@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\split_module.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import inspect

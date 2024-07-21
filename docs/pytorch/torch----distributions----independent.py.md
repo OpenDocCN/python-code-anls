@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\independent.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的类型字典
 from typing import Dict

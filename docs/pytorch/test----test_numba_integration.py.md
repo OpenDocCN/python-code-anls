@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_numba_integration.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 

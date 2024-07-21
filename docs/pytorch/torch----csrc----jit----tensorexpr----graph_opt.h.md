@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\graph_opt.h`
 
-```
+```py
 #pragma once
 // 剪裁给定的图形，使其只保留前 iters 个迭代。返回剪裁后的图形的共享指针。
 TORCH_API std::shared_ptr<Graph> trimGraph(

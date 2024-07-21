@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\PyInterpreter.cpp`
 
-```
+```py
 // 声明命名空间 c10::impl，实现 NoopPyInterpreterVTable 结构体，继承自 PyInterpreterVTable
 namespace c10::impl {
 

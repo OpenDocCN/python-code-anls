@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\module.h`
 
-```
+```py
 #pragma once
 // 包含异常处理工具类头文件
 #include <c10/util/Exception.h>

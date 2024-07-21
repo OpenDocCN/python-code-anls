@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\maxpool-microkernel-tester.h`
 
-```
+```py
 /*
  * 版权声明，此代码版权归 Facebook 及其关联公司所有。
  * 保留所有权利。

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\cpp_shim.cpp`
 
-```
+```py
 // 引入 Torch 的 C++ 动态库头文件，用于与 Torch 运行时进行交互
 #include <torch/csrc/dynamo/cpp_shim.h>
 

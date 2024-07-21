@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_basic.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 import functools  # 导入 functools 模块，用于创建偏函数

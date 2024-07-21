@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\misc.cpp`
 
-```
+```py
 // 引入 Torch 的头文件，用于张量表达式计算
 #include <torch/csrc/jit/tensorexpr/ir_simplifier.h>
 #include <torch/csrc/jit/tensorexpr/kernel.h>

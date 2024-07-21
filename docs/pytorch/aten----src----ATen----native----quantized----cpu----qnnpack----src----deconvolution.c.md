@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\deconvolution.c`
 
-```
+```py
 /*
  * 版权声明：Facebook公司及其关联公司版权所有。
  * 保留所有权利。

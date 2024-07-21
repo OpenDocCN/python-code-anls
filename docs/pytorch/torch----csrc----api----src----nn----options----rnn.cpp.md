@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\rnn.cpp`
 
-```
+```py
 // 包含 Torch 库中 RNN 相关选项的头文件
 #include <torch/nn/options/rnn.h>
 

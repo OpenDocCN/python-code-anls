@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\tensor.cpp`
 
-```
+```py
 // 引入 Torch 的 Lazy 模块的相关头文件
 #include <torch/csrc/lazy/core/config.h>
 #include <torch/csrc/lazy/core/tensor.h>

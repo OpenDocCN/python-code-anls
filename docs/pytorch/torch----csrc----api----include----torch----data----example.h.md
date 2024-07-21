@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\example.h`
 
-```
+```py
 #pragma once
 
 #include <torch/types.h>  // 包含 Torch 的类型定义

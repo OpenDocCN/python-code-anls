@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_move_constructors_to_cuda.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 import functools  # 导入 functools 模块，用于支持部分函数应用

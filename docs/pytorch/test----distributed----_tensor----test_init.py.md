@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_init.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # Owner(s): ["oncall: distributed"]
 

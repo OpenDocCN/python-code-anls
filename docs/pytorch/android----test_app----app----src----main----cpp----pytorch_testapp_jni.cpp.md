@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\app\src\main\cpp\pytorch_testapp_jni.cpp`
 
-```
+```py
 #include <android/log.h>
 #include <pthread.h>
 #include <unistd.h>

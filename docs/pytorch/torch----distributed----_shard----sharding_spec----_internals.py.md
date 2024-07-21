@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\_internals.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型和模块
 from typing import List, Optional, Tuple

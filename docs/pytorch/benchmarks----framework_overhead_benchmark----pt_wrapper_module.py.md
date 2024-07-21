@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\framework_overhead_benchmark\pt_wrapper_module.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 

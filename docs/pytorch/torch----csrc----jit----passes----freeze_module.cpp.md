@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\freeze_module.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/freeze_module.h>  // 包含冻结模块所需的头文件
 
 #include <torch/csrc/jit/jit_log.h>  // 包含 JIT 日志相关的头文件

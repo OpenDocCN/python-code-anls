@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CublasHandlePool.cpp`
 
-```
+```py
 /**
  * 清除 cuBLAS 工作空间
  * ~~~~~~~~~~~~~~~~~~~~~~

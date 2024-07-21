@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\CrossKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/Cross.h>
 

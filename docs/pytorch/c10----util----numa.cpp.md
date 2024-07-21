@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\numa.cpp`
 
-```
+```py
 // 包含 C10 库中的 Exception 头文件
 #include <c10/util/Exception.h>
 // 包含 C10 库中的 NUMA 头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\normalize_ops.h`
 
-```
+```py
 #pragma once
 // 预处理指令：#pragma once，确保头文件只被编译一次
 

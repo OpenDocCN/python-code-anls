@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\anomaly_mode.cpp`
 
-```
+```py
 #include <c10/util/Backtrace.h>
 #include <c10/util/Exception.h>
 #include <torch/csrc/autograd/anomaly_mode.h>

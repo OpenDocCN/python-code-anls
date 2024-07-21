@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\mobile\__init__.py`
 
-```
+```py
 # 指定允许未类型化的函数定义，用于类型检查工具 mypy
 mypy: allow-untyped-defs
 

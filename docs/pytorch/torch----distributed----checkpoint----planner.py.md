@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\planner.py`
 
-```
+```py
 import abc
 import io
 import operator

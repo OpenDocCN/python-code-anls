@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_fx_split.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 引入必要的库和模块

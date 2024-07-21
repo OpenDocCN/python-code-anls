@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_grad_acc.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import contextlib  # 引入上下文管理器相关的模块

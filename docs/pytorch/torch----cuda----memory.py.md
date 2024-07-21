@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\memory.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""This package adds support for device memory management implemented in CUDA."""
 

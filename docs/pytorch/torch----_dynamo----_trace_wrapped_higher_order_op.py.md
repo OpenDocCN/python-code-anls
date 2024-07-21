@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\_trace_wrapped_higher_order_op.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch 库
 import torch

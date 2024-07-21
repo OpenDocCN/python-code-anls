@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\autograd_metadata.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // 包含 Torch 导出宏的头文件

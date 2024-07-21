@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\androidTest\java\org\pytorch\suite\PytorchLiteInstrumentedTestSuite.java`
 
-```
+```py
 # 导入所需的类库和模块
 package org.pytorch.suite;
 

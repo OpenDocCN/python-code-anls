@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\adaround_fake_quantize.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from typing import Tuple
 

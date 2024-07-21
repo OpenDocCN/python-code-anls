@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\unpickled_python_remote_call.cpp`
 
-```
+```py
 // 引入 Torch 分布式 RPC 的相关头文件
 #include <torch/csrc/distributed/rpc/unpickled_python_remote_call.h>
 

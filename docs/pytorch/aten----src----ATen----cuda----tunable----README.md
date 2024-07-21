@@ -29,7 +29,7 @@ not the environment variables.
 
 Assuming you specified a filename, you'll end up with a CSV file with contents like so:
 
-```
+```py
 Validator,PT_VERSION,2.2.0
 Validator,ROCM_VERSION,6.0.0.0-12969-1544e39
 Validator,HIPBLASLT_VERSION,0.6.0-a9c5cc7
@@ -126,7 +126,7 @@ All python APIs exist in the `torch.cuda.tunable` module.
 
 ### C++ Interface
 Example:
-```C++
+```py++
 #include <ATen/cuda/tunable/Tunable.h>
 
 at::cuda::tunable::getTuningContext()->EnableTunableOp(true);

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\cmake.py`
 
-```
+```py
 # "Manages CMake."
 
 # 从未来导入的注释，使得 Python 2.x 中的代码与 Python 3.x 兼容

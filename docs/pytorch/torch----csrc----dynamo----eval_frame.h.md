@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\eval_frame.h`
 
-```
+```py
 #pragma once
 #include <Python.h>
 

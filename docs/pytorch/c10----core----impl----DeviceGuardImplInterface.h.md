@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\DeviceGuardImplInterface.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Device.h> // 包含设备相关的头文件

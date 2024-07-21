@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\DeprecatedTypePropertiesRegistry.cpp`
 
-```
+```py
 #include <ATen/core/DeprecatedTypePropertiesRegistry.h>
 
 #include <ATen/core/DeprecatedTypeProperties.h>

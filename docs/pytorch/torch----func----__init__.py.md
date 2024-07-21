@@ -1,6 +1,6 @@
 # `.\pytorch\torch\func\__init__.py`
 
-```
+```py
 # 从torch._functorch.eager_transforms模块中导入以下函数和类
 from torch._functorch.eager_transforms import (
     vjp,          # 导入反向变换的雅可比向量积函数

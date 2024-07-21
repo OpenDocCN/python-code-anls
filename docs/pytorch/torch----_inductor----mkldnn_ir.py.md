@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\mkldnn_ir.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类型定义
 from typing import Any, List, Optional, Set

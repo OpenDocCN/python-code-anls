@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\basic_strategy.py`
 
-```
+```py
 import itertools
 from dataclasses import dataclass
 from typing import List, Set, Tuple

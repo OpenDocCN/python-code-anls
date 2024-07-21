@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\Utils.cpp`
 
-```
+```py
 namespace at::cpu {
     // 检查当前 CPU 是否支持 AVX2 指令集
     bool is_cpu_support_avx2() {

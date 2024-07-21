@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\tensor_options_cuda.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 的头文件
 
 #include <torch/torch.h>  // 包含 PyTorch 的头文件

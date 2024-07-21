@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_cudnn.pyi`
 
-```
+```py
 # 导入 Enum 类型，用于定义枚举类型变量
 from enum import Enum
 

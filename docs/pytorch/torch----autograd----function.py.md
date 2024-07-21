@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\function.py`
 
-```
+```py
 # 使用 mypy: allow-untyped-defs 来允许未类型化的函数定义，用于类型检查工具mypy
 import functools  # 导入 functools 模块，提供了创建和使用高阶函数的工具
 import inspect  # 导入 inspect 模块，用于获取有关活动对象（如模块、类、方法、函数等）的信息

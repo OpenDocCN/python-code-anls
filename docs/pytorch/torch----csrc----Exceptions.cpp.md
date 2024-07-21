@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Exceptions.cpp`
 
-```
+```py
 # 引入所需的头文件和库
 #include <torch/csrc/Exceptions.h>
 #include <torch/csrc/python_headers.h>

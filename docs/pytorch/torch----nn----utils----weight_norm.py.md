@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\weight_norm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Weight Normalization from https://arxiv.org/abs/1602.07868."""
 # 导入必要的类型和函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\quantization.cpp`
 
-```
+```py
 // 包含标量类型定义头文件
 #include <c10/core/ScalarType.h>
 // 包含张量表达式简化器头文件

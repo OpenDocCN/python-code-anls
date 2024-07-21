@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_masked.py`
 
-```
+```py
 # Owner(s): ["module: masked operators"]
 
 """Tests for masked operations.

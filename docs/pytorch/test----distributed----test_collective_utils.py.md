@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_collective_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入需要的模块和类

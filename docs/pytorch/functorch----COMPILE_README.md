@@ -11,7 +11,7 @@ for feedback. If you are interested in using AOT Autograd and need help or have
 suggestions, please feel free to open an issue. We will be happy to help.
 
 For example, here are some examples of how to use it.
-```python
+```py
 from functorch.compile import aot_function, aot_module, draw_graph
 import torch.fx as fx
 import torch

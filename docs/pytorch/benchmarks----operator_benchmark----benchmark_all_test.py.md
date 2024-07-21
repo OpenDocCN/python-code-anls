@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_all_test.py`
 
-```
+```py
 # 导入 benchmark_all_other_test 模块，并标记为不会使用 F401 错误，表示它在当前代码中未被直接使用
 import benchmark_all_other_test  # noqa: F401
 

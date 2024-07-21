@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_plan\api.py`
 
-```
+```py
 import abc  # 导入抽象基类模块
 from dataclasses import dataclass  # 导入数据类装饰器
 from typing import Dict, List, Optional, Union  # 导入类型提示模块

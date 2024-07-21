@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\custom_op_db.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch 库
 import torch

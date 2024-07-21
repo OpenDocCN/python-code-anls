@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\definitions\standard.py`
 
-```
+```py
 """
 Default set of benchmarks.
 

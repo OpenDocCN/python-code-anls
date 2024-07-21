@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\gemm_kernel_utils.h`
 
-```
+```py
 /*
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.

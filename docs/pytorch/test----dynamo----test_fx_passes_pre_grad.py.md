@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_fx_passes_pre_grad.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 从 unittest 模块导入 mock 对象

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\selecting.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的类型和函数
 from typing import Callable, Iterator, Tuple, TypeVar

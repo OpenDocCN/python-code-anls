@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\AbortHandler.h`
 
-```
+```py
 namespace c10 {
 // AbortHandlerHelper 类用于管理终止处理程序
 class AbortHandlerHelper {

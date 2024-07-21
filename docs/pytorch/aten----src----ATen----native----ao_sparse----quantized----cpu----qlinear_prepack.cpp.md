@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\qlinear_prepack.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 Tensor 头文件，包括 ATen 库中的 Tensor 类定义
 #include <ATen/core/Tensor.h>

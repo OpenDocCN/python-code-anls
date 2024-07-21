@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\graphs.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入垃圾回收模块
 import gc

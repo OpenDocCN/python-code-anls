@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Resource.h`
 
-```
+```py
 #pragma once
 // 此指令确保头文件只被包含一次
 

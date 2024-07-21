@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Ops.cpp`
 
-```
+```py
 // 包含头文件：ATen 的 Dispatcher 接口，用于分发操作；
 // c10 的 intrusive_ptr 工具，用于管理指针；
 // torch 的分布式进程组 ProcessGroup 的声明；

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\tensor.cpp`
 
-```
+```py
 // 包含 Torch 的自动求导相关头文件
 #include <torch/csrc/autograd/functions/tensor.h>
 

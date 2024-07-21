@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\multipledispatch\dispatcher.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入警告模块中的warn函数
 from warnings import warn

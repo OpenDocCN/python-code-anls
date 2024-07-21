@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\epilogue\epilogue_rescale_output.h`
 
-```
+```py
 /*! \file
   \brief Threadblock scoped GEMM epilogue for Tensor Ops.
 

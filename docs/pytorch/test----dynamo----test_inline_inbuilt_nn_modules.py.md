@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_inline_inbuilt_nn_modules.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入单元测试模块
 import unittest

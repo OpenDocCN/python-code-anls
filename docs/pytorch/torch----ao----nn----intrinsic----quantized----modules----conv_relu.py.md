@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\quantized\modules\conv_relu.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 引入 PyTorch 相关模块

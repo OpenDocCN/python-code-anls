@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\lr_scheduler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Learning Rate Scheduler."""
 # 导入需要的模块和类

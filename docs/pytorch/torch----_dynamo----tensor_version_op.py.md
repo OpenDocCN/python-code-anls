@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\tensor_version_op.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch._prims 模块中的 _make_prim 和 RETURN_TYPE

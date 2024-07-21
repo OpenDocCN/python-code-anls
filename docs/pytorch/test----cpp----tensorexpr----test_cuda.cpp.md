@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_cuda.cpp`
 
-```
+```py
 #ifdef USE_CUDA
 // 如果定义了 USE_CUDA 宏，则包含以下头文件和命名空间
 #include <cmath>  // 数学函数库，包含 expf 函数

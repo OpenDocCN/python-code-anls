@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\context.py`
 
-```
+```py
 # 导入 functools 模块，用于高阶函数和函数工具
 # 从 typing 模块导入 Callable 类型提示，用于指定函数的类型
 from typing import Callable

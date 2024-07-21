@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\control_collectives\ControlCollectives.hpp`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含
 

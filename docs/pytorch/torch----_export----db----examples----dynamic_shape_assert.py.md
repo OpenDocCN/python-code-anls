@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dynamic_shape_assert.py`
 
-```
+```py
 # 导入torch模块，用于神经网络和张量操作
 import torch
 

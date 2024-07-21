@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorIteratorReduce.cpp`
 
-```
+```py
 /// 定义预处理宏，仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 /// 包含张量迭代器的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\python_dimname.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 防止头文件被多次包含
 #include <ATen/Dimname.h>

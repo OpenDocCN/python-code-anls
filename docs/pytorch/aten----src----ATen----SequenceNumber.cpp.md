@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\SequenceNumber.cpp`
 
-```
+```py
 // 包含 ATen 库中的 SequenceNumber.h 头文件
 #include <ATen/SequenceNumber.h>
 

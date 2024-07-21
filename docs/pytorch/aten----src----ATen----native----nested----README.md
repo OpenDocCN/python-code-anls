@@ -33,7 +33,7 @@ There are two main classes of functions that can be implemented on NestedTensors
 
 The definition of map_nt is:
 
-```cpp
+```py
 template <typename Func>
 Tensor map_nt(const Tensor& nt, Func f) {
   auto* nt_impl = get_nested_tensor_impl(nt);

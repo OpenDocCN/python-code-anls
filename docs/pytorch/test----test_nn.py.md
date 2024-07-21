@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_nn.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 # 导入必要的库和模块

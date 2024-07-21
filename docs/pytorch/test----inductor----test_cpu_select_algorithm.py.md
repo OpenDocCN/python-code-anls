@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cpu_select_algorithm.py`
 
-```
+```py
 # Owner(s): ["oncall: cpu inductor"]
 
 # 引入必要的库和模块

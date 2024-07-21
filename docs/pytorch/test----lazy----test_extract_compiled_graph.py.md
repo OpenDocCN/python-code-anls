@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_extract_compiled_graph.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入单元测试模块

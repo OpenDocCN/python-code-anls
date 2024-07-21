@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_fsspec_filesystem.py`
 
-```
+```py
 # Mypy 将不会尝试推断任何已安装的第三方库的类型。
 # mypy: ignore-errors
 

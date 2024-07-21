@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\MPSCNNNeuronOp.h`
 
-```
+```py
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
 # 导入 MetalPerformanceShaders 框架，这个框架包含了 Metal Performance Shaders 的相关功能和类。

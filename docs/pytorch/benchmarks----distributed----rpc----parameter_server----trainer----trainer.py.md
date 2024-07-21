@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\trainer.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于高阶函数和函数操作
 import time  # 导入 time 模块，用于时间相关操作
 from abc import ABC, abstractmethod  # 从 abc 模块导入 ABC 类和 abstractmethod 装饰器

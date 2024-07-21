@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\release_notes\apply_categories.py`
 
-```
+```py
 # 导入处理 CSV 文件的标准库
 import csv
 

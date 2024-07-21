@@ -1,6 +1,6 @@
 # `.\pytorch\test\optim\test_swa_utils.py`
 
-```
+```py
 # Owner(s): ["module: optimizer"]
 
 # 导入 itertools 和 pickle 模块

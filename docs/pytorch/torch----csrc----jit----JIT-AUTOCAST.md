@@ -38,7 +38,7 @@ statically typed) and this document attempts to list the known limitations.
 Explicit `with autocast()` scopes are supported inside scripted functions and
 modules (subject to the limitations described below):
 
-```python
+```py
 import torch
 from torch.cuda.amp import autocast
 
@@ -78,7 +78,7 @@ The current Autocast/JIT diagnostics should be improved:
 Using `@autocast` is not currently supported in script mode (a diagnostic
 will be emitted)
 
-```python
+```py
 import torch
 from torch.cpu.amp import autocast
 
@@ -93,7 +93,7 @@ def foo(x):
 
 Another example
 
-```python
+```py
 import torch
 from torch.cpu.amp import autocast
 
@@ -105,7 +105,7 @@ def foo(a, b, c, d):
 
 #### Autocast argument must be a compile-time constant
 
-```python
+```py
 import torch
 from torch.cpu.amp import autocast
 
@@ -119,7 +119,7 @@ def fn(a, b, use_amp: bool):
 
 #### Uncommon autocast usage patterns may not be supported
 
-```python
+```py
 import torch
 from torch.cpu.amp import autocast
 
@@ -151,7 +151,7 @@ stripped from the TorchScript IR so it's effectively ignored:
 
 > This is one known limitation where we don't have a way to emit a diagnostic!
 
-```python
+```py
 import torch
 from torch.cpu.amp import autocast
 
@@ -172,7 +172,7 @@ def fn(a, b):
 Calling a scripted function from a trace is similar to calling the scripted
 function from eager mode:
 
-```python
+```py
 import torch
 from torch.cpu.amp import autocast
 
@@ -193,7 +193,7 @@ torch.jit.trace(traced, (x, y))
 If eager-mode autocast is enabled and we try to disable autocasting from
 within a scripted function, autocasting will still occur.
 
-```python
+```py
 import torch
 from torch.cuda.amp import autocast
 

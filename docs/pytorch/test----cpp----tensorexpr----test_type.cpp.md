@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_type.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include "torch/csrc/jit/tensorexpr/eval.h"  // 引入张量表达式求值相关的头文件

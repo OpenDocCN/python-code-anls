@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\normalization.cpp`
 
-```
+```py
 // 包含头文件 <torch/nn/options/normalization.h>
 
 // 定义 torch 命名空间

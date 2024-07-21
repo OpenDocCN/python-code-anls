@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\lbfgs.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型声明模块，允许未经类型定义的函数
 from typing import Optional

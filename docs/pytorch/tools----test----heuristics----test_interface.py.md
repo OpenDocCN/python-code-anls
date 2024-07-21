@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\heuristics\test_interface.py`
 
-```
+```py
 from __future__ import annotations
 # 导入用于未来版本兼容的特性
 

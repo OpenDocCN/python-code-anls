@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\op_fuzzers\binary.py`
 
-```
+```py
 # 引入必要的库和模块
 import numpy as np  # 引入 NumPy 库，用于数值计算
 import torch  # 引入 PyTorch 库，用于深度学习任务

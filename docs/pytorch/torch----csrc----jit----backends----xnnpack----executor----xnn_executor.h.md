@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\executor\xnn_executor.h`
 
-```
+```py
 #pragma once
 // 引入 XNNPACK 头文件，用于 XNNExecutor 类的实现
 #include <xnnpack.h>

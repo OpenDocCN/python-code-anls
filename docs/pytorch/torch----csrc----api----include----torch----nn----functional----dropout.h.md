@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\dropout.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/options/dropout.h> // 引入dropout相关的选项定义
@@ -42,7 +42,7 @@ inline Tensor dropout(Tensor input, double p, bool training, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::dropout(input, F::DropoutFuncOptions().p(0.5));
-/// ```
+/// ```py
 // dropout函数的外部接口，调用detail命名空间中的dropout函数实现
 inline Tensor dropout(Tensor input, const DropoutFuncOptions& options = {}) {
   return detail::dropout(
@@ -114,7 +114,7 @@ inline Tensor dropout2d(Tensor input, double p, bool training, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::dropout2d(input, F::Dropout2dFuncOptions().p(0.5));
-/// ```
+/// ```py
 // dropout2d函数的外部接口，调用detail命名空间中的dropout2d函数实现
 inline Tensor dropout2d(
     Tensor input,
@@ -133,7 +133,7 @@ inline Tensor dropout2d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::dropout3d(input, F::Dropout3dFuncOptions().p(0.5));
-/// ```
+/// ```py
 inline Tensor dropout3d(
     Tensor input,
     const Dropout3dFuncOptions& options = {}) {
@@ -153,7 +153,7 @@ inline Tensor dropout3d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::alpha_dropout(input, F::AlphaDropoutFuncOptions().p(0.5).training(false));
-/// ```
+/// ```py
 inline Tensor alpha_dropout(
     Tensor input,
     const AlphaDropoutFuncOptions& options = {}) {
@@ -177,7 +177,7 @@ inline Tensor alpha_dropout(
 /// namespace F = torch::nn::functional;
 /// F::feature_alpha_dropout(input,
 /// F::FeatureAlphaDropoutFuncOptions().p(0.5).training(false));
-/// ```
+/// ```py
 inline Tensor feature_alpha_dropout(
     Tensor input,
     const FeatureAlphaDropoutFuncOptions& options = {}) {

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseTensor.cpp`
 
-```
+```py
 // 定义宏，限制在这些头文件中只使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

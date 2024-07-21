@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ops\arithmetic_ir_ops.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件只被编译一次
 

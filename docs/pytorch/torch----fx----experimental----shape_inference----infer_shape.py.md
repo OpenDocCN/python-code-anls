@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\shape_inference\infer_shape.py`
 
-```
+```py
 """
 This is the function that runs shape inference. It will modify the input graph module so that shapes are annotated.
 """

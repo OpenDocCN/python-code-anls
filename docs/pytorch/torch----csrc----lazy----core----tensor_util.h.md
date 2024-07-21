@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\tensor_util.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保头文件只包含一次
 

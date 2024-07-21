@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\word_language_model.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Optional, Tuple  # 引入类型提示
 

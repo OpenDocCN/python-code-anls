@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\mkl\__init__.py`
 
-```
+```py
 # 引入 torch 库，用于操作 PyTorch 相关功能
 # mypy: allow-untyped-defs
 import torch

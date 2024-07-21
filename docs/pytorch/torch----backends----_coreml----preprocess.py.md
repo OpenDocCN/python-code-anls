@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\_coreml\preprocess.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 hashlib 模块用于哈希计算，json 模块用于 JSON 数据处理
 import hashlib

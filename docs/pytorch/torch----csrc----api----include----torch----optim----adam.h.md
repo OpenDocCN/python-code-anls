@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\adam.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/module.h>  // 引入 Torch 的神经网络模块

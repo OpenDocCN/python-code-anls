@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qatembedding_ops_test.py`
 
-```
+```py
 # 导入所需的模块numpy和configs
 import numpy
 from pt import configs

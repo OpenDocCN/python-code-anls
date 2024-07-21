@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\linear.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入数学库
 import math

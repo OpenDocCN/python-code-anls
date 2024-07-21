@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupMPI.cpp`
 
-```
+```py
 // 包含 Torch 的 MPI 进程组通信头文件
 #include <torch/csrc/distributed/c10d/ProcessGroupMPI.hpp>
 

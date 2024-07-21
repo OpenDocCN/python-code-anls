@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_foreach_utils.py`
 
-```
+```py
 # 导入必要的模块和类型别名
 from typing import List, Dict, Tuple, Optional
 import torch

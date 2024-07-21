@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\serialization.h`
 
-```
+```py
 #ifndef THP_SERIALIZATION_INC
 #define THP_SERIALIZATION_INC
 

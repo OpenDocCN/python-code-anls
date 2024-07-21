@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_ucc.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入复制操作相关的模块
 import logging  # 导入日志记录相关的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\test\impl\CUDATest.cpp`
 
-```
+```py
 # 引入 Google Test 框架的头文件，用于编写和运行 C++ 单元测试
 #include <gtest/gtest.h>
 

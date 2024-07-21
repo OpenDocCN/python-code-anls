@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\__init__.py`
 
-```
+```py
 r"""
 The ``distributions`` package contains parameterizable probability distributions
 and sampling functions. This allows the construction of stochastic computation

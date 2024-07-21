@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 traceback 模块并重命名为 tb
 import traceback as tb

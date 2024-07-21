@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\__init__.py`
 
-```
+```py
 # 导入从不同模块中定义的多个类和函数，用于对代码进行重构和优化
 
 from .decomp import Decompose

@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\quantization_ops.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 

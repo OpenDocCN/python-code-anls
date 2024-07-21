@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_per_sample_grad.py`
 
-```
+```py
 # 引入允许未类型化定义的类型检查设置
 # functools 是 Python 标准库中的工具模块，提供了有用的功能
 import functools

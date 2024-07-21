@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Parallel-inl.h`
 
-```
+```py
 #pragma once
 
 

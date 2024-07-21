@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAContextLight.h`
 
-```
+```py
 #pragma once
 // 表示这个头文件只会被编译一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\multiprocessing\queue.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需的模块和类
 import io  # 导入 io 模块

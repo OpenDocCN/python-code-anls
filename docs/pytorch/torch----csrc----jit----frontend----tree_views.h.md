@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\tree_views.h`
 
-```
+```py
 // 一旦包含这个文件，就确保整个头文件只被编译一次
 #pragma once
 

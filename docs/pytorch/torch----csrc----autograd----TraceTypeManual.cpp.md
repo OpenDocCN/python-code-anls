@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\TraceTypeManual.cpp`
 
-```
+```py
 #include <ATen/TracerMode.h>
 #include <ATen/core/op_registration/op_registration.h>
 #include <c10/core/ScalarType.h>

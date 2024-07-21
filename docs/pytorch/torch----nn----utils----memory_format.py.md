@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\memory_format.py`
 
-```
+```py
 # 添加类型检查的声明，允许未类型化的函数定义
 # 该模块用于深度学习框架 PyTorch
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\dropout.py`
 
-```
+```py
 # 导入 torch.nn.functional 中的 F 模块，用于神经网络中的函数操作
 # 导入 Tensor 类型，用于声明函数参数和返回值的张量类型
 import torch.nn.functional as F

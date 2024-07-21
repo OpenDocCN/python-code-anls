@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_set_default_mobile_cpu_allocator.py`
 
-```
+```py
 #`
 # Owner(s): ["oncall: mobile"]
 

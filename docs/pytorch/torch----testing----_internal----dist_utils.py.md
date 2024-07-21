@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\dist_utils.py`
 
-```
+```py
 # 忽略类型检查错误，对于类型检查工具 mypy
 # 导入标准库模块
 import re

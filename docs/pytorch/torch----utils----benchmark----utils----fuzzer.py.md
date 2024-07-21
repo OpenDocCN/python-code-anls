@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\fuzzer.py`
 
-```
+```py
 # 设置一个类型注解 mpy: allow-untyped-defs，允许未注释的函数定义
 import functools  # 导入 functools 模块，用于高阶函数操作
 import itertools as it  # 导入 itertools 模块，并使用别名 it

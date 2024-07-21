@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\api_test.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Any, cast, Dict, SupportsInt
 from unittest import TestCase

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DispatchKey.cpp`
 
-```
+```py
 // 包含C10库中的DispatchKey.h和DispatchKeySet.h头文件
 #include <c10/core/DispatchKey.h>
 #include <c10/core/DispatchKeySet.h>

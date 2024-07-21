@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\insert_guards.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 模块中的头文件：插入守卫的 passes 和 profiling_record
 #include <torch/csrc/jit/passes/insert_guards.h>
 #include <torch/csrc/jit/runtime/profiling_record.h>

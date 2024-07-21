@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\pip_init.py`
 
-```
+```py
 """
 Initializer script that installs stuff to pip.
 """

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Tensor.cpp`
 
-```
+```py
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
 #endif

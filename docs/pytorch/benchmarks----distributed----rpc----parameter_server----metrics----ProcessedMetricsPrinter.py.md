@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\metrics\ProcessedMetricsPrinter.py`
 
-```
+```py
 import statistics  # 导入 statistics 库，用于计算统计指标
 
 import pandas as pd  # 导入 pandas 库，用于数据处理和分析

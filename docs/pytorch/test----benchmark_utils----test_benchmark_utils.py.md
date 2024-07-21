@@ -1,6 +1,6 @@
 # `.\pytorch\test\benchmark_utils\test_benchmark_utils.py`
 
-```
+```py
 # 导入所需的模块和库
 import collections  # 引入集合模块
 import json  # 引入 JSON 操作模块

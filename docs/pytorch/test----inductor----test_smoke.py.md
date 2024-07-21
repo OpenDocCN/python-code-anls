@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_smoke.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入日志模块和单元测试模块
 import logging

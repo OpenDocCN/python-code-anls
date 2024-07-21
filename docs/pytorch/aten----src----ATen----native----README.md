@@ -18,7 +18,7 @@ The rest of this document describes how to implement an ATen function.
 Every native function must have an entry in
 `native_functions.yaml`.  The format can be summarized as:
 
-```
+```py
 - func: func_name(ArgType arg0[=default], ArgType arg1[=default], ...) -> Return
   variants: function, method
   dispatch:
@@ -30,7 +30,7 @@ Each component is described in more detail below:
 
 ### `func`
 
-```
+```py
 - func: func_name[.overload_name](ArgType arg0[=default], ArgType arg1[=default], ...) -> Return
 ```
 
@@ -125,12 +125,12 @@ Here are the supported default values:
 **Returns.** The following are permissible on Return:
 
 Non-tuple return:
-```
+```py
 ReturnType [retarg0]
 ```
 
 Tuple return:
-```
+```py
 (ReturnType [retarg0], ReturnType [retarg1], ...)
 ```
 
@@ -189,7 +189,7 @@ The declarations also support the following attributes.
 **Namespaces.** User can register operators in different namespaces than `aten`, by simply putting custom namespaces before the function name. Currently nested namespace is not supported for function name. If not specified, all the functions will be registered in `aten` namespace.
 
 For example, suppose we are registering `my_op` into `custom` namespace, we can have:
-```
+```py
 - func: custom::my_op(Tensor(a) self, ...) -> Tensor(a)
   variants: function, method
   dispatch:
@@ -201,7 +201,7 @@ Note that we have a one-off `TORCH_LIBRARY` APIs to achieve the same goal of reg
 
 ### `variants`
 
-```
+```py
 variants: function, method
 ```
 
@@ -273,7 +273,7 @@ if she doesn't. For example, any out function must use the `(a!)` annotation as 
 
 ### `dispatch`
 
-```
+```py
 dispatch:
     CPU: func_cpu
     CUDA: func_cuda
@@ -282,7 +282,7 @@ dispatch:
 This specifies the actual name of the function you want to dispatch to, so you
 can dispatch to different functions depending on which backend the passed tensors
 belong to.  Notice that custom namespaces is supported on these names, it's useful when the native function listed lives in a namespace other than the default `at::native`. Currently we support nested namespace with maximum level of 2. For example:
-```
+```py
 dispatch:
     CPU: custom::ns::func_cpu
 ```
@@ -291,7 +291,7 @@ The example above hinted the native function can be found under `custom::ns::nat
 If the dispatch table is omitted, we assume a default dispatch
 table:
 
-```
+```py
 # overload is ignored
 func: func.overload(...) -> ...
 dispatch:
@@ -350,7 +350,7 @@ nested functions they call work for those backends.
 
 For example, suppose `my_op` can be implemented in the following way:
 
-```
+```py
 at::Tensor my_op(const Tensor& self, const Tensor& other) {
   return self + 2 * other;
 }
@@ -417,7 +417,7 @@ something looks wrong please shout.
 
 ### `device_guard`
 
-```
+```py
 device_guard: False
 ```
 
@@ -436,7 +436,7 @@ that case, code generation of the device guard can be disabled by adding
 
 ### `device_check`
 
-```
+```py
 device_check: NoCheck
 ```
 
@@ -451,7 +451,7 @@ In that case, code generation of the device check can be disabled by adding
 
 ### `manual_kernel_registration`
 
-```
+```py
 manual_kernel_registration: True
 ```
 
@@ -465,7 +465,7 @@ This field should only be used rarely.
 
 ### `use_const_ref_for_mutable_tensors`
 
-```
+```py
 use_const_ref_for_mutable_tensors: True
 ```
 
@@ -477,7 +477,7 @@ wanted `const T*`.)
 
 ### `autogen`
 
-```
+```py
 - func: my_op_(Tensor(a!) self) -> Tensor(a!)
 ...
   autogen: my_op, my_op.out
@@ -543,7 +543,7 @@ Here're steps to follow to decide the right dispatch keyword:
       Typically it only supports a few in-tree backends like CPU, CUDA, QuantizedCPU etc but not
       out-of-tree backends like XLA.
       Write a dispatch section, enumerate all supported backends and point them to the implementations.
-      ```
+      ```py
       dispatch:
         CPU: kernel_cpu
         CUDA: kernel_cuda
@@ -564,7 +564,7 @@ Here're steps to follow to decide the right dispatch keyword:
       registered for both inference and training.
 
     - Yes, but you still want to provide a numerically stable gradient formula instead of using autograd, write
-      ```
+      ```py
       dispatch:
         CompositeExplicitAutograd: kernel
       ```
@@ -576,7 +576,7 @@ Here're steps to follow to decide the right dispatch keyword:
 
     - No: ops in this category are mainly using `_out` boilerplate where its out version doesn't have a derivative
       formula defined. For example:
-      ```
+      ```py
       Tensor& sign_out(Tensor& result, const Tensor& self) { return unary_op_impl_out(result, self, sign_stub); }
       Tensor sign(const Tensor& self) { return unary_op_impl(self, at::sign_out); }
       Tensor& sign_(Tensor& self) { return unary_op_impl_(self, at::sign_out); }
@@ -584,7 +584,7 @@ Here're steps to follow to decide the right dispatch keyword:
 
       `sign_out` uses DispatchStub so the supported backends are enumerated in its dispatch section.
       For `sign` and `sign_`, write
-      ```
+      ```py
       dispatch:
         CompositeExplicitAutograd: kernel
       ```
@@ -600,7 +600,7 @@ Here're steps to follow to decide the right dispatch keyword:
 [torch/_python_dispatcher.py](https://github.com/pytorch/pytorch/blob/master/torch/_python_dispatcher.py).
 It shows for a certain operator, what the computed dispatch table looks like after your registrations.
 
-    ```
+    ```py
     dispatcher = PythonDispatcher()
     dispatcher.register(["CPU", "XLA", "AutogradCPU", "CompositeImplicitAutograd"])
     print(dispatcher.dispatchTable()) # Tells you exactly which kernel is used for certain backend.

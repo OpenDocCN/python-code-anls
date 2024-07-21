@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\Dict_test.cpp`
 
-```
+```py
 #include <ATen/core/Dict.h> // 引入 ATen 库中的字典实现头文件
 #include <ATen/ATen.h> // 引入 ATen 库
 #include <gtest/gtest.h> // 引入 Google 测试框架头文件

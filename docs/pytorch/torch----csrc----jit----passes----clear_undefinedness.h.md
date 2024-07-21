@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\clear_undefinedness.h`
 
-```
+```py
 #pragma once
 // 声明一个预处理指令，确保此头文件只被编译一次
 

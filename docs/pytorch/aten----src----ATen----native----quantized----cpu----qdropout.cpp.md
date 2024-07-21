@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qdropout.cpp`
 
-```
+```py
 // 包含 PyTorch ATen 库中的头文件
 #include <ATen/ATen.h>
 // 包含 PyTorch ATen 库中的原生函数头文件

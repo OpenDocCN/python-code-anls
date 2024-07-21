@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_numpy.h`
 
-```
+```py
 #pragma once
 
 // 包含 ATen 库中的 Tensor 类

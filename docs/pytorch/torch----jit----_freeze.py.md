@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_freeze.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Freezing.
 

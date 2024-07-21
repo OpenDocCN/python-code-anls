@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAStream.cpp`
 
-```
+```py
 // 包含 CUDA C++ API 相关头文件
 #include <c10/core/impl/GPUTrace.h>
 #include <c10/cuda/CUDAFunctions.h>

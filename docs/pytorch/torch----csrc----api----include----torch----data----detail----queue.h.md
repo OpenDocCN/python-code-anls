@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\detail\queue.h`
 
-```
+```py
 #pragma once
 
 #include <torch/types.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\irparser.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // 包含 Torch 库的导出定义

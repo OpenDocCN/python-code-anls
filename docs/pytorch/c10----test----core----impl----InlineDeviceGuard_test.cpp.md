@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\impl\InlineDeviceGuard_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 #include <initializer_list>  // 引入初始化列表的头文件
 

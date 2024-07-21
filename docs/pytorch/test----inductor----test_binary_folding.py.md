@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_binary_folding.py`
 
-```
+```py
 # 导入必要的模块和库
 import functools  # 导入 functools 模块
 import importlib  # 导入 importlib 模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import.cpp`
 
-```
+```py
 // 包含 ATen 和 Caffe2 库中的头文件，用于操作张量和序列化
 #include <ATen/core/interned_strings.h>
 #include <caffe2/serialize/file_adapter.h>

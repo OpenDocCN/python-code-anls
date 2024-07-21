@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_list.cpp`
 
-```
+```py
 // 包含头文件 <torch/csrc/utils/tensor_list.h>
 #include <torch/csrc/utils/tensor_list.h>
 

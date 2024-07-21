@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cuda.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 
 # 导入必要的模块和库

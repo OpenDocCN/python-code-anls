@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\kineto_shim.h`
 
-```
+```py
 #pragma once
 
 #include <memory>

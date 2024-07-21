@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\scalar_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <iostream>  // 引入标准输入输出流库

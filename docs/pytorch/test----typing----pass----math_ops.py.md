@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\pass\math_ops.py`
 
-```
+```py
 # flake8: noqa
 # 导入math模块和torch模块
 import math

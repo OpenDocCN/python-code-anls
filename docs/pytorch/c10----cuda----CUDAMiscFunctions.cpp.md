@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAMiscFunctions.cpp`
 
-```
+```py
 #include <c10/cuda/CUDAMiscFunctions.h>
 #include <cstdlib>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\FunctionalInverses.cpp`
 
-```
+```py
 // 引入 ATen 库中的相关头文件和命名空间
 #include <ATen/FunctionalInverses.h>
 

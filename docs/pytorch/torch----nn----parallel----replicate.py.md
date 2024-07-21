@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\replicate.py`
 
-```
+```py
 # 从 collections 模块导入 OrderedDict 类
 # 从 typing 模块导入多个类型相关的定义
 # 引入 torch 库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\xnnpack_backend_lib.cpp`
 
-```
+```py
   // 引入 ATen 和 Torch 相关头文件
   #include <ATen/Functions.h>
   #include <ATen/Utils.h>

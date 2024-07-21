@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\script_remote_call.cpp`
 
-```
+```py
 // 引入 Torch RPC 代理和远程调用的必要头文件
 #include <torch/csrc/distributed/rpc/rpc_agent.h>
 #include <torch/csrc/distributed/rpc/script_remote_call.h>

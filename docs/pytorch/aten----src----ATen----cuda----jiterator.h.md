@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\jiterator.h`
 
-```
+```py
 #pragma once
 #include <ATen/jit_macros.h>
 

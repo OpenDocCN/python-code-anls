@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_module_hooks.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 # 引入必要的库和模块
 import gc  # 垃圾回收模块

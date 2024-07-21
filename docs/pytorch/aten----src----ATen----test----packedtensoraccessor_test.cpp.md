@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\packedtensoraccessor_test.cpp`
 
-```
+```py
 // 引入 ATen 库的操作符和测试断言
 #include <ATen/Operators.h>
 // 引入 ATen 库的测试断言

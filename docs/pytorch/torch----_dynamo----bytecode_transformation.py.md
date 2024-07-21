@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\bytecode_transformation.py`
 
-```
+```py
 # 设置允许未标记的定义，用于类型检查
 # 导入必要的模块和库
 import copy  # 导入 copy 模块，用于复制对象

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\CompositeViewCopyKernels.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于条件编译，只在方法操作符中生效
 

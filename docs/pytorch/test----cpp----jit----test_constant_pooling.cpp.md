@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_constant_pooling.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <torch/csrc/jit/ir/ir.h>

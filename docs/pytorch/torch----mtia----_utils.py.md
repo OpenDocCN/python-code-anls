@@ -1,6 +1,6 @@
 # `.\pytorch\torch\mtia\_utils.py`
 
-```
+```py
 # 引入 Any 类型用于参数类型提示
 from typing import Any
 

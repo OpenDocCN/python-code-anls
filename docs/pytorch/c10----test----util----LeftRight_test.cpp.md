@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\LeftRight_test.cpp`
 
-```
+```py
 TEST(LeftRightTest, writesCanBeConcurrentWithReads_writeThenRead) {
   LeftRight<int> obj;  // 创建一个 LeftRight 对象，用于管理一个整数类型的数据
 

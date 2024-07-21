@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\LinearAlgebra.cpp`
 
-```
+```py
 // 定义宏，仅包含每个操作符的方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

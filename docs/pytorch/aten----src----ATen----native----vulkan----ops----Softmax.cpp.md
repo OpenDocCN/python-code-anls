@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Softmax.cpp`
 
-```
+```py
 // 引入 Vulkan 操作的常用头文件和工具函数
 #include <ATen/native/vulkan/ops/Common.h>
 #include <ATen/native/vulkan/ops/Utils.h>

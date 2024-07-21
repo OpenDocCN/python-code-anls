@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\VariableHooksInterface.cpp`
 
-```
+```py
 #include <ATen/core/VariableHooksInterface.h>  // 包含 VariableHooksInterface 的头文件
 
 namespace at::impl {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\_learnable_fake_quantize.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\parser.h`
 
-```
+```py
 #pragma once
 // 预处理指令：指定头文件只包含一次
 

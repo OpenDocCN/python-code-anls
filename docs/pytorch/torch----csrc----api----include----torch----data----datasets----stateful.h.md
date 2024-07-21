@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\stateful.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保此头文件仅被编译一次
 

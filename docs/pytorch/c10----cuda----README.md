@@ -8,7 +8,7 @@ to this folder, TAKE NOTE.  The code in this folder is very special,
 because on our AMD GPU build, we transpile it into c10/hip to provide a
 ROCm environment.  Thus, if you write:
 
-```
+```py
 // c10/cuda/CUDAFoo.h
 namespace c10 { namespace cuda {
 
@@ -20,7 +20,7 @@ void my_func();
 this will get transpiled into:
 
 
-```
+```py
 // c10/hip/HIPFoo.h
 namespace c10 { namespace hip {
 

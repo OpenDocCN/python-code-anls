@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SpmmReduceKernel.h`
 
-```
+```py
 #pragma once
 
 

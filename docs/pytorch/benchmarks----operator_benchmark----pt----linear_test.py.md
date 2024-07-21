@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\linear_test.py`
 
-```
+```py
 # 从 pt 模块导入 configs 模块
 from pt import configs
 

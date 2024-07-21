@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\logging_test.cpp`
 
-```
+```py
 #include <algorithm>  // 引入算法库，用于一些算法操作
 #include <optional>   // 引入可选项库，用于处理可能为空的对象
 

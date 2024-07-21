@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\miopen\Utils.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 防止头文件重复包含
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseCsrTensorMath.h`
 
-```
+```py
 // 声明代码在此之后只能被包含一次，防止头文件被多次包含而引起的重定义问题
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\serialize\inline_container.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只包含一次
 

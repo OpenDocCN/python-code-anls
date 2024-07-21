@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_test_stat_aggregates.py`
 
-```
+```py
 # 引入未来版本兼容性，允许在旧版本 Python 中使用新特性注解
 from __future__ import annotations
 

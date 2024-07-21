@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\stack_test.py`
 
-```
+```py
 # 导入必要的库
 import random  # 导入随机数生成模块
 from typing import List  # 引入类型提示中的列表类型

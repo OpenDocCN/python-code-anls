@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\OperatorCallTracer.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/model_tracer/OperatorCallTracer.h>
 
 namespace torch {

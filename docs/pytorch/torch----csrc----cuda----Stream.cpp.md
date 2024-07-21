@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Stream.cpp`
 
-```
+```py
 // 包含必要的头文件来定义 Python 绑定
 #include <pybind11/pybind11.h>
 #include <torch/csrc/Device.h>

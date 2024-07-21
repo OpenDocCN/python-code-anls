@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\propagate_gradients_req.cpp`
 
-```
+```py
 // 包含需要的头文件以便访问所需的类和函数
 #include <torch/csrc/distributed/autograd/rpc_messages/propagate_gradients_req.h>
 #include <torch/csrc/distributed/rpc/rpc_agent.h>

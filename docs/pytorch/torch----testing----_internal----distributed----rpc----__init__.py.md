@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\__init__.py`
 
-```
+```py
 # 导入json模块，用于处理JSON格式数据
 import json
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r""" Functional interface (quantized)."""
 # 引入必要的库和模块

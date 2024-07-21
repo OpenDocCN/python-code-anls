@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ops\device_data.h`
 
-```
+```py
 #pragma once
 // 包含 Torch Lazy 模块的相关头文件
 

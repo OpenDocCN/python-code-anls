@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\common_types.py`
 
-```
+```py
 # 导入必要的类型声明
 from typing import Optional, Tuple, TypeVar, Union
 

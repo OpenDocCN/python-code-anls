@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\fx_onnx_interpreter.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 
@@ -455,7 +455,7 @@ class FxOnnxInterpreter:
             )
             # 在诊断日志中记录 PyTorch 源信息
             with diagnostic.log_section(logging.INFO, "PyTorch source information"):
-                diagnostic.info("```\n%s\n```", node_stack_trace)
+                diagnostic.info("```\n%s\n```py", node_stack_trace)
             # 从 FX 的堆栈跟踪中获取节点的位置信息
             location = _location_from_fx_stack_trace(node_stack_trace)
             if location is not None:

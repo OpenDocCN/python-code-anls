@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\unboxing.py`
 
-```
+```py
 # 引入未来版本兼容性，允许在当前版本使用未来的注解语法
 from __future__ import annotations
 

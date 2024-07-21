@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_pytorch_onnx_onnxruntime_cuda.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 导入单元测试模块

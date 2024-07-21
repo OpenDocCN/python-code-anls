@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\mkldnn.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import torch  # 导入 PyTorch 模块
 

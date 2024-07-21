@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\errors\error_handler.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\androidTest\cpp\pytorch_jni_common_test.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件，用于单元测试
 #include <gtest/gtest.h>
 

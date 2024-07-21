@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\intrinsic_symbols.cpp`
 
-```
+```py
 #ifdef TORCH_ENABLE_LLVM
 #include <c10/util/Half.h>
 #include <torch/csrc/jit/tensorexpr/intrinsic_symbols.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_itt.py`
 
-```
+```py
 # Owner(s): ["module: intel"]
 
 # 导入 PyTorch 库

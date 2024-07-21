@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_functional_api.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import os  # 导入操作系统模块

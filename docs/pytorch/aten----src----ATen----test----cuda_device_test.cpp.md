@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_device_test.cpp`
 
-```
+```py
 # 包含 Google Test 框架的头文件，用于进行单元测试
 #include <gtest/gtest.h>
 

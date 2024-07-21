@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\file_structure_representation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型注解
 from typing import Dict, List

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\analyze\find_first_use_of_broken_modules.py`
 
-```
+```py
 from typing import Dict, List  # 导入类型提示工具中的字典和列表类型
 
 from ..package_exporter import PackagingError  # 导入自定义异常类 PackagingError

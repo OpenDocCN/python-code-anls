@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import ast                    # 提供抽象语法树操作的功能

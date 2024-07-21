@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\backcompat\__init__.py`
 
-```
+```py
 # 导入必要的模块并允许未类型化的定义（mypy: allow-untyped-defs）
 from torch._C import _set_backcompat_broadcast_warn    # 导入设置广播警告的函数
 from torch._C import _get_backcompat_broadcast_warn    # 导入获取广播警告状态的函数

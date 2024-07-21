@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\attention.h`
 
-```
+```py
 #pragma once
 // 一旦该头文件被包含，保证本头文件内容只被编译一次
 

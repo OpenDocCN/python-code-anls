@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\ir.cpp`
 
-```
+```py
 // 包含了用于 JIT 编译器 IR 的头文件
 #include <torch/csrc/jit/ir/ir.h>
 

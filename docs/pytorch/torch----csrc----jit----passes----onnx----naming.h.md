@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\naming.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>  // 包含 Torch 的 IR 模块头文件

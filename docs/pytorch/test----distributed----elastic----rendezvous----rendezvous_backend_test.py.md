@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\rendezvous_backend_test.py`
 
-```
+```py
 # Owner(s): ["oncall: r2p"]
 
 # Copyright (c) Facebook, Inc. and its affiliates.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_simplifier.cpp`
 
-```
+```py
 // 引入头文件，用于 JIT 日志、张量表达式边界重叠、IR 打印和简化器功能
 #include <torch/csrc/jit/jit_log.h>
 #include <torch/csrc/jit/tensorexpr/bounds_overlap.h>

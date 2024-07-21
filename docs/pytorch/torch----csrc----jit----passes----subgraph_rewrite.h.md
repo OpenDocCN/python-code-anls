@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\subgraph_rewrite.h`
 
-```
+```py
 /** This file defines API for pattern-based subgraph rewrites.
  *
  * The API can be used for finding concrete patterns in the model and replacing

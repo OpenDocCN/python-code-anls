@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\glsl\random.h`
 
-```
+```py
 /*
  * Random utility functions
  */

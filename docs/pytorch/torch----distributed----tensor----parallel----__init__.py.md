@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\__init__.py`
 
-```
+```py
 # 导入分布式训练所需的模块和函数
 from torch.distributed.tensor.parallel.api import parallelize_module
 from torch.distributed.tensor.parallel.loss import loss_parallel

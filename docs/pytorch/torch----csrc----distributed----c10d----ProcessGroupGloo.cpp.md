@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupGloo.cpp`
 
-```
+```py
 #include <c10/util/Exception.h> // 包含异常处理相关头文件
 #include <torch/csrc/distributed/c10d/ProcessGroupGloo.hpp> // 包含Gloo后端的进程组头文件
 

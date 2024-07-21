@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\profiler\remote_profiler_manager.cpp`
 
-```
+```py
 // 包含远程分析器管理器的头文件
 #include <torch/csrc/distributed/rpc/profiler/remote_profiler_manager.h>
 // 包含RPC代理的头文件

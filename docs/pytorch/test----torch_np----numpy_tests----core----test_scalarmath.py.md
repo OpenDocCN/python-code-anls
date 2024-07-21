@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_scalarmath.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入标准库模块
 import contextlib

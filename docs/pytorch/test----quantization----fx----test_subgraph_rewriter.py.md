@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\fx\test_subgraph_rewriter.py`
 
-```
+```py
 # 导入标准库模块
 import os
 import sys

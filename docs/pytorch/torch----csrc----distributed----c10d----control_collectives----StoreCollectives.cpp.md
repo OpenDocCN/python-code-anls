@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\control_collectives\StoreCollectives.cpp`
 
-```
+```py
 // 引入必要的头文件，包括异常处理、格式化输出、分布式存储等
 #include <c10/util/Exception.h>
 #include <fmt/format.h>

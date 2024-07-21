@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\IndexingUtils.h`
 
-```
+```py
 #pragma once
 #include <ATen/ExpandUtils.h>  // 包含扩展工具的头文件
 #include <ATen/native/CanUse32BitIndexMath.h>  // 包含32位索引数学工具的头文件

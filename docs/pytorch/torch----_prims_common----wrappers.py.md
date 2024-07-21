@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_prims_common\wrappers.py`
 
-```
+```py
 # 设置 mypy 的选项，允许未标注的函数定义
 mypy: allow-untyped-defs
 

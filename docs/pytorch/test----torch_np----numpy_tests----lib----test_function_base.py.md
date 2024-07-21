@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\lib\test_function_base.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的模块和函数

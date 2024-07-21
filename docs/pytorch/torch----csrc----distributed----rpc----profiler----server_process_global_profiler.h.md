@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\profiler\server_process_global_profiler.h`
 
-```
+```py
 #pragma once
 
 #include <shared_mutex>  // 包含 C++ 标准库中的 shared_mutex 头文件

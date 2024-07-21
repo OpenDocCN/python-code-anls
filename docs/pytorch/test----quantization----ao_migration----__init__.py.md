@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\ao_migration\__init__.py`
 
-```
+```py
 # 定义一个名为 calculate_factorial 的函数，接收一个整数参数 n
 def calculate_factorial(n):
     # 如果 n 小于等于 1，则直接返回 1，因为 0! = 1! = 1

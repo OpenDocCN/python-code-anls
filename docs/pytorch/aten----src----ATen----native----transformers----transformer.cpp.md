@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\transformer.cpp`
 
-```
+```py
 // 定义预处理宏，仅使用方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库的 Tensor 类和调度功能

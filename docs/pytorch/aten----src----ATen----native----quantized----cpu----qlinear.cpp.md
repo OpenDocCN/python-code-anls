@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qlinear.cpp`
 
-```
+```py
 // 定义预处理指令，以仅包含 Torch 的操作方法和运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

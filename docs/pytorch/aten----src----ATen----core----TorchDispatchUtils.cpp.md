@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\TorchDispatchUtils.cpp`
 
-```
+```py
 #include <ATen/core/TorchDispatchUtils.h>
 
 // 命名空间 at::impl 中的函数定义开始

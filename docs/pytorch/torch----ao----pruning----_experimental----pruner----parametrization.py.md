@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\parametrization.py`
 
-```
+```py
 # my`
 # 允许未类型定义的函数返回值
 # mypy: allow-untyped-defs

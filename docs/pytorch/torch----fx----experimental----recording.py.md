@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\recording.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools 模块，提供高阶函数和操作工具
 import functools

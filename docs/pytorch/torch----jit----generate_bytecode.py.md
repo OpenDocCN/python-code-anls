@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\generate_bytecode.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块和函数
 from typing import List

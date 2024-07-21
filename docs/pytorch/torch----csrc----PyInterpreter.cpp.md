@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\PyInterpreter.cpp`
 
-```
+```py
 //cpp
 // 包含所需的头文件，用于 Python 与 C++ 的交互
 #include <ATen/core/PythonFallbackKernel.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\benchmarks\process_scorecard.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 库，用于绘图
 import matplotlib.pyplot as plt
 # 导入 pandas 库，用于数据操作和分析

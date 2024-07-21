@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ops\to_copy.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/lazy/ts_backend/ts_node.h>

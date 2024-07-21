@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_subgraph_rewriter.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 引入标准库模块

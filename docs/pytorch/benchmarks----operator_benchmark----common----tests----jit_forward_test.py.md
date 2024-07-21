@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\tests\jit_forward_test.py`
 
-```
+```py
 # 导入 operator_benchmark 模块并重命名为 op_bench
 import operator_benchmark as op_bench
 

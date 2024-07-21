@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\ATenOpList.h`
 
-```
+```py
 #pragma once
 
 

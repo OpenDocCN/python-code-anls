@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\compiler\xnn_compiler.h`
 
-```
+```py
 // 包含 XNNPack 执行器的头文件
 #include <caffe2/torch/csrc/jit/backends/xnnpack/executor/xnn_executor.h>
 // 包含 XNNPack 库的头文件

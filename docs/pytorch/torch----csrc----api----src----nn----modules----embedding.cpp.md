@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\embedding.cpp`
 
-```
+```py
 // 包含了 Torch 库中的 Embedding 头文件
 #include <torch/nn/modules/embedding.h>
 

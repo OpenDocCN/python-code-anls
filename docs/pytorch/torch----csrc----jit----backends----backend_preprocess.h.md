@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_preprocess.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 的 JIT 后端细节头文件
 #include <torch/csrc/jit/backends/backend_detail.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharding_spec\test_sharding_spec.py`
 
-```
+```py
 # 导入必要的模块和类
 import copy
 from dataclasses import dataclass

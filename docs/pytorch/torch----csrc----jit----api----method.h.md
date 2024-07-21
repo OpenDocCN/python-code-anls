@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\method.h`
 
-```
+```py
 #pragma once
 // 指令：防止头文件重复包含，仅编译一次
 

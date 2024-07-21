@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\pattern_conversion\pattern_encapsulation.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>  // 包含 Torch 的 IR 相关头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ops\generic.cpp`
 
-```
+```py
 #include <torch/csrc/lazy/ts_backend/ops/generic.h>
 
 namespace torch {

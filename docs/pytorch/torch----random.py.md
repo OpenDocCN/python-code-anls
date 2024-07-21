@@ -1,6 +1,6 @@
 # `.\pytorch\torch\random.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入上下文管理模块
 import contextlib

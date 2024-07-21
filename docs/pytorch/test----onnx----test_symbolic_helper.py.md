@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_symbolic_helper.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 """Unit tests on `torch.onnx.symbolic_helper`."""
 

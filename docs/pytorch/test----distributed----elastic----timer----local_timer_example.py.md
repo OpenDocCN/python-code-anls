@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\timer\local_timer_example.py`
 
-```
+```py
 # 指定 Python 解释器的位置，使脚本可执行
 #!/usr/bin/env python3
 # 所有权：["oncall: r2p"]

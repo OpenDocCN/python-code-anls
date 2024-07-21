@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\BatchLinearAlgebraKernel.cpp`
 
-```
+```py
 /*
 Defines TORCH_ASSERT_ONLY_METHOD_OPERATORS to enable specific method operators.
 Includes necessary headers for ATen library functionalities.

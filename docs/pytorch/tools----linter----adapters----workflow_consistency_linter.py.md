@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\workflow_consistency_linter.py`
 
-```
+```py
 """
 Checks for consistency of jobs between different GitHub workflows.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Stream.cpp`
 
-```
+```py
 // 包含 C10 核心库中的流定义和虚拟保护实现的头文件
 #include <c10/core/Stream.h>
 #include <c10/core/impl/VirtualGuardImpl.h>

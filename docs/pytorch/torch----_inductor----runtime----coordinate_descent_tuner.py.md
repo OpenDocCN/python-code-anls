@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\runtime\coordinate_descent_tuner.py`
 
-```
+```py
     # 设置 mypy: allow-untyped-defs 以允许未类型化的函数定义
 import copy  # 导入复制模块
 import itertools  # 导入迭代工具模块

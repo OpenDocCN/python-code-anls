@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\registerizer.h`
 
-```
+```py
 #pragma once
 #include <c10/core/ScalarType.h>
 #include <c10/util/irange.h>

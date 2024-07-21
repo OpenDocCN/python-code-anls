@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\KernelFunction_impl.h`
 
-```
+```py
 // 包含 ATen 库中有关 boxing 的头文件
 #include <ATen/core/boxing/impl/boxing.h>
 #include <ATen/core/boxing/impl/make_boxed_from_unboxed_functor.h>

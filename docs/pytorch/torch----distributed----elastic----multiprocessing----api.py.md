@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\api.py`
 
-```
+```py
 # 标识当前操作系统是否为 Windows
 IS_WINDOWS = sys.platform == "win32"
 # 标识当前操作系统是否为 macOS

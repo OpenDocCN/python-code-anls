@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\attention\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """ This module contains functions and classes that alter the behavior of torch.nn.functional.scaled_dot_product_attention """
 # 引入上下文管理器

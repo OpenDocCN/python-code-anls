@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\inductor_bmm.py`
 
-```
+```py
 from benchmark_helper import time_with_torch_timer  # 导入用于计时的辅助函数
 
 import torch  # 导入PyTorch库

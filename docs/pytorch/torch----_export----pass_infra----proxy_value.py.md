@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\pass_infra\proxy_value.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # pyre-strict
 # 引入必要的模块和类型定义

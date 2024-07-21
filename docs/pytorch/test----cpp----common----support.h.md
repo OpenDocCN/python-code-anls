@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\common\support.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Exception.h>  // 包含了异常处理相关的头文件

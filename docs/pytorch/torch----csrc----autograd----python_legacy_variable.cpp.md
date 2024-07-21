@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_legacy_variable.cpp`
 
-```
+```py
   // 引入 Torch 自动求导 Python 变量的头文件
   #include <torch/csrc/autograd/python_legacy_variable.h>
 
@@ -105,7 +105,7 @@
   // ```python
   // var = Variable(torch.randn(2, 3))
   // var.resize_(4, 5)
-  // ```
+  // ```py
   var.unsafeGetTensorImpl()->set_allow_tensor_metadata_change(true);
 
   // 检查是否存在梯度函数 `grad_fn`，不支持在旧的 Variable 构造函数中使用 `_grad_fn`

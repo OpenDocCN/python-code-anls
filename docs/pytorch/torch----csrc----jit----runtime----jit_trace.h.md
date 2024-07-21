@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\jit_trace.h`
 
-```
+```py
 #include <torch/csrc/jit/ir/ir.h>
 // 包含 Torch 的 JIT IR 相关头文件
 

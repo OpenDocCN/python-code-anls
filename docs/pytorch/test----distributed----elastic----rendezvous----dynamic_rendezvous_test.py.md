@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\dynamic_rendezvous_test.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入 copy 模块，用于对象的深拷贝和浅拷贝操作
 import os  # 导入 os 模块，提供与操作系统相关的功能

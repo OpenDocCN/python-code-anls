@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\samplers\stream.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // 导出符号定义

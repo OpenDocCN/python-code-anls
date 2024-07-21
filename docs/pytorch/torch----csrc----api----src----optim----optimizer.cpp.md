@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\optimizer.cpp`
 
-```
+```py
 #include <torch/optim/optimizer.h>  // 包含了 torch 库中优化器的头文件
 
 #include <torch/csrc/autograd/generated/variable_factories.h>  // 包含了 torch 自动求导相关的变量工厂的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入警告模块，用于生成警告信息
 import warnings

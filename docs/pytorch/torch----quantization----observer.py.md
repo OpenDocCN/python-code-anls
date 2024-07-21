@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\observer.py`
 
-```
+```py
 # flake8: noqa: F401
 """
 这个文件正在迁移到 `torch/ao/quantization`，在迁移过程中保留在这里以保持兼容性。

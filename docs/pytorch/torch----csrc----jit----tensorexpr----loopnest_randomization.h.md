@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\loopnest_randomization.h`
 
-```
+```py
 #pragma once
 
 // 指令：`#pragma once`，这是一个预处理指令，用于确保头文件只被编译一次，增加编译效率。

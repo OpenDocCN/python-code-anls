@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UpSampleLinear1d.cpp`
 
-```
+```py
 // Adapted from interp.cpp from Caffe util by Pauline Luc
 // Originally developed by George Papandreou
 

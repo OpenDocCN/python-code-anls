@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\subgraph_rewrite.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 子图重写相关头文件
 #include <torch/csrc/jit/passes/subgraph_rewrite.h>
 

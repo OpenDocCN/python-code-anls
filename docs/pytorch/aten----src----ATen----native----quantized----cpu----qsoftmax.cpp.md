@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qsoftmax.cpp`
 
-```
+```py
 // 包含 PyTorch 的 ATen 头文件和库声明
 #include <ATen/ATen.h>
 #include <torch/library.h>

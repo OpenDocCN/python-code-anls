@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\TCPStoreTest.cpp`
 
-```
+```py
 // 包含所需的头文件：c10/util/irange.h 和 StoreTestCommon.hpp
 #include <c10/util/irange.h>
 #include "StoreTestCommon.hpp"

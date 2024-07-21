@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_custom_lowering.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入单元测试模块

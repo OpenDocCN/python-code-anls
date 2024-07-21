@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\detail\CUDAHooks.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once确保此头文件仅被编译一次
 

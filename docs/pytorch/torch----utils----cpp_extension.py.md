@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\cpp_extension.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块
 import copy  # 导入copy模块，用于复制对象
@@ -1201,7 +1201,7 @@ def load_inline(name,
 
     有关省略的参数的描述，请参见 :func:`load`。
 
-    ```
+    ```py
     '''
     Args:
         cpp_sources: A string, or list of strings, containing C++ source code.

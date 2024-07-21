@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\flake8_linter.py`
 
-```
+```py
 # 从 __future__ 模块中导入 annotations 功能，使得类型提示中的字符串支持 | 运算符
 from __future__ import annotations
 

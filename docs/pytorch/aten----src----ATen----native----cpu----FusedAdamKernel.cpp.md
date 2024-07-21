@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\FusedAdamKernel.cpp`
 
-```
+```py
 // 定义宏，仅允许使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

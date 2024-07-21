@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\CachingHostAllocator.cpp`
 
-```
+```py
 namespace at::xpu {
 namespace {
 

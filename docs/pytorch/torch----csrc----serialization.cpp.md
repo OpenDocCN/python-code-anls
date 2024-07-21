@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\serialization.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 头文件
 #include <torch/csrc/python_headers.h>
 // 包含系统错误处理头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/ivalue.h>  // 引入 ATen 库中的 IValue 类

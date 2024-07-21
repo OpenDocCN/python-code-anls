@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\__init__.py`
 
-```
+```py
 # 导入sys模块，用于访问与Python解释器相关的功能
 import sys
 

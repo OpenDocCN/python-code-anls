@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\pooling.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件只被编译一次
 
@@ -78,7 +78,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::avg_pool1d(x, F::AvgPool1dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 // 示例代码，展示如何使用 `avg_pool1d` 函数
 
 using AvgPool1dFuncOptions = AvgPool1dOptions;
@@ -98,7 +98,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::avg_pool2d(x, F::AvgPool2dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 // 示例代码，展示如何使用 `avg_pool2d` 函数
 
 using AvgPool2dFuncOptions = AvgPool2dOptions;
@@ -118,7 +118,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::avg_pool3d(x, F::AvgPool3dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 // 示例代码，展示如何使用 `avg_pool3d` 函数
 
 using AvgPool3dFuncOptions = AvgPool3dOptions;
@@ -146,7 +146,7 @@ struct AdaptiveMaxPoolOptions {
 /// Example:
 /// ```
 /// AdaptiveMaxPool1d model(AdaptiveMaxPool1dOptions(3));
-/// ```
+/// ```py
 using AdaptiveMaxPool1dOptions = AdaptiveMaxPoolOptions<ExpandingArray<1>>;
 
 /// `AdaptiveMaxPoolOptions` specialized for the `AdaptiveMaxPool2d` module.
@@ -154,7 +154,7 @@ using AdaptiveMaxPool1dOptions = AdaptiveMaxPoolOptions<ExpandingArray<1>>;
 /// Example:
 /// ```
 /// AdaptiveMaxPool2d model(AdaptiveMaxPool2dOptions({3, 2}));
-/// ```
+/// ```py
 using AdaptiveMaxPool2dOptions = AdaptiveMaxPoolOptions<ExpandingArray<2>>;
 /// Options for `torch::nn::functional::adaptive_avg_pool1d`.
 ///
@@ -165,7 +165,7 @@ using AdaptiveMaxPool2dOptions = AdaptiveMaxPoolOptions<ExpandingArray<2>>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_avg_pool1d(x, F::AdaptiveAvgPool1dFuncOptions(3));
-/// ```
+/// ```py
 using AdaptiveAvgPool1dFuncOptions = AdaptiveAvgPool1dOptions;
 /// Options for a `D`-dimensional maxunpool functional.
 template <size_t D>
@@ -189,7 +189,7 @@ struct MaxUnpoolOptions {
 /// Example:
 /// ```
 /// MaxUnpool1d model(MaxUnpool1dOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 using MaxUnpool1dOptions = MaxUnpoolOptions<1>;
 
 /// `MaxUnpoolOptions` specialized for the `MaxUnpool2d` module.
@@ -197,7 +197,7 @@ using MaxUnpool1dOptions = MaxUnpoolOptions<1>;
 /// Example:
 /// ```
 /// MaxUnpool2d model(MaxUnpool2dOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 using MaxUnpool2dOptions = MaxUnpoolOptions<2>;
 
 /// `MaxUnpoolOptions` specialized for the `MaxUnpool3d` module.
@@ -205,7 +205,7 @@ using MaxUnpool2dOptions = MaxUnpoolOptions<2>;
 /// Example:
 /// ```
 /// MaxUnpool3d model(MaxUnpool3dOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 using MaxUnpool3dOptions = MaxUnpoolOptions<3>;
 /// Options for configuring the behavior of the `MaxUnpoolFuncOptions` structure.
 struct MaxUnpoolFuncOptions {
@@ -232,7 +232,7 @@ struct MaxUnpoolFuncOptions {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_unpool1d(x, indices, F::MaxUnpool1dFuncOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 using MaxUnpool1dFuncOptions = MaxUnpoolFuncOptions<1>;
 
 /// Specialization of `MaxUnpoolFuncOptions` for `torch::nn::functional::max_unpool2d`.
@@ -241,7 +241,7 @@ using MaxUnpool1dFuncOptions = MaxUnpoolFuncOptions<1>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_unpool2d(x, indices, F::MaxUnpool2dFuncOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 using MaxUnpool2dFuncOptions = MaxUnpoolFuncOptions<2>;
 
 /// Specialization of `MaxUnpoolFuncOptions` for `torch::nn::functional::max_unpool3d`.
@@ -250,7 +250,7 @@ using MaxUnpool2dFuncOptions = MaxUnpoolFuncOptions<2>;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_unpool3d(x, indices, F::MaxUnpool3dFuncOptions(3));
-/// ```
+/// ```py
 using MaxUnpool3dFuncOptions = MaxUnpoolFuncOptions<3>;
 
 } // namespace functional
@@ -284,7 +284,7 @@ struct FractionalMaxPoolOptions {
 /// Example:
 /// ```
 /// FractionalMaxPool2d model(FractionalMaxPool2dOptions(5).output_size(1));
-/// ```
+/// ```py
 using FractionalMaxPool2dOptions = FractionalMaxPoolOptions<2>;
 
 /// Specialization of `FractionalMaxPoolOptions` for the `FractionalMaxPool3d` module.
@@ -292,7 +292,7 @@ using FractionalMaxPool2dOptions = FractionalMaxPoolOptions<2>;
 /// Example:
 /// ```
 /// FractionalMaxPool3d model(FractionalMaxPool3dOptions(5).output_size(1));
-/// ```
+/// ```py
 using FractionalMaxPool3dOptions = FractionalMaxPoolOptions<3>;
 
 namespace functional {
@@ -304,7 +304,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::fractional_max_pool2d(x,
 /// F::FractionalMaxPool2dFuncOptions(3).output_size(2));
-/// ```
+/// ```py
 using FractionalMaxPool2dFuncOptions = FractionalMaxPool2dOptions;
 } // namespace functional
 
@@ -317,7 +317,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::fractional_max_pool3d(x,
 /// F::FractionalMaxPool3dFuncOptions(3).output_size(2));
-/// ```
+/// ```py
 using FractionalMaxPool3dFuncOptions = FractionalMaxPool3dOptions;
 } // namespace functional
 
@@ -348,7 +348,7 @@ struct LPPoolOptions {
 /// Example:
 /// ```
 /// LPPool1d model(LPPool1dOptions(1, 2).stride(5).ceil_mode(true));
-/// ```
+/// ```py
 using LPPool1dOptions = LPPoolOptions<1>;
 
 /// `LPPoolOptions` specialized for the `LPPool2d` module.
@@ -357,7 +357,7 @@ using LPPool1dOptions = LPPoolOptions<1>;
 /// ```
 /// LPPool2d model(LPPool2dOptions(1, std::vector<int64_t>({3, 4})).stride({5,
 /// 6}).ceil_mode(true));
-/// ```
+/// ```py
 using LPPool2dOptions = LPPoolOptions<2>;
 
 /// `LPPoolOptions` specialized for the `LPPool3d` module.
@@ -366,7 +366,7 @@ using LPPool2dOptions = LPPoolOptions<2>;
 /// ```
 /// LPPool3d model(LPPool3dOptions(1, std::vector<int64_t>({3, 4, 5})).stride(
 /// {5, 6, 7}).ceil_mode(true));
-/// ```
+/// ```py
 using LPPool3dOptions = LPPoolOptions<3>;
 
 namespace functional {
@@ -379,7 +379,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::lp_pool1d(x, F::LPPool1dFuncOptions(2, 3).stride(2));
-/// ```
+/// ```py
 using LPPool1dFuncOptions = LPPool1dOptions;
 } // namespace functional
 
@@ -393,7 +393,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::lp_pool2d(x, F::LPPool2dFuncOptions(2, {2, 3}).stride(2));
-/// ```
+/// ```py
 using LPPool2dFuncOptions = LPPool2dOptions;
 } // namespace functional
 
@@ -407,7 +407,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::lp_pool3d(x, F::LPPool3dFuncOptions(2, {2, 3, 4}).stride(2));
-/// ```
+/// ```py
 using LPPool3dFuncOptions = LPPool3dOptions;
 } // namespace functional
 /// 导入 torch 库中的 nn 命名空间
@@ -420,7 +420,7 @@ namespace nn {
         /// ```
         /// namespace F = torch::nn::functional;
         /// F::lp_pool3d(x, F::LPPool3dFuncOptions(2, {2, 3, 4}).stride(2));
-        /// ```
+        /// ```py
         using LPPool3dFuncOptions = LPPool3dOptions;
     } // namespace functional
 } // namespace nn

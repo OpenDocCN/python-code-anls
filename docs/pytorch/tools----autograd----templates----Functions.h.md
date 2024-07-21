@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\Functions.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}  // 插入由代码生成工具生成的注释，通常包含有关生成代码的信息

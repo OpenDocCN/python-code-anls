@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\init.cpp`
 
-```
+```py
 #include <torch/csrc/python_headers.h>
 // 包含 Torch C++ API 的 Python 头文件
 

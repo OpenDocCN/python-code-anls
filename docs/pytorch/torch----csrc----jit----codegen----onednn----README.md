@@ -34,7 +34,7 @@ Inside the oneDNN graph JIT Op, input PyTorch tensors of each partition will be 
 
 ## Tests
 
-```bash
+```py
 pytest test/test_jit_llga_fuser.py
 ```
 
@@ -47,7 +47,7 @@ A simple cascaded Conv-Relu example is provided in test. Please consider enablin
 oneDNN Graph was formerly known as LLGA (Low Level Graph API),
 and thus LLGA in the codebase corresponds to oneDNN Graph.
 
-```bash
+```py
 DNNL_VERBOSE=1 PYTORCH_JIT_LOG_LEVEL=">>graph_helper:>>graph_fuser:>>kernel:>>interface" python -u test/test_jit_llga_fuser.py -k test_conv2d_eltwise
 ```
 
@@ -55,26 +55,26 @@ DNNL_VERBOSE=1 PYTORCH_JIT_LOG_LEVEL=">>graph_helper:>>graph_fuser:>>kernel:>>in
 
 Most of the source code is placed in
 
-```bash
+```py
 torch/csrc/jit/codegen/onednn/*
 ```
 
 Tensor related code is located at
 
-```bash
+```py
 torch/csrc/jit/codegen/onednn/LlgaTensorImpl.h
 torch/csrc/jit/codegen/onednn/LlgaTensorImpl.cpp
 ```
 
 CMake files where bridge code is included:
 
-```bash
+```py
 caffe2/CMakeLists.txt
 ```
 
 CMake files where oneDNN Graph submodule are included:
 
-```bash
+```py
 third_party/ideep/mkl-dnn
 cmake/public/mkldnn.cmake
 cmake/Modules/FindMKLDNN.cmake
@@ -88,7 +88,7 @@ torch/csrc/jit/codegen/onednn/interface.cpp. You might also want to add it to ca
 ## Example with Float
 
 
-```python
+```py
 # enable oneDNN graph fusion globally
 torch.jit.enable_onednn_fusion(True)
 
@@ -110,7 +110,7 @@ with torch.no_grad():
 
 ## Example with BFloat16
 
-```python
+```py
 # Assuming we have a model of the name 'model'
 
 example_input = torch.rand(1, 3, 224, 224)

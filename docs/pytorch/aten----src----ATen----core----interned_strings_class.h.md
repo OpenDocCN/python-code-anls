@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\interned_strings_class.h`
 
-```
+```py
 # 包含标准库头文件：互斥锁、字符串、无序映射、向量
 #include <mutex>
 #include <string>

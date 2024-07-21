@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\object.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/functional.h>  // 引入 ATen 核心功能库的函数定义

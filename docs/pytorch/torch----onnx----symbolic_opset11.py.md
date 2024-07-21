@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset11.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """This file exports ONNX ops for opset 11."""
 from __future__ import annotations

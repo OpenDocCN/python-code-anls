@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\decomposition_table.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Dispatcher for AtenLib functions from onnx-script."""
 

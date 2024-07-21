@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\TensorShape.cpp`
 
-```
+```py
 /* 定义宏，用于仅声明方法操作符 */
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 /* 包含张量核心头文件 */

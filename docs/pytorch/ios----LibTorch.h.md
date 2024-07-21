@@ -1,6 +1,6 @@
 # `.\pytorch\ios\LibTorch.h`
 
-```
+```py
 #ifndef LibTorch_h
 #define LibTorch_h
 

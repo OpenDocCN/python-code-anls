@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\serialization\simple_measurement.py`
 
-```
+```py
 # 导入必要的模块
 from pyarkbench import Benchmark, default_args, Timer
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\qint8.h`
 
-```
+```py
 #pragma once
 #include <cstdint> // 包含 C++ 标准库中的cstdint，定义了标准整数类型
 #include <c10/macros/Macros.h> // 包含 c10 库中的宏定义

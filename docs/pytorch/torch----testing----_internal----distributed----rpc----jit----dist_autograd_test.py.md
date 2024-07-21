@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\jit\dist_autograd_test.py`
 
-```
+```py
 # 忽略类型检查错误，由于特定的代码约束或限制，忽略类型检查有时是必要的
 # 导入需要的模块和类
 from typing import Dict, Tuple  # 导入类型提示相关的模块

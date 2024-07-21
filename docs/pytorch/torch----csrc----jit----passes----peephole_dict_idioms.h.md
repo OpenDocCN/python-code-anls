@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_dict_idioms.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令：指示编译器只包含本文件一次，避免多重包含问题

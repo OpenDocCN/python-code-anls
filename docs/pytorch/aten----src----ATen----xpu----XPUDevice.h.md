@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\XPUDevice.h`
 
-```
+```py
 #pragma once
 
 # 声明代码只被编译一次，避免重复包含头文件

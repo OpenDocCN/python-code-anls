@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\logging_utils.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入需要的模块

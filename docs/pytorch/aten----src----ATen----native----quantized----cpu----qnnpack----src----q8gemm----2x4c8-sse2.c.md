@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gemm\2x4c8-sse2.c`
 
-```
+```py
 /*
  * 版权所有（c）Facebook公司及其关联公司。
  * 保留所有权利。

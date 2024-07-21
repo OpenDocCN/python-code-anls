@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ParamCommsUtils.cpp`
 
-```
+```py
 // 包含 Torch 的分布式通信库参数通信工具的头文件
 #include <torch/csrc/distributed/c10d/ParamCommsUtils.hpp>
 

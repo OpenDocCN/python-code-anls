@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Generator.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件，用于生成器（Generator）和张量（Tensor）的操作
 #include <ATen/core/Generator.h>
 #include <ATen/core/Tensor.h>

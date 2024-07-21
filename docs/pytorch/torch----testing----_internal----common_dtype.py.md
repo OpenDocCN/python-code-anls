@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_dtype.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 引入 List 类型用于类型提示

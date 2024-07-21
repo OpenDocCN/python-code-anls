@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\log_normal.py`
 
-```
+```py
 # 引入需要的模块和类
 # mypy: allow-untyped-defs
 from torch.distributions import constraints  # 导入约束模块

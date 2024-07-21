@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\memory_dag.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/jit_type.h>

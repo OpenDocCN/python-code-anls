@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\inline_fork_wait.cpp`
 
-```
+```py
 // 包含 Torch 中的 JIT 模块头文件
 #include <torch/csrc/jit/jit_log.h>
 #include <torch/csrc/jit/passes/inline_fork_wait.h>

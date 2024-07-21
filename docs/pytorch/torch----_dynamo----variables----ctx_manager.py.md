@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\ctx_manager.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入必要的模块和类
 import dataclasses  # 导入dataclasses模块，用于支持数据类

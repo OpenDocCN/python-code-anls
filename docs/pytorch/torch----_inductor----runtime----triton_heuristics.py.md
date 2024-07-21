@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\runtime\triton_heuristics.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 Python 内置模块和第三方库
 import builtins  # 内置模块

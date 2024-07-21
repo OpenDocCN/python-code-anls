@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Unicode.cpp`
 
-```
+```py
 // 包含 C10 库中的 Unicode 头文件
 #include <c10/util/Unicode.h>
 

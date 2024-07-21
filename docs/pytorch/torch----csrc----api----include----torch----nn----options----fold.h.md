@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\fold.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 引入 Torch 库中的参数处理模块
@@ -17,7 +17,7 @@ namespace nn {
 /// ```
 /// Fold model(FoldOptions({8, 8}, {3, 3}).dilation(2).padding({2,
 /// 1}).stride(2));
-/// ```
+/// ```py
 struct TORCH_API FoldOptions {
   FoldOptions(ExpandingArray<2> output_size, ExpandingArray<2> kernel_size)
       : output_size_(std::move(output_size)),
@@ -53,7 +53,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::fold(input, F::FoldFuncOptions({3, 2}, {2, 2}));
-/// ```
+/// ```py
 using FoldFuncOptions = FoldOptions;  // 使用 FoldOptions 作为 fold 函数的参数选项
 } // namespace functional
 
@@ -64,7 +64,7 @@ using FoldFuncOptions = FoldOptions;  // 使用 FoldOptions 作为 fold 函数�
 /// Example:
 /// ```
 /// Unfold model(UnfoldOptions({2, 4}).dilation(2).padding({2, 1}).stride(2));
-/// ```
+/// ```py
 struct TORCH_API UnfoldOptions {
   UnfoldOptions(ExpandingArray<2> kernel_size)
       : kernel_size_(std::move(kernel_size)) {}
@@ -94,7 +94,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::unfold(input, F::UnfoldFuncOptions({2, 2}).padding(1).stride(2));
-/// ```
+/// ```py
 using UnfoldFuncOptions = UnfoldOptions;  // 使用 UnfoldOptions 作为 unfold 函数的参数选项
 } // namespace functional
 

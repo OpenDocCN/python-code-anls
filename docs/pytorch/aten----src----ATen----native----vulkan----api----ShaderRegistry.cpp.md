@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\ShaderRegistry.cpp`
 
-```
+```py
 namespace at {
 namespace native {
 namespace vulkan {

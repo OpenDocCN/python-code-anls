@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\object.cpp`
 
-```
+```py
 // 引入 Torch JIT 模块中的必要头文件
 
 #include <torch/csrc/jit/api/object.h>

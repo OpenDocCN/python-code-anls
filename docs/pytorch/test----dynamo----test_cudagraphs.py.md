@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_cudagraphs.py`
 
-```
+```py
 # Owner(s): ["module: cuda graphs"]
 
 import functools  # 导入 functools 模块，用于函数装饰器

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\case.py`
 
-```
+```py
 # 设置 mypy 参数，允许未类型化的函数定义
 # 导入 inspect 模块，用于检查对象
 import inspect

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_flatten_params.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 指定该文件的所有者是分布式团队负责
 import sys  # 导入系统模块
 

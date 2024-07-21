@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\op_allowlist_test.cpp`
 
-```
+```py
 namespace allowlist_contains_test {
   // 静态断言，检查 allowlist_contains 函数对空字符串的处理
   static_assert(c10::impl::allowlist_contains("", ""), "");

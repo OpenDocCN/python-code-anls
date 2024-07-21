@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\const_fold.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入正则表达式模块和类型提示模块
 import re

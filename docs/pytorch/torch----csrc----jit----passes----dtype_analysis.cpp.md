@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\dtype_analysis.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件：函数 schema、JIT 类型、符号
 #include <ATen/core/function_schema.h>
 #include <ATen/core/jit_type.h>

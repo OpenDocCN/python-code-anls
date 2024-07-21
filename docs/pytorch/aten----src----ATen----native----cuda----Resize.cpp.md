@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Resize.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/cuda/Resize.h>
 #include <ATen/core/Tensor.h>

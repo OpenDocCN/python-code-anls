@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_control_collectives.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入所需模块和类

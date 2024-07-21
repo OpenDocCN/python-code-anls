@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDABlas.cpp`
 
-```
+```py
 /*
   Provides the implementations of CUDA BLAS function templates.
  */

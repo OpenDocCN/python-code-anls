@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\quantization_patterns.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>  // 包含用于迭代范围的头文件

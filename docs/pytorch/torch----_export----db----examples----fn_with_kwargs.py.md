@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\fn_with_kwargs.py`
 
-```
+```py
 # 引入torch模块，这是PyTorch深度学习框架的核心模块
 import torch
 

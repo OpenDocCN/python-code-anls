@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_scatter_gather_ops.py`
 
-```
+```py
 # Owner(s): ["module: scatter & gather ops"]
 
 # 引入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\kernel.cpp`
 
-```
+```py
 // 包含 Torch 和 OneDNN 之间的头文件
 #include <torch/csrc/jit/codegen/onednn/graph_helper.h>
 #include <torch/csrc/jit/codegen/onednn/kernel.h>

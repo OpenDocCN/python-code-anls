@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\Activation.cpp`
 
-```
+```py
 // 定义编译选项，禁用 Torch 的操作符断言
 #define TORCH_ASSERT_NO_OPERATORS
 // 如果未定义 _USE_MATH_DEFINES 宏，则定义该宏

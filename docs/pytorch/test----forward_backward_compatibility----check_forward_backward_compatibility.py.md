@@ -1,6 +1,6 @@
 # `.\pytorch\test\forward_backward_compatibility\check_forward_backward_compatibility.py`
 
-```
+```py
 import argparse
 import datetime
 import re

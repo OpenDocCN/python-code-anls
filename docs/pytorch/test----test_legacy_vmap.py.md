@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_legacy_vmap.py`
 
-```
+```py
 # Owner(s): ["module: vmap"]
 
 # 导入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\tensorpipe_agent.cpp`
 
-```
+```py
 // 包含TensorPipe代理的头文件
 #include <torch/csrc/distributed/rpc/tensorpipe_agent.h>
 

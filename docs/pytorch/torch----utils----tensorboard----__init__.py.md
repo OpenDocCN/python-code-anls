@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\__init__.py`
 
-```
+```py
 # 导入 `tensorboard` 模块，用于与 TensorBoard 相关的功能
 import tensorboard
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_remote_call.h`
 
-```
+```py
 #pragma once
 
 // 包含必要的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_misc.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 # 导入必要的模块和函数
 import inspect  # 提供了从源代码中检索类和函数声明的功能

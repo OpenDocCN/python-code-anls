@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ConvolutionMM3d.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的头文件
 #include <ATen/core/Tensor.h>

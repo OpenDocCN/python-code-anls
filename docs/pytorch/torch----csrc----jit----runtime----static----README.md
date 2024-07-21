@@ -30,13 +30,13 @@ Static runtime supports two execution modes.
 
 Mode 1: single-threaded with no parallelism except for intra-op parallelism.
 For this mode, you can do either:
-```
+```py
   // m is the TorchScript module
   auto runtime = StaticRuntime(m, opts);
   auto output = runtime.run(args, kwargs);
 ```
 or
-```
+```py
   auto mod = PrepareForStaticRuntime(m);
   auto runtime = StaticRuntime(mod, opts);
   auto output = runtime.run(args, kwargs);
@@ -48,7 +48,7 @@ should have one InferenceModule instance per model, and one Static Runtime insta
 per running thread. To avoiding creating StaticRuntime on the fly, use a
 synchronized stack (i.e. `boost::lockfree::stack`) to cache all the Static
 Runtime instances in your code.
-```
+```py
   // initialization
   auto mod = PrepareForStaticRuntime(m);
   // 128 is good for most cases. Pick a number that works for you
@@ -114,7 +114,7 @@ Static runtime has three op execution modes:
 
 1) Out variants: ops that return tensors which we may be able to manage. See "Memory Planning" for more
 details. Out variants are registered via the `REGISTER_OPERATOR_FUNCTOR` macro in `ops.h`.
-```
+```py
 REGISTER_OPERATOR_FUNCTOR(
   aten::op_name,
   aten_op_name, // This macro generates a struct, this field names it
@@ -155,7 +155,7 @@ The following diagram shows the core data structure. An arrow from `A` to `B` me
 `A` stores a reference to `B`. If the reference is unowned,
 `A` may not out live `B` or anything that `B` stores a reference to (directly or indirectly).
 If the reference is owned, the lifetimes of `A` and `B` are the same.
-```
+```py
 
                          IValue array◄────────────────┐─────────────────────────────────────────┐
                               ▲                       │               Owns                      │       Owns

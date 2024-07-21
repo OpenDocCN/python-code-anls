@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_bundled_inputs.py`
 
-```
+```py
 # 指定脚本解释器为 Python 3
 #!/usr/bin/env python3
 # 指定所有者为移动端的责任人

@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_backend\test_custom_backend.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入所需的库和模块

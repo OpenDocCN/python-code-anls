@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_flatten.cpp`
 
-```
+```py
 #include <torch/csrc/utils/tensor_flatten.h>  // 包含 Torch 库中用于张量操作的头文件
 
 #include <map>  // 包含标准库中的 map 容器头文件

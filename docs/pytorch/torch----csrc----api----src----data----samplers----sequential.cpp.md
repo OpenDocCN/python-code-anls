@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\data\samplers\sequential.cpp`
 
-```
+```py
 // 包含 Torch 库中的必要头文件
 #include <torch/data/samplers/sequential.h>
 #include <torch/serialize/archive.h>

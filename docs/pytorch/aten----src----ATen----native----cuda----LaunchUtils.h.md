@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\LaunchUtils.h`
 
-```
+```py
 // 声明宏，确保头文件仅被编译一次
 #pragma once
 

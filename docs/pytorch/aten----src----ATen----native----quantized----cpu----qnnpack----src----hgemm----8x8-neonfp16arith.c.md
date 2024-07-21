@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\hgemm\8x8-neonfp16arith.c`
 
-```
+```py
 /*
  * 导入 ARM NEON 头文件，以便使用 NEON 指令集优化加速计算
  */

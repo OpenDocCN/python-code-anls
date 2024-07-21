@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\cpp\backend.cpp`
 
-```
+```py
 // 包含 Torch 的后端接口和脚本支持
 #include <torch/csrc/jit/backends/backend.h>
 #include <torch/script.h>

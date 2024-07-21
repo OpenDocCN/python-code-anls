@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\_onnx_graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类和函数
 from tensorboard.compat.proto.graph_pb2 import GraphDef  # 导入 GraphDef 类

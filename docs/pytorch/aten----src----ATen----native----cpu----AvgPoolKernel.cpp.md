@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\AvgPoolKernel.cpp`
 
-```
+```py
 // 定义宏，用于只包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

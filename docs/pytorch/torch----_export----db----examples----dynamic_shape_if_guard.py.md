@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dynamic_shape_if_guard.py`
 
-```
+```py
 # 导入torch库，用于深度学习模型和张量操作
 import torch
 

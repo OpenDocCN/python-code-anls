@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\Interpreter.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/functorch/Macros.h>  // 引入 functorch 宏定义

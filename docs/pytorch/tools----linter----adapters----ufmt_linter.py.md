@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\ufmt_linter.py`
 
-```
+```py
 # 从未来导入类型提示注解
 from __future__ import annotations
 

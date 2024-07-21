@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lobpcg.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Locally Optimal Block Preconditioned Conjugate Gradient methods.
 """

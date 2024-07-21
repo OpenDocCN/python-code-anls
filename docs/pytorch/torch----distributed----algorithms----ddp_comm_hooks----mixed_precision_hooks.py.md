@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\mixed_precision_hooks.py`
 
-```
+```py
 from dataclasses import dataclass
 from typing import Any, no_type_check
 

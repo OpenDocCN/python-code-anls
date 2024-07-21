@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_dce.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/csrc/jit/ir/irparser.h>  // 引入 Torch JIT IR 解析器的头文件

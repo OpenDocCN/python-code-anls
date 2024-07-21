@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qcomparators_test.py`
 
-```
+```py
 # 导入 operator_benchmark 模块，用于性能基准测试
 # 导入 torch 模块，用于深度学习框架中的张量操作
 import operator_benchmark as op_bench

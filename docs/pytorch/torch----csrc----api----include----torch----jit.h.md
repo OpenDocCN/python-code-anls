@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\jit.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // Torch导出宏定义

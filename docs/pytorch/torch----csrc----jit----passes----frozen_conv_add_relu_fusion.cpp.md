@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_conv_add_relu_fusion.cpp`
 
-```
+```py
 // 包含 ATen 库的工具函数
 #include <ATen/Utils.h>
 

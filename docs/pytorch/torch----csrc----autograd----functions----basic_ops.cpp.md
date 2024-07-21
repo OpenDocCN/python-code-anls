@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\basic_ops.cpp`
 
-```
+```py
 #include <torch/csrc/autograd/functions/basic_ops.h>
 
 #include <torch/csrc/autograd/function.h>

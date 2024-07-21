@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\reveal\tensor_constructors.py`
 
-```
+```py
 # 引入 torch 库，用于张量操作
 # mypy: disable-error-code="possibly-undefined"
 # flake8: noqa

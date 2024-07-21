@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\import_test_stats.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 from __future__ import annotations

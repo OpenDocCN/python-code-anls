@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DeviceType.h`
 
-```
+```py
 #pragma once
 
 // 这段代码与 caffe2/proto/caffe2.proto 直接同步，但不需要将 Protobuf 头文件引入 ATen/core，

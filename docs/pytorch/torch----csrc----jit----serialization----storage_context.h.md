@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\storage_context.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件仅被包含一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\agent\server\test\local_elastic_agent_test.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: r2p"]
 

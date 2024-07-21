@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\dataloader.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/dataloader/stateful.h>

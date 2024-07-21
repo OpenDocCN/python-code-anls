@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\x86.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 导入内部的配置工具模块

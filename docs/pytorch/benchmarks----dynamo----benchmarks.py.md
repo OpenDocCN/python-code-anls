@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\benchmarks.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入必要的模块
 import argparse  # 用于解析命令行参数的模块
@@ -69,7 +69,7 @@ def parse_args(args=None):
 
             def get_example_inputs(self):
                 return (torch.randn(2, 10),)
-        ```
+        ```py
     """,
     )
     return parser.parse_known_args(args)  # 解析命令行参数并返回

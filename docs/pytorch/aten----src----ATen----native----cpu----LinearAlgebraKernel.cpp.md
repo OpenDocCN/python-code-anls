@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\LinearAlgebraKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/LinearAlgebra.h>
 #include <ATen/core/Tensor.h>

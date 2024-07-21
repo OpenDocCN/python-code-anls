@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\byte_order.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/BFloat16.h>  // 包含BFloat16类型的头文件

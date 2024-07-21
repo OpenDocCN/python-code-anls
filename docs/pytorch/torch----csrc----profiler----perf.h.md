@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\perf.h`
 
-```
+```py
 /*
  * Maximum number of events supported
  * This stems from the hardware limitation on CPU performance counters, and the

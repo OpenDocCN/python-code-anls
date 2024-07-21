@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\sparse\dlmc\utils.py`
 
-```
+```py
 import math  # 导入数学库
 from pathlib import Path  # 导入路径操作模块
 

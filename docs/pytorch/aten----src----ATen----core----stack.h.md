@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\stack.h`
 
-```
+```py
 #pragma once
 // 预处理指令：#pragma once 确保头文件只被包含一次，避免重复定义
 

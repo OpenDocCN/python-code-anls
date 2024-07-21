@@ -14,7 +14,7 @@ A simple example is the add function.
 
 Essentially, the high level idea of computing the mask is
 
-```
+```py
 >>> aggregated_tensor = aggregate_fn([activation for activation in all_activations])
 >>> reduced_tensor = reduce_fn(aggregated_tensor)
 >>> mask = mask_fn(reduced_tensor)
@@ -22,7 +22,7 @@ Essentially, the high level idea of computing the mask is
 
 *The activation sparsifier also supports per-feature/channel sparsity. This means that a desired set of features in an activation can be also pruned. The mask will be stored per feature.*
 
-```
+```py
 >>> # when features = None, mask is a tensor computed on the entire activation tensor
 >>> # otherwise, mask is a list of tensors of length = len(features), computed on each feature of activations
 >>>
@@ -38,21 +38,21 @@ The activation sparsifier attaches itself to a set of layers in a model and then
 Let's go over the 3 steps again -
 1. **Aggregation**: The activation of aggregation happens by attaching a hook to the layer that specifically applies and stores the aggregated data. The aggregation happens per feature, if the features are specified, otherwise it happens on the entire tensor.
 The `aggregate_fn` should accept two input tensors and return an aggregated tensor. Example:
-```
+```py
 def aggregate_fn(tensor1, tensor2):
     return tensor1 + tensor2
 ```
 
 2. **Reduce**: This is initiated once the `step()` is called. The `reduce_fn()` is called on the aggregated tensor. The goal is to squash the aggregated tensor.
 The `reduce_fn` should accept one tensor as argument and return a reduced tensor. Example:
-```
+```py
 def reduce_fn(agg_tensor):
     return agg_tensor.mean(dim=0)
 ```
 
 3. **Masking**: The computation of the mask happens immediately after the reduce operation. The `mask_fn()` is applied on the reduced tensor. Again, this happens per-feature, if the features are specified.
 The `mask_fn` should accept a tensor (reduced) and sparse config as arguments and return a mask (computed using tensor according to the config). Example:
-```
+```py
 def mask_fn(tensor, threshold):  # threshold is the sparse config here
     mask = torch.ones_like(tensor)
     mask[torch.abs(tensor) < threshold] = 0.0
@@ -70,7 +70,7 @@ def mask_fn(tensor, threshold):  # threshold is the sparse config here
 
 ## Example
 
-```
+```py
 # Fetch model
 model = SomeModel()
 

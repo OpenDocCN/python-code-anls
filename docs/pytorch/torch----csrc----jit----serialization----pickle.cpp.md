@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\pickle.cpp`
 
-```
+```py
 // 包含 Torch 序列化和反序列化相关的头文件
 
 #include <torch/csrc/jit/serialization/pickle.h>

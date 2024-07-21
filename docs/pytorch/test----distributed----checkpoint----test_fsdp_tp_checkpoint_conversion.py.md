@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_fsdp_tp_checkpoint_conversion.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入PyTorch库和分布式检查点模块
 import torch

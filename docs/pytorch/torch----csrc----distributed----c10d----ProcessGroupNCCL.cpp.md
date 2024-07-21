@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupNCCL.cpp`
 
-```
+```py
 #ifdef USE_C10D_NCCL
 // 如果定义了 USE_C10D_NCCL 宏，则编译以下代码块
 
@@ -119,7 +119,7 @@ ncclRedOpRAII unpackPreMulSum(
 
   const auto* preMulSupplement =
       reinterpret_cast<NCCLPreMulSumSupplement*>(reduceOp.supplement_.get());
-```  
+```py  
 将 `reduceOp.supplement_.get()` 返回的指针强制转换为 `NCCLPreMulSumSupplement*` 类型，存储在 `preMulSupplement` 中。
 
 
@@ -129,7 +129,7 @@ ncclRedOpRAII unpackPreMulSum(
 
 
   bool has_tensor = preMulSupplement->tensor_factor.defined();
-```  
+```py  
 检查 `preMulSupplement` 的 `tensor_factor` 是否已定义，结果存储在 `has_tensor` 中。
 
 
@@ -141,7 +141,7 @@ ncclRedOpRAII unpackPreMulSum(
   const T* ptr_factor = has_tensor
       ? preMulSupplement->tensor_factor.const_data_ptr<T>()
       : nullptr;
-```  
+```py  
 根据 `has_tensor` 的值，如果为真，则将 `preMulSupplement->tensor_factor` 的 `const_data_ptr<T>()` 赋给 `ptr_factor`，否则将 `nullptr` 赋给 `ptr_factor`。
 
 
@@ -158,7 +158,7 @@ ncclRedOpRAII unpackPreMulSum(
       dataType,
       residence,
       comm);
-```  
+```py  
 调用 `ncclRedOpCreatePreMulSum` 函数，创建 `preMulSum` 对象，传递给定的参数：指向 `preMulSum` 的指针、标量值（根据 `has_tensor` 的值决定是 `ptr_factor` 或 `scalar_factor`）、数据类型 `dataType`、`residence` 和 `comm`。
 
 

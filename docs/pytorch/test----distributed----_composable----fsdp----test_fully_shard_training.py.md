@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_training.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import contextlib  # 导入上下文管理器模块

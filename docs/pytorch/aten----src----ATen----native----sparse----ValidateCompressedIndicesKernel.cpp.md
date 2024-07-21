@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\ValidateCompressedIndicesKernel.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件，用于稀疏张量压缩索引的验证通用函数
 #include <ATen/native/sparse/ValidateCompressedIndicesCommon.h>
 // 包含 ATen 库中的 CPU 循环操作的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\div_rtn.h`
 
-```
+```py
 #pragma once
 // 声明一个只允许头文件被包含一次的预处理指令
 

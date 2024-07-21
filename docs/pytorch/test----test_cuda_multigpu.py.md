@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cuda_multigpu.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 
 # 导入标准库和第三方库

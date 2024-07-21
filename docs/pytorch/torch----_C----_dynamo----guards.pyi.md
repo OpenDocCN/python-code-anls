@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_dynamo\guards.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类型声明
 from typing import Any

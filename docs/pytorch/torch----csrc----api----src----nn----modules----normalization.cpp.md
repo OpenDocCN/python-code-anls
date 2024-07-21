@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\normalization.cpp`
 
-```
+```py
 // 包含 Torch 库中的归一化模块头文件
 #include <torch/nn/modules/normalization.h>
 

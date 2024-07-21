@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\monitor\python_init.cpp`
 
-```
+```py
 // 引入 C++ 标准库中的实用工具
 #include <utility>
 

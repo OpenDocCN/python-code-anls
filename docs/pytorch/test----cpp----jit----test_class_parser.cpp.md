@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_class_parser.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <torch/csrc/jit/frontend/parser.h>

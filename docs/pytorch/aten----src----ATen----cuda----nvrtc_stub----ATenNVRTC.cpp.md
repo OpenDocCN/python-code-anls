@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\nvrtc_stub\ATenNVRTC.cpp`
 
-```
+```py
 #include <ATen/cuda/nvrtc_stub/ATenNVRTC.h>  // 包含 ATenNVRTC 头文件，提供了与 CUDA 相关的 NVRTC 接口
 #include <iostream>  // 包含标准输入输出流的头文件，用于输出信息到控制台
 

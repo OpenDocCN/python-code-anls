@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\immutable_collections.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型定义
 from typing import Any, Dict, Iterable, List, Tuple

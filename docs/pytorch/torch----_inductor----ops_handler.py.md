@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\ops_handler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入模块 itertools，用于迭代操作
 import itertools

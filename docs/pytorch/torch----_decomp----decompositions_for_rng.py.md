@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_decomp\decompositions_for_rng.py`
 
-```
+```py
 # 设置类型检查允许未标记的函数定义
 # 导入 functools 库，用于高阶函数
 # 从 collections 库导入 defaultdict，创建默认字典

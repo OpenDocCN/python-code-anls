@@ -1,6 +1,6 @@
 # `.\pytorch\test\profiler\test_cpp_thread.py`
 
-```
+```py
 # Owner(s): ["oncall: profiler"]
 
 # 引入必要的标准库和第三方库

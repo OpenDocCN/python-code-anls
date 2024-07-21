@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\source.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型声明
 import collections

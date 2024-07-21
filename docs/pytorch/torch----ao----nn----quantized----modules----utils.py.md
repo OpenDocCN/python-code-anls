@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\utils.py`
 
-```
+```py
 # 导入必要的模块和函数
 import abc  # 导入抽象基类模块
 import torch  # 导入PyTorch库

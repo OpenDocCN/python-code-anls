@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256_convert.h`
 
-```
+```py
 #pragma once
 // 在预处理阶段指定此头文件只包含一次
 

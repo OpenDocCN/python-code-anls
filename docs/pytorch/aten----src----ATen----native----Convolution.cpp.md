@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Convolution.cpp`
 
-```
+```py
 // 定义宏，用于在 Torch 中仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\FunctionalTensorWrapper.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件，用于实现 FunctionalTensorWrapper 类
 #include <ATen/FunctionalTensorWrapper.h>
 

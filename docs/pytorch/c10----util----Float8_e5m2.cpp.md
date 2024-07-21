@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Float8_e5m2.cpp`
 
-```
+```py
 #include <c10/util/Float8_e5m2.h>  // 包含 Float8_e5m2 类的头文件
 
 namespace c10 {

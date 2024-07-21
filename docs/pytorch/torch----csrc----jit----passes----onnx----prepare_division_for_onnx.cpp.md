@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\prepare_division_for_onnx.cpp`
 
-```
+```py
 // 包含头文件：torch/csrc/jit/passes/onnx/prepare_division_for_onnx.h
 #include <torch/csrc/jit/passes/onnx/prepare_division_for_onnx.h>
 

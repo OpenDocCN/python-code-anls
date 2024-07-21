@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\adagrad.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/pimpl.h>  // 包含神经网络模块的私有实现头文件

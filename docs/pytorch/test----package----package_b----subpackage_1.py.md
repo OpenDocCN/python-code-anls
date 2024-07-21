@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_b\subpackage_1.py`
 
-```
+```py
 # 将字符串赋值给变量result，值为"subpackage_1"
 result = "subpackage_1"
 

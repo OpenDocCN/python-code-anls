@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\distance.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/options/distance.h>
@@ -33,7 +33,7 @@ inline Tensor cosine_similarity(
 /// namespace F = torch::nn::functional;
 /// F::cosine_similarity(input1, input2,
 ///   F::CosineSimilarityFuncOptions().dim(1));
-/// ```
+/// ```py
 // 定义了计算余弦相似度的函数，支持多种可选参数配置
 inline Tensor cosine_similarity(
     const Tensor& x1,
@@ -68,7 +68,7 @@ inline Tensor pairwise_distance(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::pairwise_distance(input1, input2, F::PairwiseDistanceFuncOptions().p(1));
-/// ```
+/// ```py
 // 定义了计算成对距离的函数，支持多种可选参数配置
 inline Tensor pairwise_distance(
     const Tensor& x1,

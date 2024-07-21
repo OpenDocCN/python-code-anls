@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\MPSGraphVenturaOps.h`
 
-```
+```py
 #pragma once
 #include <MetalPerformanceShadersGraph/MetalPerformanceShadersGraph.h>
 

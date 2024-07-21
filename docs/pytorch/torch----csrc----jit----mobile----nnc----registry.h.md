@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\registry.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Exception.h>  // 引入异常处理工具

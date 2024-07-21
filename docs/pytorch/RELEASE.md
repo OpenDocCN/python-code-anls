@@ -93,7 +93,7 @@ Releasing a new version of PyTorch generally entails 3 major steps:
 Following Requirements needs to be met prior to cutting a release branch:
 
 * Resolve all outstanding issues in the milestones(for example [1.11.0](https://github.com/pytorch/pytorch/milestone/28))before first RC cut is completed. After RC cut is completed following script should be executed from builder repo in order to validate the presence of the fixes in the release branch :
-``` python github_analyze.py --repo-path ~/local/pytorch --remote upstream --branch release/1.11 --milestone-id 26 --missing-in-branch ```
+```py python github_analyze.py --repo-path ~/local/pytorch --remote upstream --branch release/1.11 --milestone-id 26 --missing-in-branch ```
 * Validate that all new workflows have been created in the PyTorch and domain libraries included in the release. Validate it against all dimensions of release matrix, including operating systems(Linux, MacOS, Windows), Python versions as well as CPU architectures(x86 and arm) and accelerator versions(CUDA, ROCm).
 * All the nightly jobs for pytorch and domain libraries should be green. Validate this using following HUD links:
   * [Pytorch](https://hud.pytorch.org/hud/pytorch/pytorch/nightly)
@@ -108,12 +108,12 @@ Release branches are typically cut from the branch [`viable/strict`](https://git
 
 There's a convenience script to create release branches from current `viable/strict`. Perform following actions :
 * Perform a fresh clone of pytorch repo using
-```bash
+```py
 git clone git@github.com:pytorch/pytorch.git
 ```
 
 * Execute following command from PyTorch repository root folder:
-```bash
+```py
 DRY_RUN=disabled scripts/release/cut-release-branch.sh
 ```
 This script should create 2 branches:
@@ -127,7 +127,7 @@ Builder branch cut should be performed at the same time as Pytorch core branch c
 
 > NOTE: RELEASE_VERSION only needs to be specified if version.txt is not available in root directory
 
-```bash
+```py
 DRY_RUN=disabled GIT_BRANCH_TO_CUT_FROM=main RELEASE_VERSION=1.11 scripts/release/cut-release-branch.sh
 ```
 
@@ -178,22 +178,22 @@ Following POC's should be assigned from each of the workstreams:
 To draft RCs, a user with the necessary permissions can push a git tag to the main `pytorch/pytorch` git repository. Please note: exactly same process is used for each of the domain library
 
 The git tag for a release candidate must follow the following format:
-```
+```py
 v{MAJOR}.{MINOR}.{PATCH}-rc{RC_NUMBER}
 ```
 
 An example of this would look like:
-```
+```py
 v1.12.0-rc1
 ```
 You can use following commands to perform tag from pytorch core repo (not fork):
 * Checkout and validate the repo history before tagging
-```
+```py
 git checkout release/1.12
 git log --oneline
 ```
 * Perform tag and push it to github (this will trigger the binary release build)
-```
+```py
 git tag -f  v1.12.0-rc2
 git push origin  v1.12.0-rc2
 ```
@@ -240,7 +240,7 @@ Please also make sure to add milestone target to the PR/issue, especially if it 
 You can now use `pytorchbot` to cherry pick a PyTorch PR that has been committed
 to the main branch using `@pytorchbot cherry-pick` command as follows.
 
-```
+```py
 usage: @pytorchbot cherry-pick --onto ONTO [--fixes FIXES] -c
                                {regression,critical,fixnewfeature,docs,release}
 
@@ -274,7 +274,7 @@ The following requirements need to be met prior to creating final Release Candid
 * Resolve all outstanding open issues in the milestone. There should be no open issues/PRs (for example [2.1.2](https://github.com/pytorch/pytorch/milestone/39)). The issue should either be closed or de-milestoned.
 
 * Validate that all closed milestone PRs are present in the release branch. Confirm this by running:
-``` python github_analyze.py --repo-path ~/local/pytorch --remote upstream --branch release/2.2 --milestone-id 40 --missing-in-branch ```
+```py python github_analyze.py --repo-path ~/local/pytorch --remote upstream --branch release/2.2 --milestone-id 40 --missing-in-branch ```
 
 * No outstanding cherry-picks that need to be reviewed in the issue tracker: https://github.com/pytorch/pytorch/issues/115300
 
@@ -450,7 +450,7 @@ In the event a submodule cannot be fast forwarded, and a patch must be applied w
 * Get the dependencies maintainers to support a release branch for us
 
 Editing submodule remotes can be easily done with: (running from the root of the git repository)
-```
+```py
 git config --file=.gitmodules -e
 ```
 

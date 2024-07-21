@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\testing\file_check.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\cpp_stacktraces.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 来确保头文件只被包含一次，防止多重包含问题

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\fuse_attention.py`
 
-```
+```py
 # 设置允许未类型化定义（用于类型检查工具mypy）
 mypy: allow-untyped-defs
 # 导入模块functools、inspect、logging、math

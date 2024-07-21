@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ForeachOpsKernels.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <vector>                              // 包含向量(vector)容器的头文件
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS     // 定义仅用于方法操作符(assert)的宏

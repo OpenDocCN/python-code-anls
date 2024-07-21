@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Gru.cpp`
 
-```
+```py
     // 循环中的第i层GRU操作
     // 提取当前层的隐藏状态并将其压缩为2D维度
     auto h = at::slice(hx_vk, 0, i, i + 1, 1);
@@ -176,7 +176,7 @@ GruPackedContext::GruPackedContext(
 
   TORCH_INTERNAL_ASSERT(
       has_biases, "Vulkan gru expects 'has_biases' to be true.");
-```  
+```py  
 # 使用 `TORCH_INTERNAL_ASSERT` 断言确保 `has_biases` 参数为真，否则输出错误信息。
 
   TORCH_INTERNAL_ASSERT(!train, "Vulkan gru expects 'train' to be false.");
@@ -185,7 +185,7 @@ GruPackedContext::GruPackedContext(
 
   TORCH_INTERNAL_ASSERT(
       !bidirectional, "Vulkan gru expects 'bidirectional' to be false.");
-```  
+```py  
 # 使用 `TORCH_INTERNAL_ASSERT` 断言确保 `bidirectional` 参数为假，否则输出错误信息。
 
   TORCH_INTERNAL_ASSERT(
@@ -195,7 +195,7 @@ GruPackedContext::GruPackedContext(
 # 使用 `TORCH_INTERNAL_ASSERT` 断言确保 `dropout` 参数小于数值上限的浮点数精度乘以1000，否则输出错误信息。
 
   packed_.reserve(Packed::NumArgs);
-```  
+```py  
 # 预留存储空间以存放 `Packed::NumArgs` 个元素的数据。
 
   packed_.emplace_back(pack_linear_op_contexts(params_cpu, num_layers));
@@ -203,7 +203,7 @@ GruPackedContext::GruPackedContext(
 # 将通过 `pack_linear_op_contexts` 函数打包的 `params_cpu` 和 `num_layers` 数据插入到 `packed_` 向量的末尾。
 
   packed_.emplace_back(has_biases);
-```  
+```py  
 # 将 `has_biases` 参数插入到 `packed_` 向量的末尾。
 
   packed_.emplace_back(num_layers);
@@ -211,7 +211,7 @@ GruPackedContext::GruPackedContext(
 # 将 `num_layers` 参数插入到 `packed_` 向量的末尾。
 
   packed_.emplace_back(dropout);
-```  
+```py  
 # 将 `dropout` 参数插入到 `packed_` 向量的末尾。
 
   packed_.emplace_back(train);
@@ -219,7 +219,7 @@ GruPackedContext::GruPackedContext(
 # 将 `train` 参数插入到 `packed_` 向量的末尾。
 
   packed_.emplace_back(bidirectional);
-```  
+```py  
 # 将 `bidirectional` 参数插入到 `packed_` 向量的末尾。
 
   packed_.emplace_back(batch_first);

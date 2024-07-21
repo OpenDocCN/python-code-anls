@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_simplify.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件，用于单元测试
 #include <gtest/gtest.h>
 // 包含 TensorExpr 测试的基础头文件

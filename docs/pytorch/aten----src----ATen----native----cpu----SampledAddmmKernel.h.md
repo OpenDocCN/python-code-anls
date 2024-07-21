@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SampledAddmmKernel.h`
 
-```
+```py
 #pragma once
 // 预处理指令，用于确保头文件只被包含一次
 

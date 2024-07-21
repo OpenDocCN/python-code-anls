@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\quantized\modules\__init__.py`
 
-```
+```py
 # 导入自定义模块中的特定类
 from .linear_relu import LinearReLU
 from .conv_relu import ConvReLU1d, ConvReLU2d, ConvReLU3d

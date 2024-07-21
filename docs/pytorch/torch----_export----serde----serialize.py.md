@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\serde\serialize.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的库和模块
 import base64                 # 导入base64编解码模块

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\generic_math.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h>  // 引入宏定义和声明

@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\perfkernels\embedding_lookup_idx.h`
 
-```
+```py
 #pragma once
 
 #include <cstdint> // 包含标准整数类型定义的头文件

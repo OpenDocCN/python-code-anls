@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\perf-inl.h`
 
-```
+```py
 /*
  * PerfEvent
  * ---------

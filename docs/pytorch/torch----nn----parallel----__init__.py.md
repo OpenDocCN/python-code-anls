@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\__init__.py`
 
-```
+```py
 # 设置类型检查工具 mypy 允许未定义类型的函数
 # 导入被弃用的功能模块，来自 typing_extensions 库
 from typing_extensions import deprecated

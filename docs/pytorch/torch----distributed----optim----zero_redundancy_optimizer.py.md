@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\zero_redundancy_optimizer.py`
 
-```
+```py
 # Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.
 #
 # This source code is licensed under the BSD license found in the

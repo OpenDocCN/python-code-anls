@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\shape_inference.cpp`
 
-```
+```py
 /**
  * This is a handwritten file that accompanies codegenerated header
  * LazyShapeDtype.h

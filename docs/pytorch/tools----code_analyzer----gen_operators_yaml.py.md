@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_analyzer\gen_operators_yaml.py`
 
-```
+```py
 # 使用 /usr/bin/env python3 解释器运行脚本
 #!/usr/bin/env python3
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\layer_norm.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

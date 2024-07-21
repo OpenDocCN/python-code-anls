@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\LegacyBatching.cpp`
 
-```
+```py
 // 包含头文件 Tensor.h, LegacyBatchedTensorImpl.h, WrapDimUtils.h 和 LegacyVmapTransforms.h
 #include <ATen/core/Tensor.h>
 #include <ATen/LegacyBatchedTensorImpl.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_ufuncs.py`
 
-```
+```py
 # 忽略 mypy 的类型检查错误
 # 导入未来版本的注解特性，以支持更高级的类型注解
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\utils\data\elastic_distributed_sampler.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

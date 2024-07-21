@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\alias_analysis.cpp`
 
-```
+```py
 #include <torch/csrc/jit/ir/alias_analysis.h>  // 包含了别名分析的头文件
 
 #include <ATen/core/interned_strings.h>  // 包含了ATen库中的interned字符串定义

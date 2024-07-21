@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类别名，包括参数(Parameter)，未初始化的缓冲区(UninitializedBuffer)，未初始化的参数(UninitializedParameter)
 from torch.nn.parameter import (

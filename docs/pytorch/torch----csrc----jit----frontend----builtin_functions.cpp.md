@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\builtin_functions.cpp`
 
-```
+```py
 // 引入头文件，包含 Torch JIT 前端内置函数的声明
 #include <torch/csrc/jit/frontend/builtin_functions.h>
 

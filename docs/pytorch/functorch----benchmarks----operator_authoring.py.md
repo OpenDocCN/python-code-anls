@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\benchmarks\operator_authoring.py`
 
-```
+```py
 # 导入计时器模块
 import timeit
 # 导入偏函数模块

@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_minifier.py`
 
-```
+```py
 # 导入所需的模块和类
 import unittest
 from unittest.mock import patch

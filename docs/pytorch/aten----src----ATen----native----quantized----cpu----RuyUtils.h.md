@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\RuyUtils.h`
 
-```
+```py
 #pragma once
 #ifdef USE_RUY_QMATMUL
 // 包含 Ruy 库的头文件

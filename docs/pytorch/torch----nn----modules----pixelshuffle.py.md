@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\pixelshuffle.py`
 
-```
+```py
 # 导入 torch.nn.functional 中的 F 模块
 import torch.nn.functional as F
 # 导入 Tensor 类型

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\adam.py`
 
-```
+```py
 # 指定不检查未类型化的函数定义
 # 从 typing 模块导入所需的类型提示
 from typing import List, Optional, Tuple, Union

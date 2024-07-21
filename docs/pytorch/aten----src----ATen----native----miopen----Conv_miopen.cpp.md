@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\miopen\Conv_miopen.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于指定仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 核心张量库的头文件
@@ -1004,7 +1004,7 @@ void raw_miopen_depthwise_convolution_forward_out(
   miopenConvolutionMode_t c_mode = miopenDepthwise;
 
   # 设置 Miopen 的卷积模式为深度卷积模式（depthwise）
-  ```
+  ```py
 
   ConvolutionArgs args{ input, output, weight };
   # 创建 ConvolutionArgs 对象 args，包含输入、输出、权重张量

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\source_range_test.cpp`
 
-```
+```py
 // 引入 Google Test 框架的头文件
 #include <gtest/gtest.h>
 // 引入 Torch 的源代码范围头文件

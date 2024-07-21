@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Utils.cpp`
 
-```
+```py
 #include <torch/csrc/distributed/c10d/Utils.hpp>
 // 引入 Torch 库中分布式相关工具的头文件
 

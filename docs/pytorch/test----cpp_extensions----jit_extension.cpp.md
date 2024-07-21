@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\jit_extension.cpp`
 
-```
+```py
 #include <torch/extension.h> // 引入 PyTorch C++ 扩展的头文件
 
 #include "doubler.h" // 引入自定义的 doubler.h 头文件

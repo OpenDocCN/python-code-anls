@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_subclasses\functional_tensor.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 contextlib 模块，提供了用于管理上下文的实用工具
 import contextlib

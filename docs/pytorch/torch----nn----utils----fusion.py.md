@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\fusion.py`
 
-```
+```py
 # 导入未来版本中的注解支持
 from __future__ import annotations
 

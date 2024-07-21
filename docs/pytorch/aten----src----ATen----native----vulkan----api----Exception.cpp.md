@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Exception.cpp`
 
-```
+```py
 // 包含 Vulkan API 异常处理的头文件
 #include <ATen/native/vulkan/api/Exception.h>
 

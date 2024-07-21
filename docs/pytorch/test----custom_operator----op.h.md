@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\op.h`
 
-```
+```py
 // 包含 PyTorch C++ 脚本接口头文件
 #include <torch/script.h>
 

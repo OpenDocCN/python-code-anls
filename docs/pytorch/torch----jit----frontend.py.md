@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\frontend.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import ast  # AST（抽象语法树）模块，用于处理Python代码的抽象语法树

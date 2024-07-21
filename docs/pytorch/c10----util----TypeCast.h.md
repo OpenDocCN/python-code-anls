@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\TypeCast.h`
 
-```
+```py
 #pragma once
 // 引入必要的头文件，包括C10宏定义和各种数据类型
 #include <c10/macros/Macros.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymFloat.cpp`
 
-```
+```py
 namespace c10 {
 
 # 进入c10命名空间，定义了SymFloat类的成员函数和静态函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义和模块
 from typing import Any, Dict, List, Optional, Tuple

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_artifacts.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 import os  # 提供与操作系统交互的功能

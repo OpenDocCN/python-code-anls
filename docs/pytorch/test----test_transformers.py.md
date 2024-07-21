@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_transformers.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 # 引入上下文管理器

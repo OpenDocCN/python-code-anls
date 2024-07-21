@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\hipify\constants.py`
 
-```
+```py
 # 定义转换版本的常量，值为0
 CONV_VERSION = 0,
 # 定义初始化转换的常量，值为1

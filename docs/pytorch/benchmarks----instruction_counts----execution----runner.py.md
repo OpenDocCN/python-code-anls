@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\execution\runner.py`
 
-```
+```py
 """Run benchmarks while handling parallelism, isolation, and fault tolerance."""
 # 导入必要的模块
 import math  # 数学计算模块

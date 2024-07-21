@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\__init__.py`
 
-```
+```py
 # 导入Python标准库中的json模块，用于处理JSON格式数据
 import json
 

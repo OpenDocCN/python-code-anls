@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_metrics.py`
 
-```
+```py
 # 使用 __future__ 模块中的 annotations 特性，使得类型注解中的类型可以使用字符串表示法
 from __future__ import annotations
 

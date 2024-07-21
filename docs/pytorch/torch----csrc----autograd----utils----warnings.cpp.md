@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\utils\warnings.cpp`
 
-```
+```py
 // 包含 Torch 自动微分工具的警告处理工具头文件
 #include <torch/csrc/autograd/utils/warnings.h>
 

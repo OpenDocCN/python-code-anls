@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\collect_env.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # Unlike the rest of the PyTorch this file must be python2 compliant.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\ops.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/static/ops.h>
 
 #include <ATen/CPUFunctions.h>

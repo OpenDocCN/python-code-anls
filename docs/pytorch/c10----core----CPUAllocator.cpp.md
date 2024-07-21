@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\CPUAllocator.cpp`
 
-```
+```py
 #include <c10/core/Allocator.h>
 #include <c10/core/CPUAllocator.h>
 #include <c10/core/DeviceType.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\powerSGD_hook.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging

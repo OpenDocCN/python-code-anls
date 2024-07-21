@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_metal.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 import torch  # 导入 PyTorch 库

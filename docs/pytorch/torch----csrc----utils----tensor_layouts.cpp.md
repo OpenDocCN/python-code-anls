@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_layouts.cpp`
 
-```
+```py
 // 包含头文件：ATen 布局定义
 #include <ATen/Layout.h>
 // 包含头文件：C10 标量类型定义

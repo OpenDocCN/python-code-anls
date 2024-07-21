@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\device_set.h`
 
-```
+```py
 #pragma once
 
 // `#pragma once` 是预处理指令，用于确保头文件只被编译一次，提升编译效率。

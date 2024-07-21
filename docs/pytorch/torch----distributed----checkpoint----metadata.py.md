@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\metadata.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块
 import os

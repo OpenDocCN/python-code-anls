@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_llvm.cpp`
 
-```
+```py
 #ifdef TORCH_ENABLE_LLVM
 // 如果 TORCH_ENABLE_LLVM 定义了，编译以下代码
 

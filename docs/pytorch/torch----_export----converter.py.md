@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\converter.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志、运算符和警告模块
 import logging

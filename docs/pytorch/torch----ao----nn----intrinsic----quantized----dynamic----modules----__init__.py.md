@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\quantized\dynamic\modules\__init__.py`
 
-```
+```py
 # 导入 torch 库，用于神经网络和张量操作
 import torch
 # 从当前目录下的 linear_relu 模块中导入 LinearReLU 类

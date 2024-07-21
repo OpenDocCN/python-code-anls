@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\torch_include.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/torch.h>  // 包含 PyTorch C++ API 的头文件

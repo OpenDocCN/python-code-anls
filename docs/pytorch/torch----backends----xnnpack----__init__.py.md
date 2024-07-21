@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\xnnpack\__init__.py`
 
-```
+```py
 # 启用类型提示允许
 mypy: allow-untyped-defs
 

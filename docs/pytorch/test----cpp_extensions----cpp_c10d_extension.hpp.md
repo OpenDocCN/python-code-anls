@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cpp_c10d_extension.hpp`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件仅被编译一次
 

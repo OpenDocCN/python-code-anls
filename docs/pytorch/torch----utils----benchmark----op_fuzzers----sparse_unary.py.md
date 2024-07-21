@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\op_fuzzers\sparse_unary.py`
 
-```
+```py
 # 添加类型检查时允许未注释的函数定义
 # mypy: allow-untyped-defs
 

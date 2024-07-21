@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\dangling_impl_extension.cpp`
 
-```
+```py
 # 包含 Torch 扩展的头文件
 #include <torch/extension.h>
 

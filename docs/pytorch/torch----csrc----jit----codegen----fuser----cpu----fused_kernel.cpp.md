@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cpu\fused_kernel.cpp`
 
-```
+```py
 #ifdef _MSC_VER
 // 定义获取临时路径的函数，用于在 Windows 下获取临时文件目录路径
 static const std::string getTempPath() {

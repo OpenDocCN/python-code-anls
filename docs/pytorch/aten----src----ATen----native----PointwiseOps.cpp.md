@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\PointwiseOps.cpp`
 
-```
+```py
 // 定义宏，用于在编译时仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含点对点操作的头文件

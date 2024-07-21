@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_dedup_tensors.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # 导入必要的模块和类
 import dataclasses

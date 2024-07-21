@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\instance_norm_expanded_weights.py`
 
-```
+```py
     # 导入必要的模块和函数，允许未类型化的定义
     # 这里使用了 functools 中的 partial 函数
     # 以及 typing 中的 List 和 Optional 类型

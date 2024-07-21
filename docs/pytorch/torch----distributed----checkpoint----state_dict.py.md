@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\state_dict.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import contextlib  # 用于上下文管理

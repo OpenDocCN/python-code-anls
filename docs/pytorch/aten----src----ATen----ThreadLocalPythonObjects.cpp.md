@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ThreadLocalPythonObjects.cpp`
 
-```
+```py
 // 包含头文件 c10/core/TensorImpl.h，提供了有关张量实现的功能
 #include <c10/core/TensorImpl.h>
 

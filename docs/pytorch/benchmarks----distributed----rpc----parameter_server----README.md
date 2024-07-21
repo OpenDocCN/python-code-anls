@@ -30,13 +30,13 @@ Inherit from a base class and implement your trainer. The benchmark has two requ
 
 1. It must implement a __init__ method that takes rank, trainer_count, and ps_rref as arguments
 
-    ```python
+    ```py
     def __init__(self, rank, trainer_count, ps_rref, backend, use_cuda_rpc):
     ```
 
 2. It must implement a train method that takes model and data as arguments.
 
-    ```python
+    ```py
     def train(self, model, data):
     ```
 
@@ -47,13 +47,13 @@ Inherit from a base class and implement your parameter server. The benchmark has
 
 1. It must implement a __init__ method that takes rank and ps_trainer_count as arguments
 
-    ```python
+    ```py
     def __init__(self, rank, ps_trainer_count, backend, use_cuda_rpc):
     ```
 
 2. It must implement a reset_state method
 
-    ```python
+    ```py
     def reset_state(ps_rref):
     ```
 

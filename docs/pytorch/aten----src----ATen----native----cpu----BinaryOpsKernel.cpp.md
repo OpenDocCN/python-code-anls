@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\BinaryOpsKernel.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_NO_OPERATORS，用于指定不包含操作符
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库中的二元操作函数头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\csrc\dim\dim.h`
 
-```
+```py
 // 版权声明：Copyright (c) Facebook, Inc. and its affiliates.
 // 版权所有。
 //

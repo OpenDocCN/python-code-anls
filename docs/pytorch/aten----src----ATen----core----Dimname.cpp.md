@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Dimname.cpp`
 
-```
+```py
 // 引入 ATen 库的 Dimname 类定义
 #include <ATen/core/Dimname.h>
 // 引入 C10 库的 Exception 处理工具

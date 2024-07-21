@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\export\update_schema.py`
 
-```
+```py
 import argparse  # 导入解析命令行参数的模块
 import os  # 导入操作系统功能的模块
 

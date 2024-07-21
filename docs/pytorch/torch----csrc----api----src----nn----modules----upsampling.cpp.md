@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\upsampling.cpp`
 
-```
+```py
 # 包含 Torch 库中的上采样模块定义头文件
 #include <torch/nn/modules/upsampling.h>
 

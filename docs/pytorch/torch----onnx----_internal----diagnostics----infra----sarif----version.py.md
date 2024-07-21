@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\sarif\version.py`
 
-```
+```py
 # 引入 typing 模块中的 Final 类型提示符，用于声明常量
 from typing import Final
 

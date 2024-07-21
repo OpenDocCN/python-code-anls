@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\Interpreter.cpp`
 
-```
+```py
 // 包含所需的头文件以实现Functorch的Interpreter
 #include <ATen/functorch/Interpreter.h>
 #include <ATen/functorch/BatchedTensorImpl.h>

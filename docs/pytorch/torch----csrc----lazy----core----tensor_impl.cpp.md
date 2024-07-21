@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\tensor_impl.cpp`
 
-```
+```py
 // 包含 Torch 中用于 Lazy 模块的张量实现的头文件
 #include <torch/csrc/lazy/core/tensor_impl.h>
 

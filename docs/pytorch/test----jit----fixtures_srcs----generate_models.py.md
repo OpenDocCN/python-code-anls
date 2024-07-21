@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\fixtures_srcs\generate_models.py`
 
-```
+```py
 # 导入必要的库和模块
 import io  # 提供用于处理字节流的工具
 import logging  # 提供日志记录功能

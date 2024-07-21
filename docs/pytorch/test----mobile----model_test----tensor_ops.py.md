@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\tensor_ops.py`
 
-```
+```py
 import torch
 
 # 定义一个名为 TensorOpsModule 的类，继承自 torch.nn.Module

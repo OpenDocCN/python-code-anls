@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\amp\__init__.py`
 
-```
+```py
 # 导入自定义模块中的特定函数和类
 from .autocast_mode import autocast, custom_bwd, custom_fwd
 from .common import amp_definitely_not_available

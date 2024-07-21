@@ -1,6 +1,6 @@
 # `.\pytorch\test\bottleneck_test\test.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 

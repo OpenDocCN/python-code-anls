@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SummaryOps.cpp`
 
-```
+```py
 // 定义宏，仅限于操作符方法的断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

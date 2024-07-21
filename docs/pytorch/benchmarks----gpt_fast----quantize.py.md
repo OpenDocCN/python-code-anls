@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\gpt_fast\quantize.py`
 
-```
+```py
 # flake8: noqa: E266, C417, B950
 # 导入 PyTorch 相关模块
 import torch

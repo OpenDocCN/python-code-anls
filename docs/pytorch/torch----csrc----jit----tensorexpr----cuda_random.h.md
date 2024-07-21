@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\cuda_random.h`
 
-```
+```py
 #pragma once
 
 namespace torch {

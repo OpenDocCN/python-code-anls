@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\PeerToPeerAccess.cpp`
 
-```
+```py
 // 引入ATen库中与CUDA对等访问有关的头文件
 #include <ATen/cuda/PeerToPeerAccess.h>
 

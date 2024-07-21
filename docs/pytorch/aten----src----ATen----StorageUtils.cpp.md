@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\StorageUtils.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件，提供各种张量和存储操作的函数和类
 #include <ATen/Functions.h>
 #include <ATen/MapAllocator.h>

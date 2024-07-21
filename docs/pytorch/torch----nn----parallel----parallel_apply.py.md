@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\parallel_apply.py`
 
-```
+```py
     i: int,
     module: Module,
     input: Any,

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\ordered_dict.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

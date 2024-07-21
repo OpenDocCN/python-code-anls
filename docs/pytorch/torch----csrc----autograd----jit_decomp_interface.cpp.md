@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\jit_decomp_interface.cpp`
 
-```
+```py
 # 包含 Torch 自动求导模块的 JIT 分解接口头文件
 #include <torch/csrc/autograd/jit_decomp_interface.h>
 

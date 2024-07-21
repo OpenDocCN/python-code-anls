@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\utils\distributed.py`
 
-```
+```py
 # 定义一个函数，用于创建基于 C10d 的分布式存储
 def create_c10d_store(
     is_server: bool,                         # 标识是否为服务端

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\constant_fold.cpp`
 
-```
+```py
 // 包含头文件 torch/csrc/jit/jit_log.h，用于 JIT 日志记录
 #include <torch/csrc/jit/jit_log.h>
 // 包含头文件 torch/csrc/jit/passes/onnx/constant_fold.h，用于 ONNX 常量折叠

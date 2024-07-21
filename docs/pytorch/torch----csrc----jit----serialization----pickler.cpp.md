@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\pickler.cpp`
 
-```
+```py
 // 包含 ATen 库中的基本头文件
 #include <ATen/ATen.h>
 // 包含 ATen 库中的字典数据结构定义

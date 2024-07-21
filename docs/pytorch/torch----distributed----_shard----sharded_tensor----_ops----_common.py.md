@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\_ops\_common.py`
 
-```
+```py
 # 通过注释允许未声明的函数
 # 导入 functools 模块，用于处理装饰器相关的功能
 import functools

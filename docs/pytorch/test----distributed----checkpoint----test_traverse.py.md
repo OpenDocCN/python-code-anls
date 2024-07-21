@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_traverse.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 引入有序字典模块

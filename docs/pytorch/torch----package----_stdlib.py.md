@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_stdlib.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 sys 模块，用于获取 Python 运行时信息
 import sys

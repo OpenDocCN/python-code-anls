@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\utils.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>
@@ -136,7 +136,7 @@ inline bool isFwGradDefinedTensorList(
 
 
   bool ret = false;
-```  
+```py  
 # 初始化一个布尔变量 `ret`，设置为 `false`。
 
 
@@ -146,7 +146,7 @@ inline bool isFwGradDefinedTensorList(
 
 
     auto t = li.get(i);
-```  
+```py  
 # 获取 `li` 中索引为 `i` 的元素，并将其存储在变量 `t` 中。
 
 
@@ -156,7 +156,7 @@ inline bool isFwGradDefinedTensorList(
 
 
   }
-```  
+```py  
 # 结束 `for` 循环。
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_hooks.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 引入上下文管理器和函数装饰器

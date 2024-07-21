@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\copy_utils.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Types.h>

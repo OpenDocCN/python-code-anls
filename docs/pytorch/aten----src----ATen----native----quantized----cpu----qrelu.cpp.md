@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qrelu.cpp`
 
-```
+```py
 // 定义宏，用于仅支持方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\int4mm_kernel.cpp`
 
-```
+```py
     // 包含头文件 <type_traits>，用于类型特性的支持
 #include <type_traits>
     // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于在包含 <ATen/core/Tensor.h> 时控制断言的行为

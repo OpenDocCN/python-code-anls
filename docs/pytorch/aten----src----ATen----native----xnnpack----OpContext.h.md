@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\OpContext.h`
 
-```
+```py
 // 只有在首次包含此头文件时，才会编译此代码
 #pragma once
 

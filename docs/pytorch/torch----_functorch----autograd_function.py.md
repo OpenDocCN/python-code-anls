@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\autograd_function.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型声明和模块
 

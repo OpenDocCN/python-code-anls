@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Array.h`
 
-```
+```py
 #pragma once
 // 表示该头文件只被编译一次的预处理指令
 

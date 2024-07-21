@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\standalone\itt_observer.cpp`
 
-```
+```py
 #include <torch/csrc/profiler/standalone/itt_observer.h>
 
 #include <torch/csrc/profiler/stubs/base.h>

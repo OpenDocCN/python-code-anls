@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_pg_wrapper.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入必要的模块和库
 import os

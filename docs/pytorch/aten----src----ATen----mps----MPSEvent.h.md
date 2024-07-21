@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSEvent.h`
 
-```
+```py
 // 版权声明，标明代码版权归 Apple Inc. 所有
 #pragma once
 

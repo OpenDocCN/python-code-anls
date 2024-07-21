@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_concat_linear.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令：`#pragma once` 的作用是确保当前头文件在同一个编译单元中只被包含一次，避免重复包含的问题。

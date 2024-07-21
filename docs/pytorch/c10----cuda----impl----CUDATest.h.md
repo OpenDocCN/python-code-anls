@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\impl\CUDATest.h`
 
-```
+```py
 #pragma once
 
 

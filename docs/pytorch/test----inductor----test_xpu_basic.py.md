@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_xpu_basic.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入所需的库和模块
 import importlib  # 导入模块动态加载功能

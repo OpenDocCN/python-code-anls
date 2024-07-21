@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset19.py`
 
-```
+```py
 """
 这个文件为 opset 19 导出 ONNX 操作符。
 

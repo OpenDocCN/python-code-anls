@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\linear.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 PyTorch 库
 import torch

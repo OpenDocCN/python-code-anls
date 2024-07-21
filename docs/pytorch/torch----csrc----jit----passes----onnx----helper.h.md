@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\helper.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/api/module.h>

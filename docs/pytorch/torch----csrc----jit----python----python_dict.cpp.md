@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_dict.cpp`
 
-```
+```py
 // 定义命名空间 torch::jit
 namespace torch::jit {
 

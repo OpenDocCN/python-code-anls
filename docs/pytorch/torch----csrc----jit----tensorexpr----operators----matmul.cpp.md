@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\matmul.cpp`
 
-```
+```py
 namespace torch {
 namespace jit {
 namespace tensorexpr {

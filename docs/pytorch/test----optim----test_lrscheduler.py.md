@@ -1,6 +1,6 @@
 # `.\pytorch\test\optim\test_lrscheduler.py`
 
-```
+```py
 # Owner(s): ["module: optimizer", "module: LrScheduler" ]
 
 import copy  # 导入用于复制对象的标准库

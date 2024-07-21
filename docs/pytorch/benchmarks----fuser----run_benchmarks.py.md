@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fuser\run_benchmarks.py`
 
-```
+```py
 # 导入模块inspect、itertools、sys和time
 import inspect
 import itertools

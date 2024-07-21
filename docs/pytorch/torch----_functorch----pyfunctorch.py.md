@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\pyfunctorch.py`
 
-```
+```py
 """
 This file contains the integration of functorch with PyDispatcher.
 

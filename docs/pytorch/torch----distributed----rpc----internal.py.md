@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\internal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的库和模块
 import collections  # 导入collections模块，用于处理集合数据类型

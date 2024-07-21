@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dictionary.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 

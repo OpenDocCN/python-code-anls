@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_new.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 头文件
 #include <torch/csrc/python_headers.h>
 // 包含 Torch 的张量创建工具函数头文件

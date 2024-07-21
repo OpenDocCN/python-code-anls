@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\optional_test.cpp`
 
-```
+```py
 #include <c10/util/Optional.h>
 
 #include <gmock/gmock.h>

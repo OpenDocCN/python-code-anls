@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\conftest.py`
 
-```
+```py
 import pytest  # noqa: F401
 # 引入 pytest 模块，禁止 Flake8 检查时引发 F401 未使用警告
 

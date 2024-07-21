@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUStream.h`
 
-```
+```py
       // 返回此流的唯一标识符，类型为 int64_t，由其类型和索引生成
       return stream_.id();
     }

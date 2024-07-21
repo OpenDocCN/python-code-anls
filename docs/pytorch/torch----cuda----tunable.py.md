@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\tunable.py`
 
-```
+```py
 r"""
 This module exposes a TunableOp interface.
 

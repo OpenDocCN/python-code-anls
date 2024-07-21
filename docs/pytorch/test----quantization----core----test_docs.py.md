@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_docs.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入正则表达式模块

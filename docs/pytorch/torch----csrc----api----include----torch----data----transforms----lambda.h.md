@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\transforms\lambda.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/transforms/base.h>  // 引入基础头文件

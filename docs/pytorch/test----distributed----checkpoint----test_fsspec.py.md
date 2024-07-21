@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_fsspec.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import shutil  # 导入 shutil 模块，用于文件和目录操作

@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_memory_efficient_fusion.py`
 
-```
+```py
 # Owner(s): ["module: functorch"]
 
 # 导入必要的模块和库

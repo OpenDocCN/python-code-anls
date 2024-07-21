@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\tests\pt_configs_list_test.py`
 
-```
+```py
 # 导入名为operator_benchmark的库，并将其命名为op_bench
 import operator_benchmark as op_bench
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_onnx_opset.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 导入必要的库

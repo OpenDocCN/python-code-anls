@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\amp\grad_scaler.py`
 
-```
+```py
 from typing_extensions import deprecated  # 导入 deprecated 装饰器
 
 import torch  # 导入 PyTorch 库

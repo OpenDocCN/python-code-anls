@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_init_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和库
 import collections

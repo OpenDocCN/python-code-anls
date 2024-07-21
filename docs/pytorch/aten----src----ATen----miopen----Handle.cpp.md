@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\miopen\Handle.cpp`
 
-```
+```py
 // 包含头文件，ATen/miopen/Exceptions.h 提供了 MIOpen 异常相关功能
 // ATen/miopen/Handle.h 提供了 MIOpen 句柄管理功能
 // ATen/hip/detail/DeviceThreadHandles.h 提供了设备线程句柄池功能

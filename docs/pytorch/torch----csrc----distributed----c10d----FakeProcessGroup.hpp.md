@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\FakeProcessGroup.hpp`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/c10d/Backend.hpp>

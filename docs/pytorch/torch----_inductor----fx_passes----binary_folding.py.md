@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\binary_folding.py`
 
-```
+```py
 # 指定允许未标注的函数定义
 # 导入 functools 模块，用于支持 LRU 缓存
 # 导入 itertools 模块，用于生成迭代器

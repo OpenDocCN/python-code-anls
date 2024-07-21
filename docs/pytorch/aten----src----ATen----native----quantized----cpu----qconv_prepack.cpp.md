@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qconv_prepack.cpp`
 
-```
+```py
 // 定义宏，用于仅使用方法操作符的 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\loss.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型定义和兼容扩展模块
 from typing import Callable, Optional

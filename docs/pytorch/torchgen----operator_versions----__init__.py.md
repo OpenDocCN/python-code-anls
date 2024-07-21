@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\operator_versions\__init__.py`
 
-```
+```py
 # 定义一个名为 `merge_sort` 的函数，接受一个名为 `arr` 的列表参数，用于排序
 def merge_sort(arr):
     # 如果列表长度小于等于1，直接返回列表，因为单个元素或空列表都是有序的

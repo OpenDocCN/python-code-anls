@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\pipelining\_backward.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

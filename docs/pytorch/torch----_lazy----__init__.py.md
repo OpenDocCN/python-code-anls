@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入线程模块，用于多线程操作
 import threading

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\multiprocessing\pool.py`
 
-```
+```py
 import multiprocessing.pool
 import multiprocessing.util as util
 

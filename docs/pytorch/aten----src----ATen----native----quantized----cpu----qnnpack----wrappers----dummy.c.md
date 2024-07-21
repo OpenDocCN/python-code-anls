@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\wrappers\dummy.c`
 
-```
+```py
 # 导入所需的模块：datetime（日期时间处理）和 random（生成随机数）
 import datetime
 import random

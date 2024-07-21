@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\examples\example3.c`
 
-```
+```py
 // example3.c - 展示如何使用 miniz.c 的 deflate() 和 inflate() 函数进行简单的文件压缩
 // 公共领域，2011年5月15日，Rich Geldreich，richgel99@gmail.com。请参阅tinfl.c末尾的“unlicense”声明。
 

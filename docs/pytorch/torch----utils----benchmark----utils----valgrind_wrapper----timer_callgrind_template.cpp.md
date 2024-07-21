@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\valgrind_wrapper\timer_callgrind_template.cpp`
 
-```
+```py
 /*
    C++ template for Timer.collect_callgrind
 

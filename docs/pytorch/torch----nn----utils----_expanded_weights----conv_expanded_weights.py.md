@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\conv_expanded_weights.py`
 
-```
+```py
 # 导入 PyTorch 库和函数
 import torch
 import torch.nn.functional as F

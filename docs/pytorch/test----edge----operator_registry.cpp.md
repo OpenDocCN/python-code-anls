@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\operator_registry.cpp`
 
-```
+```py
 // 获取全局唯一的内核注册表对象，确保每个程序中仅有一个实例
 namespace torch {
 namespace executor {

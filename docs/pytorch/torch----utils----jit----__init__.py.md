@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\jit\__init__.py`
 
-```
+```py
 # 导入所需的模块：os（操作系统接口）、shutil（高级文件操作）、tempfile（生成临时文件和目录）、glob（根据模式匹配文件路径名）
 import os
 import shutil

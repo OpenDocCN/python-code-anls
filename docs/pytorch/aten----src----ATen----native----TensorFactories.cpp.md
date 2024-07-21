@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorFactories.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于仅包含方法操作符的头文件
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 
@@ -1104,7 +1104,7 @@ Tensor randint(
   // See [Note: hacky wrapper removal for TensorOptions]
 
   // 参考注释：用于处理 TensorOptions 的不优雅包装的移除
-```  
+```py  
 # 此注释提醒读者参考有关如何处理 `TensorOptions` 的说明，特别是移除不优雅包装的部分。
 
   TensorOptions options = TensorOptions().dtype(dtype).layout(layout).device(device).pinned_memory(pin_memory);
@@ -1115,7 +1115,7 @@ Tensor randint(
 
 
   auto result = at::empty(size, options);
-```  
+```py  
 # 使用指定的 `TensorOptions` 创建一个大小为 `size` 的空张量 `result`。
 
 

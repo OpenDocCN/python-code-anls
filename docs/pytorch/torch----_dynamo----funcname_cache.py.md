@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\funcname_cache.py`
 
-```
+```py
 import tokenize  # 导入 tokenize 模块，用于对 Python 源文件进行词法分析
 
 from typing import Dict, List, Optional  # 导入必要的类型声明

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\oss_coverage.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入时间模块
 import time

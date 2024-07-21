@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DeviceType.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <c10/core/DeviceType.h>
 #include <c10/util/Exception.h>

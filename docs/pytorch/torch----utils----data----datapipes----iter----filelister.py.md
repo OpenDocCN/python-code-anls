@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\filelister.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的类型定义
 from typing import Iterator, List, Sequence, Union

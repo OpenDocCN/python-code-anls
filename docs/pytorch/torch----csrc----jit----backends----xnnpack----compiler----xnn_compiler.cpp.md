@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\compiler\xnn_compiler.cpp`
 
-```
+```py
 // 版权声明及许可信息
 //
 // 该源代码使用 BSD 风格许可证授权，许可条款详见根目录下的 LICENSE 文件。

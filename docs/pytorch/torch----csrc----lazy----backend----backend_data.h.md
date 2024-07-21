@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\backend_data.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/lazy/backend/backend_device.h>

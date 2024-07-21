@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\vision.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/options/vision.h>
@@ -136,7 +136,7 @@ inline Tensor grid_sample(
 /// namespace F = torch::nn::functional;
 /// F::grid_sample(input, grid,
 ///                F::GridSampleFuncOptions().mode(torch::kBilinear).padding_mode(torch::kZeros).align_corners(true));
-/// ```
+/// ```py
 inline Tensor grid_sample(
     const Tensor& input,
     const Tensor& grid,

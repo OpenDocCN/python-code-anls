@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\impl\CUDATest.cpp`
 
-```
+```py
 // 包含 CUDA 库的测试文件，用于确认 CUDA 库是否可用
 
 #include <c10/cuda/CUDAException.h>     // 包含 CUDA 异常处理的头文件

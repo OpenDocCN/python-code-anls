@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_tensor_creation_ops.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入必要的模块和库

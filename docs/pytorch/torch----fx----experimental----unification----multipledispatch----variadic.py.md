@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\multipledispatch\variadic.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入typename函数，该函数来自.utils模块
 from .utils import typename

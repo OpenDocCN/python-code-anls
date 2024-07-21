@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\SmallVector.h`
 
-```
+```py
 #pragma once
 #include <c10/util/SmallVector.h>
 

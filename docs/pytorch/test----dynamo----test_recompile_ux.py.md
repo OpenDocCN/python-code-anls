@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_recompile_ux.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 引入单元测试模块
 import unittest

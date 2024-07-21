@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\test_assert.h`
 
-```
+```py
 #pragma once
 // 如果尚未定义 __func__ 宏，并且编译器版本小于等于 1900，则将 __func__ 定义为 __FUNCTION__
 #if defined(_MSC_VER) && _MSC_VER <= 1900

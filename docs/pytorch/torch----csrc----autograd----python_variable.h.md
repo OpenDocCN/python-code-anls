@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_variable.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

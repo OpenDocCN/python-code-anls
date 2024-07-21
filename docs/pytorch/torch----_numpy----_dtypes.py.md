@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_dtypes.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略 mypy 类型检查中的错误信息
 

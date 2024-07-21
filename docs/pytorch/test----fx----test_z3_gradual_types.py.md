@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_z3_gradual_types.py`
 
-```
+```py
 # 引入操作符模块，用于操作符相关功能
 import operator
 # 引入单元测试模块

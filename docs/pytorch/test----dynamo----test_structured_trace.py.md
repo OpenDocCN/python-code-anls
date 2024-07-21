@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_structured_trace.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的库

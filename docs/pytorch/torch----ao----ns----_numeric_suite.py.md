@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\_numeric_suite.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库及其量化相关模块
 import torch

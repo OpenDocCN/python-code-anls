@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\schedule_registry.py`
 
-```
+```py
 # 定义计算类型常量，分别表示前向计算、反向计算和权重更新
 F = _ComputationType.FORWARD
 B = _ComputationType.BACKWARD

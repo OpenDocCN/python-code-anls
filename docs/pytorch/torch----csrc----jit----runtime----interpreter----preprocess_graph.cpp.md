@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\interpreter\preprocess_graph.cpp`
 
-```
+```py
 // 引入 Torch 库中的预处理图模块
 #include <torch/csrc/jit/runtime/interpreter/preprocess_graph.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\ReduceOps.cpp`
 
-```
+```py
 // 定义宏以启用仅在方法操作符中的 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_digraph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 collections 模块导入 deque 类
 from collections import deque

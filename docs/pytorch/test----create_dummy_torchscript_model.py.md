@@ -1,6 +1,6 @@
 # `.\pytorch\test\create_dummy_torchscript_model.py`
 
-```
+```py
 # Usage: python create_dummy_model.py <name_of_the_file>
 # 导入系统模块
 import sys

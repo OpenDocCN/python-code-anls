@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Module.cpp`
 
-```
+```py
 #include <ATen/DeviceAccelerator.h>
 #include <c10/util/Optional.h>
 #include <fmt/core.h>

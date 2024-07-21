@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\group_norm.h`
 
-```
+```py
 #pragma once
 #include <ATen/native/DispatchStub.h>
 #include <cstdint>

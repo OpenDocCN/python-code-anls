@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_compatibility.py`
 
-```
+```py
 # 导入必要的模块和类
 from unittest.mock import patch
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\cpp_stacktraces.cpp`
 
-```
+```py
 #include <torch/csrc/utils/cpp_stacktraces.h>
 // 引入 Torch 的 C++ 栈跟踪工具头文件
 

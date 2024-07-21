@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mkl\SparseBlas.h`
 
-```
+```py
 #pragma once
 
 /*

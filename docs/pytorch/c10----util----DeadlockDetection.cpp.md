@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\DeadlockDetection.cpp`
 
-```
+```py
 #include <c10/util/DeadlockDetection.h>  // 包含头文件 c10/util/DeadlockDetection.h
 
 #include <cstdlib>  // 包含标准库头文件 cstdlib

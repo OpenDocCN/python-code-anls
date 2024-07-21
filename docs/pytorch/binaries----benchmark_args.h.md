@@ -1,6 +1,6 @@
 # `.\pytorch\binaries\benchmark_args.h`
 
-```
+```py
 /**
  * 版权声明：
  * 本代码版权归 Facebook, Inc. 所有

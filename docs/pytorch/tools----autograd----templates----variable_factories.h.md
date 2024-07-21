@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\variable_factories.h`
 
-```
+```py
 // 预处理指令，确保头文件只包含一次
 #pragma once
 

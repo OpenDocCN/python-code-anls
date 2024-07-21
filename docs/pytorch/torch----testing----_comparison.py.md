@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_comparison.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import abc  # Abstract Base Classes (ABC) 模块

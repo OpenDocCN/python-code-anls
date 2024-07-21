@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\module.cpp`
 
-```
+```py
 // 引入 Torch 的 nn 模块定义
 #include <torch/nn/module.h>
 

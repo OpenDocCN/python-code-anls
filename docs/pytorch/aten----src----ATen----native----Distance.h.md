@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Distance.h`
 
-```
+```py
 #pragma once
 
 

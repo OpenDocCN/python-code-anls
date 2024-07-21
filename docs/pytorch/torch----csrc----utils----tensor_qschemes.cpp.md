@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_qschemes.cpp`
 
-```
+```py
 // 包含头文件，定义了与张量量化方案相关的实用工具
 #include <torch/csrc/utils/tensor_qschemes.h>
 

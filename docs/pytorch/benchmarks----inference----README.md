@@ -32,7 +32,7 @@ The togglable commmand line arguments to the script are as follows:
 
 e.g. A sample command to run the benchmark
 
-```
+```py
 python -W ignore server.py --num_iters 1000 --batch_size 32
 ```
 

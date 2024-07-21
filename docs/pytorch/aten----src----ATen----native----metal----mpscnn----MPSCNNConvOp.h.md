@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\MPSCNNConvOp.h`
 
-```
+```py
 #import <ATen/native/metal/MetalConvParams.h>
 #import <ATen/native/metal/MetalNeuronType.h>
 #import <ATen/native/metal/mpscnn/MPSCNNOp.h>

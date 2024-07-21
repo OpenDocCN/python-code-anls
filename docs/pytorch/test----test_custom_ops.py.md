@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_custom_ops.py`
 
-```
+```py
 # Owner(s): ["module: custom-operators"]
 
 # 从 torch.testing._internal.common_utils 导入所有内容，禁止 F403 错误提示

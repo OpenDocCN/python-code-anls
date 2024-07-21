@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\cpp_backtrace.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 torch._C 模块导入 _get_cpp_backtrace 函数
 from torch._C import _get_cpp_backtrace

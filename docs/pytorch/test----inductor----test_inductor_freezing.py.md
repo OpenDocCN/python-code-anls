@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_inductor_freezing.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 引入标准库和第三方库
 import contextlib                     # 上下文管理器相关功能

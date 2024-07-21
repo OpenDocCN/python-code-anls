@@ -1,12 +1,12 @@
 # Fusion Pattern Format
 The patterns are we matching against is float modules types, functional operators and pytorch operators in reverse order:
-```
+```py
 operator = module_type | functional | torch op | native op | MatchAllNode
 Pattern = (operator, Pattern, Pattern, ...) | operator
 ```
 where the first item for Pattern is the operator we want to match, and the rest are the patterns for the arguments of the operator.
 For example, pattern (nn.ReLU, (operator.add, MatchAllNode, (nn.BatchNorm2d, nn.Conv2d))) would match the following graph:
-```
+```py
 tensor_1            tensor_2
  |                    |
  *(MatchAllNode)  nn.Conv2d

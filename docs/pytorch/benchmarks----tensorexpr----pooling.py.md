@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\pooling.py`
 
-```
+```py
 # 从 benchmark 模块中导入 benchmark 类
 from . import benchmark
 

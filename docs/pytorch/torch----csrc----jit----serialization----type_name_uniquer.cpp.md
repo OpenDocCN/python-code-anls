@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\type_name_uniquer.cpp`
 
-```
+```py
 // 引入 Torch 库中的类型名称唯一化工具头文件
 #include <torch/csrc/jit/serialization/type_name_uniquer.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\rprop.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Implementation for the Resilient backpropagation."""
 from typing import List, Optional, Tuple  # 导入必要的类型注解

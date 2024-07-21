@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Logging.h`
 
-```
+```py
 #ifndef C10_UTIL_LOGGING_H_
 #define C10_UTIL_LOGGING_H_
 

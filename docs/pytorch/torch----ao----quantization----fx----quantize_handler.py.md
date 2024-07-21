@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\quantize_handler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 from abc import ABC

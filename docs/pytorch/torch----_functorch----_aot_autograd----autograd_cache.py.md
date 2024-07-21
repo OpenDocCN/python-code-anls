@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\autograd_cache.py`
 
-```
+```py
 """
 Utils for caching the outputs of AOTAutograd
 """

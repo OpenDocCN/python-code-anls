@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\dist_autograd_test.py`
 
-```
+```py
 # mypy: ignore-errors
 
 import sys  # 导入sys模块，用于系统相关操作

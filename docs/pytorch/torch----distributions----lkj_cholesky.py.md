@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\lkj_cholesky.py`
 
-```
+```py
 """
 This closely follows the implementation in NumPyro (https://github.com/pyro-ppl/numpyro).
 

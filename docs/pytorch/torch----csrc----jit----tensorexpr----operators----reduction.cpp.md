@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\reduction.cpp`
 
-```
+```py
 // 引入 Torch 库中的张量表达式操作的头文件
 #include <torch/csrc/jit/tensorexpr/operators/reduction.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\analyze\trace_dependencies.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 sys 模块，用于设置和获取系统相关信息
 import sys

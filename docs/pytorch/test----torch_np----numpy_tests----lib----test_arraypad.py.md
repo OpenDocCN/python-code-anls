@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\lib\test_arraypad.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 引入 skipIf 别名 skipif 用于条件性跳过测试

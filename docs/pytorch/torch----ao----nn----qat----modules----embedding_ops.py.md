@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\qat\modules\embedding_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库
 import torch

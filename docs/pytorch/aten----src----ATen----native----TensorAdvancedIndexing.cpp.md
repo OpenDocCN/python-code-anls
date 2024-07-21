@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorAdvancedIndexing.cpp`
 
-```
+```py
 // Indexing tensors by by tensors
 //
 // This corresponds to "advanced indexing" in NumPy. The two operations are:
@@ -885,7 +885,7 @@ Tensor & put_(Tensor & self, const Tensor& index, const Tensor & source, const b
 put_stub(iter.device_type(), iter, self, accumulate);
 
 
-```  
+```py  
   return self;
 
 

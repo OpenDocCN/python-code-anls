@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\finalize.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/api/module.h>  // 引入 Torch 模块 API 头文件

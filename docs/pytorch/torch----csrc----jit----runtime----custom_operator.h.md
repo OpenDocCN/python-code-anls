@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\custom_operator.h`
 
-```
+```py
 #pragma once
 
 # 声明指令，确保本文件只被编译一次，避免重复包含。

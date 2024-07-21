@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\quantized\Quantizer.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ArrayRef.h>
 #include <ATen/ATen.h>

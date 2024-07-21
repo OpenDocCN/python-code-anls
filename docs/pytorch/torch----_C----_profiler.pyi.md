@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_profiler.pyi`
 
-```
+```py
 # 导入必要的模块
 from enum import Enum  # 导入枚举类型的支持
 from typing import Any, Literal  # 引入类型提示中的通用和文字类型

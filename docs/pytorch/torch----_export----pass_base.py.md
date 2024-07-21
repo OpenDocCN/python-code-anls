@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\pass_base.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import operator

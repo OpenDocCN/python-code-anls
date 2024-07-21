@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\native.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库，用于深度学习相关操作
 import torch

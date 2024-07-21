@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\compiled_autograd.h`
 
-```
+```py
 #pragma once
 // 包含 ATen 库的头文件，用于张量几何信息
 #include <ATen/TensorGeometry.h>

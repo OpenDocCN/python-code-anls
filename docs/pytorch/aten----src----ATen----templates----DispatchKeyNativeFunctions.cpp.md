@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\DispatchKeyNativeFunctions.cpp`
 
-```
+```py
 // 在未命名的命名空间中定义辅助函数，这些函数在当前文件中可见但对外部不可见
 namespace {
     // 插入生成的注释

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\UCCUtils.hpp`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 来确保头文件只被编译一次，防止多重包含问题

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\flash_attn\static_switch.h`
 
-```
+```py
 // 宏定义：根据条件(COND)进行静态分支切换，使用给定的常量名(CONST_NAME)
 #define BOOL_SWITCH(COND, CONST_NAME, ...)      \
   [&] {                                         \

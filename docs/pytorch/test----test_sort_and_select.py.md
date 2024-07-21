@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_sort_and_select.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 import random  # 导入random模块，用于生成随机数

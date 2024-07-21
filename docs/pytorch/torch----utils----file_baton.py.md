@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\file_baton.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作系统和时间模块
 import os

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_dict.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Dict.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\device_op_overrides.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入未类型化定义的函数和类
 from ..common import DeviceOpOverrides, register_device_op_overrides

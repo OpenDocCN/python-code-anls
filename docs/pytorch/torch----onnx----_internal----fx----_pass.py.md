@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\_pass.py`
 
-```
+```py
 # 添加类型提示的兼容性标记
 # mypy: allow-untyped-defs
 # 导入 Python 未来版本的注解特性
@@ -333,7 +333,7 @@ class Transform(abc.ABC):
             with diagnostic.log_section(graph_diff_log_level, "Graph diff:"):
                 diagnostic.log(
                     graph_diff_log_level,
-                    "```\n%s\n```",
+                    "```\n%s\n```py",
                     diagnostics.LazyString(
                         _unified_diff, old_readable_graph, new_readable_graph
                     ),
@@ -349,7 +349,7 @@ class Transform(abc.ABC):
                 else:
                     diagnostic.log(
                         graph_diff_log_level,
-                        "```\n%s\n```",
+                        "```\n%s\n```py",
                         diagnostics.LazyString(_unified_diff, old_tabular, new_tabular),
                     )
 

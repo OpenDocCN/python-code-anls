@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_matrix_ops.py`
 
-```
+```py
     @with_comms
     # 使用装饰器确保在通信环境中执行测试函数
     def test_addmm(self):

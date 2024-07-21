@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\copysign.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/BFloat16.h>  // 引入BFloat16类型定义

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_verifier.cpp`
 
-```
+```py
 #include <torch/csrc/jit/tensorexpr/ir_verifier.h>
 
 #include <torch/csrc/jit/tensorexpr/ir.h>

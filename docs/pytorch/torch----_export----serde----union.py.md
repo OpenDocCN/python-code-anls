@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\serde\union.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 库，用于支持 lru_cache 缓存
 import functools

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_schedule.py`
 
-```
+```py
 # 版权声明和所有者信息
 # 所有者：["oncall: distributed"]
 import copy  # 导入深拷贝模块

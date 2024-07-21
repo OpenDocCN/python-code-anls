@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\valgrind_wrapper\timer_interface.py`
 
-```
+```py
 """Intermediate layer between `Timer` and `valgrind`."""
 # 引入必要的库和模块
 import collections  # 提供了额外的数据结构
@@ -404,7 +404,7 @@ class GlobalsBridge:
             globals={"counter": pickle.loads(pickle.dumps(counter))}
         ).timeit(20)
         print(counter.value)  # Still 10
-    ```
+    ```py
 
     In the first case, `stmt` is executed using the objects in `globals`;
     however, the addition of serialization and deserialization changes the

@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_compiled_optimizers.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 引入系统、单元测试、弱引用和上下文管理模块

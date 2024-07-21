@@ -1,6 +1,6 @@
 # `.\pytorch\torch\hub.py`
 
-```
+```py
 # 声明导入需要的库和模块
 import contextlib  # 上下文管理模块，用于创建上下文管理器
 import errno  # 错误码模块，处理操作系统相关的错误码

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ParallelGuard.cpp`
 
-```
+```py
 #include <c10/util/ParallelGuard.h>
 // 包含 c10 库的 ParallelGuard 头文件
 

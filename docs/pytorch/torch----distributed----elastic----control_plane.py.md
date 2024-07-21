@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\control_plane.py`
 
-```
+```py
 # 导入必要的模块和库
 import os
 from contextlib import contextmanager, ExitStack

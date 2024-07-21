@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ir_builder.h`
 
-```
+```py
 #pragma once
 
 

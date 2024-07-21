@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Normalization.cpp`
 
-```
+```py
 // 定义宏，用于标记仅支持方法操作符的 Torch 版本
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\flex_attention.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from typing import Any, Callable, Tuple, Union  # 导入需要的类型提示模块
 

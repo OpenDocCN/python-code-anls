@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cpp_api_parity.py`
 
-```
+```py
 # Owner(s): ["module: cpp"]
 
 # 导入标准库模块 os

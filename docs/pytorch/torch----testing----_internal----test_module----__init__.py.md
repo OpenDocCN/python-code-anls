@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\test_module\__init__.py`
 
-```
+```py
 # 定义一个名为 find_factors 的函数，接受一个整数参数 num
 def find_factors(num):
     # 创建一个空列表 factors 用于存储 num 的因子

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\backend_device.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保此头文件只被编译一次
 

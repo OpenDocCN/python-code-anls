@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\operator_upgraders\upgraders.h`
 
-```
+```py
 #pragma once
 #include <c10/macros/Export.h>  // 包含导出宏定义
 #include <torch/csrc/jit/ir/ir.h>  // 包含 Torch 的 IR 类定义

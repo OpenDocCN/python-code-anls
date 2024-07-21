@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_variable_indexing.cpp`
 
-```
+```py
 // 引入 Torch 的头文件：变量索引的 Python 接口
 #include <torch/csrc/autograd/python_variable_indexing.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\templates\NativeFunctions.h`
 
-```
+```py
 #pragma once
 // 一旦头文件被引入，此处的注释会被替换为生成的注释
 

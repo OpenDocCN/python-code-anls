@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\jit_utils.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 #include <c10/core/ScalarType.h>
 #include <c10/util/irange.h>

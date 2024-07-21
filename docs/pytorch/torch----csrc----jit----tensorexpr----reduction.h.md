@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\reduction.h`
 
-```
+```py
 #pragma once
 // 引入TensorExpr的相关头文件
 #include <torch/csrc/jit/tensorexpr/expr.h>

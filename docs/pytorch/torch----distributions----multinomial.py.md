@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\multinomial.py`
 
-```
+```py
 # 导入 torch 库和相关模块
 import torch
 from torch import inf

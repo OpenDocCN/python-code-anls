@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\cuda\interface.cpp`
 
-```
+```py
 // 包含 Torch CUDA 后端的融合运算接口头文件
 
 #include <torch/csrc/jit/codegen/cuda/interface.h>

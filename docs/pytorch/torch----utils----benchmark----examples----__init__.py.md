@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\__init__.py`
 
-```
+```py
 # 导入Python标准库中的re模块，用于处理正则表达式
 import re
 

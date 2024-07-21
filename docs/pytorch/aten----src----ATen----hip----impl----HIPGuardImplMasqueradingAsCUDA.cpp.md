@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\hip\impl\HIPGuardImplMasqueradingAsCUDA.cpp`
 
-```
+```py
 // 在这里导入 ATen 的头文件，其中包含了一些 HIPGuardImplMasqueradingAsCUDA 的实现
 #include <ATen/hip/impl/HIPGuardImplMasqueradingAsCUDA>
 

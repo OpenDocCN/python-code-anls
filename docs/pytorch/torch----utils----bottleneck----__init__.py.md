@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\bottleneck\__init__.py`
 
-```
+```py
 # 定义一个名为 fibonacci 的生成器函数
 def fibonacci():
     a, b = 0, 1  # 初始化两个变量 a 和 b，分别为斐波那契数列的前两个值

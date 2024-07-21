@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\init.cpp`
 
-```
+```py
 // 包含 Torch C++ 自动微分相关的头文件
 #include <torch/csrc/autograd/python_cpp_function.h>
 #include <torch/csrc/distributed/autograd/autograd.h>

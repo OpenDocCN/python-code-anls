@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\operator_upgraders\upgraders_entry.cpp`
 
-```
+```py
 #include <torch/csrc/jit/operator_upgraders/upgraders_entry.h>
 
 #include <ATen/core/stack.h>

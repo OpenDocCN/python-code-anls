@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256_mask.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件在编译时只包含一次
 

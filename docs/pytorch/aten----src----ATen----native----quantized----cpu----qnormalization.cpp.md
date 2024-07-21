@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnormalization.cpp`
 
-```
+```py
 // 引入 ATen 库中的头文件
 #include <ATen/core/Tensor.h>
 #include <ATen/native/layer_norm.h>

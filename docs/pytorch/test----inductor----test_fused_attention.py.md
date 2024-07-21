@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_fused_attention.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入必要的模块和库
 import functools

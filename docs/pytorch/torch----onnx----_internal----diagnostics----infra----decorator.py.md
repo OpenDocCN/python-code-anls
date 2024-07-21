@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\decorator.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Import necessary modules and functions for type hinting and logging
 from __future__ import annotations
@@ -30,7 +30,7 @@ def format_exception_in_markdown(exception: Exception) -> str:
     msg_list.extend(
         traceback.format_exception(type(exception), exception, exception.__traceback__)
     )
-    msg_list.append("```")
+    msg_list.append("```py")
     return "\n".join(msg_list)
 
 # Decorator function to format a function signature in markdown format

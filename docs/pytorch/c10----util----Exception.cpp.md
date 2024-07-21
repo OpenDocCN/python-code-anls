@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Exception.cpp`
 
-```
+```py
 // 包含异常处理、日志和类型相关的头文件
 #include <c10/util/Exception.h>
 #include <c10/util/Logging.h>

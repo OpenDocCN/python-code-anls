@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\__init__.py`
 
-```
+```py
 # 导入所需模块：datetime模块用于处理日期时间，timedelta用于时间间隔计算
 import datetime
 from datetime import timedelta

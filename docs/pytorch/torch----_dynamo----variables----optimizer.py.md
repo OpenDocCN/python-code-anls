@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\optimizer.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 引入弱引用模块，用于管理对象的弱引用

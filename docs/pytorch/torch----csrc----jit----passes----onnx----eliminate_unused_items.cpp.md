@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\eliminate_unused_items.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/onnx/eliminate_unused_items.h>
 #include <torch/csrc/jit/passes/onnx/helper.h>
 

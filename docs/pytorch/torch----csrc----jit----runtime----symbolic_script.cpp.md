@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\symbolic_script.cpp`
 
-```
+```py
 // 引入 Torch 的符号脚本运行时头文件
 
 #include <torch/csrc/jit/runtime/symbolic_script.h>

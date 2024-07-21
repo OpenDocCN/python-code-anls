@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\op_registration.h`
 
-```
+```py
 /**
  * Directive to include this header file only once in a compilation unit.
  */

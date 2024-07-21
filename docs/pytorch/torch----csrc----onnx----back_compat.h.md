@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\onnx\back_compat.h`
 
-```
+```py
 #pragma once
 
 #include <onnx/onnx_pb.h>

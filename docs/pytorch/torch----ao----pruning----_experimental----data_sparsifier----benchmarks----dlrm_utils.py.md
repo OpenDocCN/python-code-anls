@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\benchmarks\dlrm_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch和相关模块，忽略类型检查
 import torch
@@ -13,7 +13,7 @@ import os
 # 定义 SparseDLRM 类，继承自 DLRM_Net
 class SparseDLRM(DLRM_Net):
     """The SparseDLRM model is a wrapper around the DLRM_Net model that tries
-    to use torch.sparse tensors for the features obtained after the ```interact_features()```
+    to use torch.sparse tensors for the features obtained after the ```interact_features()```py
     call. The idea is to do a simple torch.mm() with the weight matrix of the first linear
     layer of the top layer.
     """
@@ -88,7 +88,7 @@ def get_dlrm_model(sparse_dlrm=False):
 
 # 定义函数 dlrm_wrap，简化版的 dlrm_wrap() 函数，用于将输入张量移动到指定设备，但不进行前向传播
 def dlrm_wrap(X, lS_o, lS_i, device, ndevices=1):
-    """Rewritten simpler version of ```dlrm_wrap()``` found in dlrm_s_pytorch.py.
+    """Rewritten simpler version of ```dlrm_wrap()```py found in dlrm_s_pytorch.py.
     This function simply moves the input tensors into the device and without the forward pass
     """
     # 如果设备数为1，将输入张量（或列表中的每个张量）移动到指定设备
@@ -110,7 +110,7 @@ def dlrm_wrap(X, lS_o, lS_i, device, ndevices=1):
 # 创建用于测试数据集的数据加载器函数
 def make_test_data_loader(raw_data_file_path, processed_data_file):
     """Function to create dataset and dataloaders for the test dataset.
-    Rewritten simpler version of ```make_criteo_and_loaders()``` from the dlrm_data_pytorch.py
+    Rewritten simpler version of ```make_criteo_and_loaders()```py from the dlrm_data_pytorch.py
     that makes the test dataset and dataloaders only for the ***kaggle criteo dataset***
     """
     # 创建一个 Kaggle Criteo 数据集对象，用于测试数据集

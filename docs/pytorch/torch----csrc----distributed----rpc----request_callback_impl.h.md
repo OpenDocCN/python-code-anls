@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\request_callback_impl.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/rpc/message.h>

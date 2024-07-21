@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_cudnn_test.cpp`
 
-```
+```py
 # 包含 Google Test 框架头文件
 #include <gtest/gtest.h>
 

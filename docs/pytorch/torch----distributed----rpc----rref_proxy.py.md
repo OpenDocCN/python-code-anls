@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\rref_proxy.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 functools 模块导入 partial 函数，用于创建偏函数
 from functools import partial

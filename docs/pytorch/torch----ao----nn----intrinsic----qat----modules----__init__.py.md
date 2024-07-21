@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\qat\modules\__init__.py`
 
-```
+```py
 # 导入自定义模块中的特定类和函数，包括 LinearReLU 类
 # 这些模块在当前目录的 linear_relu.py 文件中定义
 from .linear_relu import LinearReLU

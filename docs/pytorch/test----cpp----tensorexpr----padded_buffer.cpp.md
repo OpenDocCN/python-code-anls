@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\padded_buffer.cpp`
 
-```
+```py
 // 包含所需的头文件：定义了 PaddedBuffer 类的实现
 #include "test/cpp/tensorexpr/padded_buffer.h"
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\dest\lazy_ts_lowering.py`
 
-```
+```py
 from torchgen.api.lazy import LazyArgument, LazyIrSchema
 from torchgen.api.types import OptionalCType
 

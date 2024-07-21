@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\GroupRegistry.hpp`
 
-```
+```py
 // 防止头文件被多次引用
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_fx_param_shape_control_flow.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入unittest模块，用于编写和运行测试用例

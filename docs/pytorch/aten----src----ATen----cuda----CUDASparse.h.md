@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDASparse.h`
 
-```
+```py
 #pragma once
 // 用于确保头文件只被包含一次
 

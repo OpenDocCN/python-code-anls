@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\utf8_decoding_ignore.cpp`
 
-```
+```py
 #include <torch/csrc/jit/python/utf8_decoding_ignore.h>
 
 namespace torch::jit {

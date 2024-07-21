@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\constraint.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的操作函数
 from torch.fx.experimental.migrate_gradual_types.operation import op_add, op_sub, op_mul, op_div, \

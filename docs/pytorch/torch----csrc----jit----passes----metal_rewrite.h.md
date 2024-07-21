@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\metal_rewrite.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/jit/api/module.h>
 // 引入包含了 Torch JIT API 的模块头文件

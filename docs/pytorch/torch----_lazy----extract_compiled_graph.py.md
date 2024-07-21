@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\extract_compiled_graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块
 import copy  # 导入copy模块，用于对象复制

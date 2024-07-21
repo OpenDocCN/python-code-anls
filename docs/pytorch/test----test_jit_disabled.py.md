@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_disabled.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import sys  # 导入系统模块

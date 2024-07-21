@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ReduceOpsUtils.h`
 
-```
+```py
 #pragma once
 
 #include <limits> // 包含标准库中数值极限的头文件

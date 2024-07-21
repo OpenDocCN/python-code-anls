@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cublas_extension.cpp`
 
-```
+```py
 #include <iostream>
 
 #include <torch/extension.h>  // 导入 PyTorch C++ 扩展模块的头文件

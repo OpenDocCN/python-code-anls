@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\graph_signature.py`
 
-```
+```py
 # 导入必要的模块和类型定义
 # mypy: allow-untyped-defs
 import dataclasses

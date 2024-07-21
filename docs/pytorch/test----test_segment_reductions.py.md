@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_segment_reductions.py`
 
-```
+```py
 # Owner(s): ["module: scatter & gather ops"]
 
 # 导入 itertools 库中的 product 函数，用于生成迭代器的笛卡尔积

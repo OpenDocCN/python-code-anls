@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_tensor_impl.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/csrc/lazy/core/tensor_impl.h>  // 引入 Lazy Tensor 实现的头文件

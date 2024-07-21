@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\concrete_module_type.h`
 
-```
+```py
 // 使用#pragma once确保头文件只被编译一次，防止多重包含的问题
 
 #include <ATen/core/ivalue.h>                      // 引入ATen库中的ivalue头文件

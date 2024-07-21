@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\test_bits.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入所需的模块和函数

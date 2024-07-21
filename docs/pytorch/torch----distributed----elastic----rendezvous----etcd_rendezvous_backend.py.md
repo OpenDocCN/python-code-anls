@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\etcd_rendezvous_backend.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 以上为 mypy 工具的配置，允许未标注类型的函数定义
 # Copyright (c) Facebook, Inc. and its affiliates.

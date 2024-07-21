@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_cloner.h`
 
-```
+```py
 #pragma once
 #include <c10/core/ScalarType.h>  // 包含C10库中的标量类型定义
 #include <torch/csrc/Export.h>   // 包含Torch导出相关的头文件

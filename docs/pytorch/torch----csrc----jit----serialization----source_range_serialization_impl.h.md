@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\source_range_serialization_impl.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once确保头文件只被编译一次
 

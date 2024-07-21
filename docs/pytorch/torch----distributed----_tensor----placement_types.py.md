@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\placement_types.py`
 
-```
+```py
 # 设置一个类型检查的标志，允许未标注的函数定义
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

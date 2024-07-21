@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\schema_type_annotation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 相关模块
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\LlgaTensorImpl.h`
 
-```
+```py
 // 预处理指令，表示这个头文件只会被包含一次
 #pragma once
 

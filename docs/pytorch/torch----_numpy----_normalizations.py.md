@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_normalizations.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略 mypy 类型检查时可能出现的错误
 

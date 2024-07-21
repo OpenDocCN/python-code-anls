@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\no_merge_conflict_csv_linter.py`
 
-```
+```py
 from __future__ import annotations
 # 引入未来的注释类型支持，允许在类型提示中使用字符串类型。
 

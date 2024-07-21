@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_sugared_value.cpp`
 
-```
+```py
 // 引入 Torch JIT 的 Python Sugared Value 头文件
 #include <torch/csrc/jit/python/python_sugared_value.h>
 

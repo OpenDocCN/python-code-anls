@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\negative_binomial.py`
 
-```
+```py
 # 引入torch库，用于深度学习任务
 import torch
 # 引入torch.nn.functional中的F，提供了许多用于神经网络的函数

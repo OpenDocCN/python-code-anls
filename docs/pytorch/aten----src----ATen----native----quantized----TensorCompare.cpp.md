@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\TensorCompare.cpp`
 
-```
+```py
 // 包含 ATen 库中的各种头文件，用于张量操作和计算
 #include <ATen/ATen.h>
 #include <ATen/CPUApplyUtils.h>

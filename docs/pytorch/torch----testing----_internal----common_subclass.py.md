@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_subclass.py`
 
-```
+```py
 # mypy: ignore-errors  # 忽略类型检查错误，允许代码通过静态类型检查时忽略特定的错误
 
 import torch  # 导入PyTorch库

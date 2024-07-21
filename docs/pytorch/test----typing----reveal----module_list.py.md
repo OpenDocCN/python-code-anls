@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\reveal\module_list.py`
 
-```
+```py
 import torch
 
 

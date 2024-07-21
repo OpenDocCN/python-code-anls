@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\compile_fx.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import contextlib  # 上下文管理工具

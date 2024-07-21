@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\compile_worker\subproc_pool.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import functools  # 提供高阶函数和函数操作的功能

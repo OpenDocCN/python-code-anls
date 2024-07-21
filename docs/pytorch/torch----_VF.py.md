@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_VF.py`
 
-```
+```py
 """
 This makes the functions in torch._C._VariableFunctions available as
     torch._VF.<funcname>

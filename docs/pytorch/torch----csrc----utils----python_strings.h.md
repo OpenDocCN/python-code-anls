@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_strings.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/python_headers.h>

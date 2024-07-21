@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\ProcessGroupNCCLErrorsTest.cpp`
 
-```
+```py
 #include <chrono>  // 包含用于时间和时间点的标准库头文件
 #include <filesystem>  // 包含用于文件系统操作的标准库头文件
 #include <fstream>  // 包含用于文件输入输出的标准库头文件

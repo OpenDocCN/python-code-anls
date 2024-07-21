@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\fusion.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/static/fusion.h>
 
 #include <ATen/core/symbol.h>

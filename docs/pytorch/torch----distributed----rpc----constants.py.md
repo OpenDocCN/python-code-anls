@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\constants.py`
 
-```
+```py
 # 导入需要的模块和类型
 from datetime import timedelta
 from typing import List

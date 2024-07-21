@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_cuda.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略类型检查错误，这可能是因为此文件在导入时需要初始化 CUDA 上下文
 

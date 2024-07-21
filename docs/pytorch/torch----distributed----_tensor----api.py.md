@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 import inspect  # 导入 inspect 模块，用于获取对象信息

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\registration.py`
 
-```
+```py
 # 模块用于处理 ATen 到 ONNX 函数的注册
 
 from __future__ import annotations  # 允许在类型检查时使用注解

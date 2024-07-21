@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\activation.cpp`
 
-```
+```py
 // 包含 torch 库中的激活函数选项头文件
 #include <torch/nn/options/activation.h>
 

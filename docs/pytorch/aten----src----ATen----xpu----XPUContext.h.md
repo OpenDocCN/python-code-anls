@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\XPUContext.h`
 
-```
+```py
 #pragma once
 
 

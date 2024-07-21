@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\functionalization.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 __future__ 模块导入 annotations 功能，允许使用类型注解
 

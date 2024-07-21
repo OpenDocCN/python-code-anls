@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SortingKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 // 定义宏，用于禁用 Torch 操作符的断言检查
 

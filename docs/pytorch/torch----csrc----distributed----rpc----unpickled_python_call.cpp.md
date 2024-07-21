@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\unpickled_python_call.cpp`
 
-```
+```py
 // 包含 Torch 分布式 RPC 模块中的 Python 反序列化调用的头文件
 #include <torch/csrc/distributed/rpc/unpickled_python_call.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_load_upgraders.cpp`
 
-```
+```py
 // 包含头文件：caffe2 序列化版本、Google 测试框架、Torch 模块 API、操作升级器、版本映射、序列化导入工具、JIT 测试工具
 #include <caffe2/serialize/versions.h>
 #include <gtest/gtest.h>

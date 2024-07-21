@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_python_autograd.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 from typing import Callable, Dict, List, NamedTuple, Optional
 

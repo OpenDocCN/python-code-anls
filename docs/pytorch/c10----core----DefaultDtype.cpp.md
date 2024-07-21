@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DefaultDtype.cpp`
 
-```
+```py
 // 包含 C10 核心的默认数据类型头文件
 #include <c10/core/DefaultDtype.h>
 // 包含 C10 的类型标识工具头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\launcher\api.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

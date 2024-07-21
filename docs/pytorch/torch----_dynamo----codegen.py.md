@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\codegen.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和库
 import collections  # 导入collections模块，用于创建特定类型的容器数据类型

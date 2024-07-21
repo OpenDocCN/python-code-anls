@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\GridSamplerKernel.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_NO_OPERATORS，用于避免编译器中操作符的定义
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 GridSampler 相关的头文件

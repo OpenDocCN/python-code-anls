@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_parametrization.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入PyTorch相关模块

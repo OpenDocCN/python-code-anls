@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\split_test.py`
 
-```
+```py
 # 导入 operator_benchmark 库和 torch 库
 import operator_benchmark as op_bench
 import torch

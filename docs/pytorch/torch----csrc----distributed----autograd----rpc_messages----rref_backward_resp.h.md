@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rref_backward_resp.h`
 
-```
+```py
 // 指令，防止头文件多次包含，只编译一次
 #pragma once
 

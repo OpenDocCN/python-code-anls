@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runner\model_container_runner_cuda.h`
 
-```
+```py
 #if !defined(C10_MOBILE) && !defined(ANDROID)
 // 如果未定义 C10_MOBILE 和 ANDROID 宏，则执行以下代码
 

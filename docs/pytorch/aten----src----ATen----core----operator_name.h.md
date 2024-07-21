@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\operator_name.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h>  // 引入 c10 宏定义

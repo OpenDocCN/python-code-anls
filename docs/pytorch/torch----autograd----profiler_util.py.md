@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\profiler_util.py`
 
-```
+```py
     # 启用 mypy 的未类型定义检查
     # 导入标准库模块
     import bisect

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\__init__.py`
 
-```
+```py
 # 导入所需的模块：requests 用于 HTTP 请求操作，os 用于系统相关操作
 import requests
 import os

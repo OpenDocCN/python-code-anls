@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_decorator.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 # flake8: noqa
 

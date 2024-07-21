@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\MobileModelRunner.h`
 
-```
+```py
 // 预处理指令，确保头文件仅被包含一次
 #pragma once
 

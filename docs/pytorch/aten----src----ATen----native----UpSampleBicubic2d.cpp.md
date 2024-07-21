@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UpSampleBicubic2d.cpp`
 
-```
+```py
 // 定义预处理宏，仅在编译时包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量操作的核心头文件

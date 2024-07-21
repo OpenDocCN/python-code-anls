@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\GridSampler.cpp`
 
-```
+```py
 // 定义编译器宏以限制仅用于方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

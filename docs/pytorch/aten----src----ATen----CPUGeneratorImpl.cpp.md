@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\CPUGeneratorImpl.cpp`
 
-```
+```py
 /**
  * Including necessary headers for ATen and standard libraries
  */

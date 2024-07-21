@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cuda_nvml_based_avail.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 
 # 引入必要的模块和库

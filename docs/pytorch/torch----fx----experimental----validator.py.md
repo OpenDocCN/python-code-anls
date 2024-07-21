@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\validator.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和库
 import functools  # 导入 functools 模块，提供高阶函数和操作工具

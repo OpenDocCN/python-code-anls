@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\jit\templates\remote_module_template.py`
 
-```
+```py
 #!/usr/bin/python3
 # mypy: allow-untyped-defs
 

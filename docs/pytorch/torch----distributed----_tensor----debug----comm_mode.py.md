@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\debug\comm_mode.py`
 
-```
+```py
 # 设置 mypy 选项以允许未类型化的函数定义
 # 导入正则表达式模块
 import re

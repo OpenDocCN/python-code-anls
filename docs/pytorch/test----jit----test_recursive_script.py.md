@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_recursive_script.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入必要的标准库和第三方库

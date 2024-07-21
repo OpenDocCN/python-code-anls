@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\functional.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\graph_settings.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入模块 inspect 和 warnings，以及类型提示 Any、List、Optional、Set
 import inspect

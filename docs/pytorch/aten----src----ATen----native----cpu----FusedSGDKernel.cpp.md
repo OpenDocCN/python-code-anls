@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\FusedSGDKernel.cpp`
 
-```
+```py
 // 定义宏以仅包含方法操作符的 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库中的头文件

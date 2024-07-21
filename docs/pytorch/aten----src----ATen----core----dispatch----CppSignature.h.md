@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\CppSignature.h`
 
-```
+```py
 #pragma once
 // 引入头文件 <typeindex>，用于支持类型索引的操作
 #include <typeindex>

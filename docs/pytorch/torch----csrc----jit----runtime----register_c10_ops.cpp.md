@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_c10_ops.cpp`
 
-```
+```py
 #include <ATen/core/ATenOpList.h>
 #include <ATen/core/dispatch/Dispatcher.h>
 #include <ATen/record_function.h>

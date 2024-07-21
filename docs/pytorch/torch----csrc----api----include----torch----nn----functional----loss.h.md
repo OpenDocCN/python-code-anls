@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\loss.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ExpandUtils.h>
@@ -34,7 +34,7 @@ inline Tensor l1_loss(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::l1_loss(input, target, F::L1LossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 // 定义 l1_loss 函数的外部接口
 inline Tensor l1_loss(
     const Tensor& input,  // 输入张量
@@ -94,7 +94,7 @@ inline Tensor kl_div(
 /// namespace F = torch::nn::functional;
 /// F::kl_div(input, target,
 /// F::KLDivFuncOptions.reduction(torch::kNone).log_target(false));
-/// ```
+/// ```py
 // 定义 kl_div 函数的外部接口
 inline Tensor kl_div(
     const Tensor& input,  // 输入张量
@@ -152,7 +152,7 @@ inline Tensor mse_loss(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::mse_loss(input, target, F::MSELossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 inline Tensor mse_loss(
     // 输入张量
     const Tensor& input,
@@ -217,7 +217,7 @@ inline Tensor binary_cross_entropy(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::binary_cross_entropy(input, target,
-/// ```
+/// ```py
 /// F::BinaryCrossEntropyFuncOptions().weight(weight));
 /// ```
 inline Tensor binary_cross_entropy(
@@ -255,7 +255,7 @@ inline Tensor hinge_embedding_loss(
 /// optional arguments are supported for this functional.
 ///
 /// Example:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::hinge_embedding_loss(input, target,
 /// F::HingeEmbeddingLossFuncOptions().margin(2));
@@ -309,7 +309,7 @@ inline Tensor multi_margin_loss(
 /// optional arguments are supported for this functional.
 ///
 /// Example:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::multi_margin_loss(input, target,
 /// F::MultiMarginLossFuncOptions().margin(2).weight(weight));
@@ -370,7 +370,7 @@ inline Tensor cosine_embedding_loss(
 /// 若要了解此功能支持的可选参数，请参阅 `torch::nn::functional::CosineEmbeddingLossFuncOptions` 类的文档。
 /// 
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::cosine_embedding_loss(input1, input2, target,
 ///                         F::CosineEmbeddingLossFuncOptions().margin(0.5));
@@ -438,7 +438,7 @@ inline Tensor smooth_l1_loss(
 /// 若要了解此功能支持的可选参数，请参阅 `torch::nn::functional::SmoothL1LossFuncOptions` 类的文档。
 /// 
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::smooth_l1_loss(input, target, F::SmoothL1LossFuncOptions(torch::kNone));
 /// ```
@@ -456,7 +456,7 @@ inline Tensor smooth_l1_loss(
 /// https://pytorch.org/docs/main/nn.functional.html#torch.nn.functional.smooth_l1_loss
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::smooth_l1_loss(input, target, /*options=*/torch::kNone, /*beta=*/0.5);
 /// ```
@@ -514,7 +514,7 @@ inline Tensor huber_loss(
 /// 查看 `torch::nn::functional::HuberLossFuncOptions` 类的文档，了解此功能支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::huber_loss(input, target,
 /// F::HuberLossFuncOptions().reduction(torch::kNone).delta(0.5));
@@ -536,7 +536,7 @@ inline Tensor huber_loss(
 /// 了解此函数支持的可选参数。
 ///
 /// 示例:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::multilabel_margin_loss(input, target,
 /// F::MultilabelMarginLossFuncOptions(torch::kNone));
@@ -576,7 +576,7 @@ inline Tensor soft_margin_loss(
 /// 了解此函数支持的可选参数。
 ///
 /// 示例:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::soft_margin_loss(input, target,
 /// F::SoftMarginLossFuncOptions(torch::kNone));
@@ -648,7 +648,7 @@ inline Tensor multilabel_soft_margin_loss(
 /// 了解这个函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::multilabel_soft_margin_loss(input, target,
 ///   F::MultilabelSoftMarginLossFuncOptions().reduction(torch::kNone).weight(weight));
@@ -696,7 +696,7 @@ inline Tensor triplet_margin_loss(
 /// 了解这个函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::triplet_margin_loss(anchor, positive, negative,
 ///   F::TripletMarginLossFuncOptions().margin(1.0));
@@ -807,7 +807,7 @@ inline Tensor triplet_margin_with_distance_loss(
 /// 了解这个函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::triplet_margin_with_distance_loss(anchor, positive, negative,
 /// F::TripletMarginWithDistanceLossFuncOptions().margin(1.0));
@@ -860,7 +860,7 @@ inline Tensor ctc_loss(
 /// 了解这个函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::ctc_loss(log_probs, targets, input_lengths, target_lengths,
 /// F::CTCLossFuncOptions().reduction(torch::kNone));
@@ -1017,7 +1017,7 @@ inline Tensor binary_cross_entropy_with_logits(
 /// 查看 `torch::nn::functional::NLLLossFuncOptions` 类的文档，了解该函数支持的可选参数
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::nll_loss(input, target,
 /// F::NLLLossFuncOptions().ignore_index(-100).reduction(torch::kMean));
@@ -1063,7 +1063,7 @@ inline Tensor cross_entropy(
 /// 查看 `torch::nn::functional::CrossEntropyFuncOptions` 类的文档，了解该函数支持的可选参数
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::cross_entropy(input, target,
 /// F::CrossEntropyFuncOptions().ignore_index(-100).reduction(torch::kMean));
@@ -1126,7 +1126,7 @@ inline Tensor binary_cross_entropy_with_logits(
 /// 返回计算得到的二元交叉熵损失的张量。
 ///
 /// 示例用法：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::binary_cross_entropy_with_logits(input, target,
 ///     F::BinaryCrossEntropyWithLogitsFuncOptions()

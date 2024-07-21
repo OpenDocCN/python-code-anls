@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\reference\modules\sparse.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch中用于定义神经网络的模块和函数
 import torch.nn as nn

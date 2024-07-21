@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_cuda_ops.cpp`
 
-```
+```py
 // 引入头文件，包含实现 PyTorch CUDA API 在 TorchScript 中使用的特殊 JIT 运算符的声明
 #include <torch/csrc/api/include/torch/utils.h>
 #include <torch/csrc/jit/cuda/cuda.h>

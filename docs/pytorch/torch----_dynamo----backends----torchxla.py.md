@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\torchxla.py`
 
-```
+```py
 # 忽略类型检查错误，可能是由于类型系统不完全匹配而引起的问题
 # mypy: ignore-errors
 

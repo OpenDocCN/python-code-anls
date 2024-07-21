@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\compilation\eager_fusion.py`
 
-```
+```py
 # 导入时间模块，用于性能测量
 import time
 

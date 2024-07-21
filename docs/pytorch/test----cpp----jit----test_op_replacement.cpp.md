@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_op_replacement.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <test/cpp/jit/test_utils.h>  // 包含测试实用工具的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\linear.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 允许在类型检查中使用未注释类型定义
 

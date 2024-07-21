@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\cpython_defs.h`
 
-```
+```py
 #pragma once
 // 一旦编译器看到这个指令，它会确保头文件只被包含一次
 

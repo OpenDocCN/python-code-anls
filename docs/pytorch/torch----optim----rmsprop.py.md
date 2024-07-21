@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\rmsprop.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Implementation for the RMSprop algorithm."""
 from typing import List, Optional

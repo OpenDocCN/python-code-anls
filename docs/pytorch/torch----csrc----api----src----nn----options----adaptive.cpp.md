@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\adaptive.cpp`
 
-```
+```py
 #include <torch/nn/options/adaptive.h>
 
 

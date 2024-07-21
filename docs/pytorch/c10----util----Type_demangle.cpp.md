@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Type_demangle.cpp`
 
-```
+```py
 #include <c10/util/Type.h>
 // 引入 c10 库中的 Type.h 头文件
 

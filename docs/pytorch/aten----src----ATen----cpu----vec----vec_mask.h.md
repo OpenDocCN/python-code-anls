@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec_mask.h`
 
-```
+```py
 /**
  * This pragma ensures that this header file is included only once during compilation.
  */

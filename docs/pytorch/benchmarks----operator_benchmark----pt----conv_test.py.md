@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\conv_test.py`
 
-```
+```py
 from pt import configs  # 导入名为configs的pt模块
 
 import operator_benchmark as op_bench  # 导入名为op_bench的operator_benchmark模块

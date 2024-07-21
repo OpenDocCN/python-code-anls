@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\special.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于静态类型检查工具
 # 如 mypy，此处忽略特定的错误类型
 # 详细信息：https://github.com/python/mypy/issues/6810

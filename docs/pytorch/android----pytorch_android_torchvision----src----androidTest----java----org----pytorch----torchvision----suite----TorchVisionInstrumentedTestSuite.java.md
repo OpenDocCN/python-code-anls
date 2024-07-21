@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android_torchvision\src\androidTest\java\org\pytorch\torchvision\suite\TorchVisionInstrumentedTestSuite.java`
 
-```
+```py
 // 导入 org.pytorch.torchvision.suite 包下的所有类
 import org.pytorch.torchvision.suite;
 

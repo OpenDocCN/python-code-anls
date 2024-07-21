@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_modules.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 # 从标准库中导入必要的模块和函数

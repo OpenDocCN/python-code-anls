@@ -1,6 +1,6 @@
 # `.\pytorch\tools\jit\gen_unboxing.py`
 
-```
+```py
 # Generates RegisterCodegenUnboxedKernels.cpp, UnboxingFunctions.h and UnboxingFunctions.cpp.
 from __future__ import annotations  # 允许在注解中使用类型提示的未来语法
 

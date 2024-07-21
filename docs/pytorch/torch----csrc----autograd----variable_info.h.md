@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\variable_info.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件仅被编译一次
 

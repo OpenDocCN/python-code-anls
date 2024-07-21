@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\PixelShuffle.cpp`
 
-```
+```py
 // 定义宏，用于仅在方法操作符中包含 ASSERT
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量转换相关头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tools\fsdp2_mem_tracker.py`
 
-```
+```py
 from copy import deepcopy  # 导入深拷贝函数 deepcopy
 from datetime import timedelta  # 导入时间间隔模块中的 timedelta 类
 from functools import partial, wraps  # 导入偏函数和装饰器相关函数

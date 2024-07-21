@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cpu\temp_file.h`
 
-```
+```py
 #pragma once
 // 只允许此头文件被包含一次
 

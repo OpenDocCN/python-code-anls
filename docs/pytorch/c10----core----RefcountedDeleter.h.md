@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\RefcountedDeleter.h`
 
-```
+```py
 #pragma once
 // 只允许该头文件被编译一次
 

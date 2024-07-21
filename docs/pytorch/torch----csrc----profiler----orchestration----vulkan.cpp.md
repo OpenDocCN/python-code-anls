@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\orchestration\vulkan.cpp`
 
-```
+```py
 #include <torch/csrc/profiler/orchestration/vulkan.h>
 
 #include <utility>

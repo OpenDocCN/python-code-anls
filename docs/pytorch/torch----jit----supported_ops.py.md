@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\supported_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入inspect模块，用于检查和获取活动对象的信息
 import inspect

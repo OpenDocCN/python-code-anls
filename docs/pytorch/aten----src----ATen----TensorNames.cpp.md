@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorNames.cpp`
 
-```
+```py
 // 引入 ATen 库中的头文件，包括 TensorNames 和 WrapDimUtils
 #include <ATen/TensorNames.h>
 #include <ATen/WrapDimUtils.h>

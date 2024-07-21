@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\__init__.py`
 
-```
+```py
 # 从 torch.utils.data.dataloader 模块中导入以下类和函数
 from torch.utils.data.dataloader import (
     _DatasetKind,       # 数据集种类的内部表示

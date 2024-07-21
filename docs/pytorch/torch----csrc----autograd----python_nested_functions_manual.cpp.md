@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_nested_functions_manual.cpp`
 
-```
+```py
 // 定义 torch::autograd 命名空间内的静态函数 THPVariable_nested_tensor
 static PyObject* THPVariable_nested_tensor(
     PyObject* /*self*/,    // self 参数，通常用于方法，这里忽略

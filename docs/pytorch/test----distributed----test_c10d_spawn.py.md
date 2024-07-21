@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_spawn.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入标准库和第三方库

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\interface.py`
 
-```
+```py
 # 从 `__future__` 模块中导入 `annotations` 特性，用于支持类型注解的一种机制
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\Copy.cpp`
 
-```
+```py
 // 包含 ATen 库中的必要头文件
 #include <ATen/ATen.h>
 // 包含 ATen 库中量化相关的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\itt_wrapper.h`
 
-```
+```py
 #ifndef PROFILER_ITT_H
 #define PROFILER_ITT_H
 // 包含 C10 库中的导出宏定义

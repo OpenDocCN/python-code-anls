@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\UniqueVoidPtr.cpp`
 
-```
+```py
 # 包含 UniqueVoidPtr.h 头文件，该文件位于 c10/util/ 目录下
 #include <c10/util/UniqueVoidPtr.h>
 

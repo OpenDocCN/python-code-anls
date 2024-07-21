@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\shellcheck_linter.py`
 
-```
+```py
 from __future__ import annotations
 # 导入必要的未来注释以支持类型注解
 

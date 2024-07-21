@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\itt_wrapper.cpp`
 
-```
+```py
 #include <ittnotify.h>
 #include <torch/csrc/itt_wrapper.h>
 #include <torch/csrc/profiler/stubs/base.h>

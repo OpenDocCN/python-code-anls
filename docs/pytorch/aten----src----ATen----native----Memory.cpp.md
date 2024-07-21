@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Memory.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

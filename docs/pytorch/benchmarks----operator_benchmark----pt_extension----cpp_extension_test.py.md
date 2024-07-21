@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt_extension\cpp_extension_test.py`
 
-```
+```py
 import unittest  # 导入unittest模块，用于编写和运行单元测试
 
 import benchmark_cpp_extension  # noqa: F401 导入名为benchmark_cpp_extension的模块，但不使用其对象

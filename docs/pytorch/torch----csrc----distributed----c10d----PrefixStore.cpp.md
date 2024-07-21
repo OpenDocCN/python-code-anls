@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\PrefixStore.cpp`
 
-```
+```py
 // 包含头文件 <torch/csrc/distributed/c10d/PrefixStore.hpp>，以及 <utility>
 #include <torch/csrc/distributed/c10d/PrefixStore.hpp>
 #include <utility>

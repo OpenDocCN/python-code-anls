@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDADevice.h`
 
-```
+```py
 // 包含预处理指令，确保头文件只被包含一次
 #pragma once
 

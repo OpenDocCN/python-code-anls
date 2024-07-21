@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\_utils\signal_handling.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Signal handling for multiprocessing data loading.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\fold.cpp`
 
-```
+```py
 // 包含 Torch 库中的折叠相关头文件
 #include <torch/nn/modules/fold.h>
 

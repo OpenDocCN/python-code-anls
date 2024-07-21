@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\mtia_extension.cpp`
 
-```
+```py
 // 包含 ATen 库中的 MTIAHooksInterface 头文件
 #include <ATen/detail/MTIAHooksInterface.h>
 // 包含 c10 核心库中的 Device 相关头文件

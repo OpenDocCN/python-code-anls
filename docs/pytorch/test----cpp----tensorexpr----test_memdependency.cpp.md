@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_memdependency.cpp`
 
-```
+```py
 // 包含 Google Test 框架中的头文件
 #include <gtest/gtest.h>
 // 包含 TensorExpr 的测试基础类的头文件

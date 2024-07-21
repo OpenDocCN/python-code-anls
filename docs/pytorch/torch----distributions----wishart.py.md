@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\wishart.py`
 
-```
+```py
 # 导入需要的模块和函数
 # mypy: allow-untyped-defs 表示允许未类型化的函数定义
 import math  # 导入数学函数库

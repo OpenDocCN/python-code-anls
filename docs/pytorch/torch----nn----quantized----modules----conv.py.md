@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\modules\conv.py`
 
-```
+```py
 # flake8: noqa: F401
 # 禁止 flake8 检查 F401 错误，即未使用的导入模块
 r"""Quantized Modules.

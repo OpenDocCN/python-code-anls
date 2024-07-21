@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Allocator.cpp`
 
-```
+```py
 // 包含 C10 核心模块的 Allocator 头文件
 #include <c10/core/Allocator.h>
 

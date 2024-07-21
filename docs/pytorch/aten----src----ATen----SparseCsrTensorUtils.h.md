@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\SparseCsrTensorUtils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/SparseCsrTensorImpl.h>

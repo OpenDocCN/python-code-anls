@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_inliner.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/csrc/jit/api/compilation_unit.h>  // 引入 Torch 的 JIT 编译单元 API 头文件

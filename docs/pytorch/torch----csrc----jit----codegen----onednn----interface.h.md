@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\interface.h`
 
-```
+```py
 #pragma once
 #include <ATen/Config.h>
 #include <torch/csrc/jit/ir/ir.h>

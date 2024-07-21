@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_complex.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["module: complex"]
 

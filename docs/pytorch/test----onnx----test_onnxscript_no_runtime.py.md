@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_onnxscript_no_runtime.py`
 
-```
+```py
 """Test the support on onnxscript in PyTorch-ONNX converter."""
 # 导入所需的模块和库
 import io

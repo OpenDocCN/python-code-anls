@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_dynamo_distributed.py`
 
-```
+```py
 # 导入需要的模块和类
 import contextlib  # 上下文管理工具模块
 import copy  # 复制对象模块

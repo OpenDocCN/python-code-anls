@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\operator_registry.h`
 
-```
+```py
 #pragma once
 
 #include <cstring>  // C-style string manipulation functions

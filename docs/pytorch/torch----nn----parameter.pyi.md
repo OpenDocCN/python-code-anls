@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parameter.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 TypeGuard 类型守卫，用于类型检查
 from typing_extensions import TypeGuard

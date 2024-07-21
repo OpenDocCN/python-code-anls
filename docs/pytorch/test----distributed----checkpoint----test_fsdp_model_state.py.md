@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_fsdp_model_state.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import torch  # 导入 PyTorch 库

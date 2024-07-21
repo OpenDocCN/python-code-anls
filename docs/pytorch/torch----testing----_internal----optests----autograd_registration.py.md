@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\optests\autograd_registration.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于标记代码中已知的类型问题
 # --------------------------------------------------------
 # 导入 contextlib 模块，用于上下文管理器

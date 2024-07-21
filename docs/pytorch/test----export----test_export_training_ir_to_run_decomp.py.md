@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_export_training_ir_to_run_decomp.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 # 尝试导入本地模块，如果失败则导入全局模块

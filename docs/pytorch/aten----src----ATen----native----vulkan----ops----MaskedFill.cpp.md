@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\MaskedFill.cpp`
 
-```
+```py
 // 引入 Vulkan 相关头文件和 Torch 库
 #include <ATen/native/vulkan/ops/Common.h>
 #include <ATen/native/vulkan/ops/Utils.h>

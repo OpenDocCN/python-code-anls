@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Pooling.cpp`
 
-```
+```py
 // 定义编译时使用的宏，指定仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

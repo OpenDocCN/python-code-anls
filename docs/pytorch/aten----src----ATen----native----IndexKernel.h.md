@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\IndexKernel.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含，保证头文件内容只被编译一次
 

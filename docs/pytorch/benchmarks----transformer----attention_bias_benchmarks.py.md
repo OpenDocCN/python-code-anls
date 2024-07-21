@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\transformer\attention_bias_benchmarks.py`
 
-```
+```py
 import itertools
 from dataclasses import asdict, dataclass
 from functools import partial

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\register_interface.cpp`
 
-```
+```py
 // 引入 Torch 的 JIT 运行时性能分析记录头文件
 #include <torch/csrc/jit/runtime/profiling_record.h>
 

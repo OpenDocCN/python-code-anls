@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\benchmarks\evaluate_forward_time.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库，包括类型提示被忽略的导入
 from typing import Dict, List

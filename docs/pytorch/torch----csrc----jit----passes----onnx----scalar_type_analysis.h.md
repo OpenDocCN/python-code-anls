@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\scalar_type_analysis.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，确保本头文件只被编译一次，用于防止多重包含。

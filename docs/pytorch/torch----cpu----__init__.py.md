@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cpu\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""
 This package implements abstractions found in ``torch.cuda``

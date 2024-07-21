@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\exception_message.h`
 
-```
+```py
 #pragma once
 // 引入 C10 库中的 Exception.h 头文件，用于处理异常
 #include <c10/util/Exception.h>

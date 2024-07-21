@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\symbolic.h`
 
-```
+```py
 #pragma once
 // 预处理指令，用于确保头文件只被编译一次
 

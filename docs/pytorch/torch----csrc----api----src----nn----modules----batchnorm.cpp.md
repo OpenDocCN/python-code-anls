@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\batchnorm.cpp`
 
-```
+```py
 # 引入 Torch 库中的批归一化函数定义文件
 #include <torch/nn/functional/batchnorm.h>
 # 引入 Torch 库中的批归一化模块定义文件

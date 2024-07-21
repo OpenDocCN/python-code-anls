@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\iter.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 设定最大循环次数

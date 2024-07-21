@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\fake_tensor_prop.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型声明模块
 from typing import Optional

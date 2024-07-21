@@ -1,6 +1,6 @@
 # `.\pytorch\test\autograd\test_complex.py`
 
-```
+```py
 # Owner(s): ["module: autograd"]
 # 导入 PyTorch 库
 import torch

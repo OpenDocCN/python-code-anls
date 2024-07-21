@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\torch_export\test_torch_export_with_onnxruntime.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 # 导入未来版本的注解功能，用于类型注解
 from __future__ import annotations

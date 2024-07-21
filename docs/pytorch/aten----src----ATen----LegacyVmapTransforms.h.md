@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LegacyVmapTransforms.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/LegacyBatchedTensorImpl.h>

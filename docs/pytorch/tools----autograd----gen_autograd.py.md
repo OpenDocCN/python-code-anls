@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_autograd.py`
 
-```
+```py
 """
 To run this file by hand from the root of the PyTorch
 repository, run:

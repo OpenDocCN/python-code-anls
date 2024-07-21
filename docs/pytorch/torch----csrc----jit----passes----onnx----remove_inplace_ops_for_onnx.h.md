@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\remove_inplace_ops_for_onnx.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 预处理指令，确保头文件只被包含一次，防止多重包含导致的编译错误和重定义问题

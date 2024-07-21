@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fully_shard\test_fully_shard_optim_checkpoint.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import itertools

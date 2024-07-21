@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\exit_transforms.cpp`
 
-```
+```py
 // 引入头文件：用于退出转换的前端操作
 #include <torch/csrc/jit/frontend/exit_transforms.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\python\combined_traceback.cpp`
 
-```
+```py
 #include <torch/csrc/profiler/python/combined_traceback.h>
 #include <torch/csrc/python_headers.h>
 #include <torch/csrc/utils/pybind.h>

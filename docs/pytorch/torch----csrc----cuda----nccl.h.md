@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\nccl.h`
 
-```
+```py
 #pragma once
 // 预处理指令：指示编译器在编译此头文件时只包含一次，防止重复包含
 

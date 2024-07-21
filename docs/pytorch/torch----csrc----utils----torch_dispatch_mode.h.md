@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\torch_dispatch_mode.h`
 
-```
+```py
 #pragma once
 // 引入 TorchDispatchModeTLS 头文件
 #include <c10/core/impl/TorchDispatchModeTLS.h>

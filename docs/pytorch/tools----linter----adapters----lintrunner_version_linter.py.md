@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\lintrunner_version_linter.py`
 
-```
+```py
 # 引入 Python 未来版本的注解支持
 from __future__ import annotations
 

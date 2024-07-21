@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\qnnpack\u8lut32norm.h`
 
-```
+```py
 /*
  * 版权声明：
  * 版权所有（c）Facebook公司及其关联公司。

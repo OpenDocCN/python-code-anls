@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\__init__.py`
 
-```
+```py
 # 导入来自当前包中的各种操作模块
 
 from .conv_ops import *  # noqa: F403

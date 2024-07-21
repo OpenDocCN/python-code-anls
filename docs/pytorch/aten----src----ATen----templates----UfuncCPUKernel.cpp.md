@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\UfuncCPUKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 // 定义宏：禁用 Torch 操作符断言
 

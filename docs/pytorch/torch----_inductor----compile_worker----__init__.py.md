@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\compile_worker\__init__.py`
 
-```
+```py
 # 定义一个名为calculate_fibonacci的函数，用于计算斐波那契数列
 def calculate_fibonacci(n):
     # 如果n小于等于0，则直接返回0

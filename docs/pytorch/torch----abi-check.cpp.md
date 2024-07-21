@@ -1,6 +1,6 @@
 # `.\pytorch\torch\abi-check.cpp`
 
-```
+```py
 #include <iostream>
 
 int main() {

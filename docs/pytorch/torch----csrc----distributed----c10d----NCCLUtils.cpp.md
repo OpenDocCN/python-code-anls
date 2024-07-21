@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\NCCLUtils.cpp`
 
-```
+```py
 // 包含 Torch 分布式的 NCCL 相关头文件
 #include <torch/csrc/distributed/c10d/NCCLUtils.hpp>
 #include <torch/csrc/distributed/c10d/ProcessGroupNCCL.hpp>

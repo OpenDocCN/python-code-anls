@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\operators.h`
 
-```
+```py
 #pragma once
 // 引入 Torch 的 TensorExpr 库中的卷积操作头文件
 #include <torch/csrc/jit/tensorexpr/operators/conv2d.h>

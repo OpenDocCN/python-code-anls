@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_torchinductor_strided_blocks.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入需要的模块和类

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\thread_name.h`
 
-```
+```py
 #pragma once
 
 // `#pragma once` 是预处理指令，用于确保头文件只被编译一次，提高编译效率。

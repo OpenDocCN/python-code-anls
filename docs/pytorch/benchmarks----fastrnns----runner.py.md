@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\runner.py`
 
-```
+```py
 from collections import namedtuple  # 导入 namedtuple 模块
 from functools import partial  # 导入 partial 函数
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\ATen_pch.h`
 
-```
+```py
 // 在这里暂时禁用 TORCH_ASSERT_NO_OPERATORS 宏定义，以确保不依赖于 native_functions.yaml 文件，
 // 这样增量构建就不会变得几乎无用。
 #pragma push_macro("TORCH_ASSERT_NO_OPERATORS")

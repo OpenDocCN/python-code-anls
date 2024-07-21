@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_memory.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import sys  # 导入系统模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\api\types\types.py`
 
-```
+```py
 # 从未来导入注解，以支持注解中的类型引用
 from __future__ import annotations
 

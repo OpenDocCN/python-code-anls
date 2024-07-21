@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalShaders.h`
 
-```
+```py
 #ifndef MPSCNNShaders_h
 #define MPSCNNShaders_h
 

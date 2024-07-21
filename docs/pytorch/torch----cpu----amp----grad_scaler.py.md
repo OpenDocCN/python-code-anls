@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cpu\amp\grad_scaler.py`
 
-```
+```py
 # 导入 deprecated 模块中的 deprecated 装饰器
 from typing_extensions import deprecated
 

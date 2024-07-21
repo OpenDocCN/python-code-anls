@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\analyze\is_from_package.py`
 
-```
+```py
 # 导入模块类型和任意类型的类型提示
 from types import ModuleType
 from typing import Any

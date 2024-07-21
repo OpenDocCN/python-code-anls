@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\events\lib_test.py`
 
-```
+```py
     @patch("torch.distributed.elastic.events.record_rdzv_event")
     @patch("torch.distributed.elastic.events.get_logging_handler")
     # 定义测试方法，用于验证构造并记录 rendezvous 事件的行为

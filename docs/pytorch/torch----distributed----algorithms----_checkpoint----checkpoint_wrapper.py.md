@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\_checkpoint\checkpoint_wrapper.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于在运行时产生警告信息
 import warnings
@@ -210,7 +210,7 @@ def offload_wrapper(module: torch.nn.Module) -> torch.nn.Module:
     """
     # 返回经过OffloadWrapper封装后的模块，用于实现checkpointing机制。
     return OffloadWrapper(module)
-    ```
+    ```py
 # 定义一个函数，用于为神经网络模块添加激活检查点功能
 def apply_activation_checkpointing(
     model,  # 输入参数：神经网络模型

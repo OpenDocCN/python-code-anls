@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\pre_grad.py`
 
-```
+```py
 # 设置 mypy 以允许未类型化的定义
 import copy  # 导入 copy 模块，用于复制对象
 import itertools  # 导入 itertools 模块，用于迭代器操作

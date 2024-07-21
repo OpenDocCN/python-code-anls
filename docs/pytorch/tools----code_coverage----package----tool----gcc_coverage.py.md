@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\gcc_coverage.py`
 
-```
+```py
 from __future__ import annotations
 
 import os                   # 导入操作系统相关模块

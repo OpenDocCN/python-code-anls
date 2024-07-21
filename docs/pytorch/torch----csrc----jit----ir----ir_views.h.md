@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\ir_views.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>

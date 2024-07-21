@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_vendor\__init__.py`
 
-```
+```py
 # 定义一个函数，计算并返回给定列表中所有正数的平均值
 def average_positive(nums):
     # 使用列表推导式过滤出所有正数

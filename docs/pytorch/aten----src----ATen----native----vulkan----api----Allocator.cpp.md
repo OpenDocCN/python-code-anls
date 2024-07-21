@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Allocator.cpp`
 
-```
+```py
 #define VMA_IMPLEMENTATION
 #include <ATen/native/vulkan/api/Allocator.h>
 

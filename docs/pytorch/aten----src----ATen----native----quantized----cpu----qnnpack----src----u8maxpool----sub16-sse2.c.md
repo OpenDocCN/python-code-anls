@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\u8maxpool\sub16-sse2.c`
 
-```
+```py
 /*
  *`
 /*

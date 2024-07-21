@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\jit\log_extract.py`
 
-```
+```py
 # 导入必要的模块和函数
 import argparse                   # 用于解析命令行参数的模块
 import functools                  # 提供了高阶函数和操作工具的模块

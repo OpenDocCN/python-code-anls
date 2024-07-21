@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\jit_opt_limit.cpp`
 
-```
+```py
 // 定义一个静态函数，返回一个引用到字符串到整数的无序映射，用于跟踪每个优化通道的计数器
 static std::unordered_map<std::string, int64_t>& passes_to_current_counter() {
   // 静态变量，存储每个优化通道的当前计数器值

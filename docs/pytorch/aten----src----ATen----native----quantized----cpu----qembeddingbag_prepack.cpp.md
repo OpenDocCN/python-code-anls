@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qembeddingbag_prepack.cpp`
 
-```
+```py
 // 定义宏以仅支持方法操作符断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入嵌入包预打包头文件

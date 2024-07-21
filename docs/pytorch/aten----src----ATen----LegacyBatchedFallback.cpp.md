@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LegacyBatchedFallback.cpp`
 
-```
+```py
 // 包含 ATen 库中的各种头文件，用于张量操作和分发功能
 #include <ATen/Context.h>
 #include <ATen/LegacyBatchedFallback.h>

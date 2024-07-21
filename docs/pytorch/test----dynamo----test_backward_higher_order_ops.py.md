@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_backward_higher_order_ops.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # flake8: noqa
 

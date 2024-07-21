@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\non_strict_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import contextlib  # 提供上下文管理工具的模块

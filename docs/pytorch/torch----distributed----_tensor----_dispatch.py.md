@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_dispatch.py`
 
-```
+```py
 # 版权声明以及导入必要的模块和类型声明
 import contextlib  # 提供用于创建上下文管理器的实用工具
 import functools  # 提供用于函数式编程的实用工具

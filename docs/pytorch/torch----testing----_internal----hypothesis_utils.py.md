@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\hypothesis_utils.py`
 
-```
+```py
 # 忽略 mypy 的类型检查错误
 # 导入必要的库和模块
 from collections import defaultdict  # 导入 defaultdict 类

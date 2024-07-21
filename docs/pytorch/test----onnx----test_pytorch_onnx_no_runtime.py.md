@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_pytorch_onnx_no_runtime.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 """Tests for onnx export that don't run the exported model."""

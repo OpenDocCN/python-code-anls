@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\Module.java`
 
-```
+```py
 // Copyright 2004-present Facebook. All Rights Reserved.
 
 // 引入必要的依赖和类

@@ -1,6 +1,6 @@
 # `.\pytorch\mypy_plugins\check_mypy_version.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入系统模块

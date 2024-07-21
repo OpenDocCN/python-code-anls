@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\transformer.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>
@@ -30,7 +30,7 @@ namespace nn {
 /// 示例：
 /// ```
 /// Transformer trans(TransformerOptions(512, 8));
-/// ```
+/// ```py
 };
 
 /// `TransformerImpl` 的 `ModuleHolder` 子类。

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesActivation.cpp`
 
-```
+```py
 // 包含标准库头文件，用于实现 C++ 程序
 #include <ATen/functorch/BatchRulesHelper.h>
 #include <ATen/functorch/PlumbingHelper.h>

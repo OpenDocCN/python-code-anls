@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\RegisterBackendSelect.cpp`
 
-```
+```py
 // 使用较高优先级的调度键（BackendSelect）注册操作，优先于常规的后端特定键（如 CPU），使工厂函数调用到这里。
 // 然后“手动”计算一个较低优先级以重新调度（例如 CPU），以达到最终正确的后端。
 // ${generated_comment}

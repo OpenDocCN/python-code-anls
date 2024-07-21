@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\fail\random.py`
 
-```
+```py
 # 导入 torch 库，用于机器学习和深度学习任务
 import torch
 

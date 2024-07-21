@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\decomposition.py`
 
-```
+```py
 # 设置 mypy，允许未类型化的定义
 # 导入必要的模块和库
 import functools  # 提供高阶函数的实用工具，如函数包装器

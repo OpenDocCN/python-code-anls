@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\upgrader_mobile.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件只被编译一次
 

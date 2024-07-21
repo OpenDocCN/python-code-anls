@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\xpu\detail\Utils.cpp`
 
-```
+```py
 // 包含 oneDNN 的头文件 Utils.h
 
 #include <ATen/native/mkldnn/xpu/detail/Utils.h>

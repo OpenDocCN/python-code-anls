@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\TensorFactory.cpp`
 
-```
+```py
 // 2022年苹果公司版权声明
 
 #include <ATen/ATen.h>  // 引入 ATen 库，提供张量操作的基本功能
@@ -101,7 +101,7 @@ Tensor empty_strided_mps(
 
 
   check_size_nonnegative(size);
-```  
+```py  
 // 调用函数check_size_nonnegative，用于检查尺寸参数size是否为非负数
 
 
@@ -117,7 +117,7 @@ Tensor empty_strided_mps(
 
 
   resize_impl_mps_(t.unsafeGetTensorImpl(), size, stride);
-```  
+```py  
 // 调用resize_impl_mps_函数，用于重新设置张量t的实现，参数包括张量实现、尺寸和步长
 
 

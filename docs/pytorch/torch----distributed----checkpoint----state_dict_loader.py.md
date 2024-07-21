@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\state_dict_loader.py`
 
-```
+```py
 # 允许未标记类型的定义在类型检查期间不发出警告
 mypy: allow-untyped-defs
 

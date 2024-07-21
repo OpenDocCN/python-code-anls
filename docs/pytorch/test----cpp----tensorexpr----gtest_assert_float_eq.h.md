@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\gtest_assert_float_eq.h`
 
-```
+```py
 #pragma once
 
 #include <cmath>

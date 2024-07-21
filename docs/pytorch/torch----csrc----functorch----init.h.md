@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\functorch\init.h`
 
-```
+```py
 #include <Python.h>
 
 

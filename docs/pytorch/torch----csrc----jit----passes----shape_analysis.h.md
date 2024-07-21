@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\shape_analysis.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // 包含 Torch 的导出声明

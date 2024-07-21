@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\PixelShuffle.h`
 
-```
+```py
 // 定义了一个命名空间 `at::native`，包含了与像素重排相关的函数
 
 // 检查像素重排操作的输入张量形状是否满足要求

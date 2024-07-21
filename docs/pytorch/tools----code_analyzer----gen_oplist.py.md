@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_analyzer\gen_oplist.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 

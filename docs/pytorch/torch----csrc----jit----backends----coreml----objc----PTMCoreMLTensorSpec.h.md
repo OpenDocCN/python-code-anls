@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\objc\PTMCoreMLTensorSpec.h`
 
-```
+```py
 // 包含 C10 库中的 ScalarType 类定义
 #include <c10/core/ScalarType.h>
 // 导入 nlohmann/json 库，用于 JSON 数据处理

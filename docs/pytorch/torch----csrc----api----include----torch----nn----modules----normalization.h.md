@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\normalization.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保头文件只被编译一次
 
@@ -36,7 +36,7 @@ namespace nn {
 /// ```
 /// LayerNorm model(LayerNormOptions({2,
 /// 2}).elementwise_affine(false).eps(2e-5));
-/// ```
+/// ```py
 class TORCH_API LayerNormImpl : public torch::nn::Cloneable<LayerNormImpl> {
  public:
   // 构造函数：根据给定的标准化形状构造 LayerNormImpl 对象
@@ -92,7 +92,7 @@ TORCH_MODULE(LayerNorm);
 /// ```
 /// LocalResponseNorm
 /// model(LocalResponseNormOptions(2).alpha(0.0002).beta(0.85).k(2.));
-/// ```
+/// ```py
 class TORCH_API LocalResponseNormImpl
     : public Cloneable<LocalResponseNormImpl> {
  public:
@@ -131,7 +131,7 @@ TORCH_MODULE(LocalResponseNorm);
 /// Example:
 /// ```
 /// CrossMapLRN2d model(CrossMapLRN2dOptions(3).alpha(1e-5).beta(0.1).k(10));
-/// ```
+/// ```py
 class TORCH_API CrossMapLRN2dImpl
     : public torch::nn::Cloneable<CrossMapLRN2dImpl> {
  public:
@@ -176,7 +176,7 @@ TORCH_MODULE(CrossMapLRN2d);
 /// Example:
 /// ```
 /// GroupNorm model(GroupNormOptions(2, 2).eps(2e-5).affine(false));
-/// ```
+/// ```py
 /// 定义一个名为 GroupNormImpl 的类，它继承自 torch::nn::Cloneable<GroupNormImpl>
 class TORCH_API GroupNormImpl : public torch::nn::Cloneable<GroupNormImpl> {
  public:

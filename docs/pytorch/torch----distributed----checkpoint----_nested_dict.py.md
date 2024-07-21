@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_nested_dict.py`
 
-```
+```py
 """
 TODO:
 Need to add ability to handle tuple, OrderedDict, NamedTuple.

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUFunctions.cpp`
 
-```
+```py
 /*
  * Note [Device Management]
  *

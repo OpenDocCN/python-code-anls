@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Backoff.cpp`
 
-```
+```py
 #include <torch/csrc/distributed/c10d/Backoff.hpp>
 
 #include <exception>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\loopnest_randomization.cpp`
 
-```
+```py
 // 包含 C++ 标准库的头文件
 #include <algorithm>
 #include <iostream>

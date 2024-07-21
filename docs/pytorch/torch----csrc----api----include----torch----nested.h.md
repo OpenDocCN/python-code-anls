@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nested.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>
@@ -81,7 +81,7 @@ inline at::Tensor nested_tensor(
 /// See
 /// https://pytorch.org/docs/main/nested.html#torch.nested.as_nested_tensor
 ///
-/// ```
+/// ```py
 // 定义一个内联函数，将输入列表转换为嵌套张量
 inline at::Tensor as_nested_tensor(
     at::TensorList list,

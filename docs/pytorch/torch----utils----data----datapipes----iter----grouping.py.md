@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\grouping.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于显示未来可能会移除的警告信息
 import warnings

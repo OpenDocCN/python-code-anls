@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\normalization.py`
 
-```
+```py
 # 引入torch模块，用于量化操作
 import torch
 

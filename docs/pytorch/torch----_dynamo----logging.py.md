@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\logging.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 itertools 和 logging 模块
 import itertools

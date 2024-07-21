@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\aoti_runtime\interface.cpp`
 
-```
+```py
 // 包含需要的头文件
 #include <torch/csrc/inductor/aoti_runtime/arrayref_tensor.h>
 #include <torch/csrc/inductor/aoti_runtime/interface.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_fx_op_consistency.py`
 
-```
+```py
 # 所有权归 module: onnx 所有
 
 """测试 torch.onnx FX 导出操作符与相同输入的 torch 操作符的输出值一致性。

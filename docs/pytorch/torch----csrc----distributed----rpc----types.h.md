@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\types.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/ivalue.h>

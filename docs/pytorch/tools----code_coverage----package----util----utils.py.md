@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\util\utils.py`
 
-```
+```py
 # 从未来版本导入注解支持，用于类型提示
 from __future__ import annotations
 

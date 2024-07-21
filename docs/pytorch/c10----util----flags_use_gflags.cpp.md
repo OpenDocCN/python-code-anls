@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\flags_use_gflags.cpp`
 
-```
+```py
 #include <c10/macros/Macros.h>
 
 #ifdef C10_USE_GFLAGS

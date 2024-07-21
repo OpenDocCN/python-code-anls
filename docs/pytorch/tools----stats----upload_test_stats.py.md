@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_test_stats.py`
 
-```
+```py
 # 从未来模块导入 annotations，支持类型注解
 from __future__ import annotations
 

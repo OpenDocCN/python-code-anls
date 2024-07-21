@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\u8clamp\sse2.c`
 
-```
+```py
 /*
  * 实现了一个使用 SSE2 指令集的函数，用于对输入的 uint8_t 数组进行范围限制操作。
  * 如果输入的元素数量大于等于 8，将使用 SSE2 向量化指令进行处理，否则使用标量处理。

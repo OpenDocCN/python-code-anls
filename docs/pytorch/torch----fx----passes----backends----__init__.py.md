@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\backends\__init__.py`
 
-```
+```py
 # 导入模块os，用于操作文件和目录
 import os
 

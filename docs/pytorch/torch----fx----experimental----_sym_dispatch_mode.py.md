@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\_sym_dispatch_mode.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型提示所需的模块
 from typing import List, Optional, Type

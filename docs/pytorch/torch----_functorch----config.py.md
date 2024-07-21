@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\config.py`
 
-```
+```py
 """
 Global flags for aot autograd
 """

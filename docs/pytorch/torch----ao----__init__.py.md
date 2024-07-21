@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # torch.ao is a package with a lot of interdependencies.
 # We will use lazy import to avoid cyclic dependencies here.

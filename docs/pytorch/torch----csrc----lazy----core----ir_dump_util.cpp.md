@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ir_dump_util.cpp`
 
-```
+```py
 // 引入 Torch 框架中的头文件，用于IR（Intermediate Representation）的工具函数
 #include <torch/csrc/lazy/core/ir_dump_util.h>
 

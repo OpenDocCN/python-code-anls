@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cuda_cpp_scheduling.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块，用于记录程序运行信息
 import logging

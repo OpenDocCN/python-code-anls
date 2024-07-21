@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qlinear_test.py`
 
-```
+```py
 # 导入 pt 模块中的 configs 模块
 from pt import configs
 

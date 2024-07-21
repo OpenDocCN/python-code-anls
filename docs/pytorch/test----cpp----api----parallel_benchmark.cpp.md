@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\parallel_benchmark.cpp`
 
-```
+```py
 // 引入 Torch 库，包括 Torch 的头文件
 #include <torch/torch.h>
 // 引入计时相关的标准库

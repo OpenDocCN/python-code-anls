@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_vmap_registrations.py`
 
-```
+```py
 # Owner(s): ["module: functorch"]
 import typing  # 导入 typing 模块，用于类型提示
 import unittest  # 导入 unittest 模块，用于编写和运行单元测试

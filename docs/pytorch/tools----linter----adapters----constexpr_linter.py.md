@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\constexpr_linter.py`
 
-```
+```py
 """
 CONSTEXPR: Ensures users don't use vanilla constexpr since it causes issues
 """

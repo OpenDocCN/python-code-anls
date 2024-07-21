@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\reinplace.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 itertools 模块，提供迭代工具函数
 import itertools

@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\context.py`
 
-```
+```py
 # 导入 __future__ 模块的 annotations 功能，使得可以在类型提示中使用 TypeVar
 from __future__ import annotations
 

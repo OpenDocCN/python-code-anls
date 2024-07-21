@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_dropout.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/remove_dropout.h>
 
 namespace torch {

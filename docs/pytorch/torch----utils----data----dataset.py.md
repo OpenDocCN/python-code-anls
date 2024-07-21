@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\dataset.py`
 
-```
+```py
 # 引入必要的模块和类
 # mypy: allow-untyped-defs 允许未类型化的定义
 import bisect  # 导入 bisect 模块，提供对有序序列的插入和查找操作

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\CompileTimeFunctionPointer.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/TypeTraits.h>  // 引入类型特性工具

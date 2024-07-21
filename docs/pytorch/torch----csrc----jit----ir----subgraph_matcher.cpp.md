@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\subgraph_matcher.cpp`
 
-```
+```py
 /**
  * \brief Include necessary header files for the C10 library and Torch JIT.
  */

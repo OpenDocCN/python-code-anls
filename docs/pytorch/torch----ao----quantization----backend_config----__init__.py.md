@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\__init__.py`
 
-```
+```py
 # 导入所需的模块和函数，包括从其他文件导入的类和函数
 from .backend_config import BackendConfig, BackendPatternConfig, DTypeConfig, DTypeWithConstraints, ObservationType
 from .fbgemm import get_fbgemm_backend_config

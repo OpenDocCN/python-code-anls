@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\config.py`
 
-```
+```py
 # 是否禁用编译过程中的进度显示
 # 如果在这里导入 dynamo 配置，会导致循环导入，因此需要添加一个新的配置
 disable_progress = True

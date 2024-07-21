@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\metrics\CUDAMetric.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 
 from .MetricBase import MetricBase  # 导入自定义的MetricBase类

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\registry.py`
 
-```
+```py
 # 导入必要的模块和函数
 from .api import (
     rendezvous_handler_registry as handler_registry,  # 导入并重命名模块中的 rendezvous_handler_registry

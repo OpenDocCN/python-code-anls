@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\onnx_log.cpp`
 
-```
+```py
 // 包含 Torch 的 ONNX 模块日志相关头文件
 #include <torch/csrc/jit/passes/onnx/onnx_log.h>
 // 包含输入输出流的标准库

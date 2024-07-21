@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fuse_linear.h`
 
-```
+```py
 /** \brief Fusing linear patterns as single at::linear for easier pattern
  * matching in later passes
  */

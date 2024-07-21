@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\Function.h`
 
-```
+```py
 #pragma once
 // 声明该头文件在编译单元中只包含一次
 

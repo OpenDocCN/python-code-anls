@@ -1,6 +1,6 @@
 # `.\pytorch\docs\cpp\source\conf.py`
 
-```
+```py
 # PyTorch文档构建配置文件，由sphinx-quickstart在2016年12月23日13:31:47创建。
 
 # 这个文件通过execfile()执行，并将当前目录设置为其所在的目录。

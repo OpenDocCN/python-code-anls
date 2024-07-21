@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\utils.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的模块和库

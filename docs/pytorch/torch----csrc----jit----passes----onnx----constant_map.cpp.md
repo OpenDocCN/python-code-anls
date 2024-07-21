@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\constant_map.cpp`
 
-```
+```py
 // 包含 C++ 头文件
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/jit_log.h>

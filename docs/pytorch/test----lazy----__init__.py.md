@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\__init__.py`
 
-```
+```py
 # 定义一个名为 parse_csv 的函数，接受一个参数 filename
 def parse_csv(filename):
     # 打开指定文件名的文件，以只读模式

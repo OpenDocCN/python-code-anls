@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\NaiveConvolutionTranspose3d.cpp`
 
-```
+```py
 // 定义宏以仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量操作的头文件

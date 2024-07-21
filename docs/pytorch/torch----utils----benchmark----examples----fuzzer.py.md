@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\fuzzer.py`
 
-```
+```py
 # 导入 sys 模块，用于处理系统相关的操作
 import sys
 

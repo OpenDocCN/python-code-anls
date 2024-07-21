@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_file_system_checkpoint_cpu.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统模块和临时文件模块

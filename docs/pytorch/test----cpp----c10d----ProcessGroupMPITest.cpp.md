@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\ProcessGroupMPITest.cpp`
 
-```
+```py
 // 包含系统头文件 <unistd.h>，提供对 POSIX 操作系统 API 的访问
 // 包含 C10 库的头文件 <c10/util/irange.h>，提供对 C++ 10 中的 irange 功能的访问
 // 包含 Torch 分布式组件中 MPI 实现的头文件 <torch/csrc/distributed/c10d/ProcessGroupMPI.hpp>

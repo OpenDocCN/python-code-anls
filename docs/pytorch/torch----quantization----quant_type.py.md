@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\quant_type.py`
 
-```
+```py
 # 引入禁用了 flake8 检查的标志，以避免 F401 错误（未使用导入）
 r"""
 This file is in the process of migration to `torch/ao/quantization`, and

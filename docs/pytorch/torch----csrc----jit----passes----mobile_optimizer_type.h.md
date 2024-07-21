@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\mobile_optimizer_type.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\constants.h`
 
-```
+```py
 #pragma once
 // 包含 ATen 库中的相关头文件，用于处理 IR 中的常量
 #include <ATen/core/ivalue.h>

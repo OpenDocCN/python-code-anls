@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\compatibility\runtime_compatibility.cpp`
 
-```
+```py
 /*
  * 包含必要的头文件
  */

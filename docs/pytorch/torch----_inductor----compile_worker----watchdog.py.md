@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\compile_worker\watchdog.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作系统相关的功能
 import os

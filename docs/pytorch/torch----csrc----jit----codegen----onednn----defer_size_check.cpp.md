@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\defer_size_check.cpp`
 
-```
+```py
 // 包含头文件：torch/csrc/jit/codegen/onednn/defer_size_check.h
 // 用于实现 size check 延迟的相关功能
 #include <torch/csrc/jit/codegen/onednn/defer_size_check.h>

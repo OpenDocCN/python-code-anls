@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\control_plane\WorkerServer.cpp`
 
-```
+```py
 // 包含标准库头文件
 #include <filesystem>
 #include <mutex>

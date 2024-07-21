@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_distributed_autograd.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库，用于分布式自动求导功能
 import torch

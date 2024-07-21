@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\utils.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Device.h>

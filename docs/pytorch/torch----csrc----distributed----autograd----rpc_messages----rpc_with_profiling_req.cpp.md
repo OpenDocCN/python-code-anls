@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rpc_with_profiling_req.cpp`
 
-```
+```py
 // 包含必要的头文件，用于实现 RPC 消息的序列化和反序列化
 #include <torch/csrc/distributed/autograd/rpc_messages/rpc_with_profiling_req.h>
 #include <torch/csrc/distributed/rpc/utils.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\win32-headers.h`
 
-```
+```py
 #pragma once
 // 如果未定义 WIN32_LEAN_AND_MEAN 宏，则定义它，用于减少 windows.h 的包含内容
 #ifndef WIN32_LEAN_AND_MEAN

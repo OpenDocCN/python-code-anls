@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\check_perf_csv.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于解析命令行参数
 import sys  # 用于访问系统相关功能

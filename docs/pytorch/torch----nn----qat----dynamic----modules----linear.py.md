@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\qat\dynamic\modules\linear.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""
 QAT Modules.

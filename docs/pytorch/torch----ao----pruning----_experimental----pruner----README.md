@@ -9,7 +9,7 @@ One way to do this is to consider each parameter individually. This gives us the
 
 For example, consider a simple linear regression model that is parametrized by a weight tensor W.
 
-```
+```py
 W = [[1 2 3]
      [4 5 6]
      [7 1 9]]
@@ -18,7 +18,7 @@ W = [[1 2 3]
 We can prune the lowest absolute value elements in W in order to preserve as much information as possible.
 Below we've removed three parameters from W.
 
-```
+```py
 W_pruned = [[0 0 3]
             [4 5 6]
             [7 0 9]]
@@ -28,7 +28,7 @@ Unfortunately, zeroing out parameters does not offer a speed-up to the model out
 
 However, if we zero out a row of parameters at a time instead of a single parameter, we can speed up computation by resizing the weight matrix. This is called **structured pruning** and is what this folder implements.
 
-```
+```py
 W_pruned = [[0 0 0] = [[4, 5, 6],
             [4 5 6]    [7, 1, 9]]
             [7 1 9]]
@@ -64,7 +64,7 @@ The accuracy degradation of pruning can be quite large initially. Once we are sa
 
 You can test this with the following bit of code:
 
-```python
+```py
 from torch.fx import symbolic_trace
 model = MyModel()
 symbolic_trace(model)
@@ -94,7 +94,7 @@ If you are looking to prune a currently unsupported pattern, you can do this by 
 
 
 Here is an example script that will prune away 50% of the rows for all the linear layers in the model, based on the saliency of each row.
-```python
+```py
 from torch.ao.pruning._experimental.pruner import SaliencyPruner
 
 # Define model
@@ -148,7 +148,7 @@ pruned_model = pruner.prune()
 ```
 Afterwards, by printing the name and size of each parameter in our model, we can see that it has been pruned.
 
-```
+```py
 # original model
 Parameter name      | Shape           |  # of elements
 --------------------|-----------------|---------------
@@ -160,7 +160,7 @@ seq.4.bias          | 600             |       600
 linear.weight       | 4, 600          |      2400
 === Total Number of Parameters: 1233500 ===
 ```
-```
+```py
 # pruned model
 Parameter name      | Shape           |  # of elements
 --------------------|-----------------|---------------
@@ -200,7 +200,7 @@ The idea is to remove the weights that are small, since they wouldn't contribute
 
 Below we can see an implemented Saliency Pruner
 
-```python
+```py
 class SaliencyPruner(BaseStructuredSparsifier):
      """
      Prune filters based on the saliency
@@ -227,7 +227,7 @@ If you're working with linear/conv2d layers, it's very probable that you just ne
 
 This is because there are many modules, for example **pooling** that behave the same way and do not need to be modified by the pruning code.
 
-```python
+```py
 from torch.ao.pruning._experimental.pruner.prune_functions import prune_conv2d_activation_conv2d
 
 def prune_conv2d_pool_activation_conv2d(

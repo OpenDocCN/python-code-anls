@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_tracer.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 

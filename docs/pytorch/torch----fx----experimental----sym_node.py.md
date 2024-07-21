@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\sym_node.py`
 
-```
+```py
 """
 This file does three things:
 - Contains the definition of SymNode

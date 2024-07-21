@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\model_dump\__main__.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 使用 /usr/bin/env python3 命令找到 Python 解释器并执行脚本
 

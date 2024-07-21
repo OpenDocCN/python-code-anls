@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\__init__.py`
 
-```
+```py
 # 定义一个名为 create_user 的函数，用于创建新用户并返回用户对象
 def create_user(username, email):
     # 使用 User 模型创建一个新的用户对象

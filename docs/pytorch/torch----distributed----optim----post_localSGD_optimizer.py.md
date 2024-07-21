@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\post_localSGD_optimizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于可能的警告信息
 import warnings

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_onnxscript_runtime.py`
 
-```
+```py
 """Test the support on onnxscript in PyTorch-ONNX converter with onnxruntime."""
 
 # 从 typing 模块导入 List 类型

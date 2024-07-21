@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Common.h`
 
-```
+```py
 #pragma once
 // 只有在 AT_MKLDNN_ENABLED 宏定义被启用时才编译以下代码段
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_trace_type.py`
 
-```
+```py
 # Note [Manual Backend kernels]
 # 对于这些操作，我们希望手动注册到分发键 Backend，并跳过所有键的代码生成注册，以前是 Backend 的。
 # 对于代码生成，这意味着：

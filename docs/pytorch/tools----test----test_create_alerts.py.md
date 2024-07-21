@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_create_alerts.py`
 
-```
+```py
 # 从未来导入类型注释的支持，允许在类声明之前使用类型注释
 from __future__ import annotations
 

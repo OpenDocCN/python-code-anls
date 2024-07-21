@@ -79,7 +79,7 @@ Follow the instructions for [installing PyTorch from source](https://github.com/
 
   One way to avoid running `python setup.py develop` every time one makes a change to C++/CUDA/ObjectiveC files on Linux/Mac,
   is to create a symbolic link from `build` folder to `torch/lib`, for example, by issuing following:
-  ```bash
+  ```py
    pushd torch/lib; sh -c "ln -sf ../../build/lib/libtorch_cpu.* ."; popd
   ```
    Afterwards rebuilding a library (for example to rebuild `libtorch_cpu.so` issue `ninja torch_cpu` from `build` folder),
@@ -93,7 +93,7 @@ Follow the instructions for [installing PyTorch from source](https://github.com/
   you can always `uninstall` with `timeout` or in a loop if you're feeling
   lazy.)
 
-  ```bash
+  ```py
   conda uninstall pytorch -y
   yes | pip uninstall torch
   ```
@@ -113,7 +113,7 @@ Follow the instructions for [installing PyTorch from source](https://github.com/
   `rm -rf build` from the toplevel `pytorch` directory and start over.
   3. If you have made edits to the PyTorch repo, commit any change you'd like to keep and clean the repo with the
   following commands (note that clean _really_ removes all untracked files and changes.):
-      ```bash
+      ```py
       git submodule deinit -f .
       git clean -xdf
       python setup.py clean
@@ -122,30 +122,30 @@ Follow the instructions for [installing PyTorch from source](https://github.com/
       ```
   4. The main step within `python setup.py develop` is running `make` from the `build` directory. If you want to
     experiment with some environment variables, you can pass them into the command:
-      ```bash
+      ```py
       ENV_KEY1=ENV_VAL1[, ENV_KEY2=ENV_VAL2]* python setup.py develop
       ```
 
 * If you run into issue running `git submodule update --init --recursive`. Please try the following:
   - If you encounter an error such as
-    ```
+    ```py
     error: Submodule 'third_party/pybind11' could not be updated
     ```
     check whether your Git local or global config file contains any `submodule.*` settings. If yes, remove them and try again.
     (please reference [this doc](https://git-scm.com/docs/git-config#Documentation/git-config.txt-submoduleltnamegturl) for more info).
 
   - If you encounter an error such as
-    ```
+    ```py
     fatal: unable to access 'https://github.com/pybind11/pybind11.git': could not load PEM client certificate ...
     ```
     this is likely that you are using HTTP proxying and the certificate expired. To check if the certificate is valid, run
     `git config --global --list` and search for config like `http.proxysslcert=<cert_file>`. Then check certificate valid date by running
-    ```bash
+    ```py
     openssl x509 -noout -in <cert_file> -dates
     ```
 
   - If you encounter an error that some third_party modules are not checked out correctly, such as
-    ```
+    ```py
     Could not find .../pytorch/third_party/pybind11/CMakeLists.txt
     ```
     remove any `submodule.*` settings in your local git config (`.git/config` of your pytorch repo) and try again.
@@ -162,7 +162,7 @@ to compile any C++ code.
 
 You can use this script to check out a new nightly branch with the following:
 
-```bash
+```py
 ./tools/nightly.py checkout -b my-nightly-branch
 conda activate pytorch-deps
 ```
@@ -170,14 +170,14 @@ conda activate pytorch-deps
 Or if you would like to re-use an existing conda environment, you can pass in
 the regular environment parameters (`--name` or `--prefix`):
 
-```bash
+```py
 ./tools/nightly.py checkout -b my-nightly-branch -n my-env
 conda activate my-env
 ```
 
 You can also use this tool to pull the nightly commits into the current branch:
 
-```bash
+```py
 ./tools/nightly.py pull -n my-env
 conda activate my-env
 ```
@@ -273,7 +273,7 @@ All PyTorch test suites are located in the `test` folder and start with
 `test_`. Run the entire test
 suite with
 
-```bash
+```py
 python test/run_test.py
 ```
 
@@ -284,7 +284,7 @@ to run.
 For example, to run all the TorchScript JIT tests (located at
 `test/test_jit.py`), you would run:
 
-```bash
+```py
 python test/test_jit.py
 ```
 
@@ -297,7 +297,7 @@ Going off the above example, let's say you want to run
 `test_Sequential`, which is defined as part of the `TestJit` class
 in `test/test_jit.py`. Your command would be:
 
-```bash
+```py
 python test/test_jit.py TestJit.test_Sequential
 ```
 
@@ -312,7 +312,7 @@ developing. Install it via `pip install pytest`.
 If you want to just run tests that contain a specific substring, you can
 use the `-k` flag:
 
-```bash
+```py
 pytest test/test_nn.py -k Loss -v
 ```
 
@@ -324,13 +324,13 @@ command runs tests such as `TestNN.test_BCELoss` and
 
 Install all prerequisites by running
 
-```bash
+```py
 make setup_lint
 ```
 
 You can now run the same linting steps that are used in CI locally via `make`:
 
-```bash
+```py
 make lint
 ```
 
@@ -360,7 +360,7 @@ For example, if you wanted to run the test `MayContainAlias`, which
 is part of the test suite `ContainerAliasingTest` in the file
 `test/cpp/jit/test_alias_analysis.cpp`, the command would be:
 
-```bash
+```py
 ./build/bin/test_jit --gtest_filter=ContainerAliasingTest.MayContainAlias
 ```
 
@@ -370,7 +370,7 @@ is part of the test suite `ContainerAliasingTest` in the file
 You can generate a commit that limits the CI to only run a specific job by using
 `tools/testing/explicit_ci_jobs.py` like so:
 
-```bash
+```py
 # --job: specify one or more times to filter to a specific job + its dependencies
 # --filter-gha: specify github actions workflows to keep
 # --make-commit: commit CI changes to git with a message explaining the change
@@ -427,7 +427,7 @@ In addition to the standard Google Style docstring formatting rules, the followi
 
 * The word `optional` should only be used after the types, and it is only used if the user does not have to specify a value for the variable. Default values are listed after the variable description. Example:
 
-    ```
+    ```py
     my_var (int, optional): Variable description. Default: 1
     ```
 
@@ -438,13 +438,13 @@ In addition to the standard Google Style docstring formatting rules, the followi
 
 * Square brackets should be used for the dictionary type. For example:
 
-    ```
+    ```py
     my_var (dict[str, int]): Variable description.
     ```
 
 * If a variable has two different possible types, then the word `or` should be used without a comma. Otherwise variables with 3 or more types should use commas to separate the types. Example:
 
-    ```
+    ```py
     x (type1 or type2): Variable description.
     y (type1, type2, or type3): Variable description.
     ```
@@ -458,7 +458,7 @@ To build the documentation:
 
 2. Install the prerequisites
 
-```bash
+```py
 cd docs
 pip install -r requirements.txt
 # `katex` must also be available in your PATH.
@@ -472,19 +472,19 @@ pip install -r requirements.txt
 compatible with your version of `nodejs` and doc builds will fail.
 A combination of versions that is known to work is `node@6.13.1` and
 `katex@0.13.18`. To install the latter with `npm` you can run
-```npm install -g katex@0.13.18```
+```py install -g katex@0.13.18```
 
 
 > Note that if you are a Facebook employee using a devserver, yarn may be more convenient to install katex:
 
-```bash
+```py
 yarn global add katex
 ```
 > If a specific version is required you can use for example `yarn global add katex@0.13.18`.
 
 3. Generate the documentation HTML files. The generated files will be in `docs/build/html`.
 
-```bash
+```py
 make html
 ```
 
@@ -497,7 +497,7 @@ it is helpful to remove the files you are not working on, only keeping the base
 `index.rst` file and the files you are editing. The Sphinx build will produce
 missing file warnings but will still complete. For example, to work on `jit.rst`:
 
-```bash
+```py
 cd docs/source
 find . -type f | grep rst | grep -v index | grep -v jit | xargs rm
 
@@ -535,7 +535,7 @@ If you are developing on a remote machine, you can set up an SSH tunnel so that
 you can access the HTTP server on the remote machine from your local machine. To map
 remote port 8000 to local port 8000, use either of the following commands.
 
-```bash
+```py
 # For SSH
 ssh my_machine -L 8000:my_machine:8000
 
@@ -548,14 +548,14 @@ Then navigate to `localhost:8000` in your web browser.
 **Tip:**
 You can start a lightweight HTTP server on the remote machine with:
 
-```bash
+```py
 python -m http.server 8000 <path_to_html_output>
 ```
 
 Alternatively, you can run `rsync` on your local machine to copy the files from
 your remote machine:
 
-```bash
+```py
 mkdir -p build cpp/build
 rsync -az me@my_machine:/path/to/pytorch/docs/build/html build
 rsync -az me@my_machine:/path/to/pytorch/docs/cpp/build/html cpp/build
@@ -576,7 +576,7 @@ the `.. testcode::` directive in your `.rst` and docstrings.
 
 To manually run these tests, follow steps 1 and 2 above, then run:
 
-```bash
+```py
 cd docs
 make doctest
 ```
@@ -591,7 +591,7 @@ that has the ability to profile native code and Python code in the same session.
 
 `py-spy` can be installed via `pip`:
 
-```bash
+```py
 pip install py-spy
 ```
 
@@ -599,7 +599,7 @@ To use `py-spy`, first write a Python test script that exercises the
 functionality you would like to profile. For example, this script profiles
 `torch.add`:
 
-```python
+```py
 import torch
 
 t1 = torch.tensor([[1, 1], [1, 1.]])
@@ -614,7 +614,7 @@ number of times to get good statistics. The most straightforward way to use
 `py-spy` with such a script is to generate a [flame
 graph](http://www.brendangregg.com/flamegraphs.html):
 
-```bash
+```py
 py-spy record -o profile.svg --native -- python test_tensor_tensor_add.py
 ```
 
@@ -644,7 +644,7 @@ If you want to manage multiple builds of PyTorch, you can make use of
 separate Python package environments, each of which can be tied to a
 specific build of PyTorch. To set one up:
 
-```bash
+```py
 conda create -n pytorch-myfeature
 source activate pytorch-myfeature
 # if you run python now, torch will NOT be installed
@@ -685,7 +685,7 @@ variables `DEBUG`, `USE_DISTRIBUTED`, `USE_MKLDNN`, `USE_CUDA`, `USE_FLASH_ATTEN
 
 For example:
 
-```bash
+```py
 DEBUG=1 USE_DISTRIBUTED=0 USE_MKLDNN=0 USE_CUDA=0 BUILD_TEST=0 USE_FBGEMM=0 USE_NNPACK=0 USE_QNNPACK=0 USE_XNNPACK=0 python setup.py develop
 ```
 
@@ -723,7 +723,7 @@ same. Using ccache in a situation like this is a real time-saver.
 
 Before building pytorch, install ccache from your package manager of choice:
 
-```bash
+```py
 conda install ccache -c conda-forge
 sudo apt install ccache
 sudo yum install ccache
@@ -733,7 +733,7 @@ brew install ccache
 You may also find the default cache size in ccache is too small to be useful.
 The cache sizes can be increased from the command line:
 
-```bash
+```py
 # config: cache dir is ~/.ccache, conf file ~/.ccache/ccache.conf
 # max size of cache
 ccache -M 25Gi  # -M 0 for unlimited
@@ -747,14 +747,14 @@ this doesn't seem to be the case, check the `CMAKE_<LANG>_COMPILER_LAUNCHER`
 rules in `build/CMakeCache.txt`, where `<LANG>` is `C`, `CXX` and `CUDA`.
 Each of these 3 variables should contain ccache, e.g.
 
-```
+```py
 //CXX compiler launcher
 CMAKE_CXX_COMPILER_LAUNCHER:STRING=/usr/bin/ccache
 ```
 
 If not, you can define these variables on the command line before invoking `setup.py`.
 
-```bash
+```py
 export CMAKE_C_COMPILER_LAUNCHER=ccache
 export CMAKE_CXX_COMPILER_LAUNCHER=ccache
 export CMAKE_CUDA_COMPILER_LAUNCHER=ccache
@@ -772,7 +772,7 @@ People on Mac, follow [this guide](https://stackoverflow.com/questions/42730345/
 The easiest way to use `lld` this is download the
 [latest LLVM binaries](http://releases.llvm.org/download.html#8.0.0) and run:
 
-```bash
+```py
 ln -s /path/to/downloaded/ld.lld /usr/local/bin/ld
 ```
 
@@ -784,7 +784,7 @@ you're using CMake newer than 3.16, you can enable pre-compiled headers by
 setting `USE_PRECOMPILED_HEADERS=1` either on first setup, or in the
 `CMakeCache.txt` file.
 
-```sh
+```py
 USE_PRECOMPILED_HEADERS=1 python setup.py develop
 ```
 
@@ -806,7 +806,7 @@ build again.
 
 A compiler-wrapper to fix this is provided in `tools/nvcc_fix_deps.py`. You can use
 this as a compiler launcher, similar to `ccache`
-```bash
+```py
 export CMAKE_CUDA_COMPILER_LAUNCHER="python;`pwd`/tools/nvcc_fix_deps.py;ccache"
 python setup.py develop
 ```
@@ -818,7 +818,7 @@ But often only a few files needs to be rebuild with debug info to get a symbolic
 One can easily solve this with the help of `tools/build_with_debinfo.py`
 
 For example, suppose one wants to debug what is going on while tensor index is selected, which can be achieved by setting a breakpoint at `applySelect` function:
-```
+```py
 % lldb -o "b applySelect" -o "process launch" -- python3 -c "import torch;print(torch.rand(5)[3])"
 (lldb) target create "python"
 Current executable set to '/usr/bin/python3' (arm64).
@@ -840,13 +840,13 @@ Target 0: (python) stopped.
 Process 87729 launched: '/usr/bin/python' (arm64)
 ```
 Which is not very informative, but can be easily remedied by rebuilding `python_variable_indexing.cpp` with debug information
-```
+```py
 % ./tools/build_with_debinfo.py torch/csrc/autograd/python_variable_indexing.cpp
 [1 / 2] Building caffe2/torch/CMakeFiles/torch_python.dir/csrc/autograd/python_variable_indexing.cpp.o
 [2 / 2] Building lib/libtorch_python.dylib
 ```
 And afterwards:
-```
+```py
 % lldb -o "b applySelect" -o "process launch" -- python3 -c "import torch;print(torch.rand(5)[3])"
 (lldb) target create "python"
 Current executable set to '/usr/bin/python3' (arm64).
@@ -889,7 +889,7 @@ pytorch-specific commands which you can use from the GDB prompt. In
 particular, `torch-tensor-repr` prints a human-readable repr of an at::Tensor
 object. Example of usage:
 
-```
+```py
 $ gdb python
 GNU gdb (GDB) 9.2
 [...]
@@ -922,7 +922,7 @@ tensor([1., 2., 3., 4.], dtype=torch.float64)
 GDB tries to automatically load `pytorch-gdb` thanks to the
 [.gdbinit](.gdbinit) at the root of the pytorch repo. However, auto-loadings is disabled by default, because of security reasons:
 
-```bash
+```py
 $ gdb
 warning: File "/path/to/pytorch/.gdbinit" auto-loading has been declined by your `auto-load safe-path' set to "$debugdir:$datadir/auto-load".
 To enable execution of this file add
@@ -941,7 +941,7 @@ As gdb itself suggests, the best way to enable auto-loading of `pytorch-gdb`
 is to add the following line to your `~/.gdbinit` (i.e., the `.gdbinit` file
 which is in your home directory, **not** `/path/to/pytorch/.gdbinit`):
 
-```bash
+```py
 add-auto-load-safe-path /path/to/pytorch/.gdbinit
 ```
 
@@ -967,7 +967,7 @@ If you are working on the CUDA code, here are some useful CUDA debugging tips:
    It is useful for you to measure this metric whenever you are writing/optimizing a CUDA
    kernel. Following script shows how we can measure the effective bandwidth of CUDA `uniform_`
    kernel.
-   ```python
+   ```py
    import torch
    from torch.utils.benchmark import Timer
    size = 128*512
@@ -1026,7 +1026,7 @@ Windows; this can be helpful if you want to learn more about some peculiar linki
 by reproducing it on a small example. Here's a simple example cmake file that defines
 two dynamic libraries, one linking with the other:
 
-```CMake
+```py
 project(myproject CXX)
 set(CMAKE_CXX_STANDARD 14)
 add_library(foo SHARED foo.cpp)
@@ -1038,7 +1038,7 @@ target_link_libraries(bar PUBLIC foo)
 
 You can build it with:
 
-```bash
+```py
 mkdir build
 cd build
 cmake ..
@@ -1078,7 +1078,7 @@ Here are a few well known pitfalls and workarounds:
   evaluated as if it were device code, and so you might get an error
   that the code is "not accessible".
 
-```cpp
+```py
 class A {
   static A singleton_;
   static constexpr inline A* singleton() {
@@ -1126,18 +1126,18 @@ To run clang-tidy locally, follow these steps:
 
 1. Install clang-tidy.
 We provide custom built binaries which have additional checks enabled. You can install it by running:
-```bash
+```py
 python3 -m tools.linter.clang_tidy.generate_build_files
 ```
 We currently only support Linux and MacOS (x86).
 
 2. Install clang-tidy driver script dependencies
-```bash
+```py
 pip3 install -r tools/linter/clang_tidy/requirements.txt
 ```
 
 3. Run clang-tidy
-```bash
+```py
 # Run clang-tidy on the entire codebase
 make clang-tidy
 # Run clang-tidy only on your changes
@@ -1151,14 +1151,14 @@ We use clang-tidy to perform additional
 formatting and semantic checking of code. We provide a pre-commit git hook for
 performing these checks, before a commit is created:
 
-  ```bash
+  ```py
   ln -s ../../tools/git-pre-commit .git/hooks/pre-commit
   ```
 
 If you have already committed files and
 CI reports `flake8` errors, you can run the check locally in your PR branch with:
 
-  ```bash
+  ```py
   flake8 $(git diff --name-only $(git merge-base --fork-point main))
   ```
 
@@ -1181,7 +1181,7 @@ folder (later called `$LLVM_ROOT`).
 
 Then set up the appropriate scripts. You can put this in your `.bashrc`:
 
-```bash
+```py
 LLVM_ROOT=<wherever your llvm install is>
 PYTORCH_ROOT=<wherever your pytorch checkout is>
 
@@ -1212,7 +1212,7 @@ export ASAN_SYMBOLIZER_PATH=$LLVM_ROOT/bin/llvm-symbolizer
 
 Then you can use the scripts like:
 
-```
+```py
 suo-devfair ~/pytorch ❯ build_with_asan
 suo-devfair ~/pytorch ❯ run_with_asan python test/test_jit.py
 ```
@@ -1307,7 +1307,7 @@ For PRs, however, it's a bit more complicated. Consider this commit graph, where
 `main` is at commit `A`, and the branch for PR #42 (just a placeholder) is at
 commit `B`:
 
-```
+```py
        o---o---B (refs/pull/42/head)
       /         \
      /           C (refs/pull/42/merge)

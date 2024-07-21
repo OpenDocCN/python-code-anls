@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\fuser.py`
 
-```
+```py
 # 导入 torch 库，用于深度学习框架 PyTorch
 import torch
 

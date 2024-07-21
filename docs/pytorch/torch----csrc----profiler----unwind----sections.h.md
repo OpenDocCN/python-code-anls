@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\sections.h`
 
-```
+```py
 #pragma once
 // 包含 C++ 标准库头文件 <cxxabi.h> 和 ELF 文件格式头文件 <elf.h>
 #include <cxxabi.h>

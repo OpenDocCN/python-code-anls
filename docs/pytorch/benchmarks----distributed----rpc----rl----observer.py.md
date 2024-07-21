@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\rl\observer.py`
 
-```
+```py
 import random
 import time
 

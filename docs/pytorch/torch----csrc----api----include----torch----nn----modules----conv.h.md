@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\conv.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>  // 包含用于范围迭代的头文件
@@ -204,7 +204,7 @@ std::vector<int64_t> _reversed_padding_repeated_twice;
 /// Example:
 /// ```
 /// Conv1d model(Conv1dOptions(3, 2, 3).stride(1).bias(false));
-/// ```
+/// ```py
 class TORCH_API Conv1dImpl : public ConvNdImpl<1, Conv1dImpl> {
  public:
   // 构造函数，初始化 Conv1dImpl 实例
@@ -239,7 +239,7 @@ TORCH_MODULE(Conv1d);
 /// Example:
 /// ```
 /// Conv2d model(Conv2dOptions(3, 2, 3).stride(1).bias(false));
-/// ```
+/// ```py
 class TORCH_API Conv2dImpl : public ConvNdImpl<2, Conv2dImpl> {
  public:
   // 构造函数，初始化 Conv2dImpl 实例
@@ -278,7 +278,7 @@ TORCH_MODULE(Conv2d);
 /// Example:
 /// ```
 /// Conv3d model(Conv3dOptions(3, 2, 3).stride(1).bias(false));
-/// ```
+/// ```py
 /// `Conv3dImpl` 类继承自 `ConvNdImpl` 类，用于实现 3 维卷积操作。
 /// 该类提供了处理 3 维卷积的基本功能和配置选项。
 class Conv3dImpl : public ConvNdImpl<3, Conv3dImpl> {
@@ -379,7 +379,7 @@ class ConvTransposeNdImpl : public ConvNdImpl<D, Derived> {
 /// ```
 /// ConvTranspose1d model(ConvTranspose1dOptions(3, 2,
 /// 3).stride(1).bias(false));
-/// ```
+/// ```py
 class TORCH_API ConvTranspose1dImpl
     : public ConvTransposeNdImpl<1, ConvTranspose1dImpl> {
  public:
@@ -432,7 +432,7 @@ TORCH_MODULE(ConvTranspose1d);
 /// ```
 /// ConvTranspose2d model(ConvTranspose2dOptions(3, 2,
 /// 3).stride(1).bias(false));
-/// ```
+/// ```py
 class TORCH_API ConvTranspose2dImpl
     : public ConvTransposeNdImpl<2, ConvTranspose2dImpl> {
  public:
@@ -481,7 +481,7 @@ TORCH_MODULE(ConvTranspose2d);
 /// 示例:
 /// ```
 /// ConvTranspose3d model(ConvTranspose3dOptions(2, 2, 2).stride(1).bias(false));
-/// ```
+/// ```py
 class TORCH_API ConvTranspose3dImpl : public ConvTransposeNdImpl<3, ConvTranspose3dImpl> {
  public:
   /// 构造函数，初始化 ConvTranspose3dImpl 对象

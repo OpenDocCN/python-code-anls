@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\cast_all_constant_to_floating.cpp`
 
-```
+```py
 // 包含头文件，导入 Torch 的 ONNX 相关库
 #include <torch/csrc/jit/passes/onnx/cast_all_constant_to_floating.h>
 #include <torch/csrc/jit/passes/onnx/helper.h>

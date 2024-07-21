@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_aot_inductor_utils.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入PyTorch相关模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\detail\data_shuttle.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/detail/queue.h>  // 包含队列实现的头文件

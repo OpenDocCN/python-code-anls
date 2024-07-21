@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_tensor_creation_ops.py`
 
-```
+```py
 # Owner(s): ["module: tensor creation"]
 
 import torch  # 导入PyTorch库

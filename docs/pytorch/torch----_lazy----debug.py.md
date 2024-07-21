@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\debug.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch._C._lazy 模块，这是一个包含延迟加载功能的 C++ 扩展模块
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\scaled_modified_bessel_k1.cpp`
 
-```
+```py
 // 定义编译时排除所有运算符
 #define TORCH_ASSERT_NO_OPERATORS
 

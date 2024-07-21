@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\socket.cpp`
 
-```
+```py
 // 在源代码的开头包含必要的版权和许可声明信息
 
 #include <torch/csrc/distributed/c10d/socket.h>

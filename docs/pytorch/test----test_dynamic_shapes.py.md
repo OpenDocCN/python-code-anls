@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_dynamic_shapes.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import contextlib  # 引入上下文管理模块

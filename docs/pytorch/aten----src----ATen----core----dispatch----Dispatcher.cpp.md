@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\Dispatcher.cpp`
 
-```
+```py
 // 包含 ATen 库的调度器和 Python 操作注册的头文件
 #include <ATen/core/dispatch/Dispatcher.h>
 #include <ATen/core/PythonOpRegistrationTrampoline.h>

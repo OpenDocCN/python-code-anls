@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\tensor_info.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/Export.h>
 

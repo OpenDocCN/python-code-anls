@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymInt.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/SymBool.h>               // 包含 SymBool 相关头文件

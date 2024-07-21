@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx.cpp`
 
-```
+```py
 // 包含头文件：torch/csrc/jit/passes/onnx.h，提供了关于ONNX的一些功能
 #include <torch/csrc/jit/passes/onnx.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\xnnpack_graph_builder.cpp`
 
-```
+```py
 // 包含头文件 xnnpack_graph_builder.h，用于构建 XNNPack 图的后端
 #include <caffe2/torch/csrc/jit/backends/xnnpack/xnnpack_graph_builder.h>
 

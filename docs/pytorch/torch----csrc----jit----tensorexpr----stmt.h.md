@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\stmt.h`
 
-```
+```py
     // 块语句类，继承自 StmtNode<Block>
 class TORCH_API Block : public StmtNode<Block> {
  public:

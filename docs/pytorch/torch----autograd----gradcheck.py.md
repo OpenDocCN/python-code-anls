@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\gradcheck.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import collections

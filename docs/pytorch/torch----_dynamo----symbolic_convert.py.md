@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\symbolic_convert.py`
 
-```
+```py
 # 导入必要的模块和库
 # 允许未类型化的函数定义，适用于mypy类型检查
 # collections模块用于提供额外的数据结构，collections.abc为抽象基类提供支持

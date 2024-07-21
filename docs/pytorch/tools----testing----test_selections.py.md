@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\test_selections.py`
 
-```
+```py
 from __future__ import annotations
 
 import math  # 导入数学库，用于数学计算

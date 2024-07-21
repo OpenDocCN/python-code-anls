@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\NestedIntSymNodeImpl.cpp`
 
-```
+```py
 #include <ATen/core/NestedIntSymNodeImpl.h>
 #include <c10/core/SymNodeImpl.h>
 #include <c10/util/Exception.h>

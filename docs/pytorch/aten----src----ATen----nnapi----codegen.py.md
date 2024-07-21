@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\codegen.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Code generator for NNAPI wrapper.  We can't link directly against

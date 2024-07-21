@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\TensorFactory.h`
 
-```
+```py
 // 定义一个宏来根据不同的MPS类型分发处理函数
 #define AT_DISPATCH_MPS_TYPES(TYPE, NAME, ...)                          \
   // 调用一个宏来根据给定的类型进行分发处理

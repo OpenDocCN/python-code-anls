@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\tensor_factory_functions.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

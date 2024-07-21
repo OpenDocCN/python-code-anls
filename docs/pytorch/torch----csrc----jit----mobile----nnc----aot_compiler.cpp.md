@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\aot_compiler.cpp`
 
-```
+```py
 // 包含头文件，用于移动端 AOT 编译器的前向声明
 #include <torch/csrc/jit/mobile/nnc/aot_compiler.h>
 

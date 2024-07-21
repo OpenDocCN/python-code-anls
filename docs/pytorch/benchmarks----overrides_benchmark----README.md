@@ -6,7 +6,7 @@ This benchmark suite provides a systemic way to measure the performance of `__to
 ### Initial Setup
 Install `py-spy` by doing:
 
-```bash
+```py
 pip install py-spy
 ```
 
@@ -15,7 +15,7 @@ Note that more extensive documentation on using `py-spy` is available in `CONTRI
 ### Running the benchmark
 Run one of the following commands in the terminal, with the working directory being `${PYTORCH_CLONE_DIR}/benchmarks/overrides_benchmark`:
 
-```bash
+```py
 # Benchmark all the cases
 python bench.py
 

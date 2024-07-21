@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\model_averaging\hierarchical_model_averager.py`
 
-```
+```py
 # 设置 mypy 允许未标注的函数定义
 # 版权声明 2022 Cruise LLC
 # 导入日志记录模块

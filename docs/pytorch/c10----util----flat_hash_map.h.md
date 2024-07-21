@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\flat_hash_map.h`
 
-```
+```py
 // Taken from
 // https://github.com/skarupke/flat_hash_map/blob/2c4687431f978f02a3780e24b8b701d22aa32d9c/flat_hash_map.hpp
 // with fixes applied:

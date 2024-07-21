@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\helpers.cpp`
 
-```
+```py
 // 包含 Torch 核心库中的辅助函数头文件
 #include <torch/csrc/lazy/core/helpers.h>
 

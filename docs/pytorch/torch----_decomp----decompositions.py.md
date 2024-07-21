@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_decomp\decompositions.py`
 
-```
+```py
 # 设置允许未类型化的定义，在使用mypy进行类型检查时忽略未注释类型的函数
 # 导入 functools 模块，用于高阶函数的支持
 # 导入 numbers 模块，用于数值相关的操作

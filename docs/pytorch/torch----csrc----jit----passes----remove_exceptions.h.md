@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_exceptions.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令，确保头文件只被包含一次，防止多重包含导致的重定义错误

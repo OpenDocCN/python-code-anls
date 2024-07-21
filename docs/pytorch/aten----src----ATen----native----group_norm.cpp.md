@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\group_norm.cpp`
 
-```
+```py
 // 定义宏以仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含相关头文件

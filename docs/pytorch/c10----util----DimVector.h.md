@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\DimVector.h`
 
-```
+```py
 #pragma once
 
 # pragma once 指令，确保此头文件在编译时只包含一次，防止多重包含

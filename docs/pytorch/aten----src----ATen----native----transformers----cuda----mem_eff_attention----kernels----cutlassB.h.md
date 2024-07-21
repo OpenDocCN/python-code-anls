@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\kernels\cutlassB.h`
 
-```
+```py
 /*
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.

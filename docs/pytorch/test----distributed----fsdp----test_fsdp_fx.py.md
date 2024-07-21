@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_fx.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入PyTorch库

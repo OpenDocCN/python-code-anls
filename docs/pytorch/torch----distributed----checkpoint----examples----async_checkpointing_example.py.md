@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\examples\async_checkpointing_example.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["oncall: distributed"]
 

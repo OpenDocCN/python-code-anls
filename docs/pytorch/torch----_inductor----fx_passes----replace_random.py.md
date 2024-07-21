@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\replace_random.py`
 
-```
+```py
 # 引入必要的模块和库
 import collections  # 导入collections模块，用于创建默认字典等数据结构
 import logging  # 导入logging模块，用于记录日志信息

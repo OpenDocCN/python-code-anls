@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_anomaly_mode.h`
 
-```
+```py
 #pragma once
 
 #include <pybind11/pybind11.h>  // 包含 pybind11 库的头文件

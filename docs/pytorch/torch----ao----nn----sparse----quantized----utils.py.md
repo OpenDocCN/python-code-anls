@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\sparse\quantized\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 threading 模块，用于多线程支持
 import threading

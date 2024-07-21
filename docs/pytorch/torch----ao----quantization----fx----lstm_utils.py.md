@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\lstm_utils.py`
 
-```
+```py
 # 导入必要的模块和函数
 import copy  # 导入深拷贝函数
 import operator  # 导入运算符模块

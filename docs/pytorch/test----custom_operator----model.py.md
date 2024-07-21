@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\model.py`
 
-```
+```py
 # 导入 argparse 模块，用于命令行参数解析
 import argparse
 # 导入 os.path 模块，用于操作系统路径操作

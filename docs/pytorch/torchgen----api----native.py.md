@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\native.py`
 
-```
+```py
 # 从 __future__ 导入 annotations，确保支持类型注解的早期版本兼容性
 from __future__ import annotations
 

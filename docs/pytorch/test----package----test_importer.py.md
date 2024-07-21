@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_importer.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 from io import BytesIO  # 导入BytesIO类，用于创建二进制数据的缓冲区

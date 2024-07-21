@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\batch_norm_replacement.py`
 
-```
+```py
 # 添加类型检查允许未定义的函数
 # 导入 PyTorch 的神经网络模块 nn
 import torch.nn as nn

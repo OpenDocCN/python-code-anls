@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\AutogradState.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Export.h>

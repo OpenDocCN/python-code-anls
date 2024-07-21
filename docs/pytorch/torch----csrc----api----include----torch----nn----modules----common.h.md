@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\common.h`
 
-```
+```py
 #pragma once
 
 /// This macro enables a module with default arguments in its forward method
@@ -20,13 +20,13 @@
 ///   int value;
 /// };
 /// TORCH_MODULE(M);
-/// ```
+/// ```py
 ///
 /// If we try to use it in a Sequential module and run forward:
 /// ```
 /// torch::nn::Sequential seq(M(1));
 /// seq->forward(1);
-/// ```
+/// ```py
 ///
 /// We will receive the following error message:
 /// ```
@@ -34,7 +34,7 @@
 /// If MImpl's forward() method has default arguments, please make sure
 /// the forward() method is declared with a corresponding
 /// `FORWARD_HAS_DEFAULT_ARGS` macro.
-/// ```
+/// ```py
 ///
 /// The right way to fix this error is to use the `FORWARD_HAS_DEFAULT_ARGS`
 /// macro when declaring the module:
@@ -66,7 +66,7 @@
 ///   int value;
 /// };
 /// TORCH_MODULE(M);
-/// ```
+/// ```py
 
 /// Macro definition for handling default arguments in a forward method.
 #define FORWARD_HAS_DEFAULT_ARGS(...)                                         \

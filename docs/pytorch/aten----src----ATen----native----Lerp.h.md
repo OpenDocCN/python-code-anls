@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Lerp.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/native/DispatchStub.h>  // 包含分发函数声明的头文件

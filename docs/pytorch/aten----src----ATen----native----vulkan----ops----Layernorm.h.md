@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Layernorm.h`
 
-```
+```py
 #pragma once
 
 #ifdef USE_VULKAN_API

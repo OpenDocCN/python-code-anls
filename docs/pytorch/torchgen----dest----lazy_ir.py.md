@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\dest\lazy_ir.py`
 
-```
+```py
 from __future__ import annotations
 # 导入未来版本的注释特性
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\LocalDispatchKeySet.cpp`
 
-```
+```py
 // 线程局部变量，用于保存本地分发键集的 POD 结构
 // 注意 [TLS 初始化]
 // 我们希望 raw_local_dispatch_key_set 被非零状态初始化，例如 BackendSelect 和 ADInplaceOrView 在包含的集合中。

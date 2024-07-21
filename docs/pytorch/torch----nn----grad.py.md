@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\grad.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Gradient interface."""
 

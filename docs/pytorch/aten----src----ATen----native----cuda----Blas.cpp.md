@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Blas.cpp`
 
-```
+```py
 // 包含 C++ 标准库头文件和 PyTorch 相关头文件
 #include <cstdint>
 #include <c10/util/Exception.h>

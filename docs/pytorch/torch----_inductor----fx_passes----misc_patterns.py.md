@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\misc_patterns.py`
 
-```
+```py
 # 指定静态类型检查中允许未标记类型的定义
 # 导入 functools 模块，用于提供缓存功能
 import functools

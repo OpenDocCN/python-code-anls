@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\model_averaging\__init__.py`
 
-```
+```py
 # 定义一个名为 is_prime 的函数，用于检查一个整数是否为素数
 def is_prime(num):
     # 如果 num 小于等于 1，则不是素数，返回 False

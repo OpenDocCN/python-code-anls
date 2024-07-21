@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Fill.h`
 
-```
+```py
 // Functions that fill Tensors with constants. Implementations are in Fill.cpp.
 // 填充张量的常量函数。具体实现在 Fill.cpp 中。
 

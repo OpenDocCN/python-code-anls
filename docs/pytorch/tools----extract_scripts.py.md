@@ -1,6 +1,6 @@
 # `.\pytorch\tools\extract_scripts.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 声明脚本解释器为 Python 3，并使脚本可执行
 

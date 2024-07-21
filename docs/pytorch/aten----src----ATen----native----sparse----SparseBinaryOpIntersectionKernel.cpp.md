@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseBinaryOpIntersectionKernel.cpp`
 
-```
+```py
     // 定义一个宏，指示仅包含方法操作符
     #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
     // 包含稀疏张量相关的头文件

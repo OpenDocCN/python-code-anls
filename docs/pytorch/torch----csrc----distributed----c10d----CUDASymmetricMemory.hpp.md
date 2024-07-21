@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\CUDASymmetricMemory.hpp`
 
-```
+```py
 #pragma once
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>

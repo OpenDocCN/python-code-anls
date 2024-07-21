@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\fused_obs_fake_quant.cpp`
 
-```
+```py
 // 定义宏，仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入张量操作的头文件

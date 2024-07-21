@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_script_profile.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google 测试框架的头文件
 
 #include <c10/util/Optional.h>  // 包含 C10 库中的 Optional 实用工具头文件

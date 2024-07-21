@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSStream.h`
 
-```
+```py
 /*
    著作权声明，指明该文件版权归属于 Apple 公司，表示版权所有年份为 2022 年
 */

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_dtensor_compile.py`
 
-```
+```py
 # 引入必要的模块和库
 import copy  # 引入 copy 模块，用于复制对象
 import functools  # 引入 functools 模块，用于高阶函数的操作

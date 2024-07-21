@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\optim_baseline.py`
 
-```
+```py
 """Script to generate baseline values from PyTorch optimization algorithms"""
 
 # 引入必要的库

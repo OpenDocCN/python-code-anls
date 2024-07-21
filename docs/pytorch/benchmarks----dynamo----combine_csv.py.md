@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\combine_csv.py`
 
-```
+```py
 # 导入必要的模块：ast 用于安全地将字符串转换为 Python 字面量，csv 用于 CSV 文件操作，sys 用于访问命令行参数，defaultdict 用于创建默认字典。
 import ast
 import csv

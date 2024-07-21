@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\annotate_getitem_nodes.py`
 
-```
+```py
 import operator  # 导入 operator 模块，用于操作符相关的函数
 
 import torch  # 导入 PyTorch 模块

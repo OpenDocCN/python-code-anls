@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cpp_extensions_mtia_backend.py`
 
-```
+```py
 # Owner(s): ["module: mtia"]
 
 # 导入标准库和第三方库

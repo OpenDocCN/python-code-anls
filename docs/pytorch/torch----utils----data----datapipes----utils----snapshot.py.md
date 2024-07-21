@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\utils\snapshot.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和类
 from torch.utils.data.datapipes._hook_iterator import _SnapshotState

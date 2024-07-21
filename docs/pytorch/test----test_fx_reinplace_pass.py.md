@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_fx_reinplace_pass.py`
 
-```
+```py
 # 导入必要的模块和函数
 import torch
 from torch.testing._internal.common_utils import TestCase, run_tests

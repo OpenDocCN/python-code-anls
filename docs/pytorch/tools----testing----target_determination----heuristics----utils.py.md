@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\utils.py`
 
-```
+```py
 # 从未来模块导入注释，支持类型注释
 from __future__ import annotations
 

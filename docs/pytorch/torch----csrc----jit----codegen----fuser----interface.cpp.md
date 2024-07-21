@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\interface.cpp`
 
-```
+```py
 // 引入 Torch 的 JIT Fuser 接口头文件
 #include <torch/csrc/jit/codegen/fuser/interface.h>
 

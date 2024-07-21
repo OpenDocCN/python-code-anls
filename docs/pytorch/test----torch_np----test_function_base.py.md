@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_function_base.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入 pytest 模块，用于编写和运行测试用例

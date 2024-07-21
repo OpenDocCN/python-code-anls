@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\autocast.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令 `#pragma once`：确保当前头文件只被编译一次，避免多重包含的问题

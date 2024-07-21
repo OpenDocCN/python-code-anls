@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_functions.h`
 
-```
+```py
 #pragma once
 
 // 指令：在编译时只包含该头文件一次，避免重复包含

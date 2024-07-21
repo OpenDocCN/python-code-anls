@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\quint8.h`
 
-```
+```py
 #pragma once
 // 使用 `#pragma once` 确保头文件只被编译一次，防止多重包含的问题
 

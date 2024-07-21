@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\nested\NestedTensorFactories.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once确保头文件只被编译一次，防止重复包含
 

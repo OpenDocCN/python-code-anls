@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\parse.py`
 
-```
+```py
 from __future__ import annotations
 
 from collections import defaultdict, namedtuple

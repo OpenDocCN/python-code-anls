@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_state_dict_utils.py`
 
-```
+```py
     """Iterate through the state dict, applying the given functions to each tensor type.
 
     Args:

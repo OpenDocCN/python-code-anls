@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\TensorModeKernel.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件只被编译一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\aten_interned_strings.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}  // 描述：这是一个占位注释，将来会被生成的注释内容替换

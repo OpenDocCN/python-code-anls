@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\tensor.h`
 
-```
+```py
 #pragma once
 
 /// `#pragma once` 是一种预处理指令，用于确保头文件只被编译一次，避免多重包含问题。

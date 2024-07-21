@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_xnnpack_integration.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 引入所需的模块和库

@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\my_custom_ops.py`
 
-```
+```py
 # 从模型中导入自定义操作库路径获取函数
 from model import get_custom_op_library_path
 

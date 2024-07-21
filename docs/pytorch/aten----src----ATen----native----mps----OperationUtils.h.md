@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\OperationUtils.h`
 
-```
+```py
 //  Copyright © 2022 Apple Inc.
 // 版权声明，代码版权归Apple Inc.所有
 

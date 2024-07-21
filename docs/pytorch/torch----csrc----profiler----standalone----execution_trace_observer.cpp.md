@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\standalone\execution_trace_observer.cpp`
 
-```
+```py
 #ifdef _WIN32
 // 如果是在 Windows 下编译，确保 WIN32_LEAN_AND_MEAN 被定义，以减少包含的 Windows 头文件
 #ifndef WIN32_LEAN_AND_MEAN

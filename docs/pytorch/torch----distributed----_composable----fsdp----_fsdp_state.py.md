@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fsdp\_fsdp_state.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import functools  # 导入 functools 模块，用于装饰器功能

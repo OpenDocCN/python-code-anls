@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\Functions.cpp`
 
-```
+```py
 // 包含所需的头文件
 
 #include <array>  // 包含数组容器的头文件

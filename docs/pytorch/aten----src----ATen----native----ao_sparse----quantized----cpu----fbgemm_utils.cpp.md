@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\fbgemm_utils.cpp`
 
-```
+```py
 // 定义宏以仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

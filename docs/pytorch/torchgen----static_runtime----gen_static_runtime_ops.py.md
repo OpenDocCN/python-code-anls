@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\static_runtime\gen_static_runtime_ops.py`
 
-```
+```py
 # 从未来版本导入注解支持
 from __future__ import annotations
 

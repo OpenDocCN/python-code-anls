@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\utils\Factory.cpp`
 
-```
+```py
 // 定义编译选项，仅包含断言方法的运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

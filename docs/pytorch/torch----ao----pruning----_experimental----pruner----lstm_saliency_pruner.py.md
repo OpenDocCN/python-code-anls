@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\lstm_saliency_pruner.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 from typing import cast  # 从 typing 模块导入 cast 函数，用于类型转换

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\python\init.cpp`
 
-```
+```py
 #include <torch/csrc/lazy/python/init.h> // 引入 Torch 懒执行模块的 Python 初始化头文件
 
 #include <ATen/FunctionalTensorWrapper.h> // 引入 ATen 的功能性张量包装头文件

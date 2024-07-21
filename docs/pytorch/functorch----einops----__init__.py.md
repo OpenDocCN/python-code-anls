@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\einops\__init__.py`
 
-```
+```py
 # 导入当前目录下的 rearrange 模块中的 rearrange 函数
 from .rearrange import rearrange
 

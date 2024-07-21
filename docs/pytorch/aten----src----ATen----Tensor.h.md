@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Tensor.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\container\sequential.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 确保头文件只被编译一次
 

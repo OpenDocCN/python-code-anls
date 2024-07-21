@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\kernel\unpack_mixed_mm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块
 import logging

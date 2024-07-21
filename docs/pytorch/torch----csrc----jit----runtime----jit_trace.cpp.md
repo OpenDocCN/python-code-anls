@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\jit_trace.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件
 #include <ATen/ATen.h>
 // 包含 ATen 库中的并行处理功能

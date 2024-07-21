@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\RNN.h`
 
-```
+```py
 #pragma once
 // 使用预处理器指令#pragma once，确保头文件只被编译一次
 

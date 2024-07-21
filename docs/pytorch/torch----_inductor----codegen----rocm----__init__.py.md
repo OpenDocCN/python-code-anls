@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\__init__.py`
 
-```
+```py
 # 导入 requests 库，用于发送 HTTP 请求
 import requests
 

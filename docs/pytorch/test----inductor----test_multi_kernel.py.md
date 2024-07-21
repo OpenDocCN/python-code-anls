@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_multi_kernel.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 引入必要的模块和库

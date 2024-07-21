@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\OptionalArrayRef.h`
 
-```
+```py
 // This file defines OptionalArrayRef<T>, a class that has almost the same
 // exact functionality as std::optional<ArrayRef<T>>, except that its
 // converting constructor fixes a dangling pointer issue.

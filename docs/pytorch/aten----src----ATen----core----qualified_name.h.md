@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\qualified_name.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ArrayRef.h>

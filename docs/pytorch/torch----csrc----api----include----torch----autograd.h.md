@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\autograd.h`
 
-```
+```py
 #pragma once
 
 这行代码用于指示编译器在编译过程中只包含该头文件一次，即防止头文件的多重包含问题。

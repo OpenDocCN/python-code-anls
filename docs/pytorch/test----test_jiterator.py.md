@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jiterator.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 
 # 导入PyTorch库

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\CuFFTPlanCache.h`
 
-```
+```py
 // 包含 ATen 库的必要头文件
 #include <ATen/Config.h>
 #include <ATen/core/DimVector.h>

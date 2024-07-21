@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_ndarray.py`
 
-```
+```py
 # 忽略类型检查错误
 # 从将来的模块导入注解支持
 import builtins

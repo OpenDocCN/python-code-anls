@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256_complex_double.h`
 
-```
+```py
 #pragma once
 // 防止头文件中定义静态数据！
 // 参见注释 [不要使用 AVX 编译初始化器]

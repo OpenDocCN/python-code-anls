@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\e2e\test_e2e_save_and_load.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 引入时间模块

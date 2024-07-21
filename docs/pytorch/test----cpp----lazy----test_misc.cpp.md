@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_misc.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <string>  // 引入 string 头文件

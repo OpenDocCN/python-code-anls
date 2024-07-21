@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_inference\aoti_custom_class.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只包含一次
 

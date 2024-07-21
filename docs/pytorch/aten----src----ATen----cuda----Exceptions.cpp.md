@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\Exceptions.cpp`
 
-```
+```py
 // 包含 CUDA Caching Allocator 头文件，以确保在获取 CUDART_VERSION 之前已定义 CUDACachingAllocator
 #include <c10/cuda/CUDACachingAllocator.h>
 

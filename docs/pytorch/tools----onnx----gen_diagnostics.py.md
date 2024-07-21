@@ -1,6 +1,6 @@
 # `.\pytorch\tools\onnx\gen_diagnostics.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 """ Generates PyTorch ONNX Export Diagnostic rules for C++, Python and documentations.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\scatter_gather.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型和函数
 from typing import Any, Dict, List, Optional, overload, Sequence, Tuple, TypeVar, Union

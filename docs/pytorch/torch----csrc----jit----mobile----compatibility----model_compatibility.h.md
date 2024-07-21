@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\compatibility\model_compatibility.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Export.h>

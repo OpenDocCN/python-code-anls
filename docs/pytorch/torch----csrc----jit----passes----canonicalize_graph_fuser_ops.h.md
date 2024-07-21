@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\canonicalize_graph_fuser_ops.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令，确保头文件只被包含一次，以防止多重包含带来的问题。

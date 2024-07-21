@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cuda_extension.cpp`
 
-```
+```py
 // 包含 Torch 的 C++ 扩展头文件
 #include <torch/extension.h>
 

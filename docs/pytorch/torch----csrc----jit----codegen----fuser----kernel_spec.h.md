@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\kernel_spec.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>

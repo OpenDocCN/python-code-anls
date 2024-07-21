@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Utils.cpp`
 
-```
+```py
 /*
  * This header includes Vulkan-specific tensor packing functionalities.
  * It ensures access to Vulkan common operations and types.

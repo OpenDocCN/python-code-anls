@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\adam.cpp`
 
-```
+```py
 // 包含 PyTorch 中 Adam 优化器的头文件
 #include <torch/optim/adam.h>
 

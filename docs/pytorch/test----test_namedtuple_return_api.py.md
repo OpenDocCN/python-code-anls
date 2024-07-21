@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_namedtuple_return_api.py`
 
-```
+```py
 # 导入标准库 os、正则表达式模块 re、YAML 解析模块 yaml、文本包装模块 textwrap、PyTorch 深度学习库
 import os
 import re

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\decomposition_registry.cpp`
 
-```
+```py
 // 包含 Torch JIT 前端的IR生成器头文件
 #include <torch/csrc/jit/frontend/ir_emitter.h>
 // Torch JIT 日志记录工具头文件

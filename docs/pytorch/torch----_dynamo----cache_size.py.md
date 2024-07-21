@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\cache_size.py`
 
-```
+```py
 # 引入必要的模块和库
 # mypy: allow-untyped-defs
 import logging  # 导入日志记录模块

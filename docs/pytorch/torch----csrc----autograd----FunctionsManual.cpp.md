@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\FunctionsManual.cpp`
 
-```
+```py
 // 引入 Torch 库中的不同模块和头文件，用于自动求导和张量操作
 
 #include <torch/csrc/autograd/FunctionsManual.h>
@@ -6131,7 +6131,7 @@ Tensor linalg_lu_solve_jvp(
   }
 }
     const bool use_A_T) {
-```  
+```py  
 
 // 禁用 TF32 加速
 at::NoTF32Guard disable_tf32;

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\hipify\hipify_python.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 """ The Python Hipify script.

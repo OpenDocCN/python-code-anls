@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\mixture_same_family.py`
 
-```
+```py
 # 使用 mypy 配置选项，允许未标记类型的定义
 from typing import Dict  # 导入 Dict 类型用于声明字典类型
 

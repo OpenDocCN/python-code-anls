@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\update_differentiable_graph_requires_grad.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 框架中所需的头文件
 
 #include <torch/csrc/jit/passes/update_differentiable_graph_requires_grad.h>

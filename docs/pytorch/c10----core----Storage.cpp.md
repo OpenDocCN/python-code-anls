@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Storage.cpp`
 
-```
+```py
 // 包含 C10 库中的引用计数删除器和存储类头文件
 #include <c10/core/RefcountedDeleter.h>
 #include <c10/core/Storage.h>

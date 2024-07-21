@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android_torchvision\src\main\cpp\pytorch_vision_jni.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <cassert>
 #include <cmath>

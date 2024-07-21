@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Distributions.h`
 
-```
+```py
 #pragma once
 
 namespace at {

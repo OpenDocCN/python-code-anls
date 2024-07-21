@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\ReduceOps.cpp`
 
-```
+```py
 // 定义宏，仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 CUDA 下的归约操作头文件

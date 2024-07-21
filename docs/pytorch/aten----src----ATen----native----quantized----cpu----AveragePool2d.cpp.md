@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\AveragePool2d.cpp`
 
-```
+```py
 // 定义宏，用于限定仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

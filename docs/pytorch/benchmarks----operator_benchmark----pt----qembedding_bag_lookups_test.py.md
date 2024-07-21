@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qembedding_bag_lookups_test.py`
 
-```
+```py
 # 导入必要的模块和类型声明
 from typing import Optional
 

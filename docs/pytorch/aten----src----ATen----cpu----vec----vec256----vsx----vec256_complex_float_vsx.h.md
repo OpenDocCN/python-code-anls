@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_complex_float_vsx.h`
 
-```
+```py
 #pragma once
 // 包含 ATen 库中有关 CPU 矢量化的头文件
 #include <ATen/cpu/vec/intrinsics.h>

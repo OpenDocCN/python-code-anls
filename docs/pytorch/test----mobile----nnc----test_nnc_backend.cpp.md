@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\nnc\test_nnc_backend.cpp`
 
-```
+```py
 // 包含 ATen 库中的函数定义头文件
 #include <ATen/Functions.h>
 // 包含 Google Test 框架的头文件

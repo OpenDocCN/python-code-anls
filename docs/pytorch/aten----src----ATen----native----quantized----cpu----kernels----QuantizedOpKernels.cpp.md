@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\kernels\QuantizedOpKernels.cpp`
 
-```
+```py
 // 定义宏，仅包含 Torch 断言方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

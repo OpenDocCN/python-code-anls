@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\cpp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Functionality for Python <-> C++ frontend inter-op."""
 

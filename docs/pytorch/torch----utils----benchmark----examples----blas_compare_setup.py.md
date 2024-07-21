@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\blas_compare_setup.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import collections  # 导入 collections 模块，用于创建命名元组等数据结构
 import os  # 导入 os 模块，提供了与操作系统交互的功能

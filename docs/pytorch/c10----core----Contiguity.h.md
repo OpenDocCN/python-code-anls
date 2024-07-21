@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Contiguity.h`
 
-```
+```py
 #pragma once
 #include <c10/core/SymBool.h>  // 引入 SymBool 类型的头文件
 #include <c10/core/SymInt.h>   // 引入 SymInt 类型的头文件

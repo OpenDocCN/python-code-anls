@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ConvolutionMM3d.h`
 
-```
+```py
 // 包含 ATen 库中的 Tensor 类的定义文件
 #include <ATen/core/Tensor.h>
 

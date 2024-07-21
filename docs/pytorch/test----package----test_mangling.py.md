@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_mangling.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入所需的模块和函数

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUStream.cpp`
 
-```
+```py
 // 引入头文件：c10/util/CallOnce.h、c10/util/irange.h、c10/xpu/XPUException.h、c10/xpu/XPUStream.h
 #include <c10/util/CallOnce.h>
 #include <c10/util/irange.h>

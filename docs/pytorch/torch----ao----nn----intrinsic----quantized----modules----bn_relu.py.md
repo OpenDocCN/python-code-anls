@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\quantized\modules\bn_relu.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入必要的 PyTorch 模块

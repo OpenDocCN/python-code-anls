@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\patcher.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import copy  # 复制对象的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cuda_expandable_segments.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 # run time cuda tests, but with the allocator using expandable segments
 

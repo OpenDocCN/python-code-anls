@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_globals.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 Globals used internally by the ONNX exporter.

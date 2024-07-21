@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\hooks.py`
 
-```
+```py
 # 导入远程服务器处理桶的工具函数
 from utils import process_bucket_with_remote_server
 

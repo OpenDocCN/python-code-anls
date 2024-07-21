@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\sharding.py`
 
-```
+```py
 """
 # mypy: allow-untyped-defs
 从 enum 模块中导入 IntEnum 类型，用于定义枚举值

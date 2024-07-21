@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\onnx\init.cpp`
 
-```
+```py
 // 包含 ONNX 相关的头文件
 #include <onnx/onnx_pb.h>
 #include <torch/csrc/onnx/back_compat.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\proxy.py`
 
-```
+```py
 # mypy: ignore-errors
 # 导入所需的模块和库
 

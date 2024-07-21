@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cuda\fused_kernel.cpp`
 
-```
+```py
 // 包含 CUDA 融合内核相关头文件
 #include <torch/csrc/jit/codegen/fuser/cuda/fused_kernel.h>
 

@@ -55,7 +55,7 @@ http://stackoverflow.com/questions/7690220/how-to-document-python-function-param
 
 Swap this kind of formatting into py files:
 
-```
+```py
 def my_method(x, y):"""!
     my_method description
 

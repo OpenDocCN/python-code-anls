@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\throughput_benchmark.cpp`
 
-```
+```py
 // 包含 Torch 的性能基准工具的头文件
 #include <torch/csrc/utils/throughput_benchmark.h>
 
@@ -134,7 +134,7 @@ model_(*input.args, **input.kwargs);
 
 template <>
 ModuleOutput ModuleBenchmark::runOnce(py::args&& args, const py::kwargs& kwargs) const {
-```  
+```py  
 // 确保模块已经初始化
 CHECK(initialized_);
 // 获取全局解释器锁（GIL）以确保线程安全
@@ -164,7 +164,7 @@ inputs_.emplace_back(std::move(stack));
 
 template <>
 void ScriptModuleBenchmark::addInput(ScriptModuleInput&& input) {
-```  
+```py  
 // 在输入的开头插入模型的 ivalue
 input.insert(input.begin(), model_._ivalue());
 // 将处理后的输入添加到输入列表中
@@ -182,7 +182,7 @@ inputs_.emplace_back(std::move(args), std::move(kwargs));
 
 template <>
 ModuleInput cloneInput<ModuleInput>(const ModuleInput& input) {
-```  
+```py  
 // 获取全局解释器锁（GIL）以确保线程安全
 pybind11::gil_scoped_acquire gil_guard;
 // 克隆模块输入的参数和关键字参数

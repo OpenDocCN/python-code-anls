@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\datapipe.py`
 
-```
+```py
 # 导入 functools 模块，用于高阶函数操作
 import functools
 # 导入 pickle 模块，用于序列化和反序列化 Python 对象

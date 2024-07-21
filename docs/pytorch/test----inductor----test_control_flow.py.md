@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_control_flow.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 import itertools  # 导入 itertools 模块，用于生成迭代器的函数

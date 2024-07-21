@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\DispatchKeyFunctions.h`
 
-```
+```py
 #include <ATen/core/TensorBody.h>
 
 // TODO Undo all logic introduced for Note [Avoiding Include Cycles In Static Dispatch]

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\infra\partitioner.py`
 
-```
+```py
 # 导入必要的模块和函数
 # mypy: allow-untyped-defs
 from torch.fx.passes.utils.fuser_utils import fuse_by_partitions

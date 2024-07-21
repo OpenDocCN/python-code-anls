@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入quantize模块下所有内容，禁止F403错误
 from .quantize import *  # noqa: F403

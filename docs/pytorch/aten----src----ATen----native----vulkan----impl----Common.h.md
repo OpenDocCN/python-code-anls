@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\impl\Common.h`
 
-```
+```py
 #pragma once
 
 

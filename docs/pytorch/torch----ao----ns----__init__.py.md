@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\__init__.py`
 
-```
+```py
 # 定义一个名为 read_zip 的函数，接收一个参数 fname，用于读取 ZIP 文件并返回文件名到数据的字典
 def read_zip(fname):
     # 打开文件 fname 为二进制模式，并读取其内容，将内容封装为 BytesIO 对象

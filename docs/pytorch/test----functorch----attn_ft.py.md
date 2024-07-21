@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\attn_ft.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

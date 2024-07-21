@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\test_checkpoint.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的库和模块

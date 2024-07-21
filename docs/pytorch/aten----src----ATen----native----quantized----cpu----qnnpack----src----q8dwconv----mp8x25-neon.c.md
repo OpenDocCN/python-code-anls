@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\mp8x25-neon.c`
 
-```
+```py
 /*
  * 包含必要的头文件，其中包括 NEON SIMD 指令集的引入
  */

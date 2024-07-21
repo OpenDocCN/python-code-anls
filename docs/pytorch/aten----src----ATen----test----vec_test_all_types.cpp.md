@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\vec_test_all_types.cpp`
 
-```
+```py
 // 包含 ATen 库的向量测试头文件
 #include <ATen/test/vec_test_all_types.h>
 // 包含 C10 实用工具的范围迭代器头文件

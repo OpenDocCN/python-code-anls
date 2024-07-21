@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_prim_ops.cpp`
 
-```
+```py
 // 包含头文件 <ATen/autocast_mode.h>，提供了自动混合精度计算的支持
 // 包含头文件 <ATen/core/Generator.h>，定义了随机数生成器的接口
 // 包含头文件 <c10/util/Optional.h>，提供了可选值的封装类模板

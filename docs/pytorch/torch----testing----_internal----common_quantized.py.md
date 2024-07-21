@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_quantized.py`
 
-```
+```py
 # 忽略类型检查错误（这行注释可能是为了在类型检查工具中跳过错误的检查）
 mypy: ignore-errors
 

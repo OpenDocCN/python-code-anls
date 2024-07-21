@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_minifier.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 import unittest  # 导入单元测试模块
 

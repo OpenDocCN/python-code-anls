@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\monitor\instrumentation.h`
 
-```
+```py
 #pragma once
 // 声明该头文件只被编译一次
 

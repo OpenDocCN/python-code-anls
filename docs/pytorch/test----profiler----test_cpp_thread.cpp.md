@@ -1,6 +1,6 @@
 # `.\pytorch\test\profiler\test_cpp_thread.cpp`
 
-```
+```py
 // 包含 Torch 的自动微分和分析器的头文件
 #include <torch/csrc/autograd/profiler_kineto.h>
 #include <torch/torch.h>

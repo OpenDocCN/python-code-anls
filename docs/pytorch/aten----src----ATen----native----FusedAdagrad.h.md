@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FusedAdagrad.h`
 
-```
+```py
 # 包含 ATen 库中的 Tensor 类的头文件
 #include <ATen/core/Tensor.h>
 

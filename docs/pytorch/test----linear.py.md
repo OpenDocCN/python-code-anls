@@ -1,6 +1,6 @@
 # `.\pytorch\test\linear.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 
 

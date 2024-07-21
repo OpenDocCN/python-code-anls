@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_c\test_module.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入 PyTorch 库

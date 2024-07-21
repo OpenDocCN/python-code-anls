@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\test_contract.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 从标准库中导入 deepcopy 函数和 Tuple 类型

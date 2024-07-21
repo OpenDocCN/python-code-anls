@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\annotate_warns.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/annotate_warns.h>
 
 #include <atomic>

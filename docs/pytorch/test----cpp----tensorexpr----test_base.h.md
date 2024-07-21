@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_base.h`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_GTEST 宏，则包含 GTest 测试框架的相关头文件
 #if defined(USE_GTEST)

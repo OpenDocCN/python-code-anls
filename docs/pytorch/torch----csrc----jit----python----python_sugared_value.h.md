@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_sugared_value.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/api/module.h>

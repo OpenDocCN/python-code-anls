@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_linalg.py`
 
-```
+```py
 # Owner(s): ["module: linear algebra"]
 
 # 导入必要的库

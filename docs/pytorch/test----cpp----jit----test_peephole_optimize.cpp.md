@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_peephole_optimize.cpp`
 
-```
+```py
 TEST(PeepholeOptimizeTest, IsAndIsNot)
 // 定义测试用例：测试 is / is not none 优化
 {

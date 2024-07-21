@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\test_quantize_fx_lite_script_module.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入需要的库和模块

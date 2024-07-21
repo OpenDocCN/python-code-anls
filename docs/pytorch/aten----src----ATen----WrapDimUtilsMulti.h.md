@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\WrapDimUtilsMulti.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/WrapDimUtils.h>

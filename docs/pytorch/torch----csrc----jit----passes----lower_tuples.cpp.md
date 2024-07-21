@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\lower_tuples.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，用于 JIT 编译时的元组降级处理
 #include <torch/csrc/jit/passes/lower_tuples.h>
 

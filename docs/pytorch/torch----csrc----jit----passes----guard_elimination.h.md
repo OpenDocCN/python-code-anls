@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\guard_elimination.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 来确保头文件只被编译一次，防止多重包含
 

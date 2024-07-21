@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\conv2d.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/operators/misc.h>

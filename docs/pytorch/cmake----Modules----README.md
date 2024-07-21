@@ -16,7 +16,7 @@ This is modified from [the file included in CMake 3.13 release](https://github.c
 
 + For non-GNU compilers, whenever we try a candidate OpenMP flag, first try it with directly linking MKL's `libomp` if it has one. Otherwise, we may end up linking two `libomp`s and end up with this nasty error:
 
-  ```
+  ```py
   OMP: Error #15: Initializing libomp.dylib, but found libiomp5.dylib already
   initialized.
 

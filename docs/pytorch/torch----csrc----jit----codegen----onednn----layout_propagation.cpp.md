@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\layout_propagation.cpp`
 
-```
+```py
 // 包含 Torch 的头文件：onednn/graph_helper.h, onednn/layout_propagation.h, jit_log.h
 #include <torch/csrc/jit/codegen/onednn/graph_helper.h>
 #include <torch/csrc/jit/codegen/onednn/layout_propagation.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Layout.h`
 
-```
+```py
 #pragma once
 #include <c10/core/Layout.h>
 

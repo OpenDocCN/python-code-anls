@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\FileStoreTest.cpp`
 
-```
+```py
 // 包含C++标准库头文件<c10/util/irange.h>
 #include <c10/util/irange.h>
 // 包含自定义的测试公共头文件"StoreTestCommon.hpp"

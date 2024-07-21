@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_layout_optim.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入所需的库和模块
 import copy  # 导入 copy 模块，用于复制对象

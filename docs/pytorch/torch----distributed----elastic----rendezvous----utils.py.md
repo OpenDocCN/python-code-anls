@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Facebook, Inc. and its affiliates.
 # All rights reserved.

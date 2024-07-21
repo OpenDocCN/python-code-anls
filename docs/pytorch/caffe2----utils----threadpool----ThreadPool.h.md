@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\threadpool\ThreadPool.h`
 
-```
+```py
 #ifndef CAFFE2_UTILS_THREADPOOL_H_
 #define CAFFE2_UTILS_THREADPOOL_H_
 

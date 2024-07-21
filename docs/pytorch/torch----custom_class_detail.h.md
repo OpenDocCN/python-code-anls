@@ -1,6 +1,6 @@
 # `.\pytorch\torch\custom_class_detail.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/boxing/impl/make_boxed_from_unboxed_functor.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\experimental_ops.py`
 
-```
+```py
 # 引入必要的模块和类型定义
 from typing import cast, List, Optional, Sequence, Tuple
 

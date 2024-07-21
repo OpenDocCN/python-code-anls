@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\TraceUtils.h`
 
-```
+```py
 #pragma once
 // 包含 C10 库的 ScalarType 头文件
 #include <c10/core/ScalarType.h>

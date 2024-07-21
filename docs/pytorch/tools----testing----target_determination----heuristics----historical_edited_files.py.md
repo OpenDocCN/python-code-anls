@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\historical_edited_files.py`
 
-```
+```py
 # 导入未来版本的注解支持
 from __future__ import annotations
 

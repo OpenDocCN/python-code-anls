@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\comptime.py`
 
-```
+```py
 # 引入必要的模块和库
 import builtins  # 引入内置模块
 import dis  # 引入 dis 模块，用于反汇编 Python 字节码

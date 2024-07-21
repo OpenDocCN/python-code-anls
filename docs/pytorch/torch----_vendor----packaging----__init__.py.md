@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_vendor\packaging\__init__.py`
 
-```
+```py
 # 定义模块标题，用于显示包的名称
 __title__ = "packaging"
 

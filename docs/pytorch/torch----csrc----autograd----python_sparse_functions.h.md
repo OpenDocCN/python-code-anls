@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_sparse_functions.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令 "#pragma once" 确保头文件只被编译一次，避免重复包含
 

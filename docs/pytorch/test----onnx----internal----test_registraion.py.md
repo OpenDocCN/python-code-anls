@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\internal\test_registraion.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 """Unit tests for the internal registration wrapper module."""
 

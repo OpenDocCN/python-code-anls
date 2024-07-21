@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\Operators.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}  // 插入生成的注释

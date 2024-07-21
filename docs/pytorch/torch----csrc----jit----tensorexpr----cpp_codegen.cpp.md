@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\cpp_codegen.cpp`
 
-```
+```py
 // 包含 C++ 标准库中的头文件
 #include <algorithm>
 #include <type_traits>

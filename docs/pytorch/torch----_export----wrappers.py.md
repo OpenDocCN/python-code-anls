@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\wrappers.py`
 
-```
+```py
 # 用于声明允许未类型化定义的标志，供 mypy 使用
 # 从 contextlib 模块导入上下文管理器
 from contextlib import contextmanager

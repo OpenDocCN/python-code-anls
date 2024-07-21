@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\pointwise_ops.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 from typing import List, Sequence, Tuple
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\functional_adam.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型相关的模块
 from typing import Dict, List, Optional, Tuple

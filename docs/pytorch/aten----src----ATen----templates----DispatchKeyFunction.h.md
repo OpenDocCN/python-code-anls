@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\DispatchKeyFunction.h`
 
-```
+```py
 #pragma once
 // ${generated_comment}  // 包含生成的注释，通常用于自动生成的文件说明
 

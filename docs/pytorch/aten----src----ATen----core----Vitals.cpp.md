@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Vitals.cpp`
 
-```
+```py
 namespace at::vitals {
 
 命名空间 `at::vitals` 的开始。

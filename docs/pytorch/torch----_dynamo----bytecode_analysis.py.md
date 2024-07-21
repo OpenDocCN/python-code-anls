@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\bytecode_analysis.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import bisect                  # 提供用于操作有序列表的函数

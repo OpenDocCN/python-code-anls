@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_b\subpackage_2.py`
 
-```
+```py
 # 动态导入 math 模块，使用 fromlist=[] 以确保返回的是 math 模块对象
 __import__("math", fromlist=[])
 

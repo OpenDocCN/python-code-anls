@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\lightweight_dispatch\test_codegen_unboxing.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <test/cpp/jit/test_utils.h>
 #include <torch/torch.h>

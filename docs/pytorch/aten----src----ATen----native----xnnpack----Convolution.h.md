@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Convolution.h`
 
-```
+```py
 #pragma once
 
 #ifdef USE_XNNPACK

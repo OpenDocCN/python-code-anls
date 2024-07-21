@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseUnaryOps.cpp`
 
-```
+```py
 // 定义一个模板函数，用于执行稀疏张量的单目操作函数
 template <typename Ufunc>
 Tensor coalesced_unary_ufunc(const Tensor &self, const Ufunc &ufunc) {

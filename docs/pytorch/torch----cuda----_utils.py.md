@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\_utils.py`
 
-```
+```py
 # 从 typing 模块导入 Any 类型
 from typing import Any
 

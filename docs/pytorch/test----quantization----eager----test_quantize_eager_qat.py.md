@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\eager\test_quantize_eager_qat.py`
 
-```
+```py
 # 导入所需的模块和库
 import copy  # 导入 copy 模块，用于深复制对象
 import math  # 导入 math 模块，提供数学函数实现

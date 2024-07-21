@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_nested_functions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于声明仅为方法操作符的情况
 // ${generated_comment}

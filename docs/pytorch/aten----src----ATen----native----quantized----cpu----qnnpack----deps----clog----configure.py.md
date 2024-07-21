@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\deps\clog\configure.py`
 
-```
+```py
 # 导入 confu 模块，用于配置解析
 import confu
 

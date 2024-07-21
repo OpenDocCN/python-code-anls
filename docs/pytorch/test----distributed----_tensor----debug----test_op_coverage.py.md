@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\debug\test_op_coverage.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入 PyTorch 库和模块

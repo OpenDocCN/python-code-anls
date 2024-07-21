@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Upsample.cpp`
 
-```
+```py
 // 包含 Vulkan 上采样相关的头文件和函数声明
 #include <ATen/native/UpSample.h>
 #include <ATen/native/vulkan/ops/Common.h>

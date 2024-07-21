@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\RangeFactories.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/RangeFactories.h>
 #include <ATen/AccumulateType.h>

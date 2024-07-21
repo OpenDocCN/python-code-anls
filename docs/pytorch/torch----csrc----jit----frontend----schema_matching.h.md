@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\schema_matching.h`
 
-```
+```py
 // 预处理指令，用于确保头文件只被包含一次
 #pragma once
 

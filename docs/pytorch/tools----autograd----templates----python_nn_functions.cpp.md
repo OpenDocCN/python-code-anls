@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_nn_functions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于只包含方法操作符
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\model_dump\__init__.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 """

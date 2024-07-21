@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAGeneratorImpl.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 指令，确保头文件只被编译一次，避免重复包含导致的编译错误和效率问题

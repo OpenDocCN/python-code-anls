@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\compare-fastrnn-results.py`
 
-```
+```py
 import argparse  # 导入处理命令行参数的模块
 import json  # 导入处理 JSON 数据的模块
 from collections import namedtuple  # 导入命名元组用于创建简单的对象结构

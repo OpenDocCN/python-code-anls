@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\rpc\test_tensorpipe_serialization.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/util/irange.h>

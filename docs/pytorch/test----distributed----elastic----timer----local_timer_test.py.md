@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\timer\local_timer_test.py`
 
-```
+```py
 # 多进程处理模块导入
 import multiprocessing as mp
 # 信号处理模块导入

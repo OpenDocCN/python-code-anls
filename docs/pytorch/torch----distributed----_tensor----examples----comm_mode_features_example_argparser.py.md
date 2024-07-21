@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\examples\comm_mode_features_example_argparser.py`
 
-```
+```py
 # 导入 argparse 库，用于解析命令行参数
 import argparse
 

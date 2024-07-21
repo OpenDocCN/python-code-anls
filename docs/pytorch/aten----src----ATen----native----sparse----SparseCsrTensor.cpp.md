@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseCsrTensor.cpp`
 
-```
+```py
 // 基本稀疏张量函数
 
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS

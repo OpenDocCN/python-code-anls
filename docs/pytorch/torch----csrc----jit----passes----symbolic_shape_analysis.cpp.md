@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\symbolic_shape_analysis.cpp`
 
-```
+```py
 /*
 XXX: this is still in prototype phase and has much work left to do, including
 but not limited to:

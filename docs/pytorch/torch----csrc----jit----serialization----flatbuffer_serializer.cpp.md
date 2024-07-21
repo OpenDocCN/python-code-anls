@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\flatbuffer_serializer.cpp`
 
-```
+```py
 // 包含 Torch 序列化的 FlatBuffer 序列化器头文件
 #include <torch/csrc/jit/serialization/flatbuffer_serializer.h>
 

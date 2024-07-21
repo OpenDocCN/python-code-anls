@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\ScalarType.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/BFloat16.h> // 引入BFloat16类型的头文件

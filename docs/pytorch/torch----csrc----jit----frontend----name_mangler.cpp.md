@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\name_mangler.cpp`
 
-```
+```py
 // 包含 Torch 的名称管理器头文件
 #include <torch/csrc/jit/frontend/name_mangler.h>
 

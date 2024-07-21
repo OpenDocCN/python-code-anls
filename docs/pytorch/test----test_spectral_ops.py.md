@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_spectral_ops.py`
 
-```
+```py
 # Owner(s): ["module: fft"]
 
 import torch  # 导入PyTorch库

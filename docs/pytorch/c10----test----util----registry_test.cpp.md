@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\registry_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 框架的头文件
 #include <iostream> // 包含标准输入输出流的头文件
 #include <memory> // 包含智能指针相关的头文件

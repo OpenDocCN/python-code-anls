@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\im2col_shape_check.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Tensor.h>
 #include <ATen/TensorUtils.h>

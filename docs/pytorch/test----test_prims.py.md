@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_prims.py`
 
-```
+```py
 # Owner(s): ["module: decompositions"]
 
 # 导入必要的库和模块

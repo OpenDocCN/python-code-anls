@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\backend.cpp`
 
-```
+```py
 #include <vector>  // 包含标准库中的 vector 头文件
 
 #include <torch/csrc/jit/backends/backend.h>  // 包含 Torch 后端接口头文件

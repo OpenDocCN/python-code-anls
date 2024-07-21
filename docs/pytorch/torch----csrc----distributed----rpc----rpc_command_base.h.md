@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rpc_command_base.h`
 
-```
+```py
 // 预处理命令，指定此头文件只包含一次
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\ios\TestApp\TestApp\AppDelegate.h`
 
-```
+```py
 # 导入UIKit框架中的UIKit头文件，这是iOS开发的基本框架
 #import <UIKit/UIKit.h>
 

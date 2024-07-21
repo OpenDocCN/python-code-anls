@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\utils.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ArrayRef.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\tensorrt.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch 库，用于深度学习计算
 import torch

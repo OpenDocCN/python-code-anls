@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\dim.py`
 
-```
+```py
 python
 # 导入dis模块，用于反汇编Python字节码
 import dis

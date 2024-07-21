@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\update_differentiable_graph_requires_grad.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件只被编译一次
 

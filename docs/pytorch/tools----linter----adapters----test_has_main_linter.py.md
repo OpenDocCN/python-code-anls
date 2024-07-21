@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\test_has_main_linter.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 This lint verifies that every Python test file (file that matches test_*.py or

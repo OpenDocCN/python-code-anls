@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\BatchLinearAlgebraLib.cpp`
 
-```
+```py
 // 定义宏以指示在拆分实现文件时使用注意事项[BatchLinearAlgebraLib split implementation files]
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

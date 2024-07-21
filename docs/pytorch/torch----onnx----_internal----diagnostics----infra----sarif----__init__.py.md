@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\sarif\__init__.py`
 
-```
+```py
 # 从指定路径导入多个模块，这些模块用于处理SARIF规范的不同方面，如地址、文件、代码流等。
 
 from torch.onnx._internal.diagnostics.infra.sarif._address import Address

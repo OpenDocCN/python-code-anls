@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_resp.cpp`
 
-```
+```py
 // 包含头文件 torch/csrc/distributed/rpc/python_resp.h
 #include <torch/csrc/distributed/rpc/python_resp.h>
 

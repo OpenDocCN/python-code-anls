@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parameter.py`
 
-```
+```py
 from collections import OrderedDict  # 导入有序字典模块
 
 import torch  # 导入 PyTorch 模块

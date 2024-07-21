@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc_utils.py`
 
-```
+```py
 # mypy: ignore-errors
 # 导入所需的模块和类
 import os

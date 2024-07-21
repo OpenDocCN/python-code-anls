@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\transformer.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/torch.h>  // 包含 PyTorch C++ API 的头文件
@@ -103,7 +103,7 @@ void transformer_decoder_layer_test_helper_gelu(
 
 
   torch::Device device = is_cuda ? torch::kCUDA : torch::kCPU;
-```  
+```py  
 # 根据 `is_cuda` 变量的布尔值选择计算设备，如果为 true，则选择 CUDA 设备，否则选择 CPU 设备。
 
 
@@ -116,7 +116,7 @@ void transformer_decoder_layer_test_helper_gelu(
   TransformerDecoderLayer model =
       get_a_test_layer<TransformerDecoderLayer, TransformerDecoderLayerOptions>(
           tensor_options, use_callable_activation);
-```  
+```py  
 # 使用 `get_a_test_layer` 函数创建一个 `TransformerDecoderLayer` 对象 `model`，传入 `tensor_options` 和 `use_callable_activation` 参数。
 
 
@@ -127,7 +127,7 @@ void transformer_decoder_layer_test_helper_gelu(
 
     model.get()->options.activation(
         [&](const torch::Tensor& t) { return torch::nn::functional::gelu(t); });
-```  
+```py  
 # 在 `model` 对象上设置激活函数为 GELU（Gaussian Error Linear Unit），使用 Lambda 函数作为激活函数的定义。
 
 

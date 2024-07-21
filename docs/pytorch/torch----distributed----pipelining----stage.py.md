@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\pipelining\stage.py`
 
-```
+```py
     """
     Base class for pipeline stages.
     Defines or implements common methods used by the `_PipelineStage` used by

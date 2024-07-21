@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\quantized\QTensorImpl.cpp`
 
-```
+```py
 // 包含 ATen 库中的 QTensorImpl 类的头文件
 #include <ATen/quantized/QTensorImpl.h>
 

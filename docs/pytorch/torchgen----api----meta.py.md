@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\meta.py`
 
-```
+```py
 # 从 torchgen.model 模块中导入 NativeFunctionsGroup 类
 from torchgen.model import NativeFunctionsGroup
 

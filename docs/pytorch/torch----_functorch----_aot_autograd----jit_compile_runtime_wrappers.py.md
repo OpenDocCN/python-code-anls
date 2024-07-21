@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\jit_compile_runtime_wrappers.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 Functions in this module do most of the "work" of AOTAutograd.

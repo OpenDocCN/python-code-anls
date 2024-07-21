@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\PythonDispatcherTLS.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once确保头文件只被编译一次
 

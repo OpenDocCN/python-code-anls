@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\user_input_mutation.py`
 
-```
+```py
 # 引入 torch 模块，用于神经网络和张量操作
 # mypy: allow-untyped-defs 表示允许未标记类型的定义
 import torch

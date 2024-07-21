@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\memory_snapshot.cpp`
 
-```
+```py
 // 包含 ATen 库的 Context 头文件，用于管理运行时环境
 #include <ATen/Context.h>
 // 包含 ATen 库的 record_function 头文件，用于记录函数调用的信息

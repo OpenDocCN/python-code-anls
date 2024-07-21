@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_dedup_tensors.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import dataclasses  # 导入用于创建数据类的模块

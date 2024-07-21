@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_nnapi.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: mobile"]
 

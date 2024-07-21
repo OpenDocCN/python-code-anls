@@ -1,6 +1,6 @@
 # `.\pytorch\test\mkl_verbose.py`
 
-```
+```py
 # 导入 argparse 模块，用于处理命令行参数
 import argparse
 

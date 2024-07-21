@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_prims\executor.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和函数
 from typing import Callable, Optional

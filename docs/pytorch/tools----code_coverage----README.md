@@ -32,7 +32,7 @@ We have two different compilers, `gcc` and `clang`, and this tool supports both.
 ## Preparation
 The first step is to [build *Pytorch* from source](https://github.com/pytorch/pytorch#from-source) with `USE_CPP_CODE_COVERAGE` option `ON`. You may also want to set `BUILD_TEST` option `ON` to get the test binaries. Besides, if you are under `gcc` compiler, to get accurate result, it is recommended to also select `CMAKE_BUILD_TYPE=Debug`.
 See: [how to adjust build options](https://github.com/pytorch/pytorch#adjust-build-options-optional) for reference. Following is one way to adjust build option:
-```
+```py
 # in build/ folder (all build artifacts must in `build/` folder)
 cmake .. -DUSE_CPP_CODE_COVERAGE=ON -DBUILD_TEST=ON -DCMAKE_BUILD_TYPE=Debug
 ```
@@ -40,7 +40,7 @@ cmake .. -DUSE_CPP_CODE_COVERAGE=ON -DBUILD_TEST=ON -DCMAKE_BUILD_TYPE=Debug
 
 ## Examples
 The tool will auto-detect compiler type in your operating system, but if you are using another one, you need to specify it. Besides, if you are using `clang`, `llvm` tools are required. So the first step is to set some environment value if needed:
-```bash
+```py
 # set compiler type, the default is auto detected, you can check it at the start of log.txt
 export COMPILER_TYPE="CLANG"
 # set llvm path for clang, by default is /usr/local/opt/llvm/bin
@@ -48,26 +48,26 @@ export LLVM_TOOL_PATH=...
 ```
 
 Great, you are ready to run the code coverage tool for the first time! Start from the simple command:
-```
+```py
 python oss_coverage.py --run-only=atest
 ```
 This command will run `atest` binary in `build/bin/` folder and generate reports over the entire *Pytorch* folder. You can find the reports in `profile/summary`. But you may only be interested in the `aten` folder, in this case, try:
-```
+```py
 python oss_coverage.py --run-only=atest --interest-only=aten
 ```
 In *Pytorch*, `c++` tests located in `build/bin/` and `python` tests located in `test/`. If you want to run `python` test, try:
-```
+```py
 python oss_coverage.py --run-only=test_complex.py
 ```
 
 You may also want to specify more than one test or interested folder, in this case, try:
-```
+```py
 python oss_coverage.py --run-only=atest c10_logging_test --interest-only aten/src/Aten c10/core
 ```
 That it is! With these two simple options, you can customize many different functionality according to your need.
 By default, the tool will run all tests in `build/bin` folder (by running all executable binaries in it) and `test/` folder (by running `run_test.py`), and then collect coverage over the entire *Pytorch* folder. If this is what you want, try:
 *(Note: It's not recommended to run default all tests in clang, because it will take too much space)*
-```bash
+```py
 python oss_coverage.py
 ```
 
@@ -82,7 +82,7 @@ By default all steps will be run, but you can specify only run one of them. Foll
 
 **1. Interested in different folder**
 `—summary` is useful when you have different interested folder. For example,
-```bash
+```py
 # after run this command
 python oss_coverage.py --run-only=atest --interest-only=aten
 # you may then want to learn atest's coverage over c10, instead of running the test again, you can:
@@ -92,7 +92,7 @@ python oss_coverage.py --run-only=atest --interest-only=c10 --summary
 
 **2. Run tests yourself**
 When you are developing a new feature, you may first run the tests yourself to make sure the implementation is all right and then want to learn its coverage. But sometimes the test take very long time and you don't want to wait to run it again when doing code coverage. In this case, you can use these arguments to accelerate your development (make sure you build pytorch with the coverage option!):
-```
+```py
 # run tests when you are developing a new feature, assume the test is `test_nn.py`
 python oss_coverage.py --run-only=test_nn.py
 # or you can run it yourself

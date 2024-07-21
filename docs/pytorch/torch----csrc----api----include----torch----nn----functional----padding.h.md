@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\padding.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/PadNd.h>  // 导入 ATen 的 PadNd.h 文件，用于张量的填充操作
@@ -55,7 +55,7 @@ inline Tensor pad(
 /// namespace F = torch::nn::functional;
 /// F::pad(input, F::PadFuncOptions({1, 2, 2, 1, 1,
 /// 2}).mode(torch::kReplicate));
-/// ```
+/// ```py
 // 对输入张量进行填充操作，根据给定的选项
 inline Tensor pad(const Tensor& input, const PadFuncOptions& options) {
   // 调用 detail 命名空间下的 pad 函数，传入填充选项，并返回结果张量

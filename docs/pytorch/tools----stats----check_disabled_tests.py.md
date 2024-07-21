@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\check_disabled_tests.py`
 
-```
+```py
 # 引入未来的类型注解允许使用类名称作为类型标注，以支持类型的自我引用
 from __future__ import annotations
 

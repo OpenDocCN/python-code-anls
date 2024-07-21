@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\tensor.py`
 
-```
+```py
 # 忽略类型检查错误，这通常用于告知类型检查工具（如mypy）忽略当前文件中的错误
 # 导入必要的模块和类
 import functools  # 提供高阶函数：部分应用一个函数的参数

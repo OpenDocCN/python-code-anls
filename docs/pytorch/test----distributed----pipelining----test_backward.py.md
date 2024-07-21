@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_backward.py`
 
-```
+```py
 # 引入必要的库和模块
 import copy  # 用于深拷贝对象
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\verbose_wrapper.cpp`
 
-```
+```py
 // 包含 ATen 库的配置文件，用于获取配置信息
 #include <ATen/Config.h>
 

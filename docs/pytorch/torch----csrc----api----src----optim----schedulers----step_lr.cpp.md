@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\schedulers\step_lr.cpp`
 
-```
+```py
 #include <torch/optim/schedulers/step_lr.h>  // 包含 Torch 库中的 StepLR 调度器头文件
 
 namespace torch {

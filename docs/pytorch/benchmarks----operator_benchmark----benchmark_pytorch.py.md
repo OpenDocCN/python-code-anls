@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_pytorch.py`
 
-```
+```py
 import json  # 导入json模块，用于处理JSON格式数据
 import time  # 导入time模块，用于时间相关操作
 

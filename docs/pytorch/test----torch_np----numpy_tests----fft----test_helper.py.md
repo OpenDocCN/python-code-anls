@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\fft\test_helper.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 模块所有者为 "module: dynamo"
 

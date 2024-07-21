@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\pooling.py`
 
-```
+```py
 # 导入所需的类型定义
 from typing import List, Optional
 
@@ -108,7 +108,7 @@ class MaxPool1d(_MaxPoolNd):
         When ceil_mode=True, sliding windows are allowed to go off-bounds if they start within the left padding
         or the input. Sliding windows that would start in the right padded region are ignored.
     ```
-    ```
+    ```py
     # 定义一个类，实现一维最大池化操作
     kernel_size: _size_1_t
     stride: _size_1_t

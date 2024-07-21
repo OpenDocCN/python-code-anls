@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\control_collectives\StoreCollectives.hpp`
 
-```
+```py
 #pragma once
 // 预处理指令：确保此头文件只包含一次
 

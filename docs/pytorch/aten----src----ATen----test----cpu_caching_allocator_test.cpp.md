@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cpu_caching_allocator_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/cpu/vec/vec.h>  // 引入 ATen 的 CPU 向量化相关头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\models\DummyModel.py`
 
-```
+```py
 # 导入 PyTorch 中的神经网络模块和函数模块
 import torch.nn as nn
 import torch.nn.functional as F

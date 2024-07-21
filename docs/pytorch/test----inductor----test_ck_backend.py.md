@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_ck_backend.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入所需的模块和库
 import logging

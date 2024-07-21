@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_fine_tune.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import copy  # 导入 copy 模块，用于对象的深复制操作

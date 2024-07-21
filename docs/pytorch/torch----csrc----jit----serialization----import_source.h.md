@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import_source.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/ivalue_inl.h>

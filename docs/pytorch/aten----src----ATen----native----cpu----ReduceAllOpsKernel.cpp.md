@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\ReduceAllOpsKernel.cpp`
 
-```
+```py
 // 定义宏以仅支持方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

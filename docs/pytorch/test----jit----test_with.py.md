@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_with.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import os  # 导入操作系统相关的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cudnn\LinearPrepack.cpp`
 
-```
+```py
 #ifdef USE_CUDA
 #include <ATen/cuda/CUDAConfig.h>  // 用于包含 AT_CUDNN_ENABLED 的定义
 

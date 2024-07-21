@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\chunk_sharding_spec_ops\__init__.py`
 
-```
+```py
 # 导入必要的模块：datetime用于处理日期和时间，timedelta表示时间间隔
 import datetime
 # 导入Python标准库中的time模块，用于处理时间相关的功能

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_mode_utils.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 # 引入 TypeVar 用于类型变量

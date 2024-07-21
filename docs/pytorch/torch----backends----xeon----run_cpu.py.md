@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\xeon\run_cpu.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 This is a script for launching PyTorch inference on Intel(R) Xeon(R) Scalable Processors with optimal configurations.

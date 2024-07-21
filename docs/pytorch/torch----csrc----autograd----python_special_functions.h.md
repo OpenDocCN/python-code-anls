@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_special_functions.h`
 
-```
+```py
 #pragma once
 
 这行代码指示预处理器（preprocessor）在编译过程中只包含本文件一次，用于防止头文件的多重包含。

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_distributed_checkpoint.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统库和临时文件库

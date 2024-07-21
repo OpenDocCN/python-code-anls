@@ -1,6 +1,6 @@
 # `.\pytorch\torch\mps\profiler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入上下文管理模块contextlib
 import contextlib

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_attention.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 

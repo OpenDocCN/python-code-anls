@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\functional_call.py`
 
-```
+```py
 # 引入Counter
     # 检查参数和缓冲区字典是否为字典类型，如果不是则抛出异常
     if isinstance(parameter_and_buffer_dicts, dict):

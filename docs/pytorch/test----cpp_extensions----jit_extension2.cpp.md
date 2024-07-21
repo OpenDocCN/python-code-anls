@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\jit_extension2.cpp`
 
-```
+```py
 #include <torch/extension.h>
 
 // 引入 Torch C++ 扩展库头文件

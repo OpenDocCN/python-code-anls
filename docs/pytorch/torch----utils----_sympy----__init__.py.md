@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\__init__.py`
 
-```
+```py
 # 导入必要的模块：os 模块用于操作文件系统，sys 模块用于访问系统相关信息
 import os
 import sys

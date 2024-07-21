@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\arg_spec.h`
 
-```
+```py
 #pragma once
 #include <ATen/ATen.h>
 #include <ATen/core/functional.h> // fmap

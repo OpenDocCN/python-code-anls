@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\eager\test_fuse_eager.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入必要的模块和库

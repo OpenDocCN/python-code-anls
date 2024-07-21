@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Optional.h`
 
-```
+```py
 #ifndef C10_UTIL_OPTIONAL_H_
 #define C10_UTIL_OPTIONAL_H_
 

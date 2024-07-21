@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_symmetric_memory\__init__.py`
 
-```
+```py
 import socket  # 导入socket模块，用于获取主机名
 import uuid  # 导入uuid模块，用于生成唯一标识符
 

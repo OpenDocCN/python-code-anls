@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_interpreter.cpp`
 
-```
+```py
 #include <gmock/gmock.h>  // 引入 Google Mock 框架的头文件
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 

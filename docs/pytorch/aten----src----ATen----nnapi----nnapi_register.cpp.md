@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_register.cpp`
 
-```
+```py
 // 包含 ATen 库中的 NNAPI 绑定头文件
 #include <ATen/nnapi/nnapi_bind.h>
 

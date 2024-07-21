@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ExpandBase.h`
 
-```
+```py
 #include <ATen/core/TensorBase.h>
 
 // Broadcasting utilities for working with TensorBase

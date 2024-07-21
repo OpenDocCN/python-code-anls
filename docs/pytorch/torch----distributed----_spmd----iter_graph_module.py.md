@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\iter_graph_module.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型定义
 import copy  # 导入深拷贝函数

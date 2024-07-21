@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\helper.cpp`
 
-```
+```py
 # 包含 Torch 库中的量化辅助函数头文件
 #include <torch/csrc/jit/passes/quantization/helper.h>
 

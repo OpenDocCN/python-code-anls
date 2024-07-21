@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\jit_metaprogramming_utils.py`
 
-```
+```py
 # 忽略类型检查错误
 # Torch
 # 从 torch.jit.annotations 模块导入 BroadcastingList2 和 BroadcastingList3 类型注解，忽略 F401 错误

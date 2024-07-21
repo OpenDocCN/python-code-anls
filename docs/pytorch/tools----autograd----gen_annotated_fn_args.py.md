@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_annotated_fn_args.py`
 
-```
+```py
 """
 For procedural tests needed for __torch_function__, we use this function
 to export method names and signatures as needed by the tests in

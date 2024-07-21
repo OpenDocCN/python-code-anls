@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesReduceOps.cpp`
 
-```
+```py
 // 版权声明，版权归 Facebook, Inc. 及其关联公司所有。
 // 保留所有权利。
 //

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\util.cpp`
 
-```
+```py
 // 包含 Torch 的自动微分函数头文件
 #include <torch/csrc/autograd/function.h>
 // 包含 Kineto 性能分析的接口头文件

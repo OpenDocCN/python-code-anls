@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Utils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Config.h>  // 包含 ATen 库的配置文件

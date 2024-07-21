@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\internal\test_diagnostics.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 # 引入未来版本的注解语法支持
 from __future__ import annotations

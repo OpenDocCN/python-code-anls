@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_utils.py`
 
-```
+```py
 # 从 typing 模块导入类型提示的相关类和函数
 from typing import cast, List, Sequence, Tuple
 

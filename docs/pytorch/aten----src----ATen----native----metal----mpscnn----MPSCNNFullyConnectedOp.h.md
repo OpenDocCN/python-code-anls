@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\MPSCNNFullyConnectedOp.h`
 
-```
+```py
 // 导入 MetalConvParams.h 头文件，这是 MetalConvParams 类的声明
 #import <ATen/native/metal/MetalConvParams.h>
 // 导入 MetalNeuronType.h 头文件，这是 MetalNeuronType 枚举类型的声明

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_dict_idioms.cpp`
 
-```
+```py
 // 包含 Torch 库中的别名分析和优化的头文件
 #include <torch/csrc/jit/ir/alias_analysis.h>
 // 包含 Torch 库中的字典常见优化模式的头文件

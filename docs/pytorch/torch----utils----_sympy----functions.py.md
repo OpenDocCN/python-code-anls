@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\functions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块和库
 import functools  # 导入 functools 模块

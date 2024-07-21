@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\chunk_sharding_spec_ops\embedding_bag.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 引入必要的模块和类型注解

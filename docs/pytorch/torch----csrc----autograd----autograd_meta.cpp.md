@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\autograd_meta.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，限定仅允许方法操作符
 

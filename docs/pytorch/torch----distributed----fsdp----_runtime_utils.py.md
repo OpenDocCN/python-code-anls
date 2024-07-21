@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_runtime_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 库，用于高阶函数操作
 import functools

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_analyzer\gen_op_registration_allowlist.py`
 
-```
+```py
 """
 This util is invoked from cmake to produce the op registration allowlist param
 for `ATen/gen.py` for custom mobile build.

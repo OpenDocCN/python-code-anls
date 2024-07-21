@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\__init__.py`
 
-```
+```py
 # 导入所需的模块：json用于处理JSON格式数据，os用于操作文件系统
 import json
 import os

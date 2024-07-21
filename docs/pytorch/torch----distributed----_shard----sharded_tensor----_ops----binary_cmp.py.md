@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\_ops\binary_cmp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch和分布式相关模块
 import torch

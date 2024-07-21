@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_subclasses\__init__.py`
 
-```
+```py
 # 导入 torch 模块
 import torch
 

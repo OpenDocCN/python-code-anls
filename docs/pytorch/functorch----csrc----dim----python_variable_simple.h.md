@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\csrc\dim\python_variable_simple.h`
 
-```
+```py
 // Copyright (c) Facebook, Inc. and its affiliates.
 // All rights reserved.
 //

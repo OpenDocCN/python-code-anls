@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_pytorch_jit_onnx.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 import onnxruntime                     # 导入 ONNX 运行时库
 import pytorch_test_common              # 导入 PyTorch 测试公共模块

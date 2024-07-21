@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\optimizer.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Tensor.h>

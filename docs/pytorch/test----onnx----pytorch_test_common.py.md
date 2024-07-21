@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\pytorch_test_common.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 from __future__ import annotations
 

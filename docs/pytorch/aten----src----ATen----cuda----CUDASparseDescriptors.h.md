@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDASparseDescriptors.h`
 
-```
+```py
 #pragma once
 // 引入 ATen 库的相关头文件，用于操作 CUDA 上的稀疏张量
 #include <ATen/Tensor.h>

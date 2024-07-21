@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\update_production_ops.py`
 
-```
+```py
 """
 This is a script to aggregate production ops from xplat/pytorch_models/build/all_mobile_model_configs.yaml.
 Specify the file path in the first argument. The results will be dumped to model_ops.yaml

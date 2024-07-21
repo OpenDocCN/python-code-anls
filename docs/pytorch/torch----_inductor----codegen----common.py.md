@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\common.py`
 
-```
+```py
 # 允许未定义的类型定义（mypy配置）
 # 导入上下文管理器模块
 import contextlib

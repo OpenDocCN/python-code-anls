@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_lazy_graph_module.py`
 
-```
+```py
 # Owner(s): ["oncall: fx"]
 
 # 引入上下文管理、序列化、字节流等必要库

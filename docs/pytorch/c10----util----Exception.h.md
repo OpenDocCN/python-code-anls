@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Exception.h`
 
-```
+```py
 #ifndef C10_UTIL_EXCEPTION_H_  // 如果未定义 C10_UTIL_EXCEPTION_H_ 宏，则开始头文件保护
 #define C10_UTIL_EXCEPTION_H_
 

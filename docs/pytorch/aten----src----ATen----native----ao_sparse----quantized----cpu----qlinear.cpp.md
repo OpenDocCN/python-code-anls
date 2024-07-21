@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\qlinear.cpp`
 
-```
+```py
 // 定义宏，用于在头文件中只包含操作符方法
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 PyTorch 的 Tensor 类及其相关头文件

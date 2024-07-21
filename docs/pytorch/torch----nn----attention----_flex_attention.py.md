@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\attention\_flex_attention.py`
 
-```
+```py
 """
 This module implements the user facing API for flex_attention in PyTorch.
 """

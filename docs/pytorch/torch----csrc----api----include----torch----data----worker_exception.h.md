@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\worker_exception.h`
 
-```
+```py
 #pragma once
 
 #include <exception>  // 包含异常处理的头文件

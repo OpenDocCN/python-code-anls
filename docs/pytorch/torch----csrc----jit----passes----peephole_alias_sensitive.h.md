@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_alias_sensitive.h`
 
-```
+```py
 #pragma once
 // 使用 `#pragma once` 预处理指令，确保头文件只被编译一次，防止多重包含的问题
 

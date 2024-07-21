@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_wrapper.h`
 
-```
+```py
 // 版权声明和许可证信息，表明此文件受 Apache 许可证 2.0 版本保护
 #ifndef NNAPI_WRAPPER_H_
 #define NNAPI_WRAPPER_H_

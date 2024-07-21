@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_native_functions.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Optional, List
 import torch

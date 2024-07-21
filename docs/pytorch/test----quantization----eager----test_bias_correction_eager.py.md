@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\eager\test_bias_correction_eager.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch  # 导入PyTorch库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\ordered_dict.h`
 
-```
+```py
 #pragma once
 
 #include <cstdint>

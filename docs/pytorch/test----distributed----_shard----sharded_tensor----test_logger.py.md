@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\test_logger.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入日志模块

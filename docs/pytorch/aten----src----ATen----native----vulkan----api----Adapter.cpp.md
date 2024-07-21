@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Adapter.cpp`
 
-```
+```py
 // 引入 Vulkan 头文件中 Adapter 类的实现
 #include <ATen/native/vulkan/api/Adapter.h>
 

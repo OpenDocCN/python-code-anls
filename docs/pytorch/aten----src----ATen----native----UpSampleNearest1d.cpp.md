@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UpSampleNearest1d.cpp`
 
-```
+```py
 #ifndef AT_PER_OPERATOR_HEADERS
 #include <ATen/Functions.h>
 #include <ATen/NativeFunctions.h>

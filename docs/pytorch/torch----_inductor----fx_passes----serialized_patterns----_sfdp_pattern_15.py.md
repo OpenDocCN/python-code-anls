@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\serialized_patterns\_sfdp_pattern_15.py`
 
-```
+```py
 # 忽略类型检查错误
 # noqa: F401, E501
 # 这是一个自动生成的文件，请勿手动修改。

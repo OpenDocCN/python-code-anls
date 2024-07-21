@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\shape_type_inference.cpp`
 
-```
+```py
 // 包含 Torch 库中的 ONNX 形状推断头文件
 #include <torch/csrc/jit/passes/onnx/shape_type_inference.h>
 

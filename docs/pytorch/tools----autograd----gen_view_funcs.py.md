@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_view_funcs.py`
 
-```
+```py
 # 生成 ViewFuncs.h/cpp 文件
 
 # 注意事项：

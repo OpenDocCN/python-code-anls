@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupUCC.hpp`
 
-```
+```py
 #pragma once
 // 只包含一次这个头文件的标准预处理命令
 

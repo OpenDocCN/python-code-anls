@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\fft\test_pocketfft.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的库和模块

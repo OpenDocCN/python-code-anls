@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\sparse\spmm.py`
 
-```
+```py
 import argparse  # 导入命令行参数解析模块
 import sys  # 导入系统相关模块
 

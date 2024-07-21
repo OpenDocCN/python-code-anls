@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\embedding.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/options/embedding.h> // 包含嵌入操作的选项定义
@@ -72,7 +72,7 @@ inline Tensor embedding(
 /// namespace F = torch::nn::functional;
 /// F::embedding(input, weight,
 /// F::EmbeddingFuncOptions().norm_type(2.5).scale_grad_by_freq(true).sparse(true));
-/// ```
+/// ```py
 inline Tensor embedding(
     const Tensor& input,
     const Tensor& weight,
@@ -207,7 +207,7 @@ inline Tensor embedding_bag(
 /// namespace F = torch::nn::functional;
 /// F::embedding_bag(input, weight,
 ///   F::EmbeddingBagFuncOptions().mode(torch::kSum).offsets(offsets));
-/// ```
+/// ```py
 inline Tensor embedding_bag(
     const Tensor& input,
     const Tensor& weight,

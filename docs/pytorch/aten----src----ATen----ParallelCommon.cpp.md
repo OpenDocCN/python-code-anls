@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ParallelCommon.cpp`
 
-```
+```py
 namespace at {
 
 namespace {

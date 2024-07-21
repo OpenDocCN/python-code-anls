@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Scalar.cpp`
 
-```
+```py
 namespace c10 {
 
 Scalar Scalar::operator-() const {

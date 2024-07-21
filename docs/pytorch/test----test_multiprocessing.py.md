@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_multiprocessing.py`
 
-```
+```py
 # Owner(s): ["module: multiprocessing"]
 
 import contextlib  # 导入上下文管理工具库

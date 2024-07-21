@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\options.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型定义
 from typing import Dict, List, Optional, Union

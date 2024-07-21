@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\operator_benchmark.py`
 
-```
+```py
 # 导入benchmark_runner模块，忽略未使用变量警告（noqa: F401）
 import benchmark_runner  # noqa: F401
 

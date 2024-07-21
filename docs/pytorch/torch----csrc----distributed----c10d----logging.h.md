@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\logging.h`
 
-```
+```py
 // 定义命名空间 c10d 下的 detail 命名空间，用于存放内部实现细节
 namespace c10d {
 namespace detail {

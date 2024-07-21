@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\symbolic_shape_registry_util.h`
 
-```
+```py
 #pragma once
 // 声明该文件仅被包含一次，直到 native_functions.yaml 和 derivatives.yaml 合并为止。理想情况下，这些内容应全部迁移到 native_functions.yaml 中
 

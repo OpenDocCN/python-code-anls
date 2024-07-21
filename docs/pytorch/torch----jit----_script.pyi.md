@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_script.pyi`
 
-```
+```py
 # 设置类型检查器允许未定义的函数签名
 # 禁用类型错误代码“type-arg”
 from typing import Any, Callable, NamedTuple, overload, TypeVar

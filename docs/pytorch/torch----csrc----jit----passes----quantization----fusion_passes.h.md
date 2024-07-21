@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\fusion_passes.h`
 
-```
+```py
 #pragma once
 
 

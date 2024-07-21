@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\modules\__init__.py`
 
-```
+```py
 # 导入各种模块和类，这些都来自于当前目录下的 fused 模块
 from .fused import _FusedModule  # noqa: F401
 from .fused import ConvBn1d

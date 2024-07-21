@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\request_callback_no_python.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 指令确保头文件只被编译一次
 

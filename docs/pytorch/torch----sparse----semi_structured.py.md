@@ -1,6 +1,6 @@
 # `.\pytorch\torch\sparse\semi_structured.py`
 
-```
+```py
 # 启用类型未标记的函数声明
 mypy: allow-untyped-defs
 
@@ -530,7 +530,7 @@ class SparseSemiStructuredTensorCUSPARSELT(SparseSemiStructuredTensor):
         bitmask = _compute_compressed_swizzled_bitmask(pruned)
 
         SparseSemiStructuredTensorCUSPARSELT(original_tensor.shape, packed_cutlass, None, packed_t_cutlass, None, bitmask)
-        ```
+        ```py
         """
         # Call internal function to tile and prune the original dense tensor
         (packed, meta, packed_t, meta_t, compressed_swizzled_bitmask) = torch._sparse_semi_structured_tile(

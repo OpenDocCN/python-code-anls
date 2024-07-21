@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\std_sys_module_hacks.py`
 
-```
+```py
 import os  # 导入标准库 os，用于操作文件和目录路径 # noqa: F401
 import os.path  # 导入 os.path 模块，用于处理文件路径相关操作 # noqa: F401
 import typing  # 导入 typing 模块，用于类型提示 # noqa: F401

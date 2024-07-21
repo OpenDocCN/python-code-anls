@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UnaryOps.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于只包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

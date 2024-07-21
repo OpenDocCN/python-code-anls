@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\__init__.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Library that launches and manages ``n`` copies of worker subprocesses either specified by a function or a binary.

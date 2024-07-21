@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_common_rules.py`
 
-```
+```py
 # 版权声明及所有权信息
 # 所有者：["oncall: distributed"]
 

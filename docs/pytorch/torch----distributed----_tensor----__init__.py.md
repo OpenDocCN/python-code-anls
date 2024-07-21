@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

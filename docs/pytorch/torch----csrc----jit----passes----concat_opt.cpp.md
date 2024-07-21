@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\concat_opt.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 编译器优化相关头文件
 #include <torch/csrc/jit/passes/concat_opt.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\ddp_zero_hook.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入弱引用模块，用于对象的弱引用管理
 import weakref

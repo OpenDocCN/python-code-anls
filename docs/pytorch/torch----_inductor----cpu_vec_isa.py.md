@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\cpu_vec_isa.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import dataclasses  # 导入 dataclasses 模块，用于支持数据类（data class）
 import functools  # 导入 functools 模块，用于高阶函数（higher-order functions）的实现

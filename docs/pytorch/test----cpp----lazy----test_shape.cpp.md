@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_shape.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <sstream>  // 包含使用 stringstream 所需的头文件

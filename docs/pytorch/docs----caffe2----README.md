@@ -10,7 +10,7 @@ Caffe2 docs are split up into three areas:
 
 You need to have access to the master branch to generate the docs from source and you need access to the gh-pages branch to publish them. Since you often want the files simultaneously and since the folder structures between master and gh-pages differ so greatly, it is advised to clone each branch to different folders. Otherwise if you switch back and forth between gh-pages and master within the same local repo, you'll end up seeing folders in branches that shouldn't be there, and it can get really confusing once you start running Doxygen and generating thousands of new files.
 
-```
+```py
 cd ~
 git clone https://github.com/caffe2/caffe2.git c2master && cd c2master && git checkout master
 cd ~
@@ -93,7 +93,7 @@ It may be beneficial to run Doxygen on your own and not try to inject the preamb
 
 To do this, make sure you have doxygen installed and from the master branch root run:
 
-```
+```py
 doxygen .Doxyfile-python
 doxygen .Doxyfile-c
 ```
@@ -103,7 +103,7 @@ doxygen .Doxyfile-c
 
 You will not be able to `git push` to `gh-pages` until you have switched auth methods to SSH:
 
-```
+```py
 git remote set-url origin git@github.com:caffe2/caffe2.git
 ```
 
@@ -140,7 +140,7 @@ For more info on contributing to Caffe2.ai, take a look at [CONTRIBUTING.md](htt
 
 For example in the Applications of Deep Learning markdown file we have:
 
-```
+```py
 ---
 docid: applications-of-deep-learning
 title: Applications of Deep Learning
@@ -151,7 +151,7 @@ permalink: /docs/applications-of-deep-learning.html
 
 In the `_data/nav_docs.yml` file we have:
 
-```
+```py
 - title: Quick Start
   items:
   - id: getting-started
@@ -178,7 +178,7 @@ http://stackoverflow.com/questions/7690220/how-to-document-python-function-param
 
 Swap this kind of formatting into py files:
 
-```
+```py
 def my_method(x, y):"""!
     my_method description
 

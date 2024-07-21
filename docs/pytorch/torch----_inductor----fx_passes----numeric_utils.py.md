@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\numeric_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import gc  # 垃圾回收模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\_memory_viz.py`
 
-```
+```py
 # 导入必要的模块
 import pickle  # 用于序列化和反序列化 Python 对象
 import sys  # 提供对 Python 解释器的访问和控制

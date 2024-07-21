@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fully_shard\test_fully_shard_mixed_precision.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import sys  # 导入sys模块，用于访问系统相关功能

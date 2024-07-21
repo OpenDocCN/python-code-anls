@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\sgd.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/module.h>  // 包含 Torch 的神经网络模块相关头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onednn_graph_fuser.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h> // 引入 Torch 的 IR 类相关头文件

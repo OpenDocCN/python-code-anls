@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_bind.cpp`
 
-```
+```py
 // 包含必要的头文件：utility（实用工具）、vector（向量容器）
 #include <utility>
 #include <vector>

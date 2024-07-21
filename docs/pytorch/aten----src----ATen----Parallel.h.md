@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Parallel.h`
 
-```
+```py
 #pragma once
 #include <ATen/Config.h>
 #include <c10/macros/Macros.h>

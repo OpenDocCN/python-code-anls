@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\dwarf_symbolize_enums.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/profiler/unwind/unwind_error.h>
 #include <cstdint>

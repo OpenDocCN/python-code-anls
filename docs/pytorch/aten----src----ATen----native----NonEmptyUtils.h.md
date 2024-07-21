@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\NonEmptyUtils.h`
 
-```
+```py
 #include <ATen/core/TensorBase.h>
 #include <algorithm>
 #include <vector>

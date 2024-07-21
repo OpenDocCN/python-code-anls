@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\util\__init__.py`
 
-```
+```py
 # 定义一个类 `Person`，表示一个人的基本信息和行为
 class Person:
     # 初始化方法，创建一个新的 Person 对象

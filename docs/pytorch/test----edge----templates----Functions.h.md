@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\templates\Functions.h`
 
-```
+```py
 // clang-format off
 // 禁用 clang 格式化器，保持原始格式
 #pragma once

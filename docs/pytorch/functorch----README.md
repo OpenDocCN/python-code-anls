@@ -75,13 +75,13 @@ PyTorch source tree. Please install
 you will be able to `import functorch`.
 
 Try to run some tests to make sure all is OK:
-```bash
+```py
 pytest test/test_vmap.py -v
 pytest test/test_eager_transforms.py -v
 ```
 
 AOTAutograd has some additional optional requirements. You can install them via:
-```bash
+```py
 pip install networkx
 ```
 
@@ -105,7 +105,7 @@ Follow the instructions [here](https://colab.research.google.com/drive/1GNfb01W_
 Prerequisite: [Install PyTorch](https://pytorch.org/get-started/locally/)
 
 
-```bash
+```py
 pip install functorch
 ```
 
@@ -352,7 +352,7 @@ Functorch has a BSD-style license, as found in the [LICENSE](LICENSE) file.
 
 If you use functorch in your publication, please cite it by using the following BibTeX entry.
 
-```bibtex
+```py
 @Misc{functorch2021,
   author =       {Horace He, Richard Zou},
   title =        {functorch: JAX-like composable function transforms for PyTorch},

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gavgpool\mp8x7p7q-neon.c`
 
-```
+```py
   /*
    * 函数：pytorch_q8gavgpool_ukernel_mp8x7p7q__neon
    * 功能：执行8x7平均池化操作的NEON优化内核函数

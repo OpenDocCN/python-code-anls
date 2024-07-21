@@ -1,6 +1,6 @@
 # `.\pytorch\test\optim\test_optim.py`
 
-```
+```py
 # Owner(s): ["module: optimizer"]
 
 # 导入 PyTorch 库

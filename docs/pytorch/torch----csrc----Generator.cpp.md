@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Generator.cpp`
 
-```
+```py
 #include <torch/csrc/Generator.h>
 
 #include <ATen/ATen.h>

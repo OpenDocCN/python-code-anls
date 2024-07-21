@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\out_types.cpp`
 
-```
+```py
 // 包含 Torch 的输出类型头文件
 #include <torch/csrc/utils/out_types.h>
 

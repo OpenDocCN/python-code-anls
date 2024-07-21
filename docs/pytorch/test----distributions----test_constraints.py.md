@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributions\test_constraints.py`
 
-```
+```py
 # Owner(s): ["module: distributions"]
 
 # 导入 pytest 模块，用于测试

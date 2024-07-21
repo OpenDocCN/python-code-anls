@@ -1,6 +1,6 @@
 # `.\pytorch\torch\signal\windows\__init__.py`
 
-```
+```py
 # 从当前目录下的 windows 模块中导入多个窗口函数
 from .windows import (
     bartlett,          # 巴特利特窗口函数

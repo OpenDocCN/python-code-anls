@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\__init__.py`
 
-```
+```py
 # 导`
 from torch.utils.data.datapipes.iter.callable import (
     CollatorIterDataPipe as Collator,  # 从 callable 模块导入 CollatorIterDataPipe，并重命名为 Collator

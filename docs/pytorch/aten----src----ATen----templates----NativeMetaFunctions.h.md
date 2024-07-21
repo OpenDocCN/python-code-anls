@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\NativeMetaFunctions.h`
 
-```
+```py
 #pragma once
 // 在编译时只包含一次这个头文件，防止重复包含
 

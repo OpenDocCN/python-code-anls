@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\PixelShuffleKernel.h`
 
-```
+```py
 #pragma once
 #include <ATen/native/DispatchStub.h>
 // 引入 ATen 库的 DispatchStub 头文件，用于声明和定义调度相关的功能

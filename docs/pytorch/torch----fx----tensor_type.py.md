@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\tensor_type.py`
 
-```
+```py
 # 导入不带类型定义的 Var 类型（忽略类型检查）
 from torch.fx.experimental.unification import Var  # type: ignore[attr-defined]
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\xpu\Stream.cpp`
 
-```
+```py
 // 定义全局变量，表示 THXPStreamClass 类型的 Python 对象
 PyObject* THXPStreamClass = nullptr;
 

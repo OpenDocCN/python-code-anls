@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Shim.cpp`
 
-```
+```py
 #ifndef USE_XNNPACK
 #include <ATen/native/xnnpack/Common.h>
 #include <ATen/native/xnnpack/Engine.h>

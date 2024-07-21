@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\tensor_aten_ops.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件在编译过程中只被包含一次
 

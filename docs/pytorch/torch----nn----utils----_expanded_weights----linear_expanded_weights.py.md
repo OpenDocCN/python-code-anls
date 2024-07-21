@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\linear_expanded_weights.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型注解
 from typing import List, Optional

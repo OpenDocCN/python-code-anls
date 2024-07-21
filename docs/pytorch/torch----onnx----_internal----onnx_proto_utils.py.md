@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\onnx_proto_utils.py`
 
-```
+```py
 # Utilities for manipulating the ONNX and ONNX-script dependencies and ONNX proto.
 """Utilities for manipulating the onnx and onnx-script dependencies and ONNX proto."""
 

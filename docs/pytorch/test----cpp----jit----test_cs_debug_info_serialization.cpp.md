@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_cs_debug_info_serialization.cpp`
 
-```
+```py
 // 包含测试相关的头文件
 #include <test/cpp/jit/test_utils.h>
 

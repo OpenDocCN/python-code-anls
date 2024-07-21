@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\nn\jit\__init__.py`
 
-```
+```py
 # 导入requests库，用于进行HTTP请求
 import requests
 

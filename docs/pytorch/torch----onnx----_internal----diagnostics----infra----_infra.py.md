@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\_infra.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """This file defines an additional layer of abstraction on top of the SARIF OM."""
 

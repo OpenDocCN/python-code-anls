@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\fallback.cpp`
 
-```
+```py
 // 包含头文件：torch/csrc/jit/codegen/fuser/fallback.h，这是实现后备机制的头文件
 #include <torch/csrc/jit/codegen/fuser/fallback.h>
 

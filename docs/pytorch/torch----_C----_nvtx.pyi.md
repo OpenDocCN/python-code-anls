@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_nvtx.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 声明在 torch/csrc/cuda/shared/nvtx.cpp 中的函数，这些函数通常用于与 NVIDIA Tools Extension (NVTX) 进行交互
 def rangePushA(message: str) -> int:

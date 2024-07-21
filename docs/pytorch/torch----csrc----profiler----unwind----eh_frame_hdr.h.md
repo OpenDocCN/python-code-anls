@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\eh_frame_hdr.h`
 
-```
+```py
 #pragma once
 #include <stdint.h>
 #include <ostream>

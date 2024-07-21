@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\convert_to_ssa.h`
 
-```
+```py
 #pragma once
 #include <functional>  // 包含 C++ 标准库中的 functional 头文件
 #include <memory>       // 包含 C++ 标准库中的 memory 头文件

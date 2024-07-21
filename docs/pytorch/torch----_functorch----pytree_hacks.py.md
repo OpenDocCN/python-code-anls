@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\pytree_hacks.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 

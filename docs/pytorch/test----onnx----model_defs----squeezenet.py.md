@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\squeezenet.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 导入神经网络模块

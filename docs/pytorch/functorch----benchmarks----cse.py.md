@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\benchmarks\cse.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 导入PyTorch的FX模块

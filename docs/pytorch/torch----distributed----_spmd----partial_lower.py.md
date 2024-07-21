@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\partial_lower.py`
 
-```
+```py
 # 这个文件从 Meta 内部存储库中复制而来，与内部版本不同步。一旦内部版本完全成熟，我们应该再次上游并停用内部版本。@yifuwang
 
 import logging  # 导入日志记录模块

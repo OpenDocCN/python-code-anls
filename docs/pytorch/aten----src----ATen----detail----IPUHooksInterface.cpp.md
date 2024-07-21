@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\IPUHooksInterface.cpp`
 
-```
+```py
 // 包含 ATen 库中的 IPUHooksInterface.h 文件
 #include <ATen/detail/IPUHooksInterface.h>
 

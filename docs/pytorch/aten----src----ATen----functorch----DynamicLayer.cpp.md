@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\DynamicLayer.cpp`
 
-```
+```py
 // functorch stores some TLS. Inside the TLS is the stack of transforms.
 // Unfortunately, since functorch isn't a part of libtorch, we have
 // a level of indirection. FuncTorchTLSBase is the interface that lives in libtorch,

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\profiler\containers.cpp`
 
-```
+```py
 // 包含标准库头文件
 #include <algorithm>
 #include <cmath>

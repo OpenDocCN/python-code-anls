@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\translate.py`
 
-```
+```py
 # 从未来导入注释功能，用于支持类型注释的前向兼容性
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_all_quantized_test.py`
 
-```
+```py
 # 导入 pt 模块中的测试函数，忽略 F401 类型的未使用警告
 from pt import (
     qactivation_test,          # 激活函数量化测试

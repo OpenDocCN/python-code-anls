@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\autograd_function_db.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入 PyTorch 库

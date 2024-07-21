@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\test_module\no_future_div.py`
 
-```
+```py
 # 忽略 mypy 对错误的检查
 # 导入 torch 库，并忽略 F401 错误（未使用的导入警告）
 import torch  # noqa: F401

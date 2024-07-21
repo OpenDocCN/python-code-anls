@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\hip\impl\HIPStreamMasqueradingAsCUDA.h`
 
-```
+```py
 #pragma once
 // 定义了一个头文件的预处理指令，确保此文件只被编译一次
 

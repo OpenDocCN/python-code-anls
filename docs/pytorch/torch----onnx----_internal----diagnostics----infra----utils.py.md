@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\utils.py`
 
-```
+```py
 # 引入 future 模块中的 annotations 特性，用于函数注解
 from __future__ import annotations
 

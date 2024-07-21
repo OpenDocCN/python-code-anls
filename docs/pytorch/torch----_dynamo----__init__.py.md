@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\__init__.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 导入本地模块中的函数和类

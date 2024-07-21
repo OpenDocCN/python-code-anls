@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_native_functions.cpp`
 
-```
+```py
 // 包含 ATen 库中的各种头文件，用于张量操作和函数定义
 #include <ATen/FunctionalTensorWrapper.h>
 #include <ATen/Functions.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_dynamic_shapes.cpp`
 
-```
+```py
 // 包含 Google Test 的头文件，用于测试框架
 #include <gtest/gtest.h>
 

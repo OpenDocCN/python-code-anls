@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\functional.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <c10/util/irange.h>  // 引入用于范围迭代的头文件

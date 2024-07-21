@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\enum.h`
 
-```
+```py
 #pragma once
 
 #include <string>
@@ -20,7 +20,7 @@
     ```                                                               \
     error: default initialization of an object of const type 'const   \
     enumtype::Enum1' without a user-provided default constructor      \
-    ```                                                               \
+    ```py                                                               \
   */                                                                  \
   struct k##name {                                                    \
     k##name() {}                                                      \
@@ -55,7 +55,7 @@
 //
 //   TORCH_ARG(reduction_t, reduction);
 // };
-// ```
+// ```py
 //
 // and the functional that uses it:
 //
@@ -65,7 +65,7 @@
 //     SomeOptions options = {}) {
 //   ...
 // }
-// ```
+// ```py
 //
 // Normally, we would expect this to work:
 //
@@ -76,7 +76,7 @@
 // ```
 // error: could not convert `torch::kNone` from `const torch::enumtype::kNone`
 // to `torch::nn::SomeOptions`
-// ```
+// ```py
 //
 // To get around this problem, we explicitly provide the following constructors
 // for `SomeOptions`:
@@ -85,7 +85,7 @@
 // SomeOptions(torch::enumtype::kNone reduction) : reduction_(torch::kNone) {}
 // SomeOptions(torch::enumtype::kMean reduction) : reduction_(torch::kMean) {}
 // SomeOptions(torch::enumtype::kSum reduction) : reduction_(torch::kSum) {}
-// ```
+// ```py
 //
 // so that the conversion from `torch::kNone` to `SomeOptions` would work.
 //

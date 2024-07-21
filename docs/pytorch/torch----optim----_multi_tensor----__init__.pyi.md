@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\_multi_tensor\__init__.pyi`
 
-```
+```py
 # 从 functools 模块导入 partial 函数，用于创建偏函数
 from functools import partial
 

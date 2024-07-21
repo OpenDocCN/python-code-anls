@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\gather_test.py`
 
-```
+```py
 # 导入必要的库 numpy
 import numpy
 

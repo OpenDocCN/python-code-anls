@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\flatbuffer_serializer_jit.cpp`
 
-```
+```py
 #include <torch/csrc/jit/serialization/flatbuffer_serializer_jit.h>
 
 # 包含 flatbuffer_serializer_jit.h 头文件，这是 Torch JIT 序列化模块的一部分，用于支持 FlatBuffer 格式的序列化。

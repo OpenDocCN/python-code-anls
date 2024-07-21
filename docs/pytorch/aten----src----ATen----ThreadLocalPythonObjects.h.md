@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ThreadLocalPythonObjects.h`
 
-```
+```py
 #pragma once
 // 指令：确保头文件仅被编译一次
 

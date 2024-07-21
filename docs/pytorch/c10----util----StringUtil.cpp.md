@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\StringUtil.cpp`
 
-```
+```py
 // 包含头文件<c10/util/StringUtil.h>
 #include <c10/util/StringUtil.h>
 

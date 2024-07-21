@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\FPGM_pruner.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的类型和模块
 from typing import Callable, Optional, Union

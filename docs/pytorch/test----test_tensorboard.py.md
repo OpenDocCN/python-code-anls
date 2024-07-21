@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_tensorboard.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入必要的模块和库

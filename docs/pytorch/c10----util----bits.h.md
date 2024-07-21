@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\bits.h`
 
-```
+```py
 #pragma once
 #include <cstdint>  // 包含标准整数类型的头文件
 

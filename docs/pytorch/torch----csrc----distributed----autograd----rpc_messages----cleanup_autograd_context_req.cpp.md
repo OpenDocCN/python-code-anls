@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\cleanup_autograd_context_req.cpp`
 
-```
+```py
 // 引入相关头文件，分别包括自动微分上下文清理请求、RPC 代理和 JIT 序列化的 pickle 功能
 #include <torch/csrc/distributed/autograd/rpc_messages/cleanup_autograd_context_req.h>
 #include <torch/csrc/distributed/rpc/rpc_agent.h>

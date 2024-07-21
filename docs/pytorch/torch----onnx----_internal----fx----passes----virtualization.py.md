@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\virtualization.py`
 
-```
+```py
 # 设置 mypy 指令，允许未类型化的定义
 # 导入未来版本的 annotations 特性
 from __future__ import annotations

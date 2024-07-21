@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\dataframe\structures.py`
 
-```
+```py
 # 导入数据处理模块中的 DataFrame 封装器
 from torch.utils.data.datapipes.dataframe import dataframe_wrapper as df_wrapper
 # 导入数据处理模块中的 DataChunk 类

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\__init__.py`
 
-```
+```py
 # 定义一个名为 `add` 的函数，接受两个参数 `a` 和 `b`
 def add(a, b):
     # 返回参数 `a` 和 `b` 的和

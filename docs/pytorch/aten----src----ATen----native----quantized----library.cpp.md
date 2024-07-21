@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\library.cpp`
 
-```
+```py
 #include <torch/library.h>
 
 # 包含 Torch 库的头文件

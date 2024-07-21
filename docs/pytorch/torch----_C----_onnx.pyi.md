@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_onnx.pyi`
 
-```
+```py
 # 在 torch/csrc/onnx/init.cpp 中定义了以下内容
 
 # 导入枚举(Enum)类，用于定义不同的数据类型

@@ -1,6 +1,6 @@
 # `.\pytorch\mypy_plugins\sympy_mypy_plugin.py`
 
-```
+```py
 # 导入所需模块和类
 from mypy.plugin import Plugin
 from mypy.plugins.common import add_attribute_to_class

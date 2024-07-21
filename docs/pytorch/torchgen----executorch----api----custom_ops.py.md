@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\api\custom_ops.py`
 
-```
+```py
 # 从未来版本导入注释类型，用于类型检查
 from __future__ import annotations
 

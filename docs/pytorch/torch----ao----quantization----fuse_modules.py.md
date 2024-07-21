@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fuse_modules.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import copy  # 导入copy模块，用于对象的深拷贝操作

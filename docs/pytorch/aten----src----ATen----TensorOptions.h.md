@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorOptions.h`
 
-```
+```py
 #pragma once
 #include <c10/core/TensorOptions.h>
 

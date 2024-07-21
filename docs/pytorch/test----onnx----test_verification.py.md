@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_verification.py`
 
-```
+```py
 # 导入所需的库和模块
 import contextlib
 import io

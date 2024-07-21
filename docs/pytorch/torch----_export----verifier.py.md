@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\verifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入inspect模块，用于获取对象信息
 import inspect

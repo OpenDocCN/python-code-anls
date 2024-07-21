@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SampledAddmmKernel.cpp`
 
-```
+```py
 // 使用宏定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS，可能用于指定仅用于方法操作符的相关设置
 
 // 引入 ATen 库中所需的头文件

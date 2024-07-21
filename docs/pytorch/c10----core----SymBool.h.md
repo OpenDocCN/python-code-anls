@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymBool.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含的预处理指令
 

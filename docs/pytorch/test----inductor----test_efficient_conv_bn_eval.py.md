@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_efficient_conv_bn_eval.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入必要的模块和库
 import copy  # 导入 copy 模块，用于复制对象

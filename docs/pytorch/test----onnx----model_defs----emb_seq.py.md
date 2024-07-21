@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\emb_seq.py`
 
-```
+```py
 # 导入 PyTorch 的神经网络模块
 import torch.nn as nn
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\multi_wait.cpp`
 
-```
+```py
 #include <torch/csrc/lazy/core/multi_wait.h>
 
 #include <chrono>

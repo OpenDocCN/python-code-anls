@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\XnnpackUtils.h`
 
-```
+```py
 #pragma once
 
 #ifdef USE_XNNPACK

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\EmbeddingBag.cpp`
 
-```
+```py
 // 定义宏，仅允许使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 
@@ -2055,7 +2055,7 @@ Tensor _embedding_bag_per_sample_weights_backward_cpu_template(
   TORCH_CHECK(
       mode == MODE_SUM,
       "embedding_bag_backward: per_sample_weights only supported for mode='sum'");
-```  
+```py  
 # 检查条件，如果 `mode` 不等于 `MODE_SUM`，则抛出错误信息，指出当前只支持 `mode='sum'` 模式。
 
   AT_ASSERT(grad.dim() == 2);
@@ -2066,7 +2066,7 @@ Tensor _embedding_bag_per_sample_weights_backward_cpu_template(
   auto [indicesMaybeOwned, offsetsMaybeOwned] = promoteIndicesAndOffsets(indices_, offsets_);
   const auto& indices = *indicesMaybeOwned;
   const auto& offsets = *offsetsMaybeOwned;
-```  
+```py  
 # 调用 `promoteIndicesAndOffsets` 函数，将 `indices_` 和 `offsets_` 作为参数传入，获取返回的元组，并将元组解包为 `indices` 和 `offsets` 常量引用。
 
   AT_ASSERT(indices.dim() == 1);
@@ -2076,7 +2076,7 @@ Tensor _embedding_bag_per_sample_weights_backward_cpu_template(
 
   AT_ASSERT(weight.dim() == 2);
   AT_ASSERT(weight.sizes()[1] == embedding_features);
-```  
+```py  
 # 断言 `weight` 张量的维度为2，并且第二维的大小与 `embedding_features` 相同。
 
   auto output = at::zeros({num_samples}, grad.options());
@@ -2086,7 +2086,7 @@ Tensor _embedding_bag_per_sample_weights_backward_cpu_template(
   auto indices_arg = TensorArg(indices, "indices", 1);
   checkScalarTypes("embedding_bag", indices_arg, {kLong, kInt});
   checkContiguous("embedding_bag", indices_arg);
-```  
+```py  
 # 创建一个张量参数对象 `indices_arg`，并对其进行类型检查，要求其标量类型为长整型或整型，同时检查其是否是连续的。
 
   Tensor offset2bag_;
@@ -2113,7 +2113,7 @@ Tensor _embedding_bag_per_sample_weights_backward_cpu_template(
   auto* weight_data = weight.const_data_ptr<scalar_t>();
   auto weight_stride0 = weight.strides()[0];
   auto weight_stride1 = weight.strides()[1];
-```  
+```py  
 # 获取 `grad` 和 `weight` 张量的数据指针，并分别获取其步幅。
 
   // explicitly capture all required variables to work around windows build

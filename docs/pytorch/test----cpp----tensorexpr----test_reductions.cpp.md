@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_reductions.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 引入 Google Test 框架头文件
 
 #include <limits> // 引入数值极限相关的头文件

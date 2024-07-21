@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_common_vsx.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 来确保头文件只被包含一次，以防止多重包含的问题
 

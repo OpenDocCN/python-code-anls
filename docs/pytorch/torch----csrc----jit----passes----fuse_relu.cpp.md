@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fuse_relu.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/fuse_relu.h>
 
 #include <torch/csrc/jit/ir/ir.h>

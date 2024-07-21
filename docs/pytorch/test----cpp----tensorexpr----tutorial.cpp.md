@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\tutorial.cpp`
 
-```
+```py
 // *** Tensor Expressions ***
 //
 // This tutorial covers basics of NNC's tensor expressions, shows basic APIs to

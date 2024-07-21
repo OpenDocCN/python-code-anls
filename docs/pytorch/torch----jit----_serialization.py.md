@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_serialization.py`
 
-```
+```py
 # 根据给定的 TorchScript 模块 `m` 和文件或文件类对象 `f`，保存模块的离线版本
 def save(m, f, _extra_files=None):
     # 记录 TorchScript 使用情况日志

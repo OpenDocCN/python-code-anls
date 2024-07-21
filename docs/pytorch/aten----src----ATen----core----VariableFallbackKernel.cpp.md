@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\VariableFallbackKernel.cpp`
 
-```
+```py
 /*
  * This file implements a variable fallback kernel for custom operators.
  * Since tensors always have the Autograd set, but custom operators

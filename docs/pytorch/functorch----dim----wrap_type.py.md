@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\wrap_type.py`
 
-```
+```py
 # 导入需要的模块和类
 from types import (
     BuiltinMethodType,

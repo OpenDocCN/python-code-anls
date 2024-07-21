@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UpSample.cpp`
 
-```
+```py
 // 定义宏，仅在断言方法运算符中使用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\__init__.py`
 
-```
+```py
 # 导入所需的模块：json用于处理JSON格式数据，os用于操作系统相关功能
 import json
 import os

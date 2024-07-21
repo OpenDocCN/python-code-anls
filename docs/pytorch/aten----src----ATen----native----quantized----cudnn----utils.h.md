@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cudnn\utils.h`
 
-```
+```py
 #pragma once
 /*
 This file contains some of the auxiliary functions used by both Conv.cpp & Linear.cpp (introduced in a later PR)

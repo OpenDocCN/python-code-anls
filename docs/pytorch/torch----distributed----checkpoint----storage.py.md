@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\storage.py`
 
-```
+```py
 import abc  # 导入 abc 模块，用于定义抽象基类
 import os  # 导入 os 模块，提供与操作系统交互的功能
 from dataclasses import dataclass  # 导入 dataclass 装饰器，用于创建不可变的数据类

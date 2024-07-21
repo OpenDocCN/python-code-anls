@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_dtypes.cpp`
 
-```
+```py
 // 引入 Torch 的头文件，用于处理数据类型、异常和 Python 的头文件
 #include <torch/csrc/Dtype.h>
 #include <torch/csrc/DynamicTypes.h>

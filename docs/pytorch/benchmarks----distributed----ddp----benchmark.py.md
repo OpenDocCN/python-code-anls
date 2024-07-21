@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\ddp\benchmark.py`
 
-```
+```py
 #!/usr/bin/env python3
 #
 # Measure distributed training iteration time.

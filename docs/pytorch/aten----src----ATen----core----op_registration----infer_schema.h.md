@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\infer_schema.h`
 
-```
+```py
 #pragma once
 
 /**

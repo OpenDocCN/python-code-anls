@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\apot_fx_graph_mode_ptq.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 import torch.ao.quantization

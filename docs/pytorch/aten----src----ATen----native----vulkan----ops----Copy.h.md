@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Copy.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令，确保头文件只被编译一次
 

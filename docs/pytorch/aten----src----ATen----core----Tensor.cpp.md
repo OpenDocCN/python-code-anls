@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Tensor.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件，用于张量操作和格式化
 #include <ATen/core/Tensor.h>
 #include <ATen/core/Formatting.h>

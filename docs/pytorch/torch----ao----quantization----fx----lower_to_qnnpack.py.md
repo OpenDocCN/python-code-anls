@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\lower_to_qnnpack.py`
 
-```
+```py
 from ._lower_to_native_backend import _lower_to_native_backend
 from ..qconfig import QConfigAny
 from torch.fx import GraphModule

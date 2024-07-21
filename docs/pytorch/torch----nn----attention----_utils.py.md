@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\attention\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Defines utilities for interacting with scaled_dot_product_attention"""
 import math  # 导入数学库，用于数学计算

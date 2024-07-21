@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\NamedTensorUtils.h`
 
-```
+```py
 #pragma once
 #include <ATen/NamedTensor.h>
 #include <ATen/TensorNames.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\gemm\find_default_mma.h`
 
-```
+```py
 /*
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.

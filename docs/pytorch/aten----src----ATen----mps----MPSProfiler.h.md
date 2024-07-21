@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSProfiler.h`
 
-```
+```py
 // 版权声明，指明此代码的版权归属于苹果公司，2022年
 #pragma once
 

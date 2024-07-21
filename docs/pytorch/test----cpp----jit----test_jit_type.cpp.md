@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_jit_type.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <test/cpp/jit/test_utils.h>

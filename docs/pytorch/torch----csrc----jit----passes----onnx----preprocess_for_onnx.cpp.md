@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\preprocess_for_onnx.cpp`
 
-```
+```py
 // 包含头文件：torch/csrc/jit/passes/onnx/preprocess_for_onnx.h
 // 包含头文件：ATen/ScalarOps.h 和 c10/util/irange.h
 // 包含头文件：torch/csrc/jit/jit_log.h 和 torch/csrc/jit/passes/onnx/helper.h

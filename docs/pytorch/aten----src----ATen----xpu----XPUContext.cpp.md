@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\XPUContext.cpp`
 
-```
+```py
 namespace at::xpu {
 namespace {
 

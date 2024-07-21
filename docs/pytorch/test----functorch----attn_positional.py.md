@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\attn_positional.py`
 
-```
+```py
         # 初始化函数，定义了 BertSelfAttention 类，继承自 nn.Module
         def __init__(
             self,

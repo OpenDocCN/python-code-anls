@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\examples\example4.c`
 
-```
+```py
 // example4.c - 使用 tinfl.c 将内存中的 zlib 流解压到输出文件
 // 公有领域，作者 Rich Geldreich，联系邮箱 richgel99@gmail.com
 // 请参阅 tinfl.c 结尾的 "unlicense" 声明

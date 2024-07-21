@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_qualified_name.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/core/qualified_name.h>

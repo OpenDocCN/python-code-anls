@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn.h`
 
-```
+```py
 // 使用 pragma once 防止头文件重复包含
 
 // 引入 PyTorch 的模块和头文件，以下是常见的包含文件

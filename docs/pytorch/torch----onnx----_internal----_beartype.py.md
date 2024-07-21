@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\_beartype.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """An internal wrapper for the beartype library.
 

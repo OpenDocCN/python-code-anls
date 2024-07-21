@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_simple.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 # 导入系统模块 sys，用于处理命令行参数
 import sys

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\lib\libshm_windows\core.cpp`
 
-```
+```py
 // 包含必要的头文件：cstring（C风格字符串操作）、string（C++字符串操作）、unordered_map（无序映射容器）
 #include <cstring>
 #include <string>

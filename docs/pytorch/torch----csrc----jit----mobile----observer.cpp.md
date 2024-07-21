@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\observer.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/observer.h>
 
 // 引入 torch 库中的移动端观察器头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\_testing\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入 torch 库

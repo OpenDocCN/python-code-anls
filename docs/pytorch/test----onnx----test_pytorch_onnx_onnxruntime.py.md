@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_pytorch_onnx_onnxruntime.py`
 
-```
+```py
 # 所有者: ["模块: onnx"]
 
 # 导入必要的模块和库
@@ -4188,7 +4188,7 @@ class TestONNXRuntime(onnx_test_common._TestONNXRuntime):
             %packed.1 : Tensor[] = prim::ListConstruct(%a.1, %b.1)
             %c.1 : Tensor, %8 : Tensor = prim::ListUnpack(%packed.1)
             return (%c.1)
-            ```
+            ```py
             """
 
             def forward(self, a, b):

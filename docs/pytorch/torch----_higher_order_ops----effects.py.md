@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\effects.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 enum 模块导入 Enum 类
 from enum import Enum

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\shared\logging_utils.py`
 
-```
+```py
 # 根据给定数量和单词生成合适的复数形式的字符串
 def pluralize(count: int, singular_word: str, plural_word: str = "") -> str:
     if count == 1:

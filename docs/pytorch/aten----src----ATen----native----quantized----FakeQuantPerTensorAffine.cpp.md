@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\FakeQuantPerTensorAffine.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 // 包含 ATen 的调度功能

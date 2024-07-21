@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\packed_params.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只包含一次
 

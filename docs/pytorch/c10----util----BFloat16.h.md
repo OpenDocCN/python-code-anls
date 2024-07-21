@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\BFloat16.h`
 
-```
+```py
 #pragma once
 // 声明了 bloat16 类型（brain floating-point）。此表示法使用
 // 1 位用于符号，8 位用于指数，7 位用于尾数。

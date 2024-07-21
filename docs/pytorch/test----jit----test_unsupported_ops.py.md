@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_unsupported_ops.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入标准库和第三方库

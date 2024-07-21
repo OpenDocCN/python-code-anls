@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_subclasses\fake_utils.py`
 
-```
+```py
 # 忽略类型检查错误的标志
 # functools 模块提供的装饰器和其他功能
 import functools

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\examples\comm_mode_features_example.py`
 
-```
+```py
 # 导入标准库 os
 import os
 

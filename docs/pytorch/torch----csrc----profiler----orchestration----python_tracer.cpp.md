@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\orchestration\python_tracer.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 代码追踪器头文件
 #include <torch/csrc/profiler/orchestration/python_tracer.h>
 

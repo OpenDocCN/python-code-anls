@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\union_type.cpp`
 
-```
+```py
 // 在 c10 命名空间中定义 OptionalType 的静态创建方法
 OptionalTypePtr OptionalType::create(const TypePtr& contained) {
   // 使用传入的类型创建 OptionalTypePtr 对象并返回

@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_recompiles.py`
 
-```
+```py
 `
 # 导入 unittest.mock 的 patch 函数，用于在测试中替换对象
 from unittest.mock import patch

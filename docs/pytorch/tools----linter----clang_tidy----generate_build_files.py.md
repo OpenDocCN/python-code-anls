@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\clang_tidy\generate_build_files.py`
 
-```
+```py
 # 导入未来的类型注解特性
 from __future__ import annotations
 

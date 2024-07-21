@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\pipelining\__init__.py`
 
-```
+```py
 # 从内部模块 _IR 中导入 Pipe, pipe_split, pipeline, SplitPoint
 # 这些模块可能提供了管道处理和分割相关的功能
 

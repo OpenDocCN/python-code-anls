@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\distributed_test.py`
 
-```
+```py
 # 忽略类型检查错误，针对 mypy 工具的设置
 # 导入标准库模块
 import copy  # 导入深拷贝操作

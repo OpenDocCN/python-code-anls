@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\quantized\modules\linear_relu.py`
 
-```
+```py
 # 导入torch和量化后的神经网络模块
 import torch
 import torch.ao.nn.quantized as nnq

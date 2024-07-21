@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\upsampling.h`
 
-```
+```py
 // 防止头文件被多次包含
 #pragma once
 
@@ -337,7 +337,7 @@ inline std::vector<int64_t> _interp_output_size(
 /// namespace F = torch::nn::functional;
 /// F::interpolate(input,
 /// F::InterpolateFuncOptions().size({4}).mode(torch::kNearest));
-/// ```
+/// ```py
 inline Tensor interpolate(
     const Tensor& input,
     const InterpolateFuncOptions& options = {}) {

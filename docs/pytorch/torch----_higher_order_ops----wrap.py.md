@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\wrap.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入检查模块
 import inspect

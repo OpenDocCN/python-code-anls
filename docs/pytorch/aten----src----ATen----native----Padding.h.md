@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Padding.h`
 
-```
+```py
 #pragma once
 
 声明指令，确保头文件只被编译一次，防止重复包含。

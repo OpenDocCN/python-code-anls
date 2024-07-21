@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runtime\device_utils.h`
 
-```
+```py
 #pragma once
 
 // WARNING: Be careful when adding new includes here. This header will be used

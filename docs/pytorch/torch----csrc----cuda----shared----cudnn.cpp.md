@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\shared\cudnn.cpp`
 
-```
+```py
 // 如果定义了 USE_CUDNN 或者 USE_ROCM，则包含以下头文件和命名空间定义
 #if defined(USE_CUDNN) || defined(USE_ROCM)
 #include <torch/csrc/utils/pybind.h> // 包含 pybind.h 头文件

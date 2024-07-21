@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\GroupRegistry.cpp`
 
-```
+```py
 // 包含 Torch 分布式库中的 GroupRegistry 头文件
 #include <torch/csrc/distributed/c10d/GroupRegistry.hpp>
 

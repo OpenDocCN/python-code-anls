@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\redirects.py`
 
-```
+```py
 """
 # mypy: allow-untyped-defs
 # !/usr/bin/env python3

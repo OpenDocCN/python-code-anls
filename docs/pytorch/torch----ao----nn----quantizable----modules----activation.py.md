@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantizable\modules\activation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import torch  # 导入 PyTorch 库
 import torch.jit  # 避免循环导入需要导入的模块

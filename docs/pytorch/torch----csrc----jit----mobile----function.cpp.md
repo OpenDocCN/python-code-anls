@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\function.cpp`
 
-```
+```py
 #include <ATen/core/dynamic_type.h>
 #include <torch/csrc/jit/mobile/function.h>
 #include <torch/csrc/jit/mobile/interpreter.h>

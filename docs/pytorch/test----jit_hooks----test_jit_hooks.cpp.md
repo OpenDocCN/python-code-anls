@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit_hooks\test_jit_hooks.cpp`
 
-```
+```py
 #include <torch/script.h>
 
 #include <memory>

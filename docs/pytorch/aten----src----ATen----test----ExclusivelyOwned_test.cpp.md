@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\ExclusivelyOwned_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/Functions.h>

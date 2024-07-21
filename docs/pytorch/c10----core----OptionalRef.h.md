@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\OptionalRef.h`
 
-```
+```py
 #pragma once
 // 声明命名空间 c10
 

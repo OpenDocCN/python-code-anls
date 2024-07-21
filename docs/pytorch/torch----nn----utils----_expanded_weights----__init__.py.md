@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\__init__.py`
 
-```
+```py
 # 导入自定义模块中的特定类和函数
 from .conv_expanded_weights import ConvPerSampleGrad
 from .embedding_expanded_weights import EmbeddingPerSampleGrad

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\__init__.py`
 
-```
+```py
 # 导入所需模块：requests 用于发起 HTTP 请求
 import requests
 

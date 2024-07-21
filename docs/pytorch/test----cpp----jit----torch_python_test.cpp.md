@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\torch_python_test.cpp`
 
-```
+```py
 // 导入必要的头文件，ATen 库用于处理张量，c10 异常处理，torch 库导出，jit 模块相关接口，torch 脚本运行支持
 #include <ATen/core/ivalue.h>
 #include <c10/util/Exception.h>

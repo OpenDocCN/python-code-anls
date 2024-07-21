@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_vulkan_codegen.py`
 
-```
+```py
 # 导入必要的库和模块：tempfile用于创建临时文件和目录，unittest用于编写和运行单元测试
 import tempfile
 import unittest

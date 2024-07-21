@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\fake_interface.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 从torch库中导入Tensor类

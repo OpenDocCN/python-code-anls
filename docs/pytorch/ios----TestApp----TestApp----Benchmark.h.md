@@ -1,6 +1,6 @@
 # `.\pytorch\ios\TestApp\TestApp\Benchmark.h`
 
-```
+```py
 #ifdef BUILD_LITE_INTERPRETER
 #ifdef BUILD_LITE_INTERPRETER 表示以下代码块仅在定义了 BUILD_LITE_INTERPRETER 宏时编译和执行。
 

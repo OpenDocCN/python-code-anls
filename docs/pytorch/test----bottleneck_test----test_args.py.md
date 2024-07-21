@@ -1,6 +1,6 @@
 # `.\pytorch\test\bottleneck_test\test_args.py`
 
-```
+```py
 # 导入 argparse 库，用于命令行参数解析
 import argparse
 

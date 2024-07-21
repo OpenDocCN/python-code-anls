@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\QScheme.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Exception.h> // 包含异常处理的头文件

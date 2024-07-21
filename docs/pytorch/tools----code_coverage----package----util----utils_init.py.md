@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\util\utils_init.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 import os  # 提供与操作系统相关的功能

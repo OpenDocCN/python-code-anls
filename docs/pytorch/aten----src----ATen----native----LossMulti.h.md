@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\LossMulti.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Tensor.h>
 #include <ATen/AccumulateType.h>

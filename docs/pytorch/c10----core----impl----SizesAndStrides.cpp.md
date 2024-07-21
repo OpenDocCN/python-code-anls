@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\SizesAndStrides.cpp`
 
-```
+```py
 #include <c10/core/impl/SizesAndStrides.h>  // 引入 SizesAndStrides 类的头文件
 
 namespace c10::impl {

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_out_dtype_op.py`
 
-```
+```py
 # 导入必要的模块和类
 import unittest  # 导入unittest模块用于编写和运行测试
 import torch  # 导入PyTorch库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_contextlib.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 允许不对函数进行类型注解的声明
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\__init__.py`
 
-```
+```py
 # 导入自定义模块中的异常类
 from .api import CheckpointException
 # 导入默认的加载和保存规划器类

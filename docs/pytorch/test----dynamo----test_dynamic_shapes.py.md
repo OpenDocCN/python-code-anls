@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_dynamic_shapes.py`
 
-```
+```py
 # 导入单元测试和警告模块
 import unittest
 import warnings

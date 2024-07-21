@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\selective_build\__init__.py`
 
-```
+```py
 # 定义一个类名为 Person
 class Person:
     # 初始化方法，接收 name 和 age 两个参数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\traced_function_transforms.py`
 
-```
+```py
 """
 This module is responsible for transforming functions to be traced into a form
 that is easier for the downstream infra (e.g. Autograd, FX, AOTAutograd analysis)

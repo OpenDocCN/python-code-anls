@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\bc\test_backward_compatibility.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入必要的库和模块

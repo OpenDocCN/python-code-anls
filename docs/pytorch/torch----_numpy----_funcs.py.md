@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_funcs.py`
 
-```
+```py
 # Ignore type errors from mypy type checker
 # 忽略 mypy 类型检查器的类型错误
 

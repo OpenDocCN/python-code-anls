@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\onednn.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库及其模块
 import torch

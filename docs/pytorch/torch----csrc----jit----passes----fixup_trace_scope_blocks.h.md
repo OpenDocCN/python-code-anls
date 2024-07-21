@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fixup_trace_scope_blocks.h`
 
-```
+```py
 // 一旦跟踪完成，我们得到一个结构不完整的图形，其中插入了块。
 // 示例：
 //

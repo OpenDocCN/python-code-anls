@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\symbolic_shape_analysis.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // Torch导出API定义

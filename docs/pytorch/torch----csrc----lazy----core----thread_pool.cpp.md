@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\thread_pool.cpp`
 
-```
+```py
 namespace torch {
 namespace lazy {
 namespace {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\graph_helper.h`
 
-```
+```py
 #pragma once
 // 防止头文件多重包含
 

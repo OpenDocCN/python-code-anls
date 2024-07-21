@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\exc.py`
 
-```
+```py
 #`
 # 允许未指定类型的函数定义
 # 使 mypy 忽略未指定类型的函数定义

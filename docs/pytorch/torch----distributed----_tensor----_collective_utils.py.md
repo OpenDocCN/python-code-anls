@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_collective_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging

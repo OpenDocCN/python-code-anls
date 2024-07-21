@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\kernel\mm_plus_mm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块
 import functools

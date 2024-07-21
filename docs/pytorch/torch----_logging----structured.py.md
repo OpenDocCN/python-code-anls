@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_logging\structured.py`
 
-```
+```py
 """
 Utilities for converting data types into structured JSON for dumping.
 """

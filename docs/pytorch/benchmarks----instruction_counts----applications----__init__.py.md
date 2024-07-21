@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\applications\__init__.py`
 
-```
+```py
 # 导入所需的模块：os（用于文件操作）和 json（用于 JSON 数据处理）
 import os
 import json

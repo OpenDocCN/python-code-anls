@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt_extension\extension.cpp`
 
-```
+```py
 // 引入 Torch 库中的扩展和脚本模块
 #include <torch/extension.h>
 #include <torch/script.h>

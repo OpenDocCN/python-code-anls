@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_variable_methods.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于仅使用方法操作符
 

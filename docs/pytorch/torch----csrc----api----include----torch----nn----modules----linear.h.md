@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\linear.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>  // 包含 Cloneable 类定义，用于模块克隆
@@ -55,7 +55,7 @@ TORCH_MODULE(Identity);
 /// Example:
 /// ```
 /// Linear model(LinearOptions(5, 2).bias(false));
-/// ```
+/// ```py
 /// 示例：创建一个 Linear 模块实例，禁用偏置项
 
 class TORCH_API LinearImpl : public Cloneable<LinearImpl> {

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_exception.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 import torch  # 导入 PyTorch 库
 from torch import nn  # 导入神经网络模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cpu\Module.cpp`
 
-```
+```py
 #include <ATen/cpu/Utils.h>
 #include <torch/csrc/cpu/Module.h>
 #include <torch/csrc/utils/pybind.h>

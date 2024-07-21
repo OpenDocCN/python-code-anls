@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_compile.py`
 
-```
+```py
 """
 APIs related to torch.compile which lazily import torch._dynamo to avoid
 circular dependencies.

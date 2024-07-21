@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\bit_cast.h`
 
-```
+```py
 // 防止头文件被多次包含
 #pragma once
 

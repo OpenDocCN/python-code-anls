@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\tests\add_ops_list_test.py`
 
-```
+```py
 # 导入operator_benchmark库，并重命名为op_bench
 import operator_benchmark as op_bench
 

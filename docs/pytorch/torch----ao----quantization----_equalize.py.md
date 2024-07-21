@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\_equalize.py`
 
-```
+```py
 """
 # 添加类型提示 'mypy: allow-untyped-defs'
 import torch  # 导入 PyTorch 库

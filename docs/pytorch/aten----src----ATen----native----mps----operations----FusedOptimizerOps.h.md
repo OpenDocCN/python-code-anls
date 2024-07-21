@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\operations\FusedOptimizerOps.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保本文件仅被编译一次
 

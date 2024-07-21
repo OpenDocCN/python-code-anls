@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\verification.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Functions to verify exported ONNX model is functionally equivalent to original PyTorch model.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\determinator.py`
 
-```
+```py
 # 导入未来的注解功能，以支持类型提示中的字符串列表和任意类型
 from __future__ import annotations
 

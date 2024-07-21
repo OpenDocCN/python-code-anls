@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\CatKernel.cpp`
 
-```
+```py
 // 定义预处理器宏，用于只包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库的 Tensor 类定义

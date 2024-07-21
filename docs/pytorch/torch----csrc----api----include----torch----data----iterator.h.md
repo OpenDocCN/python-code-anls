@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\iterator.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/utils/variadic.h>  // 引入 Torch 的变长参数工具头文件

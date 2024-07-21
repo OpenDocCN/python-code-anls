@@ -1,6 +1,6 @@
 # `.\pytorch\torch\lib\libshm\manager.cpp`
 
-```
+```py
 // 包含必要的系统和库头文件
 #include <fcntl.h>
 #include <poll.h>

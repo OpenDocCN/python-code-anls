@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\meta_tensor.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/MetaFunctions.h>  // 引入 PyTorch 的 ATen 元函数头文件

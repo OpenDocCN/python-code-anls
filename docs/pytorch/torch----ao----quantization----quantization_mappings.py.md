@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantization_mappings.py`
 
-```
+```py
 # 导入copy模块，用于对象的复制操作
 import copy
 

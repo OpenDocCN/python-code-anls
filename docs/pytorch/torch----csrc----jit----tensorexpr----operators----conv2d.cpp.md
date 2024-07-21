@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\conv2d.cpp`
 
-```
+```py
 // 引入 ATen 库的配置文件
 #include <ATen/Config.h>
 // 引入 JIT 日志模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\SymmetricMemory.cpp`
 
-```
+```py
 // 包含 SymmetricMemory 头文件中的 SymmetricMemory 类型定义
 #include <torch/csrc/distributed/c10d/SymmetricMemory.hpp>
 

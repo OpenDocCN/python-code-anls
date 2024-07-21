@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\static.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/util/irange.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\generate-xnnpack-wrappers.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定解释器为 Python 3
 

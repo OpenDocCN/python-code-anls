@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\CUDAHooksInterface.cpp`
 
-```
+```py
 // 包含 ATen 库中 CUDA hooks 接口的头文件
 #include <ATen/detail/CUDAHooksInterface.h>
 

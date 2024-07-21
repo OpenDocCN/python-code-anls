@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UnaryOps.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/native/DispatchStub.h>

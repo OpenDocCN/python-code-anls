@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_resp.h`
 
-```
+```py
 #pragma once
 
 

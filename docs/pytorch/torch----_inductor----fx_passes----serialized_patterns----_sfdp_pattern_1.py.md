@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\serialized_patterns\_sfdp_pattern_1.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略类型检查错误，针对 mypy 工具
 

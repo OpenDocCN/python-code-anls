@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\requantization\gemmlowp-sse4.c`
 
-```
+```py
 /*
  * 包含必要的头文件，这些文件提供了程序运行所需的函数和类型声明
  */

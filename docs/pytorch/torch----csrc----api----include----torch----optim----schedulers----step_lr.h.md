@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\schedulers\step_lr.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令：指示编译器只包含此头文件一次，避免多重包含。

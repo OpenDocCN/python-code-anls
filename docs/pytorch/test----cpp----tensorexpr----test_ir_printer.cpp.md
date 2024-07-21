@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_ir_printer.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架头文件
 
 #include <stdexcept>  // 引入标准异常处理头文件

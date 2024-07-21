@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\two_tensor.py`
 
-```
+```py
 # 忽略 mypy 的错误检查
 
 # 导入 PyTorch 库

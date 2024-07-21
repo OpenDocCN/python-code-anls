@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\utils\common.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import fnmatch  # 用于文件名匹配

@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\examples\example1.c`
 
-```
+```py
 // example1.c - 展示了miniz.c中的compress()和uncompress()函数（与zlib的相同）。
 // 作者：Rich Geldreich，发布于公共领域，日期：2011年5月15日，联系方式：richgel99@gmail.com。
 // tinfl.c文件末尾包含了“无许可证”声明。

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\xpu\Event.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令：指示编译器只包含当前头文件一次，避免重复包含。

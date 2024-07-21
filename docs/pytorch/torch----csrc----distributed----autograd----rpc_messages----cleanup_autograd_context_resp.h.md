@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\cleanup_autograd_context_resp.h`
 
-```
+```py
 // 声明一个空的 CleanupAutogradContextResp 类，继承自 rpc::RpcCommandBase 类，用于响应 CleanupAutogradContextReq 请求。
 class CleanupAutogradContextResp : public rpc::RpcCommandBase {
  public:

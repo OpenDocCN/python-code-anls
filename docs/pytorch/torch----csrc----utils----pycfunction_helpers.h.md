@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\pycfunction_helpers.h`
 
-```
+```py
 // 使用 `#pragma once` 确保头文件只被包含一次，避免重复定义问题
 #pragma once
 

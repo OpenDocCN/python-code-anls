@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\functional_impl_check.py`
 
-```
+```py
 # 本测试的目的是检查 Python 的 `torch.nn.functional` 函数与对应的 C++ `torch::nn::functional`
 # 函数之间的实现是否一致。具体而言，这个测试执行以下操作：
 #

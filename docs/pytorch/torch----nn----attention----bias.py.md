@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\attention\bias.py`
 
-```
+```py
 # 设置全局类型提示允许未定义的函数
 # 引入需要的库和模块
 from enum import auto, IntEnum  # 自动命名，整数枚举

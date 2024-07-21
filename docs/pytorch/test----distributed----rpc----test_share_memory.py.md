@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\rpc\test_share_memory.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: distributed"]
 

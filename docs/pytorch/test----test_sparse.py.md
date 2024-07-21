@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_sparse.py`
 
-```
+```py
 # Owner(s): ["module: sparse"]
 
 import torch  # 导入 PyTorch 库

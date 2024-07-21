@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_exec_order_utils.py`
 
-```
+```py
 # 设置类型检查的全局选项，允许未声明类型的函数
 # mypy: allow-untyped-defs
 # 导入必要的库和模块

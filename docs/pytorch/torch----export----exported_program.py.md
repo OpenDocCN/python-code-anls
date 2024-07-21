@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\exported_program.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入上下文管理模块，用于处理上下文相关的操作
 import contextlib

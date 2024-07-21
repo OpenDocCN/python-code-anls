@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUException.h`
 
-```
+```py
 #pragma once
 
 // 指令 `#pragma once` 用于确保头文件只被包含一次，防止多重包含

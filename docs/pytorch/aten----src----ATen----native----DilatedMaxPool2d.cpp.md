@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\DilatedMaxPool2d.cpp`
 
-```
+```py
 // 定义宏，限定仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

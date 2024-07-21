@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\discover_tests.py`
 
-```
+```py
 from __future__ import annotations
 # 导入用于支持类型注解的模块，这样可以在函数签名中使用类型提示
 

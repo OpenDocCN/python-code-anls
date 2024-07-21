@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\verbose_wrapper.h`
 
-```
+```py
 #pragma once
 
 # 防止头文件被多次包含，确保编译时只包含一次该头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\mps\event.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库，用于与 PyTorch 相关的操作
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\core.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 Iterator 类型，忽略类型检查
 from collections.abc import Iterator  # type: ignore[import]

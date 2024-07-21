@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAMallocAsyncAllocator.cpp`
 
-```
+```py
 // 引入所需的头文件
 
 #include <c10/cuda/CUDACachingAllocator.h>

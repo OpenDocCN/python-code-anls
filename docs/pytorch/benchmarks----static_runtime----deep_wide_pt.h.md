@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\static_runtime\deep_wide_pt.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/CPUFunctions.h>  // 引入CPU功能函数库

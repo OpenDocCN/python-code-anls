@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\context.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/nnc/context.h>
 
 #include <ATen/Functions.h>

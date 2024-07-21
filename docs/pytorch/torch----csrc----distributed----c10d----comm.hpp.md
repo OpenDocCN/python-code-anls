@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\comm.hpp`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>

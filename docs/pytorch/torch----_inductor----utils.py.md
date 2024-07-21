@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\utils.py`
 
-```
+```py
 # 设置 mypy 选项，允许未标注类型的函数定义
 # 导入未来版本的注解特性
 from __future__ import annotations

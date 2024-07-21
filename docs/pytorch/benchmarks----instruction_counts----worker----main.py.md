@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\worker\main.py`
 
-```
+```py
 """
 File invoked through subprocess to actually carry out measurements.
 

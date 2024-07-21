@@ -1,6 +1,6 @@
 # `.\pytorch\tools\build_pytorch_libs.py`
 
-```
+```py
 from __future__ import annotations
 # 导入未来的注解支持，使得可以在类型提示中使用字符串类型作为字典键
 

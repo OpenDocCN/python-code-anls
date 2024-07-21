@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\FbcodeMaps.h`
 
-```
+```py
 #ifndef C10_UTIL_FBCODEMAPS_H_
 #define C10_UTIL_FBCODEMAPS_H_
 

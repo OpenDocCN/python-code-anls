@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\reference\modules\conv.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Device.cpp`
 
-```
+```py
 // 引入 Torch 的设备相关头文件
 
 #include <torch/csrc/Device.h>

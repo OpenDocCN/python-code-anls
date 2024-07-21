@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\utils\data\cycling_iterator.py`
 
-```
+```py
 # 定义一个迭代器类 CyclingIterator，用于包装一个可以通过多个周期循环的生成器函数
 class CyclingIterator:
     """

@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\magic_trace.py`
 
-```
+```py
 # 导入所需的模块和库
 import os  # 导入操作系统接口模块
 import signal  # 导入信号处理模块

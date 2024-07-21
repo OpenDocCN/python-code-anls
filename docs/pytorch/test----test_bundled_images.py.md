@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_bundled_images.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: mobile"]
 # mypy: allow-untyped-defs

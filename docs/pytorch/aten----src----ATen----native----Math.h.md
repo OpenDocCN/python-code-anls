@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Math.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/AccumulateType.h>  // 引入 ATen 库中的 AccumulateType 类

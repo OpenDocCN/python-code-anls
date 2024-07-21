@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\debug\test_comm_mode_features.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # Owner(s): ["oncall: distributed"]
 

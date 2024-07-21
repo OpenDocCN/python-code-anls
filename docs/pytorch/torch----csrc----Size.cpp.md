@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Size.cpp`
 
-```
+```py
 // 引入所需头文件：用于迭代、类型操作和绑定 Python 对象
 #include <c10/util/irange.h>
 #include <pybind11/pytypes.h>

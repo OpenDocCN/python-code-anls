@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\halide.py`
 
-```
+```py
 # 引入mypy类型检查中允许未标记类型的定义
 # from __future__ import annotations
 

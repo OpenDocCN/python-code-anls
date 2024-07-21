@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\weak.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 __future__ 模块中的 annotations 特性，允许未定义类型的函数签名
 from __future__ import annotations

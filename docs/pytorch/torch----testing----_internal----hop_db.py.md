@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\hop_db.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于向类型检查器表明有意忽略的特定错误
 # import torch 模块，用于进行张量操作和深度学习任务
 import torch

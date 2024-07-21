@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\sparse.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于类型检查工具mypy
 # Ignore type-checking errors, typically used for type-checking tool mypy
 mypy: ignore-errors

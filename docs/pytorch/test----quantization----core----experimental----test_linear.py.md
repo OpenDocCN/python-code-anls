@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\test_linear.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch  # 导入PyTorch库

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\AffineQuantizer.h`
 
-```
+```py
 #pragma once
 // 包含头文件 <ATen/core/Tensor.h>，提供张量（Tensor）相关功能
 #include <ATen/core/Tensor.h>

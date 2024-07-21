@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\compare.py`
 
-```
+```py
 # 导入必要的模块 argparse 用于命令行参数解析，defaultdict 用于创建默认值字典
 import argparse
 from collections import defaultdict

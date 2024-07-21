@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vsx_helpers.h`
 
-```
+```py
 #pragma once
 #include <cstdint>
 #include <c10/macros/Macros.h>

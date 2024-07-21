@@ -25,7 +25,7 @@ per machine.
 
 Example output (only on rank 0):
 
-```
+```py
 -----------------------------------
 PyTorch distributed benchmark suite
 -----------------------------------
@@ -111,7 +111,7 @@ produce the JSON file that the diff script can consume.
 
 Then, run the diff script as follows:
 
-```
+```py
 $ python3 diff.py PATH_TO_BASELINE_FILE PATH_TO_TEST_FILE
                                  baseline                      test
                      --------------------      --------------------

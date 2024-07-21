@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\refinement_types.py`
 
-```
+```py
 # 定义一个名为 Equality 的类，用于表示等式
 class Equality:
     # 初始化方法，接受左右两个操作数 lhs 和 rhs

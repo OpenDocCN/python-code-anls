@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\__init__.py`
 
-```
+```py
 # 定义一个名为 add_to_dict 的函数，接收两个参数：dict_obj 和 key_value
 def add_to_dict(dict_obj, key_value):
     # 将 key_value 的键与值添加到 dict_obj 字典中

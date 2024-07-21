@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\exp_family.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 # 从 torch.distributions.distribution 模块中引入 Distribution 类

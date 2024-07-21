@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\no_python_abi_suffix_test\setup.py`
 
-```
+```py
 # 导入 setuptools 库中的 setup 函数，用于配置 Python 包的安装和发布
 from setuptools import setup
 

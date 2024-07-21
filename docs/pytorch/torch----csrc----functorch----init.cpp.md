@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\functorch\init.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <ATen/FunctionalTensorWrapper.h>
 #include <ATen/WrapDimUtils.h>

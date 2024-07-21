@@ -14,14 +14,14 @@ For example, passes operating on the joint_graph and post_grad graph do not need
 However, we do still have aliasing in the graph. This does not matter most of the time, but it does mean that **our passes are not allowed to cause any additional inputs/outputs to alias if they did not alias in the original graph**.
 
 For example
-```python
+```py
 def f(x: Tensor):
     return x.clone()
 ```
 cannot be turned into a no-op, as this would change the semantics of the compiled graph.
 
 In addition, AOTDispatch can introduce a copy_ epilogue into the graph. For example, we may have a graph like
-```python
+```py
 def f(x: Tensor):
     y = x.clone()
     x.copy_(y)

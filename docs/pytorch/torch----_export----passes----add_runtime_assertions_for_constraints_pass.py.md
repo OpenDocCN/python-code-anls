@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\add_runtime_assertions_for_constraints_pass.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import math  # 导入数学库

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Linear.h`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_XNNPACK 宏，则编译以下代码块
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/peephole.h>
 
 #include <ATen/core/jit_type.h>

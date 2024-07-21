@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\rnn.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 包含 torch 库中的参数定义
@@ -53,7 +53,7 @@ struct TORCH_API RNNOptionsBase {
 /// 示例：
 /// ```
 /// RNN model(RNNOptions(128, 64).num_layers(3).dropout(0.2).nonlinearity(torch::kTanh));
-/// ```
+/// ```py
 /// Struct defining options for the RNN module.
 struct TORCH_API RNNOptions {
   /// Type definition for the nonlinearity options, which can be either Tanh or ReLU.
@@ -94,7 +94,7 @@ struct TORCH_API RNNOptions {
 /// ```
 /// LSTM model(LSTMOptions(2,
 /// 4).num_layers(3).batch_first(false).bidirectional(true));
-/// ```
+/// ```py
 struct TORCH_API LSTMOptions {
   /// Constructor initializing input size and hidden size.
   LSTMOptions(int64_t input_size, int64_t hidden_size);
@@ -130,7 +130,7 @@ struct TORCH_API LSTMOptions {
 /// ```
 /// GRU model(GRUOptions(2,
 /// 4).num_layers(3).batch_first(false).bidirectional(true));
-/// ```
+/// ```py
 /// 结构体 `GRUOptions`，定义了 GRU 模型的参数选项
 struct TORCH_API GRUOptions {
   /// 构造函数，初始化输入特征大小和隐藏状态特征大小
@@ -177,7 +177,7 @@ struct TORCH_API RNNCellOptionsBase {
 /// 示例：
 /// ```
 /// RNNCell model(RNNCellOptions(20, 10).bias(false).nonlinearity(torch::kReLU));
-/// ```
+/// ```py
 struct TORCH_API RNNCellOptions {
   typedef std::variant<enumtype::kTanh, enumtype::kReLU> nonlinearity_t;
 
@@ -199,7 +199,7 @@ struct TORCH_API RNNCellOptions {
 /// 示例：
 /// ```
 /// LSTMCell model(LSTMCellOptions(20, 10).bias(false));
-/// ```
+/// ```py
 struct TORCH_API LSTMCellOptions {
   /// 构造函数，初始化输入大小和隐藏状态大小
   LSTMCellOptions(int64_t input_size, int64_t hidden_size);
@@ -217,7 +217,7 @@ struct TORCH_API LSTMCellOptions {
 /// 示例：
 /// ```
 /// GRUCell model(GRUCellOptions(20, 10).bias(false));
-/// ```
+/// ```py
 struct TORCH_API GRUCellOptions {
   /// 构造函数，初始化输入大小和隐藏状态大小
   GRUCellOptions(int64_t input_size, int64_t hidden_size);

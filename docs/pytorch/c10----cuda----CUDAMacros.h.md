@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAMacros.h`
 
-```
+```py
 #pragma once
 // 如果尚未定义 C10_USING_CUSTOM_GENERATED_MACROS 宏，则进入此条件编译
 #ifndef C10_USING_CUSTOM_GENERATED_MACROS

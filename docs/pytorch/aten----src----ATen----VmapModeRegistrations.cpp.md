@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\VmapModeRegistrations.cpp`
 
-```
+```py
 // 引入 Torch 库的相关头文件
 #include <torch/library.h>
 // 引入 ATen 核心库的 boxing 模块中的 KernelFunction 头文件

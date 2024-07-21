@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cpu\amp\autocast_mode.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型定义模块
 from typing import Any

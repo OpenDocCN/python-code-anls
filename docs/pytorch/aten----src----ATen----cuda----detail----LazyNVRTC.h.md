@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\detail\LazyNVRTC.h`
 
-```
+```py
 #pragma once
 // 包含 CUDA 的相关头文件：CUDA 核心函数接口定义
 #include <ATen/detail/CUDAHooksInterface.h>

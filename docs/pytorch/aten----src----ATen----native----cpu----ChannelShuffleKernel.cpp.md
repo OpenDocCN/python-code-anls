@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\ChannelShuffleKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 #include <ATen/native/cpu/ChannelShuffleKernel.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_export.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 # flake8: noqa
 

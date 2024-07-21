@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\app\src\main\java\org\pytorch\testapp\Utils.java`
 
-```
+```py
 // 定义了一个名为 org.pytorch.testapp 的包
 package org.pytorch.testapp;
 

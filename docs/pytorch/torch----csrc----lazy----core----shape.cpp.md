@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\shape.cpp`
 
-```
+```py
 // 包含所需的头文件：范围处理、张量形状和张量核心
 #include <c10/util/irange.h>
 #include <torch/csrc/lazy/core/shape.h>

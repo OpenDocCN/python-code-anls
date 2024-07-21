@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\pattern_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 from collections import OrderedDict

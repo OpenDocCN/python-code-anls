@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_inplace_or_view_type.py`
 
-```
+```py
 # 生成 ADInplaceOrViewType.h/cpp 文件
 #
 # 注意：如果对 ADInplaceOrView 代码生成进行任何更改，请同时检查

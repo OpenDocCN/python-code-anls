@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Bfloat16.cpp`
 
-```
+```py
 # 包含 BFloat16 的头文件
 #include <c10/util/BFloat16.h>
 # 包含 type_traits 头文件，用于类型特性判断

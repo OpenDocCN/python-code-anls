@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FusedAdam.h`
 
-```
+```py
 // 包含 ATen 库中的 Tensor 头文件
 #include <ATen/core/Tensor.h>
 // 包含 ATen 库中的分发函数声明头文件

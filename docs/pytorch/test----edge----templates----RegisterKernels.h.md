@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\templates\RegisterKernels.h`
 
-```
+```py
 /*
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.

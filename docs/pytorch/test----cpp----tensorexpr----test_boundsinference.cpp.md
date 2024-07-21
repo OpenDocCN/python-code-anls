@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_boundsinference.cpp`
 
-```
+```py
 // 包含必要的头文件来进行测试和运行时支持
 #include <memory>
 #include <sstream>

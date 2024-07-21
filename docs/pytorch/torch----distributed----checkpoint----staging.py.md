@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\staging.py`
 
-```
+```py
 # 从 typing 模块导入 Optional 和 runtime_checkable 装饰器
 from typing import Optional, runtime_checkable
 # 从 typing_extensions 模块导入 Protocol 类

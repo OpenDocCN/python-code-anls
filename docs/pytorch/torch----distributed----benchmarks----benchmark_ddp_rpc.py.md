@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\benchmarks\benchmark_ddp_rpc.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的库和模块
 import argparse  # 用于命令行参数解析

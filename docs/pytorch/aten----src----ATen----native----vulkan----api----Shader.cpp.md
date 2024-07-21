@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Shader.cpp`
 
-```
+```py
 //
 // ShaderModule
 //

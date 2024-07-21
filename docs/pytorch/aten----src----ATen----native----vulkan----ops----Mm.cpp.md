@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Mm.cpp`
 
-```
+```py
 // 引入 Vulkan 相关头文件
 #include <ATen/native/vulkan/ops/Mm.h>
 #include <ATen/native/vulkan/ops/Utils.h>

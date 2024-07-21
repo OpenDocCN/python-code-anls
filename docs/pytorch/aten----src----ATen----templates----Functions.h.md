@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\Functions.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}

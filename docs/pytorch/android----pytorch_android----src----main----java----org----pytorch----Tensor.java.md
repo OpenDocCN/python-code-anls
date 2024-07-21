@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\Tensor.java`
 
-```
+```py
   // 导入必要的类和接口
   package org.pytorch;
 

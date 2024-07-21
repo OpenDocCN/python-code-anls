@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\StorageImpl.cpp`
 
-```
+```py
 // 包含 C10 库中的头文件 StorageImpl.h 和 flat_hash_map.h
 #include <c10/core/StorageImpl.h>
 #include <c10/util/flat_hash_map.h>

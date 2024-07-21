@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\test_infer_schema_annotation.py`
 
-```
+```py
 # Owner(s): ["module: pt2-dispatcher"]
 # 导入未来的注解支持
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_duplicate_dq.py`
 
-```
+```py
 # 代码导入了所需的库和模块，包括标准库和第三方库
 # 这些库包括 unittest 用于单元测试，torch 用于深度学习框架操作
 # 还有来自 torch.ao.quantization 模块的量化相关功能

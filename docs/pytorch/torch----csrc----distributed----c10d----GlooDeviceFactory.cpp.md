@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\GlooDeviceFactory.cpp`
 
-```
+```py
 // 包含 GlooDeviceFactory.hpp 头文件，其中包含了 Gloo 设备工厂的定义和实现
 #include <torch/csrc/distributed/c10d/GlooDeviceFactory.hpp>
 

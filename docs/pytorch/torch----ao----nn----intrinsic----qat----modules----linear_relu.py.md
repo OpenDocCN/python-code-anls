@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\qat\modules\linear_relu.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch相关模块
 import torch

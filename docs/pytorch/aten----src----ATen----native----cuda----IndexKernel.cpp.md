@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\IndexKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/cuda/IndexKernel.h>
 #include <ATen/native/TensorAdvancedIndexing.h>  // For at::native::index_out

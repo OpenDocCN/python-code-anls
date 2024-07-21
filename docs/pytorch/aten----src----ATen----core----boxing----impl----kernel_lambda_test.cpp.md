@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\kernel_lambda_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/core/boxing/impl/test_helpers.h>  // 引入 ATen 的测试辅助函数头文件

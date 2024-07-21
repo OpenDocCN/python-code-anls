@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\ops\test_tensor_ops.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入所需的模块和函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\shape_prop.py`
 
-```
+```py
 # 忽略 mypy 类型检查错误
 mypy: ignore-errors
 

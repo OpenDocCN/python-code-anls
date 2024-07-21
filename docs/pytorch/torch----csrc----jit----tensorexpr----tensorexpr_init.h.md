@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\tensorexpr_init.h`
 
-```
+```py
 // 防止头文件被重复包含
 #pragma once
 

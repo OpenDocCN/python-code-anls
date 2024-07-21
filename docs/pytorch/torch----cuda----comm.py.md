@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\comm.py`
 
-```
+```py
 # 从 torch.nn.parallel.comm 中导入以下函数，它们已被移至该模块中
 from torch.nn.parallel.comm import (
     broadcast,                   # 导入 broadcast 函数

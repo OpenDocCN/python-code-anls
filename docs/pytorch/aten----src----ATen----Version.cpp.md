@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Version.cpp`
 
-```
+```py
 // 包含 ATen 库的版本信息头文件
 #include <ATen/Version.h>
 // 包含 ATen 库的配置信息头文件

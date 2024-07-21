@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\optimization_utils.h`
 
-```
+```py
 #pragma once
 
 

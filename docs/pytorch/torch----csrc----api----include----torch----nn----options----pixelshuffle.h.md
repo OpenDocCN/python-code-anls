@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\pixelshuffle.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -15,7 +15,7 @@ namespace nn {
 /// Example:
 /// ```
 /// PixelShuffle model(PixelShuffleOptions(5));
-/// ```
+/// ```py
 struct TORCH_API PixelShuffleOptions {
   /// Constructor initializing the upscale factor.
   ///
@@ -32,7 +32,7 @@ struct TORCH_API PixelShuffleOptions {
 /// Example:
 /// ```
 /// PixelUnshuffle model(PixelUnshuffleOptions(5));
-/// ```
+/// ```py
 struct TORCH_API PixelUnshuffleOptions {
   /// Constructor initializing the downscale factor.
   ///
@@ -54,7 +54,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::pixel_shuffle(x, F::PixelShuffleFuncOptions(2));
-/// ```
+/// ```py
 using PixelShuffleFuncOptions = PixelShuffleOptions;
 
 /// Options for `torch::nn::functional::pixel_unshuffle`.
@@ -66,7 +66,7 @@ using PixelShuffleFuncOptions = PixelShuffleOptions;
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::pixel_unshuffle(x, F::PixelUnshuffleFuncOptions(2));
-/// ```
+/// ```py
 using PixelUnshuffleFuncOptions = PixelUnshuffleOptions;
 } // namespace functional
 

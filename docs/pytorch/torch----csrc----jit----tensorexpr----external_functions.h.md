@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\external_functions.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Config.h>   // 引入 ATen 库的配置信息
@@ -98,6 +98,6 @@ std::vector<at::Tensor> constructTensors2(   // 函数声明：构建张量2
 
 } // extern "C"
 #endif
-```  
+```py  
 结束 extern "C" 的作用域，并结束 C10_MOBILE 宏定义的条件编译块
 ```

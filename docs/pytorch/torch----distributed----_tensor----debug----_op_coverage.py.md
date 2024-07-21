@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\debug\_op_coverage.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 itemgetter 函数和 List 类型
 from operator import itemgetter

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\LinearAlgebraStubs.cpp`
 
-```
+```py
 // LinearAlgebraStubs.cpp
 
 // 如果定义了 BUILD_LAZY_CUDA_LINALG，则此文件为几乎无操作
@@ -189,12 +189,12 @@ REGISTER_CUDA_DISPATCH(lstsq_stub, &lazy_lstsq_kernel);
 ```  
 // 注册 CUDA 分发函数 `svd_stub`、`lu_solve_stub` 和 `lstsq_stub` 到对应的懒加载 CUDA 内核函数。
 
-```  
+```py  
 } // anonymous namespace
 ```  
 // 结束匿名命名空间，代码块内的符号不会污染全局命名空间。
 
-```  
+```py  
 // Old style dispatches
 // torch_cuda_linalg dynamic library should have a global constructor
 // that calls regiserLinaglDispatch so in order ot lazy bind
@@ -204,7 +204,7 @@ REGISTER_CUDA_DISPATCH(lstsq_stub, &lazy_lstsq_kernel);
 ```  
 // 注释：旧式分发机制的说明，torch_cuda_linalg 动态库应该有一个全局构造函数来调用 `regiserLinaglDispatch`，因此为了进行懒绑定（lazy bind）旧式分发，只需加载库并调用 `disp.func_name`。通过将分发初始化为自身并在加载 linalg 库后检查值是否不同，防止无限递归。
 
-```  
+```py  
 namespace cuda {
 namespace detail {
 void registerLinalgDispatch(const LinalgDispatch& disp_) {
@@ -214,7 +214,7 @@ void registerLinalgDispatch(const LinalgDispatch& disp_) {
 ```  
 // 命名空间 `cuda::detail` 下的函数 `registerLinalgDispatch`，用于注册线性代数分发对象 `disp`。
 
-```  
+```py  
 Tensor _cholesky_solve_helper_cuda(const Tensor& self, const Tensor& A, bool upper) {
     getTorchLinalgLibrary();
     TORCH_CHECK(disp.cholesky_solve_helper != _cholesky_solve_helper_cuda, "Can't find _cholesky_solve_helper_cuda");
@@ -223,12 +223,12 @@ Tensor _cholesky_solve_helper_cuda(const Tensor& self, const Tensor& A, bool upp
 ```  
 // 定义函数 `_cholesky_solve_helper_cuda`，用于执行 CUDA 下的 Cholesky 解算法辅助函数，确保已加载 Torch 的线性代数库，并检查 `disp` 中的 `cholesky_solve_helper` 是否为 `_cholesky_solve_helper_cuda`，若不是则抛出错误。
 
-```  
+```py  
 #endif /*defined(BUILD_LAZY_CUDA_LINALG)*/
 ```  
 // 结束条件编译指令 `#endif`，用于编译懒加载 CUDA 线性代数。
 
-```  
+```py  
 } // namespace at::native
 ```  
 // 结束命名空间 `at::native`。

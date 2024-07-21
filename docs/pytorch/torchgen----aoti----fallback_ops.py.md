@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\aoti\fallback_ops.py`
 
-```
+```py
 # 定义一个名为inductor_fallback_ops的集合，包含多个字符串元素，每个元素表示一个 Torch 操作的名称
 inductor_fallback_ops = {
     "aten._adaptive_avg_pool2d_backward.default",

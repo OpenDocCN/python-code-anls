@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_pad_mm.py`
 
-```
+```py
 # 导入unittest模块，用于编写和运行测试用例
 # 导入torch模块，PyTorch深度学习框架的核心库
 # 导入inductor_config模块，包含有关编译器自动调优的配置

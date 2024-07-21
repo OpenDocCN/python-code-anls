@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\forward_grad.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

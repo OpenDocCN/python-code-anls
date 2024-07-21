@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\spherical_bessel_j0.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_NO_OPERATORS 宏，用于禁用运算符重载
 #define TORCH_ASSERT_NO_OPERATORS
 

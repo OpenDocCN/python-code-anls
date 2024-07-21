@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\onnxfunction_dispatcher.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Dispatcher for AtenLib functions from onnx-script."""
 
@@ -347,7 +347,7 @@ class _OnnxSchemaChecker:
         def aten_op(self: TReal, other: TReal, alpha: float = 1) -> TReal:
             ...
 
-        ```
+        ```py
         Result: Perfect match.
 
     2. [NOTE: Optional input]: The dispatcher recognizes optional inputs. However,
@@ -359,7 +359,7 @@ class _OnnxSchemaChecker:
 
         aten_op(X: TTensor, Y: Optional[INT64]):
             ...
-        ```
+        ```py
         Result: Perfect match.
         Real example: `aten::convolution`.
 
@@ -371,7 +371,7 @@ class _OnnxSchemaChecker:
 
         aten_op(X: TTensor, a: int):
             ...
-        ```
+        ```py
         Result: No match.
         Real example: `aten::div` vs `aten::div.Tensor_mode`.
 
@@ -383,7 +383,7 @@ class _OnnxSchemaChecker:
 
         aten_op(X: TTensor, a: int = 3):
             ...
-        ```
+        ```py
         Result: Perfect match.
         Real example: `aten::clone`
 
@@ -395,7 +395,7 @@ class _OnnxSchemaChecker:
 
         aten_op(X: TTensor):
             ...
-        ```
+        ```py
         Result: Perfect match.
 
         ```python
@@ -404,7 +404,7 @@ class _OnnxSchemaChecker:
 
         aten_op(X: TTensor, a: int = 3):
             ...
-        ```
+        ```py
         Result: Nearest match eligible.
         Real example: `aten::div` vs `aten::div.Tensor_mode`.
 

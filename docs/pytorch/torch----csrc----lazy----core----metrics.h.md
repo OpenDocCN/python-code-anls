@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\metrics.h`
 
-```
+```py
 /**
  * This file is adapted from PyTorch/XLA
  * https://github.com/pytorch/xla/blob/master/third_party/xla_client/metrics.h

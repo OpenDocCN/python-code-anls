@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cuda_dlink_extension.cpp`
 
-```
+```py
 // 包含 Torch C++ 扩展的头文件
 #include <torch/extension.h>
 

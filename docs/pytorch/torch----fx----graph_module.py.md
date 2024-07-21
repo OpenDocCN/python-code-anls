@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\graph_module.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的模块和库
 import contextlib  # 提供了一些用于管理上下文的工具，如关闭文件、锁的创建等

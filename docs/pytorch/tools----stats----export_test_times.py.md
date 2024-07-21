@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\export_test_times.py`
 
-```
+```py
 import sys  # 导入系统模块sys，用于管理 Python 解释器的运行时环境
 from pathlib import Path  # 导入路径操作相关模块Path，用于处理文件系统路径
 

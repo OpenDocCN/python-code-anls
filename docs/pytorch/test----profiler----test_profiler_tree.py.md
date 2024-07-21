@@ -1,6 +1,6 @@
 # `.\pytorch\test\profiler\test_profiler_tree.py`
 
-```
+```py
 # Owner(s): ["oncall: profiler"]
 
 # 导入标准库和第三方模块

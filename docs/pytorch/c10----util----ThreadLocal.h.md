@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ThreadLocal.h`
 
-```
+```py
 cpp
 #pragma once
 
@@ -25,7 +25,7 @@ cpp
  *    *str_tls_ = "abc";
  *    assert(str_tls_->length(), 3);
  *  }
- * ```
+ * ```py
  *
  * (see c10/test/util/ThreadLocal_test.cpp for more examples)
  */

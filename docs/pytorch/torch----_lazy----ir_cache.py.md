@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\ir_cache.py`
 
-```
+```py
 # 引入 mypy 的特定设置，允许未标注类型的函数定义
 import torch._C._lazy
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_fx_const_fold.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入必要的库和模块

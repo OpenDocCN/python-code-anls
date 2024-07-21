@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import operator  # 导入operator模块，用于操作符操作
 import types  # 导入types模块，用于操作类型对象

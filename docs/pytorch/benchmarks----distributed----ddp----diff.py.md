@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\ddp\diff.py`
 
-```
+```py
 #!/usr/bin/env python3
 #
 # Computes difference between measurements produced by ./benchmark.py.

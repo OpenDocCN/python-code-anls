@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable_state.py`
 
-```
+```py
 # 引入必要的模块和类型声明
 from typing import cast, Dict, Optional
 import torch.nn as nn

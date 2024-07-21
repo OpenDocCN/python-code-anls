@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\argument_spec.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/jit_type.h>  // 包含 ATen 核心 JIT 类型定义

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\mentioned_in_pr.py`
 
-```
+```py
 # 引入未来的注解语法支持
 from __future__ import annotations
 

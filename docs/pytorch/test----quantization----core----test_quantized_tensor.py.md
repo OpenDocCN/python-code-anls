@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_quantized_tensor.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import numpy as np  # 导入 NumPy 库，用于数值计算

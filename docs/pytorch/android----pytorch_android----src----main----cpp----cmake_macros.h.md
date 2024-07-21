@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\cpp\cmake_macros.h`
 
-```
+```py
 /*
    声明一个预处理指令，指示编译器只包含该文件的一次拷贝。
 */

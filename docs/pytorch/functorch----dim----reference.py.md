@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\reference.py`
 
-```
+```py
 # 导入torch模块，用于张量操作
 import torch
 

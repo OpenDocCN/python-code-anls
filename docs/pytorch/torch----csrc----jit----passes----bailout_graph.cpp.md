@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\bailout_graph.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/bailout_graph.h>
 
 #include <ATen/core/function.h>

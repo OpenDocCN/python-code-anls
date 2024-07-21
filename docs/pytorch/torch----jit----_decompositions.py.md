@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_decompositions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库及相关模块
 import torch

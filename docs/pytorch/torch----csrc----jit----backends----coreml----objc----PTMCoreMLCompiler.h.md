@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\objc\PTMCoreMLCompiler.h`
 
-```
+```py
 #import <CoreML/CoreML.h>
 
 

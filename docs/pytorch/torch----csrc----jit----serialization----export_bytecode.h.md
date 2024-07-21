@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\export_bytecode.h`
 
-```
+```py
 #pragma once
 // 只允许头文件被包含一次的预处理指令
 

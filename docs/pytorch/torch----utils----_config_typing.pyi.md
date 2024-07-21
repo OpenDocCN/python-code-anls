@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_config_typing.pyi`
 
-```
+```py
 # 引入类型检查和类型提示相关模块
 # mypy: allow-untyped-defs
 from typing import Any, TYPE_CHECKING

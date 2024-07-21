@@ -1,6 +1,6 @@
 # `.\pytorch\torch\amp\__init__.py`
 
-```
+```py
 # 从自动类型转换模块中导入以下函数和变量：
 # - _enter_autocast: 进入自动类型转换模式的函数
 # - _exit_autocast: 退出自动类型转换模式的函数

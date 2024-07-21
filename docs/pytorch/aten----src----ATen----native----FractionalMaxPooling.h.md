@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FractionalMaxPooling.h`
 
-```
+```py
 #pragma once
 // 引入 ATen 库中的 Tensor 类
 #include <ATen/core/Tensor.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_tp_random_state.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入PyTorch库
 import torch

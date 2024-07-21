@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\ScatterGatherKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入非空工具函数头文件
 #include <ATen/native/NonEmptyUtils.h>

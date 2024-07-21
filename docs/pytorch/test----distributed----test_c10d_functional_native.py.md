@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_functional_native.py`
 
-```
+```py
 # Owner(s): ["module: c10d"]
 # 导入必要的库和模块
 import threading

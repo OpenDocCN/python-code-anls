@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\sampling_ops.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\contrib\__init__.py`
 
-```
+```py
 # 定义一个名为 `process_data` 的函数，接收一个名为 `data` 的参数
 def process_data(data):
     # 如果 `data` 是空的，则返回空列表

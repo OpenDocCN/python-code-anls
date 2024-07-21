@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\dedup_module_uses.cpp`
 
-```
+```py
 // 包含 Torch 的量化相关头文件
 #include <torch/csrc/jit/passes/quantization/dedup_module_uses.h>
 

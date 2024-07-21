@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\broadcast.py`
 
-```
+```py
 import itertools  # 导入 itertools 模块，用于高效的迭代工具
 import operator   # 导入 operator 模块，提供了一些常见的运算符函数
 

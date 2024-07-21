@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\TensorShapeCUDA.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于在 ATen 核心 Tensor.h 头文件中包含所需的头文件
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 核心 Tensor.h 头文件，该文件包含了与张量操作相关的基本功能

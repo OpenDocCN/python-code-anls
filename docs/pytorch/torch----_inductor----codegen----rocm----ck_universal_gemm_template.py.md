@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\ck_universal_gemm_template.py`
 
-```
+```py
 # 设置日志记录器，用于当前模块中的日志输出
 import logging
 # 导入随机模块，用于生成随机数和随机选择

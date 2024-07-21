@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_inference\test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <filesystem>
 #include <string>

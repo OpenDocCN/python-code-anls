@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUMacros.h`
 
-```
+```py
 #pragma once
 
 #ifndef C10_USING_CUSTOM_GENERATED_MACROS

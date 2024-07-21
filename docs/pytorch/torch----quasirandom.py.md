@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quasirandom.py`
 
-```
+```py
 ```python`
 # 允许未类型化函数的 mypy 配置
 # 这是 mypy 的一个配置选项，允许函数没有类型注解

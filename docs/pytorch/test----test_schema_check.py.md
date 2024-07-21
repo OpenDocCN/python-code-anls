@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_schema_check.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的库和模块

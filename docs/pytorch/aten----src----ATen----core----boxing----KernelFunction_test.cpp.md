@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\KernelFunction_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 框架的头文件
 #include <ATen/ATen.h> // 包含 ATen 张量库的头文件
 #include <ATen/core/boxing/KernelFunction.h> // 包含 ATen 核函数相关的头文件

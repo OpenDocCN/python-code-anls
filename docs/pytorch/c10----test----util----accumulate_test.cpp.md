@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\accumulate_test.cpp`
 
-```
+```py
 // 包含预处理命令，引入头文件 c10/util/accumulate.h，用于函数声明和定义
 #include <c10/util/accumulate.h>
 

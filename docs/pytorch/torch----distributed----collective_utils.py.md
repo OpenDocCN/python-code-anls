@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\collective_utils.py`
 
-```
+```py
 """
 A set of primitive functions for performing collective ops.
 

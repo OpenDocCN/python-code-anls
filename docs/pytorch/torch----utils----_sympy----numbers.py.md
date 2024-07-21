@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\numbers.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 mpmath.libmp 中的 mlib 模块（未指定类型的导入）
 import mpmath.libmp as mlib  # type: ignore[import-untyped]

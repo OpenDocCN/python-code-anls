@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\thread_pool.cpp`
 
-```
+```py
 // 包含C10库中的线程池和日志记录头文件
 #include <c10/core/thread_pool.h>
 #include <c10/util/Logging.h>

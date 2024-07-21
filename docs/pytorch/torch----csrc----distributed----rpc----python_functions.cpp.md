@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_functions.cpp`
 
-```
+```py
 // 包含必要的头文件以及命名空间声明
 #include <ATen/ThreadLocalState.h>
 #include <torch/csrc/distributed/autograd/context/container.h>

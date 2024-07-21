@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_argument_spec.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/ATen.h>

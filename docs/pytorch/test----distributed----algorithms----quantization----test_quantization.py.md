@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\algorithms\quantization\test_quantization.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的库

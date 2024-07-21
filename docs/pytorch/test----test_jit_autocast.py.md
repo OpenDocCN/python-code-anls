@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_autocast.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import torch  # 导入PyTorch库

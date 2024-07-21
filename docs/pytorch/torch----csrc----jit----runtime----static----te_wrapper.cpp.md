@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\te_wrapper.cpp`
 
-```
+```py
 // 包含 Torch 的静态张量表达式相关头文件
 #include <torch/csrc/jit/runtime/static/te_wrapper.h>
 

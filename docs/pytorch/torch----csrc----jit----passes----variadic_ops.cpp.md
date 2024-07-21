@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\variadic_ops.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，用于 JIT 编译的变参操作
 #include <torch/csrc/jit/passes/variadic_ops.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\_optimizer_overlap\optimizer_overlap.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import inspect  # 导入inspect模块，用于获取对象的信息
 from abc import ABC, abstractmethod  # 导入ABC和abstractmethod，用于定义抽象基类和抽象方法

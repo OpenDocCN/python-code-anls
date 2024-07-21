@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_sdpa.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 import contextlib  # 导入上下文管理模块

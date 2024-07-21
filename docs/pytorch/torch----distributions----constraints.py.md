@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\constraints.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""
 The following constraints are implemented:

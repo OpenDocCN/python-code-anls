@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\dataframe\__init__.py`
 
-```
+```py
 # 从 torch.utils.data.datapipes.dataframe.dataframes 中导入 CaptureDataFrame 和 DFIterDataPipe 类
 # 以及从 torch.utils.data.datapipes.dataframe.datapipes 中导入 DataFramesAsTuplesPipe 类
 from torch.utils.data.datapipes.dataframe.dataframes import (

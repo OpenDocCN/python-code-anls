@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\e2e\test_pipeline.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的库

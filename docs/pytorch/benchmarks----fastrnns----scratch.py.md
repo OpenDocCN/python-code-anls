@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\scratch.py`
 
-```
+```py
 import torch
 
 @torch.jit.script

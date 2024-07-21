@@ -1,6 +1,6 @@
 # `.\pytorch\torch\__config__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 模块
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\Conv_v7.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 AT_CUDNN_ENABLED 宏定义的 CUDAConfig.h 文件，用于检查 cuDNN 是否启用
@@ -1096,7 +1096,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
 # 参数列表，这是一个函数定义，接受多个参数，其中包括一个布尔类型参数 `allow_tf32`。
 
   auto dataType = getCudnnDataType(input);
-```  
+```py  
 # 调用函数 `getCudnnDataType` 来获取输入张量的数据类型，并将结果保存在 `dataType` 变量中。
 
   ConvolutionArgs args{input, grad_output, grad_weight};
@@ -1106,7 +1106,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
 
   at::MemoryFormat memory_format =
       cudnn_conv_suggest_memory_format(input, grad_weight);
-```  
+```py  
 # 调用 `cudnn_conv_suggest_memory_format` 函数，根据输入张量和梯度权重推荐内存格式，并将推荐的格式保存在 `memory_format` 变量中。
 
   setConvolutionParams(
@@ -1124,7 +1124,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
 # 调用 `setConvolutionParams` 函数，设置卷积参数 `args.params`，包括输入张量 `input`、梯度权重 `grad_weight`、填充 `padding`、步长 `stride`、扩展 `dilation`、分组 `groups`、确定性标志 `deterministic`、TF32 允许标志 `allow_tf32` 和推荐的内存格式 `memory_format`。
 
   args.idesc.set(input, memory_format);
-```  
+```py  
 # 调用 `args.idesc.set` 方法，设置输入描述符 `args.idesc`，使用输入张量 `input` 和内存格式 `memory_format`。
 
   args.wdesc.set(grad_weight, memory_format, 0);
@@ -1132,7 +1132,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
 # 调用 `args.wdesc.set` 方法，设置权重描述符 `args.wdesc`，使用梯度权重 `grad_weight`、内存格式 `memory_format` 和附加参数 `0`。
 
   args.odesc.set(grad_output, memory_format);
-```  
+```py  
 # 调用 `args.odesc.set` 方法，设置输出梯度描述符 `args.odesc`，使用梯度输出 `grad_output` 和内存格式 `memory_format`。
 
   args.cdesc.set(
@@ -1149,7 +1149,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
   AlgoIterator<cudnnConvolutionBwdFilterAlgoPerf_t>(args, benchmark)
       .try_all(
           [&](const cudnnConvolutionBwdFilterAlgoPerf_t& bwdFilterAlgPerf) {
-```  
+```py  
 # 创建 `AlgoIterator` 对象，迭代尝试所有的反向卷积滤波算法性能对象，每个对象保存在 `bwdFilterAlgPerf` 中。
 
             Tensor workspace =
@@ -1161,7 +1161,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
             // + mathType to figure out whether to use Tensor core kernels or
             // not See Note [behavior of cudnnFind and cudnnGet]
             ASSERT_CORRECT_PRECISION(bwdFilterAlgPerf.mathType);
-```  
+```py  
 # 断言当前反向卷积滤波算法的数学类型 `bwdFilterAlgPerf.mathType` 的正确性。
 
             AT_CUDNN_CHECK_WITH_SHAPES(
@@ -1173,7 +1173,7 @@ void raw_cudnn_convolution_backward_weight_out_32bit(
 
             Constant one(dataType, 1);
             Constant zero(dataType, 0);
-```  
+```py  
 # 创建常量对象 `one` 和 `zero`，它们的数据类型为 `dataType`，分别赋值为 `1` 和 `0`。
 
             AT_CUDNN_CHECK_WITH_SHAPES(

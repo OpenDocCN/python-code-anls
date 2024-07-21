@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_reportMemoryUsage_test.cpp`
 
-```
+```py
 #include <ATen/test/reportMemoryUsage.h>  // 包含内存使用报告相关的头文件
 
 #include <gtest/gtest.h>  // 包含 Google 测试框架的头文件

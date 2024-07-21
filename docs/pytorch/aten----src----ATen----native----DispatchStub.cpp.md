@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\DispatchStub.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/DispatchStub.h>
 

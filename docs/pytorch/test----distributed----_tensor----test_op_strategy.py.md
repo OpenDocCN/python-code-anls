@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_op_strategy.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 from itertools import chain  # 导入 chain 函数，用于扁平化多个可迭代对象成单个迭代器

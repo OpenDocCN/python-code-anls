@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\combinatorics.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import random  # 导入随机数模块
 from typing import Dict, Iterator, List, Optional, Sized, Tuple, Type, TypeVar  # 导入类型提示相关模块

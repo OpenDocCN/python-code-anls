@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\parametrizations.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类
 from enum import auto, Enum

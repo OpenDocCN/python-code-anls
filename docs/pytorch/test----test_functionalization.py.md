@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_functionalization.py`
 
-```
+```py
 # Owner(s): ["module: codegen"]
 
 # 导入单元测试模块

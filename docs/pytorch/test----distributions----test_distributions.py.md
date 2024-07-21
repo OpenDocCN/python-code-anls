@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributions\test_distributions.py`
 
-```
+```py
 # Owner(s): ["module: distributions"]
 
 """

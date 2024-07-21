@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fold_conv_bn.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/fold_conv_bn.h>  
 // 包含了实现卷积和批归一化融合的头文件
 

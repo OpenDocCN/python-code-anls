@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\fuse.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和函数
 from torch.fx import (

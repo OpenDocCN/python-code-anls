@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\detail\KernelUtils.h`
 
-```
+```py
 // 防止头文件被多次包含，保证在编译时每个文件只包含一次该头文件
 #pragma once
 

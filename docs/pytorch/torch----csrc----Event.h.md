@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Event.h`
 
-```
+```py
 #ifndef THP_EVENT_INC
 #define THP_EVENT_INC
 

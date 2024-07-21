@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\summarize_perf.py`
 
-```
+```py
 import logging  # 导入日志记录模块
 import os  # 导入操作系统功能模块
 import re  # 导入正则表达式模块

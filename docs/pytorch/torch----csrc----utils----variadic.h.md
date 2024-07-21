@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\variadic.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

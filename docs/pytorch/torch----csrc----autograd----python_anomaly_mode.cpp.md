@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_anomaly_mode.cpp`
 
-```
+```py
 // 包含异常处理、Python绑定等必要头文件
 #include <c10/util/Exception.h>
 #include <pybind11/pybind11.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Generator.h`
 
-```
+```py
 #pragma once
 // 声明了一个预处理指令，指示编译器只包含此头文件一次
 

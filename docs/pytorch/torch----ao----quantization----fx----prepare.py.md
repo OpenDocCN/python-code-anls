@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\prepare.py`
 
-```
+```py
 # 设置 mypy 选项，允许未标注类型的函数定义
 mypy: allow-untyped-defs
 

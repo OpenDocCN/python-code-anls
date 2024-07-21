@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_math_ops.py`
 
-```
+```py
 # 导入必要的模块和类
 import copy  # 导入 copy 模块用于复制对象
 import itertools  # 导入 itertools 模块用于迭代工具

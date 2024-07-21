@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_vendor\packaging\version.py`
 
-```
+```py
 # 导入模块 itertools、re 和类型提示 Any、Callable、NamedTuple、Optional、SupportsInt、Tuple、Union
 import itertools
 import re

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\kernel\bmm.py`
 
-```
+```py
 # 导入必要的模块和库
 # mypy: allow-untyped-defs
 import logging  # 导入日志模块

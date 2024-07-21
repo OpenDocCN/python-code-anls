@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_lazy_ts_backend.pyi`
 
-```
+```py
 # 导入需要的模块和类
 from typing import Any  # 从 typing 模块导入 Any 类型
 

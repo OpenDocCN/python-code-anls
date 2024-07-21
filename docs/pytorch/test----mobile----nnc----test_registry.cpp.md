@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\nnc\test_registry.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/csrc/jit/mobile/nnc/registry.h>  // 引入移动端 NNCompiler 的注册表头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\perfkernels\hp_emblookup_codegen.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入必要的模块

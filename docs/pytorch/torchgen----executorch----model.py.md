@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\model.py`
 
-```
+```py
 # 表示 Executorch 模型使用的所有内核。
 # 维护一个 Dict[OperatorName, Dict[ETKernelKey, BackendMetadata]] 结构。
 

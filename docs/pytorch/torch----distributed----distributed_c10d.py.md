@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\distributed_c10d.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Distributed Collective Communication (c10d)."""
 

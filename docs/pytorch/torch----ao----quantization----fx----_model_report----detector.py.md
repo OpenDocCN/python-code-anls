@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\_model_report\detector.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义
 from typing import Any, Dict, Set, Tuple, Callable, List

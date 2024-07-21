@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\examples\fsdp_checkpoint_example.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

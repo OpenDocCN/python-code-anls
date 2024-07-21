@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\CPUBlas.h`
 
-```
+```py
 #pragma once
 // 声明了一个预处理指令，确保头文件只被编译一次
 

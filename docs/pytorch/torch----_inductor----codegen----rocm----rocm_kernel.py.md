@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\rocm_kernel.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import logging  # 导入日志模块，用于记录程序运行信息
 from typing import Callable, Dict, List, Optional, TYPE_CHECKING, Union  # 导入类型提示相关的模块

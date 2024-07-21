@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\lstm_flattening_result.py`
 
-```
+```py
 # 导入 PyTorch 的 nn 模块中的神经网络定义
 from torch import nn
 # 导入 nn 模块中用于处理压缩序列的工具类 PackedSequence

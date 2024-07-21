@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_remote_call.cpp`
 
-```
+```py
 // 包含头文件：用于远程调用 Python 函数的相关功能
 #include <torch/csrc/distributed/rpc/python_remote_call.h>
 // 包含头文件：用于处理 RPC 代理的相关功能

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_executorch_custom_ops.py`
 
-```
+```py
 from __future__ import annotations
 # 导入未来版本的类型注解功能，用于支持在类型注解中使用字符串形式的类型名称
 

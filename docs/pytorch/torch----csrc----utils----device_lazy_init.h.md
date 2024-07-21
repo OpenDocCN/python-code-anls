@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\device_lazy_init.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/TensorOptions.h>

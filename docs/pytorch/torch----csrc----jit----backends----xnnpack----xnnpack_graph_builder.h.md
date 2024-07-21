@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\xnnpack_graph_builder.h`
 
-```
+```py
 // 声明命名空间和类 XNNGraph，这是一个用于处理 XNN 子图的类
 namespace torch {
 namespace jit {

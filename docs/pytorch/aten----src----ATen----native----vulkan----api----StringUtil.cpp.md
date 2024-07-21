@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\StringUtil.cpp`
 
-```
+```py
 # 定义一个类，表示简单的二维向量
 class Vector2D:
     # 类的初始化方法，接受两个参数作为向量的初始坐标

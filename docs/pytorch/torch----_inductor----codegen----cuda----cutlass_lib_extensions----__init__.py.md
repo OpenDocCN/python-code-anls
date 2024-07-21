@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cutlass_lib_extensions\__init__.py`
 
-```
+```py
 # 导入所需的模块：requests 用于发送 HTTP 请求，BeautifulSoup 用于解析 HTML 内容
 import requests
 from bs4 import BeautifulSoup

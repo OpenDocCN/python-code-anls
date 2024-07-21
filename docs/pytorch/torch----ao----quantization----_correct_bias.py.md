@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\_correct_bias.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 模块
 import torch

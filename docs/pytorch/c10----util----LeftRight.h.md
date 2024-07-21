@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\LeftRight.h`
 
-```
+```py
 // 包含 C10 库中的必要头文件
 #include <c10/macros/Macros.h>
 #include <c10/util/Synchronized.h>

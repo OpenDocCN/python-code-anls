@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\_functions\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作符模块，用于进行 reduce 操作
 import operator

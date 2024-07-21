@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rref_context.cpp`
 
-```
+```py
 // 在torch命名空间中的分布式RPC功能中定义了一些与RRef相关的回调和状态管理。
 
 // 定义一个线程局部变量，用于存储用户状态的表，每个状态是RRefContext::PendingUserState的共享指针的向量。

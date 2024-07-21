@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\valgrind_wrapper\compat_bindings.cpp`
 
-```
+```py
 /* Used to collect profiles of old versions of PyTorch. */
 #include <callgrind.h>  // 包含 Callgrind 工具库的头文件
 #include <pybind11/pybind11.h>  // 包含 Pybind11 库的头文件

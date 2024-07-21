@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_storage_utils.py`
 
-```
+```py
 # 导入所需的模块
 import os
 from typing import List, Type, Union

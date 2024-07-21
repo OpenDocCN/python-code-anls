@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\BinaryOps.cpp`
 
-```
+```py
 // 定义宏以启用仅在方法操作符中使用的Torch断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含ATen库中所需的头文件

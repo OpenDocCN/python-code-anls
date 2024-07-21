@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\sdpa.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 从 inspect 模块中导入 getattr_static 函数

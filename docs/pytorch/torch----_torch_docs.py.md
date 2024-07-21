@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_torch_docs.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Adds docstrings to functions defined in the torch._C module."""
 
@@ -1720,7 +1720,7 @@ def dsplit(input, indices_or_sections):
 # 
 # .. seealso::
 #     :func:`torch.corrcoef` Pearson相关系数矩阵。
-# ```
+# ```py
 # 估算给定输入矩阵的协方差矩阵，其中行是变量，列是观测值。
 # 协方差矩阵是一个方阵，给出每对变量的协方差。对角线包含每个变量的方差（变量与自身的协方差）。
 # 如果输入代表单个变量（标量或1D），则返回其方差。
@@ -7481,7 +7481,7 @@ Keyword args:
         coalescion please use :meth:`coalesce` on the resulting
         Tensor.
         Default: None: except for trivial cases (e.g. nnz < 2) the
-        resulting Tensor has is_coalesced set to ``False```.
+        resulting Tensor has is_coalesced set to ``False```py.
 
 Example::
 

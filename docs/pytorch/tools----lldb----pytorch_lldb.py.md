@@ -1,6 +1,6 @@
 # `.\pytorch\tools\lldb\pytorch_lldb.py`
 
-```
+```py
 from typing import Any
 
 import lldb  # type: ignore[import]

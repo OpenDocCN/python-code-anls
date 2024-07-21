@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_xnnpack_quantizer.py`
 
-```
+```py
 # 导入必要的模块和函数
 import copy  # 导入 copy 模块，用于对象的浅复制和深复制
 import operator  # 导入 operator 模块，包含了一些 Python 的运算符和函数

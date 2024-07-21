@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\serialization\serializer.h`
 
-```
+```py
 // 包含所需的头文件
 #include <torch/csrc/jit/backends/xnnpack/serialization/schema_generated.h>
 #include <cstddef>

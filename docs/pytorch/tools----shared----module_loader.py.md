@@ -1,6 +1,6 @@
 # `.\pytorch\tools\shared\module_loader.py`
 
-```
+```py
 # 从 importlib.abc 模块中导入 Loader 类
 from importlib.abc import Loader
 # 从 types 模块中导入 ModuleType 类

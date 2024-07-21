@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\clear_profiling.h`
 
-```
+```py
 #pragma once
 // 只有当该头文件还没有被包含过时，才会编译它，确保头文件只被包含一次
 

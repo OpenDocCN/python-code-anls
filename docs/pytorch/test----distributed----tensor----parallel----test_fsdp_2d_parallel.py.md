@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_fsdp_2d_parallel.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入所需的库和模块
 import io

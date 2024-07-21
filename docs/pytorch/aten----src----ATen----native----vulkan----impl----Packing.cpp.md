@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\impl\Packing.cpp`
 
-```
+```py
 // 获取将 NCHW 格式转换为图像格式的着色器信息
 api::ShaderInfo get_nchw_to_image_shader(const vTensor& v_dst) {
     // 如果张量是量化的

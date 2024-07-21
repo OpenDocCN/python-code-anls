@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\triton_utils.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入 unittest 模块，用于单元测试

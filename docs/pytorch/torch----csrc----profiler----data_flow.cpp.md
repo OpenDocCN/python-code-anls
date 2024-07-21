@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\data_flow.cpp`
 
-```
+```py
 // 引入 Torch 的性能分析器数据流头文件
 #include <torch/csrc/profiler/data_flow.h>
 

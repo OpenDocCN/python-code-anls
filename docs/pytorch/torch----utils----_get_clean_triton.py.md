@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_get_clean_triton.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数

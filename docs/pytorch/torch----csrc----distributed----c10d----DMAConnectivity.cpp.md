@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\DMAConnectivity.cpp`
 
-```
+```py
 // 定义一个字符串，用于表示检测器的唯一标识符，由设备类型和连接类型组成
 std::string get_detector_key(
     c10::DeviceType device_type,

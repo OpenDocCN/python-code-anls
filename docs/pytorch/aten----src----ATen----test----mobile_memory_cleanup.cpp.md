@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\mobile_memory_cleanup.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/csrc/jit/passes/xnnpack_rewrite.h>  // 引入 XNNPACK 重写相关的头文件

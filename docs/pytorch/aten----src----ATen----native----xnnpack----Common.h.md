@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Common.h`
 
-```
+```py
 #pragma once
 // 如果宏 USE_XNNPACK 被定义，则包含以下头文件
 

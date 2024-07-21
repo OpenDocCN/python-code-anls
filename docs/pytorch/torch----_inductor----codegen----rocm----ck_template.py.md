@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\ck_template.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch._inductor.codegen.rocm.rocm_template 中导入 ROCmTemplate 类

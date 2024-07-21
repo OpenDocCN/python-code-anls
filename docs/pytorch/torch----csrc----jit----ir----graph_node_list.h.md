@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\graph_node_list.h`
 
-```
+```py
     return old;
   }
   generic_graph_node_list_iterator& operator--() {

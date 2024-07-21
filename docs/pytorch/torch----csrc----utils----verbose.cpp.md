@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\verbose.cpp`
 
-```
+```py
 #include <ATen/native/verbose_wrapper.h>
 #include <torch/csrc/utils/pybind.h>
 #include <torch/csrc/utils/verbose.h>

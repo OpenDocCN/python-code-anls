@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_verifier.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/fwd_decls.h>

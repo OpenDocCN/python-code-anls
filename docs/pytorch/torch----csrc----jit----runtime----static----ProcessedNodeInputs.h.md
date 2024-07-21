@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\ProcessedNodeInputs.h`
 
-```
+```py
 /**
  * 指令告诉编译器只包含此头文件一次，即使在多个文件中引用。
  */

@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\proto_wrap.h`
 
-```
+```py
 #ifndef CAFFE2_UTILS_PROTO_WRAP_H_
 #define CAFFE2_UTILS_PROTO_WRAP_H_
 

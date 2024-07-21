@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\nadam.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入NAdam算法的实现
 r"""Implementation for the NAdam algorithm."""

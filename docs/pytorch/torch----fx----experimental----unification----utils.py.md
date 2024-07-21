@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 __all__ = ["hashable", "transitive_get", "raises", "reverse_dict", "xfail", "freeze"]
 # 定义了模块的公共接口，这些函数可以被模块外部导入和使用

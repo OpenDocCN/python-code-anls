@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\benchmarks\tensor_add.cpp`
 
-```
+```py
 // 包含 ATen 库，提供张量操作的支持
 #include <ATen/ATen.h>
 

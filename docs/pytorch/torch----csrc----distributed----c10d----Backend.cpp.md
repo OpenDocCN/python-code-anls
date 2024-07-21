@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Backend.cpp`
 
-```
+```py
 #include <c10/util/Logging.h>
 #include <fmt/format.h>
 #include <torch/csrc/distributed/c10d/Backend.hpp>

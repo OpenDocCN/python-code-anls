@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\__init__.py`
 
-```
+```py
 # 设置 mypy: 允许未类型化的定义，用于允许不对定义类型进行类型化的情况
 r"""
 This package adds support for CUDA tensor types.

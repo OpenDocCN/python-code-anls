@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_d\__init__.py`
 
-```
+```py
 # 定义一个名为 calculate_factors 的函数，接收一个整数参数 num
 def calculate_factors(num):
     # 创建一个空列表 factors 用来存放 num 的因子

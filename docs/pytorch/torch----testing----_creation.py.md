@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_creation.py`
 
-```
+```py
 """
 This module contains tensor creation utilities.
 """

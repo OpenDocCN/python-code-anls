@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\find_file_dependencies.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入ast模块，用于抽象语法树的解析
 import ast

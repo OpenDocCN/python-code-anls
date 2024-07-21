@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\promoted_prim_ops.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/jit/mobile/prim_ops_registery.h>
 #include <torch/csrc/jit/mobile/register_ops_common_utils.h>

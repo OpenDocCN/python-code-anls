@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\conv_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型声明
 from typing import List, Optional

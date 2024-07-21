@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\fake_pg.py`
 
-```
+```py
 # mypy: ignore-errors
 # 导入 torch 分布式模块中的 dist
 import torch.distributed as dist

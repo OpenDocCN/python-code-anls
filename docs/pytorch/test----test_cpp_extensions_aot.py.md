@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cpp_extensions_aot.py`
 
-```
+```py
 # Owner(s): ["module: cpp-extensions"]
 
 # 引入必要的库和模块

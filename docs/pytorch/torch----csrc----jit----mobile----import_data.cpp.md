@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\import_data.cpp`
 
-```
+```py
 /**
  * Including necessary header files for TorchScript mobile module import.
  */

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\config.py`
 
-```
+```py
 # 引入 mypy 模块的配置：允许未类型化的定义
 import torch._C._lazy
 

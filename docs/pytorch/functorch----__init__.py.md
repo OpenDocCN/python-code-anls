@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\__init__.py`
 
-```
+```py
 # 引入 torch 库，用于深度学习操作
 import torch
 

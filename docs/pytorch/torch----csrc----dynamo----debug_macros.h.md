@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\debug_macros.h`
 
-```
+```py
 #pragma once
 // 单次包含头文件防止重复包含
 

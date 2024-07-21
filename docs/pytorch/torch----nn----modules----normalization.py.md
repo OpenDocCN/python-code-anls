@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\normalization.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 numbers 模块，用于类型检查
 import numbers

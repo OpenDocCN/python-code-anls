@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\nested\nested_bmm_bench.py`
 
-```
+```py
 # 导入必要的库 argparse 和 random
 import argparse
 import random

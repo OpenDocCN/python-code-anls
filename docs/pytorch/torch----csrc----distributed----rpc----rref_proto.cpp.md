@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rref_proto.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <torch/csrc/distributed/rpc/rpc_agent.h>
 #include <torch/csrc/distributed/rpc/rref_proto.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\kernel_cache.cpp`
 
-```
+```py
 namespace torch {
 namespace jit {
 namespace fuser {

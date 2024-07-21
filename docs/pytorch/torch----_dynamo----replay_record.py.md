@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\replay_record.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import dataclasses  # 导入用于数据类的模块

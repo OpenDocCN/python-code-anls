@@ -1,6 +1,6 @@
 # `.\pytorch\tools\build_libtorch.py`
 
-```
+```py
 import argparse  # 导入用于解析命令行参数的模块
 import sys  # 导入系统相关的模块
 from os.path import abspath, dirname  # 导入用于处理文件路径的函数

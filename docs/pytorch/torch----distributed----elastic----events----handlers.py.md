@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\events\handlers.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 导入日志模块

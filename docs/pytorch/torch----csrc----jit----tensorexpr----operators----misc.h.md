@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\misc.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/fwd_decls.h>

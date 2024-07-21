@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\jit\templates\__init__.py`
 
-```
+```py
 # 导入 json 模块
 import json
 

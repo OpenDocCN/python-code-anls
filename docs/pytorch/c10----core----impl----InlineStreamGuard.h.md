@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\InlineStreamGuard.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/impl/InlineDeviceGuard.h>

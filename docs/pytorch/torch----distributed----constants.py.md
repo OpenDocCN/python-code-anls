@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\constants.py`
 
-```
+```py
 # 从 datetime 模块导入 timedelta 类型
 from datetime import timedelta
 # 从 typing 模块导入 Optional 类型

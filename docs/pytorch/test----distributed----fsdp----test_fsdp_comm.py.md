@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_comm.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import sys  # 导入系统模块sys，用于与系统交互

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\executor.cpp`
 
-```
+```py
 // 引入Torch相关的头文件，用于执行器功能的实现
 #include <torch/csrc/jit/codegen/fuser/executor.h>
 

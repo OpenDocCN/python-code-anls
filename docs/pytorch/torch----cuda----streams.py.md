@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\streams.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 ctypes 库，用于处理 C 语言类型和函数
 import ctypes

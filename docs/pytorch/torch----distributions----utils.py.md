@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\utils.py`
 
-```
+```py
 # 引入允许未类型化定义的标记，用于类型检查
 # 从 functools 模块导入 update_wrapper 函数，用于更新函数属性
 # 从 numbers 模块导入 Number 类型，用于处理数字类型

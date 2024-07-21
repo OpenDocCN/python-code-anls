@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\type_hashing.cpp`
 
-```
+```py
 #include <torch/c`
 # 包含 Torch JIT 类型哈希算法的头文件
 #include <torch/csrc/jit/ir/type_hashing.h>

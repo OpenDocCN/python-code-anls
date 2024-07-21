@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\impl\Packing.h`
 
-```
+```py
 // 包含 Vulkan API 的头文件
 #include <ATen/native/vulkan/api/api.h>
 

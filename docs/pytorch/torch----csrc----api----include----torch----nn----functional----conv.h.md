@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\conv.h`
 
-```
+```py
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 namespace detail {
 // 定义 padding_unwrap 函数，返回 "valid" 字符串，对应 kValid
@@ -49,7 +49,7 @@ inline Tensor conv1d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv1d(x, weight, F::Conv1dFuncOptions().stride(1));
-/// ```
+/// ```py
 inline Tensor conv1d(
     const Tensor& input,
     const Tensor& weight,
@@ -96,7 +96,7 @@ inline Tensor conv2d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv2d(x, weight, F::Conv2dFuncOptions().stride(1));
-/// ```
+/// ```py
 inline Tensor conv2d(
     const Tensor& input,
     const Tensor& weight,
@@ -164,7 +164,7 @@ inline Tensor conv_transpose2d(
 /// 示例：
 /// ```
 /// namespace F = torch::nn::functional;
-/// ```
+/// ```py
 /// 使用给定的输入张量 `input` 和权重张量 `weight` 进行二维转置卷积操作。
 /// 可选参数可以通过 `ConvTranspose2dFuncOptions` 类进行设置，如步幅（stride）等。
 /// 返回值是转置卷积操作后得到的张量。
@@ -210,7 +210,7 @@ inline Tensor conv_transpose3d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::conv_transpose3d(x, weight, F::ConvTranspose3dFuncOptions().stride(1));
-/// ```
+/// ```py
 inline Tensor conv_transpose3d(
     const Tensor& input,
     const Tensor& weight,

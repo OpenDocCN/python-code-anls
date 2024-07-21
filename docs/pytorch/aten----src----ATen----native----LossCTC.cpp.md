@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\LossCTC.cpp`
 
-```
+```py
 // 版权声明及许可信息
 // 本代码版权归MathInf GmbH, Thomas Viehmann所有，使用BSD-3-Clause许可协议
 // 这是Connectionist Temporal Loss的CPU实现

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\cuda\StaticSort.h`
 
-```
+```py
 #pragma once
 #include <cutlass/cutlass.h>
 

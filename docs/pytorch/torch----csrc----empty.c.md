@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\empty.c`
 
-```
+```py
 # 定义一个名为 parse_csv 的函数，接收一个文件名参数
 def parse_csv(filename):
     # 打开指定文件名的 CSV 文件，以读模式打开，并用 utf-8 编码方式

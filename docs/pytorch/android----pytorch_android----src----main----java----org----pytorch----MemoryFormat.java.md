@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\MemoryFormat.java`
 
-```
+```py
 # 定义一个名为 MemoryFormat 的枚举类型，位于 org.pytorch 包下
 package org.pytorch;
 

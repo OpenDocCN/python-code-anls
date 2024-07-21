@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\random.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的类型声明和模块
 from typing import Iterable, List, Union

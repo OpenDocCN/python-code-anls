@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\qlinear_deserialize.cpp`
 
-```
+```py
 /**
  * @brief Deserialize packed linear weight parameters.
  *

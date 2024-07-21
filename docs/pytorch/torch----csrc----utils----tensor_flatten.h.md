@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_flatten.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>

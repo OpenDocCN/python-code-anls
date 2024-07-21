@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\profiler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入gzip、json、os、shutil、tempfile等标准库
 import gzip

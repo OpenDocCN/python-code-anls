@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ZeroTensorFallback.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 // 包含调度器的头文件

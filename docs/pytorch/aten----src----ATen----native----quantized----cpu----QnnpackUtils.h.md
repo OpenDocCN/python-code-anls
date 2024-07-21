@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\QnnpackUtils.h`
 
-```
+```py
 #pragma once
 // 如果定义了宏 USE_PYTORCH_QNNPACK，则包含以下头文件
 

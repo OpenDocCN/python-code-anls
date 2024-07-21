@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\__init__.py`
 
-```
+```py
 """
 ``torch.autograd`` provides classes and functions implementing automatic differentiation of arbitrary scalar valued functions.
 

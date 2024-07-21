@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\MultinomialKernel.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的 Tensor 类定义

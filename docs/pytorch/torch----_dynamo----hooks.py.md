@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\hooks.py`
 
-```
+```py
 # 导入 dataclasses 模块，用于创建数据类
 import dataclasses
 

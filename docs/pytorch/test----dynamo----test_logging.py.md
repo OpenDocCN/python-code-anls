@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_logging.py`
 
-```
+```py
 # 引入上下文管理模块
 import contextlib
 # 提供对函数进行装饰的工具模块

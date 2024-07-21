@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\computation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch._C._lazy 模块，用于访问底层 C/C++ 函数
 import torch._C._lazy

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_fx_passes.py`
 
-```
+```py
 # 导入必要的库
 from dataclasses import dataclass
 import operator

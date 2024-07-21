@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_top_level_apis.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch  # 导入PyTorch库

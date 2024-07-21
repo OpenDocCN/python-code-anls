@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\types.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 
@@ -40,7 +40,7 @@ namespace torch {
 // namespace members). If there are no declarations in that set then it
 // considers declarations in all namespaces named by using-directives found in N
 // and in all transitive inline namespace members of N.
-// ```
+// ```py
 //
 // This means that if both `at::` and `torch::` namespaces have a function with
 // the same signature (e.g. both `at::func()` and `torch::func()` exist), after

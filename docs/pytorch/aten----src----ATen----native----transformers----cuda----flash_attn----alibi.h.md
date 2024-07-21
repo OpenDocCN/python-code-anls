@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\flash_attn\alibi.h`
 
-```
+```py
 // 包含cmath标准库，提供数学函数支持
 #include <cmath>
 

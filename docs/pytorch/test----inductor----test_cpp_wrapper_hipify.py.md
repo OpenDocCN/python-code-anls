@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cpp_wrapper_hipify.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 引入 PyTorch 库
 import torch

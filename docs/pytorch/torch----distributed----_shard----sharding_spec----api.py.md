@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块，用于高阶函数操作
 import functools

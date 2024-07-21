@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\cpp\pytorch_jni_common.cpp`
 
-```
+```py
 // C++ 头文件包含，包括断言、输入输出流、智能指针、字符串等标准库
 #include <cassert>
 #include <iostream>

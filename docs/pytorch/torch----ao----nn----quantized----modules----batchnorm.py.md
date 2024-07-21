@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\batchnorm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch和PyTorch的AO（自动优化）模块中的intrinsic模块
 import torch

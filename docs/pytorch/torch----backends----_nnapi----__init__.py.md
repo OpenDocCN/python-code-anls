@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\_nnapi\__init__.py`
 
-```
+```py
 # 导入 requests 模块，用于发送 HTTP 请求
 import requests
 

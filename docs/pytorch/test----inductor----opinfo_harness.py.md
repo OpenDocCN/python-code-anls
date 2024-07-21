@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\opinfo_harness.py`
 
-```
+```py
 import os
 import subprocess
 

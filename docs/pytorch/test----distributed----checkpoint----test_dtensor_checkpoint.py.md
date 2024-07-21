@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_dtensor_checkpoint.py`
 
-```
+```py
 # 所有权归["oncall: distributed"]，导入所需的模块和类型注解
 from typing import Dict, Union
 

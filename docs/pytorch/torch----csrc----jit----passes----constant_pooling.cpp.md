@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\constant_pooling.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/constant_pooling.h>
 
 #include <ATen/core/symbol.h>

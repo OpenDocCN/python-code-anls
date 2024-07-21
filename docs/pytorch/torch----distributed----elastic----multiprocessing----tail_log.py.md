@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\tail_log.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

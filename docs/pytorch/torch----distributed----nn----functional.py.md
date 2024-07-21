@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 PyTorch 库
 import torch
@@ -100,7 +100,7 @@ def reduce_scatter(output, input_list, op=ReduceOp.SUM, group=group.WORLD):
 
     ```python
     # Not implemented yet
-    ```
+    ```py
 
     """
     """

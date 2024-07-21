@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_autograd.h`
 
-```
+```py
 #ifndef THP_AUTOGRAD_H
 #define THP_AUTOGRAD_H
 // 定义 THP_AUTOGRAD_H 宏，用于防止头文件的多重包含

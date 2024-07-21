@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_memplanning.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <test/cpp/tensorexpr/test_base.h>
 

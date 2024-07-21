@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_fx_experimental.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入必要的模块和库

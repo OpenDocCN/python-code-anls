@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_trace_rules.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的模块和库

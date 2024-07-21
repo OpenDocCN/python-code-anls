@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\mkldnn_tensor.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本头文件只被编译一次
 

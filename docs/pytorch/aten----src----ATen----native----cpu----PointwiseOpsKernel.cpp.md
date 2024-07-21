@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\PointwiseOpsKernel.cpp`
 
-```
+```py
 // 定义宏，禁用包含运算符的断言
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库的分发机制

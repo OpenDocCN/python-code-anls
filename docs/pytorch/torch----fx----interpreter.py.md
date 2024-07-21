@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\interpreter.py`
 
-```
+```py
 # 导入需要的模块和类
 # mypy: allow-untyped-defs
 from .graph_module import GraphModule                     # 导入 GraphModule 类

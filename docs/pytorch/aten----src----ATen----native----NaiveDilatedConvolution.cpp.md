@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\NaiveDilatedConvolution.cpp`
 
-```
+```py
 // 定义宏，用于在编译时只包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库的核心 Tensor 类和相关头文件

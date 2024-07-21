@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\profiler_edge.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once确保头文件只被编译一次
 

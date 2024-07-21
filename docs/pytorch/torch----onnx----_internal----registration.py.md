@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\registration.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Module for handling symbolic function registration."""
 
@@ -317,7 +317,7 @@ def onnx_symbolic(
     @symbolic_helper.parse_args("v", "v", "b")
     def symbolic_b(g: _C.Graph, x: _C.Value, y: _C.Value, arg1: bool) -> _C.Value:
         ...
-    ```
+    ```py
 
     Args:
         name: The qualified name of the function in the form of 'domain::op'.

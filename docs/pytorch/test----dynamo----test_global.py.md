@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_global.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入 PyTorch 库
 import torch

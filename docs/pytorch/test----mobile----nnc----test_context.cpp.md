@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\nnc\test_context.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <torch/csrc/jit/mobile/nnc/context.h>
 #include <torch/csrc/jit/mobile/nnc/registry.h>

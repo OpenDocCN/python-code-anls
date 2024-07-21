@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cudnn\Handles.h`
 
-```
+```py
 #pragma once
 #include <ATen/cudnn/Handle.h>
 

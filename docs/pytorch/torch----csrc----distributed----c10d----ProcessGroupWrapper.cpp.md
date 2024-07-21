@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupWrapper.cpp`
 
-```
+```py
 #ifdef USE_C10D_GLOO
 // 包含必要的头文件
 #include <c10/core/Allocator.h>

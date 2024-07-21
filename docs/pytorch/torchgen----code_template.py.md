@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\code_template.py`
 
-```
+```py
 from __future__ import annotations
 
 import re

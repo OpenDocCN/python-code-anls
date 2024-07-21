@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_nccl.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的模块

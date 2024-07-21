@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import abc  # 引入抽象基类模块

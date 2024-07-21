@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\hip\impl\HIPCachingAllocatorMasqueradingAsCUDA.cpp`
 
-```
+```py
 // 包含 C10 核心的内存分配器头文件
 #include <c10/core/Allocator.h>
 // 包含用于 HIP 的 HIPCachingAllocatorMasqueradingAsCUDA 的具体实现头文件

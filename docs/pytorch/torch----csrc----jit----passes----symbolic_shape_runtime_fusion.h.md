@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\symbolic_shape_runtime_fusion.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只包含一次
 

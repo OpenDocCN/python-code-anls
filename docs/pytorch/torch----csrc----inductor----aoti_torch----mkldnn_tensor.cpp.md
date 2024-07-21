@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\mkldnn_tensor.cpp`
 
-```
+```py
 // 包含 ATen 库的配置文件
 #include <ATen/Config.h>
 // 包含 MKLDNN 引擎的张量头文件

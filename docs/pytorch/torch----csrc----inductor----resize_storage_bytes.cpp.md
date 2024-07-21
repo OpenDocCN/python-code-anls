@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\resize_storage_bytes.cpp`
 
-```
+```py
 // 引入 Torch 库的头文件
 #include <torch/library.h>
 

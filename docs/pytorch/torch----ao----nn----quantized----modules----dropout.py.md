@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\dropout.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\agent\server\health_check_server.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # Copyright (c) Facebook, Inc. and its affiliates.

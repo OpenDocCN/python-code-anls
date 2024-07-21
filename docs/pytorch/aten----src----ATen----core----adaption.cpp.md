@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\adaption.cpp`
 
-```
+```py
 #include <ATen/core/op_registration/adaption.h>
 
 // 进入 c10::impl 命名空间

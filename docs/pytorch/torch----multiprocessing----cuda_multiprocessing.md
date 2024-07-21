@@ -4,7 +4,7 @@ Since shared CUDA memory belongs to the producer process, we need to take specia
 
 It could be done manually by syncing on an event:
 
-```python
+```py
 # Producer
 queue.put(tensor)
 event.wait()

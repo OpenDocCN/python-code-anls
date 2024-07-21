@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_mkldnn_fusion.py`
 
-```
+```py
 # 导入必要的模块和类
 # Owner(s): ["module: mkldnn"]
 import itertools  # 导入 itertools 模块，用于迭代操作

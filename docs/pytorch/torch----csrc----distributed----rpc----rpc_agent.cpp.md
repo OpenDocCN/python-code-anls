@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rpc_agent.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <c10/util/DeadlockDetection.h>
 #include <torch/csrc/distributed/rpc/rpc_agent.h>

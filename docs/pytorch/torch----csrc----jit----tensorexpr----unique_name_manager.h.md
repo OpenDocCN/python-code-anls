@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\unique_name_manager.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保此头文件只被包含一次
 

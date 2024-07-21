@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\UndefinedTensorImpl.h`
 
-```
+```py
 ```cpp`
 #pragma once
 // 使用 #pragma once 确保头文件只被编译一次，避免重复包含

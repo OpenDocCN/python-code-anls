@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\interpreter\code_impl.h`
 
-```
+```py
 #pragma once
 
 #include <memory>  // 包含内存管理相关的头文件

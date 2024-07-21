@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\script_resp.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被包含一次，以避免重复定义错误
 

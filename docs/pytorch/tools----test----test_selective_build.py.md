@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_selective_build.py`
 
-```
+```py
 import unittest  # 导入unittest模块，用于编写和运行测试用例
 
 from torchgen.model import Location, NativeFunction  # 导入torchgen库中的Location和NativeFunction类

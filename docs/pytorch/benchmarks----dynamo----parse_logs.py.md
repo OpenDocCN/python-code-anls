@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\parse_logs.py`
 
-```
+```py
 import csv  # 导入CSV模块，用于操作CSV文件
 import os   # 导入os模块，提供了一些与操作系统相关的功能
 import re   # 导入re模块，用于正则表达式操作

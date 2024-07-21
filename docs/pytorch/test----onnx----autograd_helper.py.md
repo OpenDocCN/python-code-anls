@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\autograd_helper.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 # 导入 PyTorch 库
 import torch

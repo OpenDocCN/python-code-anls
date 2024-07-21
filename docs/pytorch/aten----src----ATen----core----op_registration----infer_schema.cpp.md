@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\infer_schema.cpp`
 
-```
+```py
 namespace c10 {
 
 namespace detail {

@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cuda_cpp_wrapper.py`
 
-```
+```py
 # 导入系统、单元测试和类型提示的命名元组
 import sys
 import unittest

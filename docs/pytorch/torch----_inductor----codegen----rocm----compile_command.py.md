@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\compile_command.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块和操作系统模块
 import logging

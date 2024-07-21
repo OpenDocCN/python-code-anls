@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\serialize\input-archive.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Device.h>

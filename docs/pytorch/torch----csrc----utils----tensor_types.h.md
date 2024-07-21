@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_types.h`
 
-```
+```py
 #pragma once
 
 #pragma once 是预处理器指令，确保当前头文件只被编译一次，以防止多重包含。

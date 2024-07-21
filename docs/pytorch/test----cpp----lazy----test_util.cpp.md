@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_util.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 框架的头文件
 
 #include <exception> // 包含异常处理相关的头文件

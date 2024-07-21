@@ -1,6 +1,6 @@
 # `.\pytorch\torch\lib\libshm\alloc_info.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 防止多次包含同一个头文件
 

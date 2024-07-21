@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\OpaqueTensorImpl.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/MemoryFormat.h>

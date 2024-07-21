@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\transforms\collate.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/example.h>

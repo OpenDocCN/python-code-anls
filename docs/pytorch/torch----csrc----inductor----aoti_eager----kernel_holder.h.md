@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_eager\kernel_holder.h`
 
-```
+```py
 #if !defined(C10_MOBILE) && !defined(ANDROID)
 // 如果未定义 C10_MOBILE 和 ANDROID，则执行以下代码
 

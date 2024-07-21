@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\xnnpack_quantizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 

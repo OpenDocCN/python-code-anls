@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\oss\__init__.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import sys

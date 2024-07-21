@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_dependencies.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 import contextlib  # 导入上下文管理模块
 

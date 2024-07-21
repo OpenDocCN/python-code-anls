@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\rocm_cpp_scheduling.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging

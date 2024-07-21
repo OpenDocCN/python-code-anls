@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_spmd\test_transformation.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入单元测试框架

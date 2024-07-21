@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\PeerToPeerAccess.h`
 
-```
+```py
 #include <c10/macros/Macros.h>
 // 包含了 c10 库的宏定义和宏函数，用于 CUDA 相关操作
 

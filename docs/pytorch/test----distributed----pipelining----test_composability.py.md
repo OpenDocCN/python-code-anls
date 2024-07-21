@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_composability.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # Owner(s): ["oncall: distributed"]
 

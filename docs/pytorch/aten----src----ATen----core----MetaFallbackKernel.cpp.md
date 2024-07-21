@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\MetaFallbackKernel.cpp`
 
-```
+```py
 // 包含头文件，定义了 ATen 核心的调度器 Dispatcher 和 PyInterpreter 类
 #include <ATen/core/dispatch/Dispatcher.h>
 #include <c10/core/impl/PyInterpreter.h>

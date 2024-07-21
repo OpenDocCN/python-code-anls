@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\named_tup.py`
 
-```
+```py
 # 导入 NamedTuple 类型定义
 from typing import NamedTuple
 # 导入 PyTorch 库

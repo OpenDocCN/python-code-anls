@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\WeightNormKernel.cpp`
 
-```
+```py
 // 定义宏，禁用Torch的运算符断言功能
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含ATen库中的TensorBase头文件

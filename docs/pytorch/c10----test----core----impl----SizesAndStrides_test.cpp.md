@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\impl\SizesAndStrides_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <c10/core/impl/SizesAndStrides.h>  // 引入 SizesAndStrides 类的头文件

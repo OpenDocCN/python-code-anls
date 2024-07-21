@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\IdWrapper.h`
 
-```
+```py
 #pragma once
 
 #include <cstddef>

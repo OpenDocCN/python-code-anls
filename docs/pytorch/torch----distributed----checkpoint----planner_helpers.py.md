@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\planner_helpers.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数，包括类型定义和类型转换函数
 from typing import Any, cast, List

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\standalone\privateuse1_observer.cpp`
 
-```
+```py
 #include <torch/csrc/profiler/standalone/privateuse1_observer.h>
 // 包含私有使用1观察者的头文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\generated\__init__.py`
 
-```
+```py
 # 导入所需的模块 BytesIO 和 zipfile
 from io import BytesIO
 import zipfile

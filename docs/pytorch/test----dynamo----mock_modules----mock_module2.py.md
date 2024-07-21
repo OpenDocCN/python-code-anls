@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\mock_modules\mock_module2.py`
 
-```
+```py
 # 导入 torch 库，用于在代码中使用 PyTorch 相关功能
 import torch
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\mobile\CPUProfilingAllocator.cpp`
 
-```
+```py
 namespace c10 {
 
 namespace {

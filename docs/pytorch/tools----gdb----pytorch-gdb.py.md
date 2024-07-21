@@ -1,6 +1,6 @@
 # `.\pytorch\tools\gdb\pytorch-gdb.py`
 
-```
+```py
 import textwrap  # 导入textwrap模块，用于处理字符串的格式化显示
 from typing import Any  # 导入Any类型，用于支持任意类型的数据
 

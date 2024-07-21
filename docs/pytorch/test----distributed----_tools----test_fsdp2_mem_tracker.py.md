@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tools\test_fsdp2_mem_tracker.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 # 导入 functools 模块，用于高阶函数支持
 import functools

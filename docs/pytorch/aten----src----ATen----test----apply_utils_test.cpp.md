@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\apply_utils_test.cpp`
 
-```
+```py
 // 包含 Google Test 的头文件
 #include <gtest/gtest.h>
 

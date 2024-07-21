@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qinstancenorm_test.py`
 
-```
+```py
 # 导入名为 operator_benchmark 的模块，作为 op_bench 别名引入
 import operator_benchmark as op_bench
 # 导入 PyTorch 库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_new.h`
 
-```
+```py
 // 一次性预处理指令，确保头文件只被包含一次
 #pragma once
 

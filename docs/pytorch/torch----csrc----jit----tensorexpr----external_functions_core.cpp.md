@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\external_functions_core.cpp`
 
-```
+```py
 #include <torch/csrc/jit/tensorexpr/external_functions_core.h>
 // 包含外部函数核心头文件
 

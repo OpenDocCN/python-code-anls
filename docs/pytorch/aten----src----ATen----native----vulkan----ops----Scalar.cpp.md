@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Scalar.cpp`
 
-```
+```py
 // 包含 Vulkan 操作中通用头文件 Common.h
 #include <ATen/native/vulkan/ops/Common.h>
 

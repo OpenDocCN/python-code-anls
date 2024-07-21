@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mkl\Exceptions.h`
 
-```
+```py
 #pragma once
 
 #include <string>                               // 包含标准字符串库

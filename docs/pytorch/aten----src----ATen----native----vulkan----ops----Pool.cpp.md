@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Pool.cpp`
 
-```
+```py
 // 引入 ATen 库的池化相关头文件
 #include <ATen/native/Pool.h>
 // 引入 ATen Vulkan 操作的通用头文件

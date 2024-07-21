@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\LlgaTensorImpl.cpp`
 
-```
+```py
 // 包含 ATen 配置文件
 #include <ATen/Config.h>
 

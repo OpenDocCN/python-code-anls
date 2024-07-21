@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalCommandBuffer.h`
 
-```
+```py
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
 # 导入 MetalPerformanceShaders 框架，这是一个使用 Metal 进行图像处理和机器学习加速的框架。

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\optim\test_apply_optimizer_in_backward.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 # 从标准库中导入深拷贝函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\package_importer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入标准库模块和第三方库模块
 import builtins

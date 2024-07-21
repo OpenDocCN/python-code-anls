@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cudnn\BinaryOps.cpp`
 
-```
+```py
 #ifdef USE_CUDA
 // 如果定义了 USE_CUDA，则包含 AT_CUDNN_ENABLED 的定义
 #include <ATen/cuda/CUDAConfig.h>  // for the definition of AT_CUDNN_ENABLED

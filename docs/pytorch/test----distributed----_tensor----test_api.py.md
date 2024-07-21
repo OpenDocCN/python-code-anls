@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_api.py`
 
-```
+```py
     @with_comms
     def test_distribute_tensor(self):
         # 创建一个设备网格对象，指定设备类型和参与的设备列表

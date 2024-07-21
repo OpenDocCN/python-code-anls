@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\threadpool\thread_pool_guard.h`
 
-```
+```py
 // 防止头文件被多次包含，仅在第一次包含时有效
 #pragma once
 

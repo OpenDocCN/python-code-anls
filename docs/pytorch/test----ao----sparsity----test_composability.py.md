@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_composability.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入必要的库

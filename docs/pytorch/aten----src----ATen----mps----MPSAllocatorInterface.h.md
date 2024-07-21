@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSAllocatorInterface.h`
 
-```
+```py
 //  Copyright © 2023 Apple Inc.  // 版权声明，指明此文件的版权信息
 
 #pragma once  // 预处理器指令，确保本文件只被编译一次

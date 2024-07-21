@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\compile_tests\update_failures.py`
 
-```
+```py
     # 解析命令行参数并执行相应操作的脚本
     filename, test_dir, unexpected_successes, new_xfails, new_skips, unexpected_skips = (
         # 初始化输出文件的目录

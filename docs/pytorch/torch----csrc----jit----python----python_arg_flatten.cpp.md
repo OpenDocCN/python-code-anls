@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_arg_flatten.cpp`
 
-```
+```py
 // 包含 C++ 头文件：c10/util/irange.h、torch/csrc/jit/python/python_arg_flatten.h、torch/csrc/utils/python_strings.h、torch/csrc/utils/six.h
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/python/python_arg_flatten.h>

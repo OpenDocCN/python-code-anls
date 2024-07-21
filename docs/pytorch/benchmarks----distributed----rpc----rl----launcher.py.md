@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\rl\launcher.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\structseq.cpp`
 
-```
+```py
 /*
  * 该文件的版权归 Python 软件基金会所有
  *

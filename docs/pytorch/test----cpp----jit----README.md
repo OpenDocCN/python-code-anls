@@ -9,7 +9,7 @@ In general a single test suite
 Add your test file to the `JIT_TEST_SRCS` list in `test/cpp/jit/CMakeLists.txt`.
 
 A test file may look like:
-```cpp
+```py
 #include <gtest/gtest.h>
 
 using namespace ::torch::jit
@@ -34,7 +34,7 @@ TEST(FooTest, NeedsMultipleGpus_MultiCUDA) {
 ## Building and running the tests
 The following commands assume you are in PyTorch root.
 
-```bash
+```py
 # ... Build PyTorch from source, e.g.
 python setup.py develop
 # (re)build just the binary

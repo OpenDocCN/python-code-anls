@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\ShaderRegistry.h`
 
-```
+```py
 #pragma once
 
 // @lint-ignore-every CLANGTIDY facebook-hte-BadMemberName

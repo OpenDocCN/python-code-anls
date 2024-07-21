@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\module.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/module.h>
 
 #include <torch/csrc/jit/backends/backend_exception.h>

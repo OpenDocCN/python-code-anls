@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\post_localSGD_hook.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging

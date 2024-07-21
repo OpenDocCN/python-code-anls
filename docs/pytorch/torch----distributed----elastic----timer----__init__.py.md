@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\timer\__init__.py`
 
-```
+```py
 """
 Expiration timers are set up on the same process as the agent and
 used from your script to deal with stuck workers. When you go into

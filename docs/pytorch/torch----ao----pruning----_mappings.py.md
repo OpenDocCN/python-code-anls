@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_mappings.py`
 
-```
+```py
 # 设置模块级别变量 __all__，指定了可以被导出的符号列表
 __all__ = [
     "get_static_sparse_quantized_mapping",

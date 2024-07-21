@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\serialize.cpp`
 
-```
+```py
 # 包含 Torch 序列化模块中的 pickle 相关头文件
 #include <torch/csrc/jit/serialization/pickle.h>
 #include <torch/csrc/jit/serialization/pickler.h>

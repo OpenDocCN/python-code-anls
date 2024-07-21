@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\LossCTC.cpp`
 
-```
+```py
 namespace at {
 namespace native {
 

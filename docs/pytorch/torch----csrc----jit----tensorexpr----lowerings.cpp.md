@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\lowerings.cpp`
 
-```
+```py
 #include <torch/csrc/jit/frontend/function_schema_parser.h>
 #include <torch/csrc/jit/tensorexpr/ir_simplifier.h>
 #include <torch/csrc/jit/tensorexpr/lowerings.h>

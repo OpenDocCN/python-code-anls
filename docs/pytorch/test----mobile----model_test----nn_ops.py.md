@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\nn_ops.py`
 
-```
+```py
 # 引入 PyTorch 库
 import torch
 import torch.nn as nn

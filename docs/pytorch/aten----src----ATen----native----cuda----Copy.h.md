@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Copy.h`
 
-```
+```py
 #pragma once
 
 # 指令：#pragma once，确保头文件只被编译一次，避免重复包含

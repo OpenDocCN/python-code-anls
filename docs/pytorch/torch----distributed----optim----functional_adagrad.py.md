@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\functional_adagrad.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的类型注解
 from typing import Dict, List, Optional

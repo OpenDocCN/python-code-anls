@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\utils.cpp`
 
-```
+```py
 // 包含 ATen 库的线程本地状态头文件
 #include <ATen/ThreadLocalState.h>
 // 包含 C10 工具库的线程本地调试信息头文件

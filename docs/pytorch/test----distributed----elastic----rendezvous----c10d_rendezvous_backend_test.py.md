@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\c10d_rendezvous_backend_test.py`
 
-```
+```py
 # 导入必要的库和模块
 import os  # 导入操作系统接口模块
 import tempfile  # 导入临时文件模块

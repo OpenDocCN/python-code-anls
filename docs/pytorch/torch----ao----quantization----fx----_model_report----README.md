@@ -19,7 +19,7 @@ ModelReport
 
 This snippet should be ready to copy, paste, and use with the exception of a few small parts denoted in `#TODO` comments
 
-```python
+```py
 # prep model
 qconfig_mapping = torch.ao.quantization.get_default_qconfig_mapping()
 model = Model() # TODO define model
@@ -74,7 +74,7 @@ call `model_report.generate_visualizer()`.
 When you first create the `ModelReportVisualizer` instance,
 it reorganizes the reports so instead of being in a:
 
-```
+```py
 report_name
 |
 -- module_fqn
@@ -85,7 +85,7 @@ report_name
 ```
 
 format, it will instead be in a:
-```
+```py
 -- module_fqn [ordered]
    |
    -- feature_name
@@ -122,7 +122,7 @@ All Detectors inherit from the `DetectorBase` class, and all of them (including 
 - `determine_observer_insert_points(self, model)` -> `Dict`: determines which observers you want to insert into a model to gather statistics and where in the model.
 All of them return a dictionary mapping unique observer fully qualified names (fqns), which is where we want to insert them, to a dictionary of location and argument information in the format:
 
-```python
+```py
 return_dict = {
     "[unique_observer_fqn_of_insert_location]" :
     {

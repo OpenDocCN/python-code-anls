@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\_ops\__init__.py`
 
-```
+```py
 # 导入需要的模块或函数
 
 # 导入 torch 分布式 sharded_tensor 模块下的 misc_ops 子模块

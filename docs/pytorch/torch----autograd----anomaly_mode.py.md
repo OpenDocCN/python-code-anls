@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\anomaly_mode.py`
 
-```
+```py
 # 设置 mypy 来允许未类型化的定义
 r"""Autograd anomaly mode."""  # 模块的文档字符串，描述此模块的用途
 

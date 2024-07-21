@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\HashStore.hpp`
 
-```
+```py
 #pragma once
 
 #include <condition_variable>  // 引入条件变量库，用于多线程同步

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\constrain_as_value_example.py`
 
-```
+```py
 # 引入torch模块
 import torch
 

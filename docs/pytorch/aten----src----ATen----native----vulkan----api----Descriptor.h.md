@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Descriptor.h`
 
-```
+```py
 #pragma once
 // 一旦此头文件被包含，忽略 lint 工具 CLANGTIDY 的 facebook-hte-BadMemberName 错误
 

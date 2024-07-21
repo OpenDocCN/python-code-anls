@@ -1,6 +1,6 @@
 # `.\pytorch\test\pytest_shard_custom.py`
 
-```
+```py
 """
 Custom pytest shard plugin
 https://github.com/AdamGleave/pytest-shard/blob/64610a08dac6b0511b6d51cf895d0e1040d162ad/pytest_shard/pytest_shard.py#L1

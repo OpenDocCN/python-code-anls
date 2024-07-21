@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\Half_test.cpp`
 
-```
+```py
 namespace {
 
 // 将半精度浮点数的二进制表示转换为单精度浮点数

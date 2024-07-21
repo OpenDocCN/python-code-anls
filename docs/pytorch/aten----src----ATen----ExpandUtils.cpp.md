@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ExpandUtils.cpp`
 
-```
+```py
 // 定义宏以便于在编译时仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库中的扩展相关头文件

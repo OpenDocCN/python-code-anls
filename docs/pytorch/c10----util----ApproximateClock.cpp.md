@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ApproximateClock.cpp`
 
-```
+```py
 // 包含所需的头文件
 #include <c10/util/ApproximateClock.h>
 #include <c10/util/ArrayRef.h>

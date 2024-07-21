@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\bounds_inference.cpp`
 
-```
+```py
 // 引入 Torch Tensor Expression 库中的头文件
 #include <torch/csrc/jit/tensorexpr/bounds_inference.h>
 

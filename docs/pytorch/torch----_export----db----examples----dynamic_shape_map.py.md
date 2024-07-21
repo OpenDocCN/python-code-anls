@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dynamic_shape_map.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 

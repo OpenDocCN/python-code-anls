@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\faulty_agent_rpc_test.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入PyTorch库
 import torch

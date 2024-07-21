@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\shared.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/datasets/base.h>  // 引入 Torch 数据集基础库

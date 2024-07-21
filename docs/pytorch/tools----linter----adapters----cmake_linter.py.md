@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\cmake_linter.py`
 
-```
+```py
 from __future__ import annotations
 
 import argparse  # 导入用于解析命令行参数的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Load.h`
 
-```
+```py
 #pragma once
 // 包含 C10 库的宏定义和标准库的字符串操作头文件
 #include <c10/macros/Macros.h>

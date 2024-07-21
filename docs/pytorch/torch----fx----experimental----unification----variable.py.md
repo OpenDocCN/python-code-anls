@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\variable.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入上下文管理器模块
 from contextlib import contextmanager

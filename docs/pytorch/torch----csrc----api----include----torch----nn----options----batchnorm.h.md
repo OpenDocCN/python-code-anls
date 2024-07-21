@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\batchnorm.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -43,7 +43,7 @@ struct TORCH_API BatchNormOptions {
 /// ```
 /// BatchNorm1d
 /// model(BatchNorm1dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 using BatchNorm1dOptions = BatchNormOptions;
 
 /// Options for the `BatchNorm2d` module.
@@ -52,7 +52,7 @@ using BatchNorm1dOptions = BatchNormOptions;
 /// ```
 /// BatchNorm2d
 /// model(BatchNorm2dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 using BatchNorm2dOptions = BatchNormOptions;
 
 /// Options for the `BatchNorm3d` module.
@@ -61,7 +61,7 @@ using BatchNorm2dOptions = BatchNormOptions;
 /// ```
 /// BatchNorm3d
 /// model(BatchNorm3dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
-/// ```
+/// ```py
 using BatchNorm3dOptions = BatchNormOptions;
 
 // ============================================================================
@@ -75,7 +75,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::batch_norm(input, mean, variance,
 /// F::BatchNormFuncOptions().weight(weight).bias(bias).momentum(0.1).eps(1e-05).training(false));
-/// ```
+/// ```py
 struct TORCH_API BatchNormFuncOptions {
   /// Optional parameter: weight tensor for affine transformation.
   TORCH_ARG(Tensor, weight) = Tensor();

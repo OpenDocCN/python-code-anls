@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\throughput_benchmark-inl.h`
 
-```
+```py
 // 预处理指令，指示编译器只包含本头文件一次
 #pragma once
 

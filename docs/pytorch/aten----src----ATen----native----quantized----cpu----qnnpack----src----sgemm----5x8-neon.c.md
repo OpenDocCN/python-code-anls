@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\sgemm\5x8-neon.c`
 
-```
+```py
 /*
  * 包含头文件 arm_neon.h，这是 ARM 平台的 NEON 向量指令库
  */

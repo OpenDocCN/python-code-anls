@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_alias_analysis.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入 torch 库

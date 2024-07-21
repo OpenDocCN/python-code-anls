@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\PaddingKernel.cpp`
 
-```
+```py
 // 定义宏，仅在 Torch 的断言方法操作器中启用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\jit.cpp`
 
-```
+```py
 // 包含 Google Test 的头文件，用于单元测试
 #include <gtest/gtest.h>
 

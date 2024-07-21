@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_fx_to_onnx.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 from __future__ import annotations  # 允许使用注解类型的未来特性
 

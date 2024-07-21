@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\kl.py`
 
-```
+```py
 # 设置 mypy 参数允许未声明的函数
 mypy: allow-untyped-defs
 # 导入数学模块

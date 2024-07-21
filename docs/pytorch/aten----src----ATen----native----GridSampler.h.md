@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\GridSampler.h`
 
-```
+```py
 // 预处理指令，指示编译器只包含此头文件一次
 #pragma once
 

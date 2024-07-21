@@ -1,6 +1,6 @@
 # `.\pytorch\torch\amp\grad_scaler.py`
 
-```
+```py
 # 允许未标注的函数类型
 # 从未来导入的__future__模块，使得当前代码支持对类型注解的处理
 from __future__ import annotations

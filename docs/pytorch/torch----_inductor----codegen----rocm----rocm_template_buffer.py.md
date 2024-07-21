@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\rocm\rocm_template_buffer.py`
 
-```
+```py
 # 导入必要的模块，允许未类型化的定义
 # mypy: allow-untyped-defs
 from ...ir import TemplateBuffer

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import atexit  # 用于注册退出函数的模块

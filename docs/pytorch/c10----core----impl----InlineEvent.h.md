@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\InlineEvent.h`
 
-```
+```py
 #pragma once
 // 只允许本头文件被包含一次
 

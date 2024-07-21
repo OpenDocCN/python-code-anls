@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ReduceAllOps.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/native/ReduceAllOps.h>
 #include <ATen/native/Resize.h>

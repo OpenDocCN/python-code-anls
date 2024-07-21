@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8avgpool\up8xm-neon.c`
 
-```
+```py
 /*
  * 版权声明和许可声明
  * 本源代码使用BSD风格许可证，详见根目录下的LICENSE文件

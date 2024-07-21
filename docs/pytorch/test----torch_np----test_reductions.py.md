@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_reductions.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 引入必要的库和模块
 from unittest import skipIf, SkipTest  # 引入跳过测试相关的异常类和装饰器

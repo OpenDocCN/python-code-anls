@@ -1,6 +1,6 @@
 # `.\pytorch\torch\sparse\__init__.py`
 
-```
+```py
 # 指定不允许未类型化的函数定义
 # 该模块由 python_tensor.cpp 添加了 Tensor 类
 from typing import Optional, Tuple, List, Union, Any

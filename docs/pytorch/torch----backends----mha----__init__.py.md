@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\mha\__init__.py`
 
-```
+```py
 # 导入 torch 模块，用于配置是否启用 C++ 内核来加速 nn.functional.MHA 和 nn.TransformerEncoder
 import torch
 

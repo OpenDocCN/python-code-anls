@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharding_plan\test_sharding_plan.py`
 
-```
+```py
 # 导入系统模块
 import sys
 

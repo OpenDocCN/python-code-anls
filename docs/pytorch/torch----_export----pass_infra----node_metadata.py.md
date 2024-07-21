@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\pass_infra\node_metadata.py`
 
-```
+```py
 # 导入必要的类型定义模块
 from typing import Any, Dict, Set
 

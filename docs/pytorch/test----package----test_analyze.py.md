@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_analyze.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入PyTorch库

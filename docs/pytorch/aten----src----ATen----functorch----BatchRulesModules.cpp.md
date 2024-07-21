@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesModules.cpp`
 
-```
+```py
 // 包含 ATen 函数的头文件，用于张量操作
 // 包含 Functorch 库的辅助函数和帮助类
 // 包含调度器的头文件，用于分发函数调用

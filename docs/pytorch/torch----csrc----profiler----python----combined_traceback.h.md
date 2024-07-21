@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\python\combined_traceback.h`
 
-```
+```py
 #include <torch/csrc/profiler/combined_traceback.h>
 // 引入包含 Torch 的 Combined Traceback 实现的头文件
 

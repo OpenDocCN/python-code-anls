@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\QuantizedLinear.cpp`
 
-```
+```py
 // 定义编译选项，仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\symbolic_shape_registry.h`
 
-```
+```py
 /*
 #pragma once
 // This file is temporary until native_functions.yaml and derivatives.yaml are

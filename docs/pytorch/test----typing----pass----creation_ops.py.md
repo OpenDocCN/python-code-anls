@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\pass\creation_ops.py`
 
-```
+```py
 # mypy: disable-error-code="possibly-undefined"
 # flake8: noqa
 # 引入类型断言模块，用于类型检查

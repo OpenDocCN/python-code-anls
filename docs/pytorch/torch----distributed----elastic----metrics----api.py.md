@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\metrics\api.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

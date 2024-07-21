@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\_ops\tensor_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的库和模块
 import copy

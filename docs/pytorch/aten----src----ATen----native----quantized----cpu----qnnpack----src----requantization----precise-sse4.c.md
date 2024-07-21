@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\requantization\precise-sse4.c`
 
-```
+```py
 /*
  * 精确重新量化函数，基于 SSE4 指令集
  * 

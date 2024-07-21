@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\LegacyVmapTransforms.h`
 
-```
+```py
 // 版权声明和许可信息，指出该源代码受BSD风格许可证保护，许可证文件位于根目录的LICENSE文件中
 // 声明本文件为functorch库中已废弃的批处理规则API，建议使用新的批处理规则API（参见writing_batch_rules.md）
 

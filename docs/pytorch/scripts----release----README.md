@@ -27,23 +27,23 @@ checked out)
 `PACKAGE_TYPE` and `PACKAGE_NAME` can be swapped out to promote other packages.
 
 #### Promoting pytorch wheels
-```bash
+```py
 promote/s3_to_s3.sh
 ```
 
 #### Promoting libtorch archives
-```bash
+```py
 PACKAGE_TYPE=libtorch PACKAGE_NAME=libtorch promote/s3_to_s3.sh
 ```
 
 #### Promoting conda packages
-```bash
+```py
 promote/conda_to_conda.sh
 ```
 
 #### Promoting wheels to PyPI
 **WARNING**: These can only be run once and cannot be undone, run with caution
-```
+```py
 promote/wheel_to_pypi.sh
 ```
 
@@ -55,6 +55,6 @@ can be restored to the test channels with the `restore-backup.sh` script.
 Which backup to restore from is dictated by the `RESTORE_FROM` environment variable.
 
 ### Usage
-```bash
+```py
 RESTORE_FROM=v1.5.0-rc5 ./restore-backup.sh
 ```

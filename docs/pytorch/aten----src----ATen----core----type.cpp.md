@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\type.cpp`
 
-```
+```py
 // 包含 ATen 库中所需的头文件
 #include <ATen/core/Dict.h>
 #include <ATen/core/Tensor.h>

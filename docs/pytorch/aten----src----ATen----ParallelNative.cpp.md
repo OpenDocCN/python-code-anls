@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ParallelNative.cpp`
 
-```
+```py
 // 包含 ATen 库的配置文件
 #include <ATen/Config.h>
 

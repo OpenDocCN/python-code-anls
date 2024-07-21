@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\functional.h`
 
-```
+```py
 #pragma once
 
 #include <vector>

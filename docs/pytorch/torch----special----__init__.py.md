@@ -1,6 +1,6 @@
 # `.\pytorch\torch\special\__init__.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 _add_docstr 和 _special，这两个是在 torch._C 模块中定义的，类型提示为 ignore[attr-defined]

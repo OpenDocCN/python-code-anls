@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\graph_iterator.h`
 
-```
+```py
     // 包含 Torch IR 的头文件
     #include <torch/csrc/jit/ir/ir.h>
 

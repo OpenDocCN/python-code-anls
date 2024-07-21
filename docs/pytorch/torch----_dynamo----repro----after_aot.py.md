@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\repro\after_aot.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块
 import argparse  # 解析命令行参数

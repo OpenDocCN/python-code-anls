@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\xpu\Stream.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_ops_utils.h`
 
-```
+```py
 #pragma once
 
 // 包含 ATen 库的上下文头文件

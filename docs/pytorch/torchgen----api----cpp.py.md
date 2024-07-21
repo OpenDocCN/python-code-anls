@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\cpp.py`
 
-```
+```py
 # 引入将来版本中的注释特性，使得该文件中可以使用类似于`annotations`的新特性
 from __future__ import annotations
 

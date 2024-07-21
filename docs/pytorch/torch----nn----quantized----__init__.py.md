@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\__init__.py`
 
-```
+```py
 # 导入动态模块，禁止检查 F403
 from . import dynamic  # noqa: F403
 

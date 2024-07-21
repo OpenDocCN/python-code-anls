@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\eval_frame.c`
 
-```
+```py
 #define PY_SSIZE_T_CLEAN
 // 包含 Torch Dynamo 的缓存条目头文件
 #include <torch/csrc/dynamo/cache_entry.h>

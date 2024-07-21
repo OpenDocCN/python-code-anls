@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\timm_models.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入所需的模块
 import importlib

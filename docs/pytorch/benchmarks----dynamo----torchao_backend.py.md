@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\torchao_backend.py`
 
-```
+```py
 from typing import Any, Callable
 
 import torch

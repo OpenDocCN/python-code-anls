@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\schedulers\reduce_on_plateau_scheduler.h`
 
-```
+```py
 #pragma once
 
 #include <torch/optim/optimizer.h>  // 包含了优化器基类的头文件

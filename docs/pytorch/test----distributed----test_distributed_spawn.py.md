@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_distributed_spawn.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入标准库模块

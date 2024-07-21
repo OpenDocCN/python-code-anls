@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\message.cpp`
 
-```
+```py
 //`
 // 包含 Torch 分布式 RPC 消息定义的头文件
 #include <torch/csrc/distributed/rpc/message.h>

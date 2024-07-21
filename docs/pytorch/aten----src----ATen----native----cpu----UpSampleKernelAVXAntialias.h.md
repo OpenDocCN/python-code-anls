@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\UpSampleKernelAVXAntialias.h`
 
-```
+```py
 /*
 The Python Imaging Library (PIL) is
 

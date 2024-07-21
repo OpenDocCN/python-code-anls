@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\__init__.py`
 
-```
+```py
 # 定义一个名为 find_duplicates 的函数，接受一个参数 nums
 def find_duplicates(nums):
     # 创建一个空集合 seen 用来存储已经出现过的数字

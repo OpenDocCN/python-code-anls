@@ -1,6 +1,6 @@
 # `.\pytorch\torch\signal\windows\windows.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型定义模块
 from typing import Optional, Iterable
@@ -762,7 +762,7 @@ def general_cosine(M, *,
     # 返回根据系数a_i和张量k计算出的余弦窗口函数的张量结果
 
 
-``````
+``````py
 @_add_docstr(
     r"""
 Computes the general Hamming window.

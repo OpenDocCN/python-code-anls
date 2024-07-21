@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\operator_upgraders\version_map.cpp`
 
-```
+```py
 // 包含 Torch JIT 操作符升级映射的头文件
 #include <torch/csrc/jit/operator_upgraders/version_map.h>
 

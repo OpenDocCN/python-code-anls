@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\dlpack.py`
 
-```
+```py
 # 引入所需模块
 from typing import Any
 

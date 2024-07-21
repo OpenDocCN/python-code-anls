@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\imethod.cpp`
 
-```
+```py
 #include <torch/imethod.h>  // 引入torch库中的imethod头文件
 
 namespace torch {

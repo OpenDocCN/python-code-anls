@@ -1,6 +1,6 @@
 # `.\pytorch\torch\multiprocessing\reductions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入多进程相关模块
 import multiprocessing

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\fixup_onnx_controlflow.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/onnx/fixup_onnx_controlflow.h>
 // 包含修复 ONNX 控制流的头文件
 

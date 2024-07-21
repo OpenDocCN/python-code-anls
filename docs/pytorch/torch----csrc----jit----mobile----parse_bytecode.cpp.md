@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\parse_bytecode.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <ATen/core/ivalue.h>
 #include <torch/csrc/jit/mobile/code.h>

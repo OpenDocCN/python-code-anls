@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\RowwisePrune.cpp`
 
-```
+```py
 // 定义宏以限制仅在方法操作器中使用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

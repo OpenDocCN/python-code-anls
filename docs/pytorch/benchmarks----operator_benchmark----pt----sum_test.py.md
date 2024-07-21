@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\sum_test.py`
 
-```
+```py
 # 导入名为 operator_benchmark 的模块，并重命名为 op_bench
 import operator_benchmark as op_bench
 # 导入 torch 模块

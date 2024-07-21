@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ReflectionPad.cpp`
 
-```
+```py
 // 定义宏，仅启用方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库的头文件

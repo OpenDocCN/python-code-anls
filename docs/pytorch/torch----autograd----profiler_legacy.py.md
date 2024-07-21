@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\profiler_legacy.py`
 
-```
+```py
 # 设置 mypy 让未定义的函数可以被使用
 mypy: allow-untyped-defs
 # 导入 itertools 模块，用于生成迭代器

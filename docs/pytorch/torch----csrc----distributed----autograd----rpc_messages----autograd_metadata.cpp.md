@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\autograd_metadata.cpp`
 
-```
+```py
 #include <torch/csrc/distributed/autograd/rpc_messages/autograd_metadata.h>
 // 包含 Torch 分布式自动求导模块中的自动求导元数据头文件
 

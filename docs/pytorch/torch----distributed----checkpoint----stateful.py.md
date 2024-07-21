@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\stateful.py`
 
-```
+```py
 from typing import Any, Dict, runtime_checkable, TypeVar
 from typing_extensions import Protocol
 

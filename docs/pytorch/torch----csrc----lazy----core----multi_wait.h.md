@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\multi_wait.h`
 
-```
+```py
 /**
  * This file is adapted from PyTorch/XLA
  * https://github.com/pytorch/xla/blob/master/third_party/xla_client/multi_wait.h

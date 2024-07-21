@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\RNN.cpp`
 
-```
+```py
 #ifndef AT_PER_OPERATOR_HEADERS
 // 如果没有定义 AT_PER_OPERATOR_HEADERS，则包含标准的 ATen 和 NativeFunctions 头文件
 #include <ATen/Functions.h>

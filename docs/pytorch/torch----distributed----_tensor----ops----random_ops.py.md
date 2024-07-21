@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\random_ops.py`
 
-```
+```py
 #`
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # 导入 PyTorch 库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\TypeInfo.cpp`
 
-```
+```py
 #include <torch/csrc/TypeInfo.h>
 
 #include <torch/csrc/Exceptions.h>

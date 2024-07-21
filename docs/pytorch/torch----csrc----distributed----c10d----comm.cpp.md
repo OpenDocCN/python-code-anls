@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\comm.cpp`
 
-```
+```py
 // 包含了 Torch 分布式通信库的头文件
 #include <torch/csrc/distributed/c10d/comm.hpp>
 

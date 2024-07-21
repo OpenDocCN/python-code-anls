@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_inductor_collectives.py`
 
-```
+```py
 # 模块所有者信息，指出这段代码的归属
 import functools  # 导入 functools 模块，用于高阶函数操作
 import unittest  # 导入 unittest 模块，用于编写和运行单元测试

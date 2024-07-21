@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\serialized_patterns\_sfdp_pattern_4.py`
 
-```
+```py
 # mypy: ignore-errors
 # noqa: F401, E501
 # This is an auto-generated file. Please do not modify it by hand.

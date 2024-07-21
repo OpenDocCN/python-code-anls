@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\dialect\__init__.py`
 
-```
+```py
 # 导入必要的模块：json 模块用于处理 JSON 格式数据，requests 模块用于发送 HTTP 请求
 import json
 import requests

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\strides.h`
 
-```
+```py
 #pragma once
 // 包含必要的头文件，用于处理数组引用和维度向量
 #include <c10/util/ArrayRef.h>

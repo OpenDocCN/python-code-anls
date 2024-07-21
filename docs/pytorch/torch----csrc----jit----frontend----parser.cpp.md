@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\parser.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 前端解析器头文件
 #include <torch/csrc/jit/frontend/parser.h>
 

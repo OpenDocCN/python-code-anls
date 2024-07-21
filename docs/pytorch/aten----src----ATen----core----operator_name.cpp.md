@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\operator_name.cpp`
 
-```
+```py
 // 引入 ATen 库中的 operator_name.h 文件
 
 #include <ATen/core/operator_name.h>

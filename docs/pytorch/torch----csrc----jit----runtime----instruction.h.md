@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\instruction.h`
 
-```
+```py
 #pragma once
 
 #include <cstdint>

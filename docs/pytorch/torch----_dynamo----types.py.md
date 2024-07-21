@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\types.py`
 
-```
+```py
 # 导入必要的模块和类型声明
 import dataclasses  # 导入用于数据类的模块
 import sys  # 导入系统相关的模块

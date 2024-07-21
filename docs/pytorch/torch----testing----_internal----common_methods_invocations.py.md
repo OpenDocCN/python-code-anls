@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_methods_invocations.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于类型检查时遇到的特定情况
 # 从 functools 模块导入 wraps 和 partial 函数
 from functools import wraps, partial
@@ -9423,7 +9423,7 @@ def sample_inputs_slice_scatter(op_info, device, dtype, requires_grad, **kwargs)
              ((L, L, L), (L, L, L // 4,), (2, L // 2, L, 2)),
              )
 
-```    
+```py    
     for input_shape, src_shape, args in cases:
         # 使用 make_arg 函数创建输入参数 input_
         input_ = make_arg(input_shape)

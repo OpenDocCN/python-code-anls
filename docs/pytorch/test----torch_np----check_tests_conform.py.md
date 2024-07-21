@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\check_tests_conform.py`
 
-```
+```py
 import sys
 import textwrap
 from pathlib import Path

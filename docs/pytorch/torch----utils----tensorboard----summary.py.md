@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\summary.py`
 
-```
+```py
 # 设置类型映射表，将 torch.Tensor 类型映射到对应的 Protobuf 类型及其值字段
 _TENSOR_TYPE_MAP = {
     torch.half: ("DT_HALF", "half_val", _tensor_to_half_val),  # 半精度浮点数映射为 Protobuf 的半精度类型及其值

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\generate_test_asset.cpp`
 
-```
+```py
 #include <torch/csrc/jit/api/module.h>
 #include <torch/jit.h>
 #include <torch/script.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\xnnpack_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/types.h>  // 引入 PyTorch 的类型定义头文件

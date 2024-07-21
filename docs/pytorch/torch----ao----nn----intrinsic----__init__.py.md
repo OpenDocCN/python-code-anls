@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从当前包的 modules 子模块中导入所有内容，禁止检查 F403 错误
 from .modules import *  # noqa: F403

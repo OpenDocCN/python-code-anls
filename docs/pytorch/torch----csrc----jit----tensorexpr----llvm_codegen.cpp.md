@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\llvm_codegen.cpp`
 
-```
+```py
 // 如果定义了 TORCH_ENABLE_LLVM，编译以下代码块
 
 #include <torch/csrc/jit/tensorexpr/llvm_codegen.h> // 引入 LLVM 代码生成器头文件

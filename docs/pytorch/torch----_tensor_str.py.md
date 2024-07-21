@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_tensor_str.py`
 
-```
+```py
 # 声明允许未类型化的函数定义（用于类型检查工具）
 # 导入上下文管理、数据类、数学函数、文本包装模块
 import contextlib

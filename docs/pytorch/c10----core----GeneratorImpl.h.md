@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\GeneratorImpl.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\propagate_gradients_resp.cpp`
 
-```
+```py
 #include <torch/csrc/distributed/autograd/rpc_messages/propagate_gradients_resp.h>
 // 包含需要使用的头文件 <torch/csrc/distributed/autograd/rpc_messages/propagate_gradients_resp.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\llvm_jit.h`
 
-```
+```py
 #pragma once
 
 #ifdef TORCH_ENABLE_LLVM

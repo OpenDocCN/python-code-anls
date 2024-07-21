@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LegacyBatchedTensorImpl.h`
 
-```
+```py
 #pragma once
 // 使用预处理器指令 #pragma once，确保该头文件只被包含一次
 

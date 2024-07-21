@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_node_lowering.cpp`
 
-```
+```py
 // 引入需要的头文件来支持 Lazy Tensor 引擎节点的降低操作
 #include <torch/csrc/lazy/ts_backend/ts_node_lowering.h>
 

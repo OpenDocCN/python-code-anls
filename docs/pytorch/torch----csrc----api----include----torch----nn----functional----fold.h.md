@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\fold.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/options/fold.h>
@@ -47,7 +47,7 @@ inline Tensor fold(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::fold(input, F::FoldFuncOptions({3, 2}, {2, 2}));
-/// ```
+/// ```py
 // 折叠操作的入口函数，根据给定的选项对输入张量进行折叠
 inline Tensor fold(const Tensor& input, const FoldFuncOptions& options) {
   return detail::fold(
@@ -97,7 +97,7 @@ inline Tensor unfold(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::unfold(input, F::UnfoldFuncOptions({2, 2}).padding(1).stride(2));
-/// ```
+/// ```py
 // 展开操作的入口函数，根据给定的选项对输入张量进行展开
 inline Tensor unfold(const Tensor& input, const UnfoldFuncOptions& options) {
   return detail::unfold(

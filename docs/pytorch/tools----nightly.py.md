@@ -1,6 +1,6 @@
 # `.\pytorch\tools\nightly.py`
 
-```
+```py
 # 指定脚本在 Python 3 环境下执行
 #!/usr/bin/env python3
 # 导入日志代码，来源于 https://github.com/ezyang/ghstack 的一部分

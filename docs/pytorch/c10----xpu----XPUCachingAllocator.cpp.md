@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\XPUCachingAllocator.cpp`
 
-```
+```py
 // 包含 C10 库中的相关头文件
 #include <c10/util/flat_hash_map.h>
 #include <c10/util/irange.h>

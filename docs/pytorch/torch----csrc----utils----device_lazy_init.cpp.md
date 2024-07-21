@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\device_lazy_init.cpp`
 
-```
+```py
 // 包含 TorchDispatchModeTLS.h 头文件，提供 TorchDispatchModeTLS 类的实现
 #include <c10/core/impl/TorchDispatchModeTLS.h>
 // 包含 device_lazy_init.h 头文件，提供 device_lazy_init 函数的声明

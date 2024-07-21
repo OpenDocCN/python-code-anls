@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\mypy_linter.py`
 
-```
+```py
 # 从未来模块导入 annotations 功能，以支持类型注解中的 str 类型
 from __future__ import annotations
 

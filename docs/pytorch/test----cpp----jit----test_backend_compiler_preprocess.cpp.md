@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_backend_compiler_preprocess.cpp`
 
-```
+```py
 namespace torch {
 namespace jit {
 namespace {

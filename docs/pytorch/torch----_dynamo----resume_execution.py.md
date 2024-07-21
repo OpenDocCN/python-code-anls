@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\resume_execution.py`
 
-```
+```py
 # 指定允许未类型化的函数定义（用于类型检查器）
 # 引入标准库和第三方模块
 import copy  # 引入 copy 模块，用于复制对象

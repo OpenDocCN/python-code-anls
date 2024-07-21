@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\lib\test_arraysetops.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """Test functions for 1D array set operations.

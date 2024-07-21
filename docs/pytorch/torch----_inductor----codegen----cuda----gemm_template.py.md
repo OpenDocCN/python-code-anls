@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\gemm_template.py`
 
-```
+```py
 # mypy: allow-untyped-defs  # 设置允许未标注类型的函数定义
 import copy  # 导入 copy 模块，用于复制对象
 import enum  # 导入 enum 模块，用于枚举类型

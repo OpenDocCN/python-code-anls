@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_gradual_type.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 引入单元测试模块

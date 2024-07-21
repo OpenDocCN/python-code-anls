@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\GridSamplerUtils.h`
 
-```
+```py
 #pragma once
 
 // See NOTE: [Tensor vs. TensorBase]

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SobolEngineOpsUtils.h`
 
-```
+```py
 /// This file contains some tensor-agnostic operations to be used in the
 /// core functions of the `SobolEngine`
 #include <ATen/core/Tensor.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_codegen_model.py`
 
-```
+```py
 # Owner(s): ["module: codegen"]
 
 # 导入所需的模块和类

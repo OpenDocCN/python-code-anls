@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_jit.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入 Torch 库及其子模块

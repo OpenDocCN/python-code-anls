@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\unpack_quantized_weights.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/api/module.h> // 包含 Torch 的模块 API 头文件

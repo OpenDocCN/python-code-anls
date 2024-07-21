@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset13.py`
 
-```
+```py
 # 设置 mypy 以允许未标注的函数定义
 # 编辑此文件？请先阅读 README.md 中的“Edit Symbolic Files”部分说明
 

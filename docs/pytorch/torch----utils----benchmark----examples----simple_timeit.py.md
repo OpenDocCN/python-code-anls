@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\simple_timeit.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Trivial use of Timer API:
 

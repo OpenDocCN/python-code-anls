@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\weight_utils.py`
 
-```
+```py
 # 导入 PyTorch 库中所需的模块
 import torch
 import torch.nn as nn

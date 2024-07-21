@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\modules\normalization.py`
 
-```
+```py
 # flake8: noqa: F401
 # 禁用 flake8 对 F401 错误的检查，表示未使用的导入
 

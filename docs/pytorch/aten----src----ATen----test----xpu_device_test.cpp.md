@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\xpu_device_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/xpu/XPUContext.h>  // 引入 ATen XPU 相关的头文件

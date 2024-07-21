@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\python_key.py`
 
-```
+```py
 # 设置 __all__ 列表，声明模块中可以导出的符号名称
 __all__ = ["make_fx", "dispatch_trace", "PythonKeyTracer", "pythonkey_decompose"]
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\TensorImpl.h`
 
-```
+```py
 // 预处理命令，确保头文件只被包含一次
 #pragma once
 
@@ -2646,7 +2646,7 @@ void safe_refresh_numel() {
 
   // NB: the TypeId argument prevents confusion where you pass a true/false
   // literal and pick the wrong overload
-  ```
+  ```py
 
   void _set_is_contiguous(identity<bool>, bool b) {
     is_contiguous_ = b;
@@ -2656,7 +2656,7 @@ void safe_refresh_numel() {
   void _set_is_channels_last_contiguous(identity<bool>, bool b) {
     is_channels_last_contiguous_ = b;
   }
-  ```
+  ```py
 
   void _set_is_channels_last_3d_contiguous(identity<bool>, bool b) {
     is_channels_last_3d_contiguous_ = b;
@@ -2666,7 +2666,7 @@ void safe_refresh_numel() {
   void _set_is_channels_last(identity<bool>, bool b) {
     is_channels_last_ = b;
   }
-  ```
+  ```py
 
   void _set_is_channels_last_3d(identity<bool>, bool b) {
     is_channels_last_3d_ = b;
@@ -2676,7 +2676,7 @@ void safe_refresh_numel() {
   void _set_is_non_overlapping_and_dense(identity<bool>, bool b) {
     is_non_overlapping_and_dense_ = b;
   }
-  ```
+  ```py
 
   // These are little wrappers over the real compute_ functions that
   // can make use of other contiguity fields to short circuit.
@@ -2686,7 +2686,7 @@ void safe_refresh_numel() {
     return is_contiguous_ || is_channels_last_contiguous_ ||
         compute_non_overlapping_and_dense(type_id);
   }
-  ```
+  ```py
 
   bool compute_channels_last_contiguous_3d_dim5(identity<bool> type_id) {
     return !is_channels_last_contiguous_ &&
@@ -2698,7 +2698,7 @@ void safe_refresh_numel() {
     return !is_channels_last_3d_contiguous_ &&
         compute_strides_like_channels_last_2d(type_id);
   }
-  ```
+  ```py
 
   bool compute_channels_last_3d_dim5(identity<bool> type_id) {
     return !is_channels_last_ && compute_strides_like_channels_last_3d(type_id);
@@ -2710,7 +2710,7 @@ void safe_refresh_numel() {
         is_channels_last_3d_contiguous_ ||
         compute_non_overlapping_and_dense(type_id);
   }
-  ```
+  ```py
 
   bool compute_is_non_overlapping_and_dense_anydim(identity<bool> type_id) {
     return is_contiguous_ || compute_non_overlapping_and_dense(type_id);
@@ -2725,7 +2725,7 @@ void safe_refresh_numel() {
     // Dim 3+ is possibly be a channels last 2d format (Dim 4 only at this
     // point) Dim 4+ is possibly be a channels last 3d format (Dim 5 only at
     // this point)
-  ```
+  ```py
     switch (dim()) {
       case 4: {
         // 设置是否是连续存储的标记为 true，并计算是否是通道最后维度连续的标记

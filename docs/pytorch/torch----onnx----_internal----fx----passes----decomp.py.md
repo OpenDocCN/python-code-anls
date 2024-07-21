@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\decomp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入允许未类型化定义的标志
 from __future__ import annotations

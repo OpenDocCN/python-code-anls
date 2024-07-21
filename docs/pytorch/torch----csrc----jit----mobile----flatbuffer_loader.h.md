@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\flatbuffer_loader.h`
 
-```
+```py
 /**
  * @file
  * @brief This header defines the public API for loading flatbuffer-serialized mobile modules.

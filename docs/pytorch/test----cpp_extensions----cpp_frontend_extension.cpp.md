@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cpp_frontend_extension.cpp`
 
-```
+```py
 // 引入 Torch C++ 扩展库
 #include <torch/extension.h>
 

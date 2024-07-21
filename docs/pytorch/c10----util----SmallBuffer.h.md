@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\SmallBuffer.h`
 
-```
+```py
 #pragma once
 #include <array>
 #include <cstddef>

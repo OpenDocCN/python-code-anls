@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Select.cpp`
 
-```
+```py
   /*
   Input tensor: (n, c, h, w)
   Output tensor: (c, h, w)

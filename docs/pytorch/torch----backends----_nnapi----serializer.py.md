@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\_nnapi\serializer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块
 import array                     # 提供高效的数值序列操作

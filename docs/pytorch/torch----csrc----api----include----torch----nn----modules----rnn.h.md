@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\rnn.h`
 
-```
+```py
 #pragma once
 class TORCH_API RNNImplBase : public torch::nn::Cloneable<Derived> {
  public:
@@ -97,7 +97,7 @@ class TORCH_API RNNImplBase : public torch::nn::Cloneable<Derived> {
 /// ```
 /// RNN model(RNNOptions(128,
 /// 64).num_layers(3).dropout(0.2).nonlinearity(torch::kTanh));
-/// ```
+/// ```py
 class TORCH_API RNNImpl : public detail::RNNImplBase<RNNImpl> {
  public:
   /// 构造函数，使用输入大小和隐藏层大小初始化 RNNImpl 对象
@@ -150,7 +150,7 @@ TORCH_MODULE(RNN);
 /// ```
 /// LSTM model(LSTMOptions(2,
 /// 4).num_layers(3).batch_first(false).bidirectional(true));
-/// ```
+/// ```py
 /// `LSTMImpl` 类继承自 `detail::RNNImplBase<LSTMImpl>`，实现 LSTM 网络的具体功能。
 class TORCH_API LSTMImpl : public detail::RNNImplBase<LSTMImpl> {
  public:
@@ -222,7 +222,7 @@ TORCH_MODULE(LSTM);
 /// ```
 /// GRU model(GRUOptions(2,
 /// 4).num_layers(3).batch_first(false).bidirectional(true));
-/// ```
+/// ```py
 /// 定义了 GRUImpl 类，继承自 detail::RNNImplBase<GRUImpl> 类
 class TORCH_API GRUImpl : public detail::RNNImplBase<GRUImpl> {
  public:
@@ -321,7 +321,7 @@ class TORCH_API RNNCellImplBase : public torch::nn::Cloneable<Derived> {
 /// ```
 /// RNNCell model(RNNCellOptions(20,
 /// 10).bias(false).nonlinearity(torch::kReLU));
-/// ```
+/// ```py
 class TORCH_API RNNCellImpl : public detail::RNNCellImplBase<RNNCellImpl> {
  public:
   /// 构造函数，初始化 RNNCellImpl 对象，设定输入大小和隐藏状态大小
@@ -366,7 +366,7 @@ TORCH_MODULE(RNNCell);
 /// Example:
 /// ```
 /// LSTMCell model(LSTMCellOptions(20, 10).bias(false));
-/// ```
+/// ```py
 class TORCH_API LSTMCellImpl : public detail::RNNCellImplBase<LSTMCellImpl> {
  public:
   /// Constructor for LSTMCellImpl.
@@ -415,7 +415,7 @@ TORCH_MODULE(LSTMCell);
 /// Example:
 /// ```
 /// GRUCell model(GRUCellOptions(20, 10).bias(false));
-/// ```
+/// ```py
 class TORCH_API GRUCellImpl : public detail::RNNCellImplBase<GRUCellImpl> {
  public:
   /// Constructor for GRUCellImpl.

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\PointwiseOps.h`
 
-```
+```py
 // 包含一次性预处理指令，确保头文件只被编译一次
 #pragma once
 

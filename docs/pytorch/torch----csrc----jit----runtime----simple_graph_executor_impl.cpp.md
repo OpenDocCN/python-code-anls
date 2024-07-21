@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\simple_graph_executor_impl.cpp`
 
-```
+```py
 // 包含 TorchScript 运行时的头文件
 #include <torch/csrc/jit/runtime/profiling_graph_executor_impl.h>
 

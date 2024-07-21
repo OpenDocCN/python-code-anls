@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\autograd_not_implemented_fallback.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保本头文件在编译过程中只包含一次
 

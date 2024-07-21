@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\qat\modules\conv_fused.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""Intrinsic QAT Modules.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\triton_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型和模块
 from typing import Any, Dict, List, Optional

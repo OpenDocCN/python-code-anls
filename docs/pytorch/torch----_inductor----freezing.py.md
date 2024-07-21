@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\freezing.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Import future annotations to allow forward references in type annotations
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_jit_internal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 The weak_script annotation needs to be here instead of inside torch/jit/ so it

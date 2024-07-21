@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\__init__.py`
 
-```
+```py
 # 导入模块 _flat_param 中的 FlatParameter 类别名为 FlatParameter
 # 导入 fully_sharded_data_parallel 模块中的多个类和函数
 from ._flat_param import FlatParameter as FlatParameter

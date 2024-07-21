@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\traceback.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入用于异常跟踪的模块
 import traceback

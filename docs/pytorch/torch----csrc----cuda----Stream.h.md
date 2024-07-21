@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Stream.h`
 
-```
+```py
 // 如果未定义 THCP_STREAM_INC 宏，则定义 THCP_STREAM_INC 宏，用于避免头文件重复包含
 #ifndef THCP_STREAM_INC
 // 定义 THCP_STREAM_INC 宏

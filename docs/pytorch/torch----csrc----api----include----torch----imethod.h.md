@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\imethod.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/ivalue.h>
 #include <vector>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\backend_interface.cpp`
 
-```
+```py
 // 包含 Torch 的 Lazy Tensor 模块的头文件
 #include <torch/csrc/lazy/backend/backend_interface.h>
 #include <torch/csrc/lazy/core/internal_ops/ltc_ops.h>

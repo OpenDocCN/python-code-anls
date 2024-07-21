@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\tensorexpr_fuser.cpp`
 
-```
+```py
 // 引入 Torch 中 TensorExpr 模块的相关头文件
 #include <torch/csrc/jit/passes/tensorexpr_fuser.h>
 

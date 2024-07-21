@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\tensorpipe_agent.h`
 
-```
+```py
 #pragma once
 
 #ifdef USE_TENSORPIPE

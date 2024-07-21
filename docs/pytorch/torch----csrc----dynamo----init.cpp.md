@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\init.cpp`
 
-```
+```py
 #include <torch/csrc/dynamo/init.h>
 // 引入 Torch 动态库的初始化头文件
 

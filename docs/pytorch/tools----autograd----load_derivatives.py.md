@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\load_derivatives.py`
 
-```
+```py
 # 解析 derivatives.yaml 文件，生成自动微分函数
 #
 # 每个自动微分函数由包含一组 Derivative 的 DifferentiabilityInfo 表示。

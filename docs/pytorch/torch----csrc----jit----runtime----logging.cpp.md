@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\logging.cpp`
 
-```
+```py
 // 包含 Torch JIT 运行时日志记录相关头文件
 #include <torch/csrc/jit/runtime/logging.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\test_helpers.h`
 
-```
+```py
 #pragma once
 
 #include <gtest/gtest.h>  // 包含 Google Test 的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\androidTest\java\org\pytorch\PytorchHostTests.java`
 
-```
+```py
 // 导入所需的 Java 类库
 package org.pytorch;
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\interpreter.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT（即时编译）运行时解释器的头文件
 
 #include <torch/csrc/jit/runtime/interpreter.h>

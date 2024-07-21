@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\BinaryInternal.h`
 
-```
+```py
 // DON'T include this except from Binary*.cu files. It should not leak into
 // headers.
 // 在非 Binary*.cu 文件中不要包含此代码，避免泄漏到头文件中

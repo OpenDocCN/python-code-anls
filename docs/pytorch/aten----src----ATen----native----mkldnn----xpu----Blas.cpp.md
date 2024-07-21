@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\xpu\Blas.cpp`
 
-```
+```py
 // 引入 ATen 库中的头文件，用于张量操作和计算
 #include <ATen/WrapDimUtilsMulti.h>
 #include <ATen/native/Resize.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\monitor\instrumentation.cpp`
 
-```
+```py
 #ifndef FBCODE_CAFFE2
 #include <torch/csrc/monitor/instrumentation.h>
 

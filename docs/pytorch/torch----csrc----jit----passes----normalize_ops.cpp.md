@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\normalize_ops.cpp`
 
-```
+```py
 // 引入 Torch 库中的 normalize_ops.h 头文件，其中包含了对操作规范化的相关功能
 #include <torch/csrc/jit/passes/normalize_ops.h>
 

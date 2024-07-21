@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesDecompositions.cpp`
 
-```
+```py
 // 包含标准头文件，这些文件通常用于C++编程
 #include <ATen/FunctionalTensorWrapper.h>
 #include <ATen/Operators.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\activation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入torch模块
 import torch

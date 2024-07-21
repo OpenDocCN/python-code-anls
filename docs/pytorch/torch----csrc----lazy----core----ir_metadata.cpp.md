@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ir_metadata.cpp`
 
-```
+```py
 // 引入 Torch 懒加载模块的必要头文件
 #include <torch/csrc/lazy/core/config.h>
 #include <torch/csrc/lazy/core/debug_util.h>

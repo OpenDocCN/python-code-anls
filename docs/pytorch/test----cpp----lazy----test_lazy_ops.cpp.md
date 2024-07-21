@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_lazy_ops.cpp`
 
-```
+```py
 #include <c10/core/Device.h>
 #include <c10/core/DeviceType.h>
 #include <gtest/gtest.h>

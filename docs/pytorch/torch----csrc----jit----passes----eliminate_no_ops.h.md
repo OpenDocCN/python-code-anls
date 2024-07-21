@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\eliminate_no_ops.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 防止头文件被多次包含
 

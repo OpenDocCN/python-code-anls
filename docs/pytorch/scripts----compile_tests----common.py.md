@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\compile_tests\common.py`
 
-```
+```py
 import functools
 import os
 import warnings

@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\static_runtime\config.py`
 
-```
+```py
 # 导入必要的模块或类
 from __future__ import annotations
 

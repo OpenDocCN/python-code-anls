@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\modules\fused.py`
 
-```
+```py
 # 导入 torch 中 AO（自动优化）模块下的神经网络组件，包括批归一化 + ReLU 的二维版本
 from torch.ao.nn.intrinsic import BNReLU2d
 # 导入 torch 中 AO 模块下的神经网络组件，包括批归一化 + ReLU 的三维版本

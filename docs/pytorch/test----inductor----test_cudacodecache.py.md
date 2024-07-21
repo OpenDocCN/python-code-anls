@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cudacodecache.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 import ctypes  # 引入 ctypes 库，用于与 C 语言兼容的数据类型转换

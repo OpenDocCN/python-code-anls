@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_mkl_verbose.py`
 
-```
+```py
 # 导入必要的模块和库
 from torch.testing._internal.common_utils import TestCase, run_tests
 import os  # 导入操作系统相关功能的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\AutogradComposite.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 符号
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

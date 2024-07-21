@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import numpy as np
 

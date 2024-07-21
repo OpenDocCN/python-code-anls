@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\nan_to_num_test.py`
 
-```
+```py
 # 导入 math 库，用于处理数学运算
 import math
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要使用的模块和函数
 import io  # 提供了用于处理字节流的工具

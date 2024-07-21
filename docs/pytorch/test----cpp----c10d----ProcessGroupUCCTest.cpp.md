@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\ProcessGroupUCCTest.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/csrc/distributed/c10d/UCCUtils.hpp>  // 包含 UCCUtils.hpp 文件，用于 UCC 相关功能

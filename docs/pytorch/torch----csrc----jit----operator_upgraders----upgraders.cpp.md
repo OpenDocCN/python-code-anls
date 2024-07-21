@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\operator_upgraders\upgraders.cpp`
 
-```
+```py
 #include <torch/csrc/jit/operator_upgraders/upgraders.h>
 
 #include <torch/csrc/jit/ir/ir.h>

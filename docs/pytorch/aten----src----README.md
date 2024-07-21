@@ -41,7 +41,7 @@ done (usually at the end of your function.)  (It's worth noting that
 you a pointer to the existing one.)  DO NOT directly access the member
 variables of the struct.
 
-```
+```py
 THIndexTensor *indices = THSTensor_(newIndices)(state, sparse);
 // ... do some stuff ...
 THIndexTensor_(free)(state, indices);
@@ -51,7 +51,7 @@ Let's take a look at the implementation of `newIndices`.  This doesn't free the
 return result of `newNarrow`, but returns it.  This justifies the `new` in its
 name.
 
-```
+```py
 THIndexTensor *THSTensor_(newIndices)(const THSTensor *self) {
   // ...
   return THIndexTensor_(newNarrow)(self->indices, 1, 0, self->nnz);
@@ -62,7 +62,7 @@ Passing an object to another function does NOT absolve you of responsibility
 of freeing it.  If that function holds on to a pointer to the object, it
 will `retain` it itself.
 
-```
+```py
   THByteStorage *inferred_size = THByteStorage_newInferSize(size, numel);
   THTensor_(setStorage)(self, tensor->storage, tensor->storageOffset, inferred_size, NULL);
   c10::raw::intrusive_ptr::decref(inferred_size);
@@ -72,7 +72,7 @@ Sometimes, you have a tensor in hand which you'd like to use directly, but
 under some conditions you have to call, e.g., `newContiguous`, to get it into
 the correct form:
 
-```
+```py
   if (!(k_->stride(3) == 1) || !(k_->stride[2] == k_->size(3))) {
     kernel = THTensor_(newContiguous)(k_);
   } else {

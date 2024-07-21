@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_tensor.py`
 
-```
+```py
 # 引入必要的模块和函数
 # 允许未类型化的函数定义，用于类型检查工具 mypy
 import copyreg  # 提供对象注册和反注册功能

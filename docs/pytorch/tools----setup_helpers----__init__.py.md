@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\__init__.py`
 
-```
+```py
 # 引入未来的注释语法支持
 from __future__ import annotations
 

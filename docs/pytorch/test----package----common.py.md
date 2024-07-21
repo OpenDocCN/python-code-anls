@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\common.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import sys

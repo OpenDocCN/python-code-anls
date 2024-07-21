@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\NaiveConvolutionTranspose2d.cpp`
 
-```
+```py
 // 定`
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS // 定义宏，禁止在方法中使用断言操作符
 #include <ATen/Dispatch.h> // 包含 ATen 库的 Dispatch 头文件，用于分发函数调用

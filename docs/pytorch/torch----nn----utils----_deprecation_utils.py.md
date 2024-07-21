@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_deprecation_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的库和模块
 import importlib

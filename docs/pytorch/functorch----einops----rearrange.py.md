@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\einops\rearrange.py`
 
-```
+```py
 # 从未来导入注解功能，用于支持函数签名中的类型注解
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\normalization.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -17,7 +17,7 @@ namespace nn {
 /// ```
 /// LayerNorm model(LayerNormOptions({2,
 /// 2}).elementwise_affine(false).eps(2e-5));
-/// ```
+/// ```py
 struct TORCH_API LayerNormOptions {
   /* implicit */ LayerNormOptions(std::vector<int64_t> normalized_shape);
   /// input shape from an expected input.
@@ -41,7 +41,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::layer_norm(input, F::LayerNormFuncOptions({2, 2}).eps(2e-5));
-/// ```
+/// ```py
 struct TORCH_API LayerNormFuncOptions {
   /* implicit */ LayerNormFuncOptions(std::vector<int64_t> normalized_shape);
   /// input shape from an expected input.
@@ -66,7 +66,7 @@ struct TORCH_API LayerNormFuncOptions {
 /// ```
 /// LocalResponseNorm
 /// model(LocalResponseNormOptions(2).alpha(0.0002).beta(0.85).k(2.));
-/// ```
+/// ```py
 struct TORCH_API LocalResponseNormOptions {
   /* implicit */ LocalResponseNormOptions(int64_t size) : size_(size) {}
   /// amount of neighbouring channels used for normalization
@@ -92,7 +92,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::local_response_norm(x, F::LocalResponseNormFuncOptions(2));
-/// ```
+/// ```py
 using LocalResponseNormFuncOptions = LocalResponseNormOptions;
 } // namespace functional
 
@@ -103,7 +103,7 @@ using LocalResponseNormFuncOptions = LocalResponseNormOptions;
 /// Example:
 /// ```
 /// CrossMapLRN2d model(CrossMapLRN2dOptions(3).alpha(1e-5).beta(0.1).k(10));
-/// ```
+/// ```py
 struct TORCH_API CrossMapLRN2dOptions {
   /* implicit */ CrossMapLRN2dOptions(int64_t size) : size_(size) {}
   /// size of the local region across channels
@@ -146,7 +146,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::normalize(input, F::NormalizeFuncOptions().p(1).dim(-1));
-/// ```
+/// ```py
 struct TORCH_API NormalizeFuncOptions {
   /// 属性：范数计算中的指数值，默认为 2.0
   TORCH_ARG(double, p) = 2.0;
@@ -170,7 +170,7 @@ struct TORCH_API NormalizeFuncOptions {
 /// 示例：
 /// ```
 /// GroupNorm model(GroupNormOptions(2, 2).eps(2e-5).affine(false));
-/// ```
+/// ```py
 struct TORCH_API GroupNormOptions {
   /* implicit */ GroupNormOptions(int64_t num_groups, int64_t num_channels);
 
@@ -197,7 +197,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::group_norm(input, F::GroupNormFuncOptions(2).eps(2e-5));
-/// ```
+/// ```py
 struct TORCH_API GroupNormFuncOptions {
   /* implicit */ GroupNormFuncOptions(int64_t num_groups);
 

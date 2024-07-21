@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_cpp_codegen.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 框架的头文件
 
 #include "test/cpp/tensorexpr/test_base.h" // 包含测试基类的头文件

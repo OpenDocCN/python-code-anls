@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\config.py`
 
-```
+```py
 # 设置类型提示，允许未标注类型的函数定义
 # import logging 模块，用于记录日志
 # import sys 模块，提供对 Python 解释器的访问

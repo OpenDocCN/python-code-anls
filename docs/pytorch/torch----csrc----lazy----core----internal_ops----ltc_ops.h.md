@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\internal_ops\ltc_ops.h`
 
-```
+```py
 #pragma once
 // 定义了一个预处理指令，确保头文件只被编译一次
 

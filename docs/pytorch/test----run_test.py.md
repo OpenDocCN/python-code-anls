@@ -1,6 +1,6 @@
 # `.\pytorch\test\run_test.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定使用Python 3解释器运行脚本
 

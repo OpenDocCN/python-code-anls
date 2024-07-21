@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\DType.java`
 
-```
+```py
 /** Codes representing tensor data types. */
 public enum DType {
   // NOTE: "jniCode" must be kept in sync with pytorch_jni_common.cpp.

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\utils.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保头文件只包含一次
 

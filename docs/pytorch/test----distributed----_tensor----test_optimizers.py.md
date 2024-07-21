@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_optimizers.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 from copy import deepcopy  # 导入深拷贝函数

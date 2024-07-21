@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_import_stats.py`
 
-```
+```py
 # Owner(s): ["module: ci"]
 
 # 从 torch.testing._internal.common_utils 导入 TestCase 类和 run_tests 函数

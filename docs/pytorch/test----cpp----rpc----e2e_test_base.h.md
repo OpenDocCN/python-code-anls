@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\rpc\e2e_test_base.h`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 测试框架头文件
 
 #include <torch/csrc/distributed/autograd/context/container.h>  // 包含分布式自动求导上下文容器头文件

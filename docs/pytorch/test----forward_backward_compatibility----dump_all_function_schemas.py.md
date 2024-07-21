@@ -1,6 +1,6 @@
 # `.\pytorch\test\forward_backward_compatibility\dump_all_function_schemas.py`
 
-```
+```py
 # 导入 argparse 模块，用于处理命令行参数解析
 import argparse
 

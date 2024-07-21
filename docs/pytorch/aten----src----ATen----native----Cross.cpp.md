@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Cross.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库中所需的头文件
 #include <ATen/native/Cross.h>

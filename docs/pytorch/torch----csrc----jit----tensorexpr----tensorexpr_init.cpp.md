@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\tensorexpr_init.cpp`
 
-```
+```py
 #include <pybind11/functional.h>
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>

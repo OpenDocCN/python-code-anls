@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_dlconvertor_test.cpp`
 
-```
+```py
 // 包含 CUDA 相关头文件
 #include <cuda.h>
 #include <cuda_runtime.h>

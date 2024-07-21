@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_complex.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import cmath  # 导入复数数学运算模块

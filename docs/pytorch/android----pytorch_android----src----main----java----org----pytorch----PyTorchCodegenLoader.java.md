@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\PyTorchCodegenLoader.java`
 
-```
+```py
 # 导入必要的包
 package org.pytorch;
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\reducer.hpp`
 
-```
+```py
 #pragma once
 
 #include <c10/core/ScalarType.h>

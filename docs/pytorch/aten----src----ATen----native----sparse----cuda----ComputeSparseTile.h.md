@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\cuda\ComputeSparseTile.h`
 
-```
+```py
 // 针对一组4x4值，计算在2:4稀疏化后将保留的选定索引，以位掩码形式返回。
 // 注意：某些情况下算法可能选择少于8个值。
 

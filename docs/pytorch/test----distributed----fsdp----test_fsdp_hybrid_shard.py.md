@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_hybrid_shard.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import contextlib  # 导入上下文管理器相关模块

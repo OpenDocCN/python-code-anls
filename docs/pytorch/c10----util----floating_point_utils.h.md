@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\floating_point_utils.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h>  // 包含 C10 宏定义的头文件

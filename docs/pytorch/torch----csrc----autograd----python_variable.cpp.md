@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_variable.cpp`
 
-```
+```py
 // 包含 ATen 库中的命名张量工具函数
 #include <ATen/NamedTensorUtils.h>
 // 包含 C10 库中的设备类型定义
@@ -1303,7 +1303,7 @@ PyObject* THPVariable_get_names(PyObject* self, void* unused) {
     PyObject* str = nullptr;
     ```
     str = PyUnicode_FromString(dimnames[i].c_str());
-    ```
+    ```py
     PyTuple_SET_ITEM(tuple.get(), i, str);
   }
 
@@ -1474,7 +1474,7 @@ PyObject* THPVariable_get_post_accumulate_grad_hooks(
 # 接受一个名为unused的void指针作为参数
 
   HANDLE_TH_ERRORS
-```  
+```py  
 # 宏：处理异常，可能是一个错误处理宏
 
   if (check_has_torch_function((PyObject*)self)) {
@@ -1482,7 +1482,7 @@ PyObject* THPVariable_get_post_accumulate_grad_hooks(
 # 如果self对象有torch函数，检查是否存在torch函数处理
 
     return handle_torch_function_getter(self, "_post_accumulate_grad_hooks");
-```  
+```py  
 # 调用处理torch函数的getter函数，返回"_post_accumulate_grad_hooks"
 
   }
@@ -1490,7 +1490,7 @@ PyObject* THPVariable_get_post_accumulate_grad_hooks(
 # 如果没有torch函数，则执行以下语句
 
   if (self->post_accumulate_grad_hooks) {
-```  
+```py  
 # 如果self对象中的post_accumulate_grad_hooks不为空（即已经分配了对象）
 
     Py_INCREF(self->post_accumulate_grad_hooks);
@@ -1498,7 +1498,7 @@ PyObject* THPVariable_get_post_accumulate_grad_hooks(
 # 增加post_accumulate_grad_hooks的引用计数
 
     return self->post_accumulate_grad_hooks;
-```  
+```py  
 # 返回post_accumulate_grad_hooks对象
 
   }
@@ -1506,7 +1506,7 @@ PyObject* THPVariable_get_post_accumulate_grad_hooks(
 # 如果post_accumulate_grad_hooks为空，执行以下语句
 
   Py_RETURN_NONE;
-```  
+```py  
 # 返回None对象（Python的None）
 
   END_HANDLE_TH_ERRORS

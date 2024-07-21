@@ -1,6 +1,6 @@
 # `.\pytorch\torch\__future__.py`
 
-```
+```py
 # 是否在转换 nn.Module 时覆盖模块参数，默认为 False
 _overwrite_module_params_on_conversion: bool = False
 

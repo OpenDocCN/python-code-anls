@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\torchscript_functions.h`
 
-```
+```py
 #pragma once
 
 // 包含必要的头文件：IValue 类型相关、自动微分分析器、分布式自动微分工具、远程引用上下文、脚本远程调用

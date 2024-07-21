@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\BinaryOps.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于指定仅包含方法运算符
 

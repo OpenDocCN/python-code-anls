@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\dwarf_enums.h`
 
-```
+```py
 #pragma once
 
 // Exception Handling Pointer Encoding (DW_EH_PE) constants

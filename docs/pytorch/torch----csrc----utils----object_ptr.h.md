@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\object_ptr.h`
 
-```
+```py
 #pragma once
 // 只允许头文件被编译一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\FunctionRef.h`
 
-```
+```py
 //===- llvm/ADT/STLExtras.h - Useful STL related functions ------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.

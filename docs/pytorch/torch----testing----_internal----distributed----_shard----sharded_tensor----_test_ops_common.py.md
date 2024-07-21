@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\_shard\sharded_tensor\_test_ops_common.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入内建模块
 import builtins

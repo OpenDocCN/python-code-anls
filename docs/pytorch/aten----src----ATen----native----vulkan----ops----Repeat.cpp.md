@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Repeat.cpp`
 
-```
+```py
 // 包含 Vulkan 操作的通用头文件
 #include <ATen/native/vulkan/ops/Common.h>
 

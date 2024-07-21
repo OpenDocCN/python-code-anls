@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_functions.h`
 
-```
+```py
 // 防止头文件重复包含，只包含一次
 #pragma once
 

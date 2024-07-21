@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_checkpointer.py`
 
-```
+```py
 # 导入必要的模块和类
 from concurrent.futures import Future
 from typing import Any, Dict, List, Optional

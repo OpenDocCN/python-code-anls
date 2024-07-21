@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\refine_tuple_types.h`
 
-```
+```py
 #pragma once
 // 使用 `#pragma once` 确保头文件只被包含一次，防止重复定义
 

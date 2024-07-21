@@ -1,6 +1,6 @@
 # `.\pytorch\torch\sparse\_semi_structured_ops.py`
 
-```
+```py
 # 引入上下文管理器contextlib，用于简化管理上下文中的资源
 import contextlib
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\__init__.py`
 
-```
+```py
 # 导入模块中的特定功能和对象，使它们可以在当前代码中直接使用
 
 from . import parametrizations, rnn, stateless

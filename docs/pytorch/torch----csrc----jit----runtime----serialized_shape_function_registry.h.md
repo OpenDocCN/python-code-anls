@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\serialized_shape_function_registry.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once确保头文件只被编译一次
 

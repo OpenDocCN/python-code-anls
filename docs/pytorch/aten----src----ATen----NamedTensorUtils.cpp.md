@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\NamedTensorUtils.cpp`
 
-```
+```py
 // 引入 ATen 库中的命名张量工具头文件
 #include <ATen/NamedTensorUtils.h>
 // 引入 ATen 库中的张量命名头文件

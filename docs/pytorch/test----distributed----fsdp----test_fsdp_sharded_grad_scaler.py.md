@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_sharded_grad_scaler.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入所需的模块和类

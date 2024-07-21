@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Dict.cpp`
 
-```
+```py
 // 定义命名空间 c10::detail 下的函数，用于比较两个 DictImpl 对象是否相等
 bool operator==(const DictImpl& lhs, const DictImpl& rhs) {
   // 进行快速的属性检查，包括键和值的类型是否相同，以及字典大小是否相等

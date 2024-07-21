@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\exponential.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 numbers 模块导入 Number 类型
 from numbers import Number

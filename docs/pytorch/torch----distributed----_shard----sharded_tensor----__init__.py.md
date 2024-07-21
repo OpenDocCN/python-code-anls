@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 库，用于支持高阶函数
 import functools

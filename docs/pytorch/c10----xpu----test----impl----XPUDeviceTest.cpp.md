@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\test\impl\XPUDeviceTest.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

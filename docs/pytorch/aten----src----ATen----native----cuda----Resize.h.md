@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Resize.h`
 
-```
+```py
 #pragma once
 // 包含头文件 EmptyTensor.h 和 ResizeCommon.h，用于声明和定义相关函数和结构
 #include <ATen/EmptyTensor.h>

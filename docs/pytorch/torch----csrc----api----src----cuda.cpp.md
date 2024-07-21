@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\cuda.cpp`
 
-```
+```py
 /// 包含 CUDA 相关头文件
 
 #include <torch/cuda.h>

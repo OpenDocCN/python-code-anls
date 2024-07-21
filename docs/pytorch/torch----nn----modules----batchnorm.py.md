@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\batchnorm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型声明和模块
 from typing import Any, Optional

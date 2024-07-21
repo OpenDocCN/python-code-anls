@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\rmsprop.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/module.h>  // 引入 Torch 深度学习框架的模块定义

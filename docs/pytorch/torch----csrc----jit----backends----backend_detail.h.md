@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_detail.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含的预处理指令
 

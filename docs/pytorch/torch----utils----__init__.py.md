@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\__init__.py`
 
-```
+```py
 # 导入必要的模块和库
 
 import copyreg  # 引入 copyreg 模块，用于处理对象的复制注册

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\versioned_symbols.cpp`
 
-```
+```py
 # 包含 TorchScript 前端版本化符号所需的头文件
 #include <torch/csrc/jit/frontend/versioned_symbols.h>
 

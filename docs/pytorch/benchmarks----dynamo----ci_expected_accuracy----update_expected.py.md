@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\ci_expected_accuracy\update_expected.py`
 
-```
+```py
 """
 Update commited CSV files used as reference points by dynamo/inductor CI.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\__init__.py`
 
-```
+```py
 # 导入本地的 functional 模块
 from . import functional
 # 导入所有模块，禁止警告 F403

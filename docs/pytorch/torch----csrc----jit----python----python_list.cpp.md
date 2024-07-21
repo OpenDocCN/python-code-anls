@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_list.cpp`
 
-```
+```py
 namespace torch::jit {
 
 // 实现 ScriptListIterator 类的 next() 方法，用于获取迭代器的下一个元素

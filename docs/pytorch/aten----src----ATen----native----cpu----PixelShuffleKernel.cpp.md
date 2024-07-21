@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\PixelShuffleKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 #include <ATen/native/cpu/PixelShuffleKernel.h>
 

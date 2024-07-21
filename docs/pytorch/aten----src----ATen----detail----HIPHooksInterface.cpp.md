@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\HIPHooksInterface.cpp`
 
-```
+```py
 // 包含 ATen 库中的 HIPHooksInterface 头文件
 #include <ATen/detail/HIPHooksInterface.h>
 

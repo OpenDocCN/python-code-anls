@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_tp_examples.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # Owner(s): ["oncall: distributed"]
 

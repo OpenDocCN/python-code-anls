@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\runner.py`
 
-```
+```py
 """
 A wrapper over the benchmark infrastructure to generate commonly used commands,
 parse results and generate csv/graphs.

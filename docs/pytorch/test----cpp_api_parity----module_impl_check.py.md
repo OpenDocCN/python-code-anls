@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\module_impl_check.py`
 
-```
+```py
 // 定义函数，测试 Python `torch.nn` 模块和对应的 C++ `torch::nn` 模块之间的实现一致性。
 // 具体步骤如下：
 //

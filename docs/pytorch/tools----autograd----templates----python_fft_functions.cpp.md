@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_fft_functions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于仅在方法操作符中进行断言
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_rpc_handler.cpp`
 
-```
+```py
 // 包含必要的头文件来支持 RPC 的 Python 处理程序和代理
 #include <torch/csrc/distributed/rpc/python_rpc_handler.h>
 #include <torch/csrc/distributed/rpc/rpc_agent.h>

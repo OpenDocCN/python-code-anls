@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\structured.py`
 
-```
+```py
 # 引入将来版本的注解功能
 from __future__ import annotations
 

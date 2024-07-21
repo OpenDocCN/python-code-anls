@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\utils.h`
 
-```
+```py
 // 预处理指令：定义了一个条件编译宏，用于在不同操作系统下设置符号的可见性
 #pragma once
 

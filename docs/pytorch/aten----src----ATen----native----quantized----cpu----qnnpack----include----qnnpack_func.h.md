@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\include\qnnpack_func.h`
 
-```
+```py
 #pragma once
 // 一次性包含标准库cstdlib和QNNPACK运算符头文件
 #include <cstdlib>

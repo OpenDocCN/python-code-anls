@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dynamic_type.cpp`
 
-```
+```py
 #include <ATen/core/dynamic_type.h>
 
 #include <string>

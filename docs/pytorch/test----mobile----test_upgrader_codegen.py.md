@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\test_upgrader_codegen.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 import os  # 导入操作系统相关的模块

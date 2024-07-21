@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\signal.py`
 
-```
+```py
 # 忽略 mypy 类型检查的错误，通常用于声明在类型检查中不需要处理的情况
 # 导入单元测试模块 unittest
 import unittest

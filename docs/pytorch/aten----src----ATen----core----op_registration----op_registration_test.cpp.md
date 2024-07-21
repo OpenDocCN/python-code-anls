@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\op_registration_test.cpp`
 
-```
+```py
 /**
  * This file contains some general registration test cases.
  * More detailed test cases containing different APIs for registering kernels

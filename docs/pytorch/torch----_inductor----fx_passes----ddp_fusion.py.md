@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\ddp_fusion.py`
 
-```
+```py
 # 导入所需的库和模块
 # Owner(s): ["oncall: distributed"]
 import collections

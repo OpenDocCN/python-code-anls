@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_awaits\__init__.py`
 
-```
+```py
 # 从 __future__ 模块导入 annotations 特性，使得类型注解的解析更加严格
 from __future__ import annotations
 

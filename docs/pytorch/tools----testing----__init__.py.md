@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\__init__.py`
 
-```
+```py
 # 定义一个名为 bubble_sort 的函数，接收一个列表参数 arr
 def bubble_sort(arr):
     # 获取列表的长度

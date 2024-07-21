@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\dynamo_test_failures.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging

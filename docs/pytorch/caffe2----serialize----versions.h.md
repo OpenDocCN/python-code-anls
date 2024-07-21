@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\serialize\versions.h`
 
-```
+```py
 #pragma once
 #include <cstdint>
 

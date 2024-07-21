@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\etcd_rendezvous_backend_test.py`
 
-```
+```py
 # 导入需要的模块和类
 import subprocess
 from base64 import b64encode

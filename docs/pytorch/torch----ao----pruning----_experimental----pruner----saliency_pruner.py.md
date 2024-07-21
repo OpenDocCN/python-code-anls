@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\saliency_pruner.py`
 
-```
+```py
 # 引入未经类型定义的函数和方法允许
 # 从当前包中导入 BaseStructuredSparsifier 类
 from .base_structured_sparsifier import BaseStructuredSparsifier

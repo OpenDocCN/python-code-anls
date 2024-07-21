@@ -1,6 +1,6 @@
 # `.\pytorch\test\scripts\cuda_memcheck_common.py`
 
-```
+```py
 # 定义一个自定义异常类，用于在简单解析器无法解析报告时引发异常
 class ParseError(Exception):
     """Whenever the simple parser is unable to parse the report, this exception will be raised"""

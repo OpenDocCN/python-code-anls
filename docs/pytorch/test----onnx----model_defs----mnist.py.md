@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\mnist.py`
 
-```
+```py
 import torch.nn as nn
 import torch.nn.functional as F
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\UndefinedTensorImpl.cpp`
 
-```
+```py
 #include <c10/core/UndefinedTensorImpl.h>
 #include <c10/util/Exception.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\NamedTensor_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 的头文件，用于单元测试
 
 #include <ATen/ATen.h>  // 包含 PyTorch 的 ATen 头文件

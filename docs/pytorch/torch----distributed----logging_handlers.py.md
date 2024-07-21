@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\logging_handlers.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 设置日志记录器的默认处理器为空处理器

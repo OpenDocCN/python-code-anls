@@ -1,6 +1,6 @@
 # `.\pytorch\tools\lite_interpreter\gen_selected_mobile_ops_header.py`
 
-```
+```py
 #!/usr/bin/env python3
 从 __future__ 模块导入 annotations 特性
 

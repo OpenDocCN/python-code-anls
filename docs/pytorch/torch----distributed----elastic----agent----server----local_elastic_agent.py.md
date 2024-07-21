@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\agent\server\local_elastic_agent.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 
@@ -87,7 +87,7 @@ class LocalElasticAgent(SimpleElasticAgent):
     user code deal with ensuring that workers are terminated in a synchronous
     manner rather than relying on the exit_barrier_timeout.
 
-    A named pipe based watchdog can be enabled in ```LocalElasticAgent``` if an
+    A named pipe based watchdog can be enabled in ```LocalElasticAgent```py if an
     """
     # 定义一个类 LocalElasticAgent，代表本地弹性代理
     def __init__(

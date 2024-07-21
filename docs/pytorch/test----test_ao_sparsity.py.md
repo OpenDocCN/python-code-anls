@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_ao_sparsity.py`
 
-```
+```py
 # 导入测试内核模块
 from ao.sparsity.test_kernels import (  # noqa: F401  # noqa: F401
     TestQuantizedSparseKernels,  # 导入测试量化稀疏内核类

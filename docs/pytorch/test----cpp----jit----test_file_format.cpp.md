@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_file_format.cpp`
 
-```
+```py
 // 引入 Torch 的文件格式处理头文件
 #include <torch/csrc/jit/mobile/file_format.h>
 

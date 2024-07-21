@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\monitor.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 定义脚本使用的 Python 解释器
 

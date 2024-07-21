@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型定义 List 和 Tuple
 from typing import List, Tuple

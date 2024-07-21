@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LinalgBackend.h`
 
-```
+```py
 #pragma once
 // 防止头文件被重复包含的预处理指令
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\graph_fuser.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 编译器 Passes 中的图融合器头文件
 #include <torch/csrc/jit/passes/graph_fuser.h>
 

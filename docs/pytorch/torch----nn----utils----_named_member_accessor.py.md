@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_named_member_accessor.py`
 
-```
+```py
 # 导入必要的模块和类型
 from typing import Dict, Iterable, List, Tuple
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\parse_string_literal.h`
 
-```
+```py
 #pragma once
 // 包含C++标准库中的可选类型
 #include <c10/util/Optional.h>

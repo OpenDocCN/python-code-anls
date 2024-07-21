@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cpp_c10d_extension.cpp`
 
-```
+```py
 #include "cpp_c10d_extension.hpp"
 
 #include <map>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_torch_functions_manual.cpp`
 
-```
+```py
 // 包含 Torch C++ API 中的头文件，用于定义数据类型、异常处理、自动微分等功能
 #include <torch/csrc/Dtype.h>
 #include <torch/csrc/DynamicTypes.h>

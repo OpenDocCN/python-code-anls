@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\kernel.cpp`
 
-```
+```py
 // 引入 Torch 的 JIT Tensorexpr 库中的头文件
 #include <torch/csrc/jit/tensorexpr/kernel.h>
 
@@ -2495,7 +2495,7 @@ void TensorExprKernel::runFast(
   std::vector<void*> args(inputs);
   args.reserve(inputs.size() + outputs.size() + constants_.size());
   args.insert(args.end(), outputs.begin(), outputs.end());
-```  
+```py  
 // 创建一个名为 args 的 vectors，其元素类型为 void 指针，该 vectors 以 inputs vectors 为初始输入创建，预留容量以容纳 inputs，outputs 和 constants_ vectors 的元素，将 outputs vectors 的元素插入到 args vectors 的末尾。
 
 
@@ -2509,7 +2509,7 @@ void TensorExprKernel::runFast(
 
   // Call the kernel.
   codegen_->call_raw(args);
-```  
+```py  
 // 调用 codegen_ 对象的 call_raw 方法，传入 args vectors 作为参数。
 }
 

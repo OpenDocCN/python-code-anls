@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_freeze.py`
 
-```
+```py
 """
 Freeze Python packages.
 

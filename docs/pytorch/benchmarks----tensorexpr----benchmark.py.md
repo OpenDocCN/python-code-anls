@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\benchmark.py`
 
-```
+```py
 # 导入必要的模块和库
 import contextlib  # 上下文管理模块，提供了一些用于管理上下文资源的工具
 import json  # JSON 数据的编解码模块

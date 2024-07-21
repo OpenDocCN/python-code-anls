@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\gemm-block-sparse-microkernel-tester.h`
 
-```
+```py
 /*
  * 版权声明: Facebook, Inc. 及其关联公司版权所有。
  * 保留所有权利。

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\PowKernel.cpp`
 
-```
+```py
 // 定义编译时取消操作符的宏，这可能是为了避免在使用Torch时使用运算符的检查
 #define TORCH_ASSERT_NO_OPERATORS
 

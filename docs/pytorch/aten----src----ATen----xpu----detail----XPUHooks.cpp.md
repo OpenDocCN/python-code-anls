@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\detail\XPUHooks.cpp`
 
-```
+```py
 namespace at::xpu::detail {
 
 // 初始化 XPU 相关设置，记录 API 使用情况

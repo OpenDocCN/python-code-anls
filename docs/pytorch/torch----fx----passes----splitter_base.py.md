@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\splitter_base.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和库
 import argparse                   # 解析命令行参数的模块

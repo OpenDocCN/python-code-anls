@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_tensorexpr.py`
 
-```
+```py
 # Owner(s): ["NNC"]
 
 import numpy as np  # 导入 NumPy 库，用于数值计算

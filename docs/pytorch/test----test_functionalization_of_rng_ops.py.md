@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_functionalization_of_rng_ops.py`
 
-```
+```py
 # Owner(s): ["oncall: pt2"]
 # 导入必要的库和模块
 import functools  # 导入 functools 模块，用于高阶函数操作

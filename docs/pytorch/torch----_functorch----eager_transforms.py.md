@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\eager_transforms.py`
 
-```
+```py
 # 忽略类型检查错误
 # 版权声明，版权归 Facebook 及其关联公司所有
 # 本源代码使用 BSD 风格许可证授权，许可证可以在源树的根目录下的 LICENSE 文件中找到

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\hooks.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入上下文管理工具模块
 import contextlib

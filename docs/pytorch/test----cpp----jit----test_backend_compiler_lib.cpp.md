@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_backend_compiler_lib.cpp`
 
-```
+```py
 // 包含ATen库中的实用工具、TensorImpl核心、ApproximateClock等头文件
 #include <ATen/Utils.h>
 #include <c10/core/TensorImpl.h>

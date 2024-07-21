@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_resolver.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令，确保头文件只被编译一次，提高编译效率

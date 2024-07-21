@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\quantization\quantization_gpu.h`
 
-```
+```py
 // 版权声明及许可信息，声明代码版权归 Meta Platforms, Inc. 及其关联公司所有
 //
 // 此源代码根据根目录中的 LICENSE 文件中的 BSD 风格许可证进行许可

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\loss.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被包含一次
 
@@ -32,7 +32,7 @@ namespace nn {
 /// Example:
 /// ```
 /// L1Loss model(L1LossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API L1LossImpl : Cloneable<L1LossImpl> {
   explicit L1LossImpl(L1LossOptions options_ = {});
 
@@ -68,7 +68,7 @@ TORCH_MODULE(L1Loss);
 /// Example:
 /// ```
 /// KLDivLoss model(KLDivLossOptions().reduction(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API KLDivLossImpl : Cloneable<KLDivLossImpl> {
   explicit KLDivLossImpl(KLDivLossOptions options_ = {});
 
@@ -104,7 +104,7 @@ TORCH_MODULE(KLDivLoss);
 /// Example:
 /// ```
 /// MSELoss model(MSELossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API MSELossImpl : Cloneable<MSELossImpl> {
   explicit MSELossImpl(MSELossOptions options_ = {});
 
@@ -141,7 +141,7 @@ TORCH_MODULE(MSELoss);
 /// Example:
 /// ```
 /// BCELoss model(BCELossOptions().reduction(torch::kNone).weight(weight));
-/// ```
+/// ```py
 struct TORCH_API BCELossImpl : Cloneable<BCELossImpl> {
   explicit BCELossImpl(BCELossOptions options_ = {});
 
@@ -181,7 +181,7 @@ TORCH_MODULE(BCELoss);
 /// ```
 /// HingeEmbeddingLoss
 /// model(HingeEmbeddingLossOptions().margin(4).reduction(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API HingeEmbeddingLossImpl : Cloneable<HingeEmbeddingLossImpl> {
   explicit HingeEmbeddingLossImpl(HingeEmbeddingLossOptions options_ = {});
 
@@ -223,7 +223,7 @@ TORCH_MODULE(HingeEmbeddingLoss);
 /// Example:
 /// ```
 /// MultiMarginLoss model(MultiMarginLossOptions().margin(2).weight(weight));
-/// ```
+/// ```py
 struct TORCH_API MultiMarginLossImpl : public Cloneable<MultiMarginLossImpl> {
   explicit MultiMarginLossImpl(MultiMarginLossOptions options_ = {});
 
@@ -266,7 +266,7 @@ TORCH_MODULE(MultiMarginLoss);
 /// Example:
 /// ```
 /// CosineEmbeddingLoss model(CosineEmbeddingLossOptions().margin(0.5));
-/// ```
+/// ```py
 struct TORCH_API CosineEmbeddingLossImpl
     : public Cloneable<CosineEmbeddingLossImpl> {
   explicit CosineEmbeddingLossImpl(CosineEmbeddingLossOptions options_ = {});
@@ -312,7 +312,7 @@ TORCH_MODULE(CosineEmbeddingLoss);
 /// Example:
 /// ```
 /// SmoothL1Loss model(SmoothL1LossOptions().reduction(torch::kNone).beta(0.5));
-/// ```
+/// ```py
 struct TORCH_API SmoothL1LossImpl : public Cloneable<SmoothL1LossImpl> {
   explicit SmoothL1LossImpl(SmoothL1LossOptions options = {});
 
@@ -350,7 +350,7 @@ TORCH_MODULE(SmoothL1Loss);
 /// 示例:
 /// ```
 /// HuberLoss model(HuberLossOptions().reduction(torch::kNone).delta(0.5));
-/// ```
+/// ```py
 struct TORCH_API HuberLossImpl : public Cloneable<HuberLossImpl> {
   explicit HuberLossImpl(HuberLossOptions options_ = {});
 
@@ -382,7 +382,7 @@ TORCH_MODULE(HuberLoss);
 /// 示例:
 /// ```
 /// MultiLabelMarginLoss model(MultiLabelMarginLossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API MultiLabelMarginLossImpl
     : public Cloneable<MultiLabelMarginLossImpl> {
   explicit MultiLabelMarginLossImpl(MultiLabelMarginLossOptions options_ = {});
@@ -416,7 +416,7 @@ TORCH_MODULE(MultiLabelMarginLoss);
 /// 示例：
 /// ```
 /// SoftMarginLoss model(SoftMarginLossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API SoftMarginLossImpl : public Cloneable<SoftMarginLossImpl> {
   explicit SoftMarginLossImpl(SoftMarginLossOptions options_ = {});
 
@@ -449,7 +449,7 @@ TORCH_MODULE(SoftMarginLoss);
 /// 示例：
 /// ```
 /// MultiLabelSoftMarginLoss model(MultiLabelSoftMarginLossOptions().reduction(torch::kNone).weight(weight));
-/// ```
+/// ```py
 struct TORCH_API MultiLabelSoftMarginLossImpl
     : public Cloneable<MultiLabelSoftMarginLossImpl> {
   explicit MultiLabelSoftMarginLossImpl(
@@ -488,7 +488,7 @@ TORCH_MODULE(MultiLabelSoftMarginLoss);
 /// ```
 /// TripletMarginLoss
 /// model(TripletMarginLossOptions().margin(3).p(2).eps(1e-06).swap(false));
-/// ```
+/// ```py
 struct TORCH_API TripletMarginLossImpl : public Cloneable<TripletMarginLossImpl> {
   explicit TripletMarginLossImpl(TripletMarginLossOptions options_ = {});
 
@@ -523,7 +523,7 @@ TORCH_MODULE(TripletMarginLoss);
 /// ```
 /// TripletMarginWithDistanceLoss
 /// model(TripletMarginWithDistanceLossOptions().margin(3).swap(false));
-/// ```
+/// ```py
 /// ```
 /// Negative log likelihood loss with Poisson distribution of target.
 /// See https://pytorch.org/docs/main/nn.html#torch.nn.PoissonNLLLoss to learn
@@ -533,7 +533,7 @@ TORCH_MODULE(TripletMarginLoss);
 /// what constructor arguments are supported for this module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// PoissonNLLLoss
 /// model(PoissonNLLLossOptions().log_input(true).full(true).eps(1e-6));
 /// ```
@@ -560,7 +560,7 @@ struct TORCH_API PoissonNLLLossImpl : public Cloneable<PoissonNLLLossImpl> {
 /// learn about PyTorch's module storage semantics.
 TORCH_MODULE(PoissonNLLLoss);
 /// 创建一个`PoissonNLLLoss`模块，配置选项包括禁用输入的对数转换（log_input(false)）、完全模式（full(true)）、epsilon值为0.42（eps(0.42)）、损失计算方式为总和（reduction(torch::kSum)）。
-/// ```
+/// ```py
 struct TORCH_API PoissonNLLLossImpl : public Cloneable<PoissonNLLLossImpl> {
   explicit PoissonNLLLossImpl(PoissonNLLLossOptions options_ = {});
 
@@ -592,7 +592,7 @@ TORCH_MODULE(PoissonNLLLoss);
 /// ```
 /// MarginRankingLoss
 /// model(MarginRankingLossOptions().margin(0.5).reduction(torch::kSum));
-/// ```
+/// ```py
 struct TORCH_API MarginRankingLossImpl
     : public Cloneable<MarginRankingLossImpl> {
   explicit MarginRankingLossImpl(MarginRankingLossOptions options_ = {});
@@ -627,7 +627,7 @@ TORCH_MODULE(MarginRankingLoss);
 /// 示例:
 /// ```
 /// 创建一个 NLLLoss 模型，使用给定的选项初始化，其中 ignore_index 设置为 -100，reduction 设置为 torch::kMean。
-/// ```
+/// ```py
 struct TORCH_API NLLLossImpl : public Cloneable<NLLLossImpl> {
   explicit NLLLossImpl(NLLLossOptions options_ = {});
 
@@ -662,7 +662,7 @@ TORCH_MODULE(NLLLoss);
 /// ```
 /// CrossEntropyLoss
 /// model(CrossEntropyLossOptions().ignore_index(-100).reduction(torch::kMean));
-/// ```
+/// ```py
 struct TORCH_API CrossEntropyLossImpl : public Cloneable<CrossEntropyLossImpl> {
   explicit CrossEntropyLossImpl(CrossEntropyLossOptions options_ = {});
 
@@ -701,7 +701,7 @@ TORCH_MODULE(CrossEntropyLoss);
 /// ```
 /// BCEWithLogitsLoss
 /// model(BCEWithLogitsLossOptions().reduction(torch::kNone).weight(weight));
-/// ```
+/// ```py
 struct TORCH_API BCEWithLogitsLossImpl
     : public Cloneable<BCEWithLogitsLossImpl> {
   

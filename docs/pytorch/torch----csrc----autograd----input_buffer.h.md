@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\input_buffer.h`
 
-```
+```py
 #pragma once
 
 // InputBuffer 类累积一组变量，供函数使用。它实现了逻辑以避免直接修改传入的值

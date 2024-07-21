@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\autocast.cpp`
 
-```
+```py
 // 包含 Torch 自动混合精度自动转换相关头文件
 #include <torch/csrc/jit/passes/autocast.h>
 

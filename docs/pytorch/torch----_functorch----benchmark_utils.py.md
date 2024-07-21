@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\benchmark_utils.py`
 
-```
+```py
 # 忽略类型检查错误，针对特定工具的声明
 # 导入上下文管理模块
 import contextlib

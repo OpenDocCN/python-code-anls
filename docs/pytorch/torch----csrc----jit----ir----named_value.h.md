@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\named_value.h`
 
-```
+```py
 #pragma once
 // 引入ATen库中的ivalue.h头文件
 #include <ATen/core/ivalue.h>

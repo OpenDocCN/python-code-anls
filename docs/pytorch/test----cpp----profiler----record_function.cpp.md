@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\profiler\record_function.cpp`
 
-```
+```py
 // 包含标准库头文件
 #include <array>
 #include <atomic>

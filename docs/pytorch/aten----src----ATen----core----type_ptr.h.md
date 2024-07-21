@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\type_ptr.h`
 
-```
+```py
 #pragma once
 
 #include <memory>

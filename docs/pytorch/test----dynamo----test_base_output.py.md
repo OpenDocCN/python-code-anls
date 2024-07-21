@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_base_output.py`
 
-```
+```py
 # 导入模块 unittest.mock，用于模拟 unittest 中的对象
 # 导入 torch 库
 # 导入 torch._dynamo.test_case 模块

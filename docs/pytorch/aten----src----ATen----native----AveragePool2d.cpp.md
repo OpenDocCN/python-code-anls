@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\AveragePool2d.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于在编译时启用特定的 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 核心 Tensor 类和标量操作头文件

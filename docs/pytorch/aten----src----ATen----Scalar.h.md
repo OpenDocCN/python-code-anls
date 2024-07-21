@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Scalar.h`
 
-```
+```py
 #pragma once
 
 

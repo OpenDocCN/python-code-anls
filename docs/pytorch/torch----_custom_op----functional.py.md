@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_custom_op\functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入弱引用模块，用于避免循环引用导致的内存泄漏问题
 import weakref

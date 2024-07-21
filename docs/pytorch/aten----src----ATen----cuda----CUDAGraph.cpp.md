@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAGraph.cpp`
 
-```
+```py
 /**
  * Note [CUDA Graph Wrapper Class]
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

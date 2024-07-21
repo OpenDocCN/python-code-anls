@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_stats.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # NOTE! PLEASE KEEP THIS FILE *FREE* OF TORCH DEPS! IT SHOULD BE IMPORTABLE ANYWHERE.
 # IF YOU FEEL AN OVERWHELMING URGE TO ADD A TORCH DEP, MAKE A TRAMPOLINE FILE A LA torch._dynamo.utils

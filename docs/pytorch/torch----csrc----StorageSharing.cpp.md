@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\StorageSharing.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 头文件
 #include <torch/csrc/python_headers.h>
 // 如果是在 MSVC 下编译，包含 Win32 头文件

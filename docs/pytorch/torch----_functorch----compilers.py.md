@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\compilers.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入必要的库
 import copy  # 导入copy模块，用于对象的浅拷贝和深拷贝操作

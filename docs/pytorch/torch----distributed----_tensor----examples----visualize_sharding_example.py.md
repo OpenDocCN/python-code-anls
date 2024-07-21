@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\examples\visualize_sharding_example.py`
 
-```
+```py
 # 导入必要的库
 import os
 

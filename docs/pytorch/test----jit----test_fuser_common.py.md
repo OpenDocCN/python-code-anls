@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_fuser_common.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import torch  # 导入 PyTorch 库

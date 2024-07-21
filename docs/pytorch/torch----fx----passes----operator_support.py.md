@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\operator_support.py`
 
-```
+```py
 # 声明一个静态类型检查的配置，允许未标注的函数定义
 # Allow untyped definitions for mypy static type checker
 # 导入抽象基类模块和类型提示模块

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_unary_ufuncs.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 import torch  # 导入 PyTorch 库

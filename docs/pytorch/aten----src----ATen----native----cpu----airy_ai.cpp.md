@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\airy_ai.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 
 这行代码定义了宏 `TORCH_ASSERT_NO_OPERATORS`，用于禁用 Torch 的运算符断言。

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\inverse_gamma.py`
 
-```
+```py
 # 引入 torch 库，包括相关的约束条件和分布类
 import torch
 from torch.distributions import constraints

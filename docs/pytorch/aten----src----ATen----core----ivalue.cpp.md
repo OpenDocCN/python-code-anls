@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\ivalue.cpp`
 
-```
+```py
 namespace c10 {
     // 定义用于比较 IValue 对象的函数，判断是否是同一个对象或者具有相同的值
     bool _fastEqualsForContainer(const IValue& lhs, const IValue& rhs) {

@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\indirect_assert_helper.py`
 
-```
+```py
 # 导入系统模块
 import sys
 

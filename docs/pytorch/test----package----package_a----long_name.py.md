@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\long_name.py`
 
-```
+```py
 # 定义一个函数，用于向给定列表 `d` 中添加一个元素
 # noqa: B950 是用来告诉 linter 忽略对此行代码长度的检查
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\modulefinder_determinator.py`
 
-```
+```py
 # 从未来版本导入注释
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\dynamo\verify_dynamo.py`
 
-```
+```py
 # 导入必要的标准库
 import os  # 提供与操作系统交互的功能
 import re  # 提供正则表达式操作支持

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\index_select_test.py`
 
-```
+```py
 import numpy
 
 import operator_benchmark as op_bench

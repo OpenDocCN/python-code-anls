@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\StringUtil.h`
 
-```
+```py
 #ifndef C10_UTIL_STRINGUTIL_H_
 #define C10_UTIL_STRINGUTIL_H_
 

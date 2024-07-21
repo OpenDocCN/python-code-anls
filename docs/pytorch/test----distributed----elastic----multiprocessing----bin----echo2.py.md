@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\multiprocessing\bin\echo2.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 导入必要的模块 argparse 和 os

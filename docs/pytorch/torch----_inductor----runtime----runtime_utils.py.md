@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\runtime\runtime_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入未被类型化的函数定义支持
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\simple_graph_executor_impl.h`
 
-```
+```py
 #pragma once
 #include <c10/util/Flags.h>  // 引入 c10 库中的 Flags 头文件
 #include <torch/csrc/jit/api/module.h>  // 引入 torch jit 模块的 module 头文件

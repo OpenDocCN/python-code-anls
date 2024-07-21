@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalNeuronType.h`
 
-```
+```py
 #ifndef MetalNeuronType_h
 #define MetalNeuronType_h
 

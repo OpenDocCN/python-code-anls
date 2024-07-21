@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\enum.cpp`
 
-```
+```py
 // 定义一个名为 "torch" 的命名空间，用于存放所有相关枚举
 namespace torch {
 

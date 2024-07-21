@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\impl\CUDAGuardImpl.h`
 
-```
+```py
   #pragma once
 
 #include <c10/core/impl/DeviceGuardImplInterface.h>

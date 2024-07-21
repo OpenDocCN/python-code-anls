@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\release_notes\common.py`
 
-```
+```py
 import json
 import locale
 import os

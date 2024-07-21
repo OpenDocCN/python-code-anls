@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\source_range.h`
 
-```
+```py
 #pragma once
 #include <c10/util/Exception.h>
 #include <c10/util/Optional.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_sympy\reference.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 math 库，提供数学函数和常量
 import math

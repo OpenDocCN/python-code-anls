@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_tensor_docs.py`
 
-```
+```py
 # 添加 docstring 到 Tensor 函数
 
 import torch._C  # 导入 torch._C 模块

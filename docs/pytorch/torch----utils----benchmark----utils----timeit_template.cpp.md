@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\timeit_template.cpp`
 
-```
+```py
 /* C++ template for Timer.timeit
 
 This template will be consumed by `cpp_jit.py`, and will replace:

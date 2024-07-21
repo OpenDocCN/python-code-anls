@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_standalone_compile.py`
 
-```
+```py
 # 导入必要的库和模块
 import torch
 from torch import _dynamo as dynamo, _inductor as inductor

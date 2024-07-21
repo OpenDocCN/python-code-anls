@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\ao_sparsifier_test.py`
 
-```
+```py
 # 导入 operator_benchmark 模块作为 op_bench 别名，用于性能基准测试
 import operator_benchmark as op_bench
 # 导入 torch 库

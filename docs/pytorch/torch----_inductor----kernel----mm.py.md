@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\kernel\mm.py`
 
-```
+```py
 # 引入mypy: allow-untyped-defs，允许在未类型化定义中使用mypy
 import functools  # 导入functools模块，提供对高阶函数的支持
 import logging  # 导入logging模块，用于记录日志信息

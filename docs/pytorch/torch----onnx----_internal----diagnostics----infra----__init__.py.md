@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\infra\__init__.py`
 
-```
+```py
 # 从._infra模块中导入多个类和变量，用于当前模块的使用
 from ._infra import (
     DiagnosticOptions,    # 导入诊断选项类

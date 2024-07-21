@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_decomp\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入模块，包括inspect、defaultdict、wraps、chain和特定类型的导入
 import inspect

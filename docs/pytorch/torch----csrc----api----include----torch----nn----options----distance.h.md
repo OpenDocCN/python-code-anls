@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\distance.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 包含 Torch 库中的参数定义头文件
@@ -15,7 +15,7 @@ namespace nn {
 /// Example:
 /// ```
 /// CosineSimilarity model(CosineSimilarityOptions().dim(0).eps(0.5));
-/// ```
+/// ```py
 struct TORCH_API CosineSimilarityOptions {
   /// Dimension where cosine similarity is computed. Default: 1
   TORCH_ARG(int64_t, dim) = 1;  // 计算余弦相似度的维度，默认为1
@@ -34,7 +34,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::cosine_similarity(input1, input2,
 /// F::CosineSimilarityFuncOptions().dim(1));
-/// ```
+/// ```py
 using CosineSimilarityFuncOptions = CosineSimilarityOptions;  // 使用 CosineSimilarityOptions 的别名
 } // namespace functional
 
@@ -46,7 +46,7 @@ using CosineSimilarityFuncOptions = CosineSimilarityOptions;  // 使用 CosineSi
 /// ```
 /// PairwiseDistance
 /// model(PairwiseDistanceOptions().p(3).eps(0.5).keepdim(true));
-/// ```
+/// ```py
 struct TORCH_API PairwiseDistanceOptions {
   /// The norm degree. Default: 2
   TORCH_ARG(double, p) = 2.0;  // 范数的度数，默认为2
@@ -66,7 +66,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::pairwise_distance(input1, input2, F::PairwiseDistanceFuncOptions().p(1));
-/// ```
+/// ```py
 using PairwiseDistanceFuncOptions = PairwiseDistanceOptions;  // 使用 PairwiseDistanceOptions 的别名
 } // namespace functional
 

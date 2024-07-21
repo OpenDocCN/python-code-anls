@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_ops.py`
 
-```
+```py
 # 导入 functools 模块，提供了高阶函数支持
 import functools
 # 导入 itertools 模块，提供了操作迭代器的函数

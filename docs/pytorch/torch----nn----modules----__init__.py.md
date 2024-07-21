@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\__init__.py`
 
-```
+```py
 # 从模块中导入具体类或函数，用于神经网络模型构建
 
 from .module import Module  # usort: skip

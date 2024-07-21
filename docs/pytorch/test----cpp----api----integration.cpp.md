@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\integration.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 引入 Google Test 框架的头文件
 
 #include <c10/util/irange.h> // 引入 C10 库的工具和范围定义

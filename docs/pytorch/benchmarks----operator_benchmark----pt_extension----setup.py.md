@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt_extension\setup.py`
 
-```
+```py
 # 导入需要的模块和函数，从setuptools库中导入setup函数
 from setuptools import setup
 

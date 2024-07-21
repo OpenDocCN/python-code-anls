@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\passes\type_promotion.py`
 
-```
+```py
 # 设置 mypy 选项，允许未标记类型的函数定义
 # 所有权：["模块：onnx"]
 from __future__ import annotations
@@ -1447,7 +1447,7 @@ class ElementwiseTypePromotionRuleSetGenerator:
             type_promoting_args=("a", "b"),
             type_promotion_kind=type_promotion_kind,
         )
-    ```
+    ```py
 
     从参考操作中提供信息，指出哪些参数会被提升。
     """

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\interface.cpp`
 
-```
+```py
 // 包含头文件：一API DNNL 图形处理、OneDNN 的 SILU 分解、延迟大小检查、图融合、形状保护、接口、内核、布局传播、二进制准备、JIT 日志、分解操作、Pass 管理、移除突变、Tensorexpr 融合、自定义运算符、图执行器、运算符选项
 #include <oneapi/dnnl/dnnl_graph.hpp>
 #include <torch/csrc/jit/codegen/onednn/decompose_silu.h>

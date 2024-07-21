@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\fx_symbolic_graph_extractor.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来导入注释，允许未类型化的定义
 

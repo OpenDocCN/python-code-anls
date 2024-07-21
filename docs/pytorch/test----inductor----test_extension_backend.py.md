@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_extension_backend.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 引入标准库和第三方库

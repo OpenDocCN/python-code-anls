@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\sample_module.py`
 
-```
+```py
 import torch
 # 导入 PyTorch 库
 

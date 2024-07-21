@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\split_cat.py`
 
-```
+```py
 # 添加类型检查允许未类型化的定义
 # 导入必要的库和模块
 import itertools  # 提供迭代工具的函数

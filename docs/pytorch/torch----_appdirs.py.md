@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_appdirs.py`
 
-```
+```py
 # 如果当前平台是Java虚拟机，则需要额外处理平台信息
 if sys.platform.startswith("java"):
     # 导入平台模块以获取Java虚拟机的操作系统信息

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\GeneratorForPrivateuseone.h`
 
-```
+```py
 #pragma once
 
 

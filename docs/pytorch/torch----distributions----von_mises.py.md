@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\von_mises.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入数学库
 import math

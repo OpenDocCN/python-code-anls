@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_quantize_pt2e_qat.py`
 
-```
+```py
 # 导入必要的模块和类
 # Owner(s): ["oncall: quantization"]
 import copy  # 导入 copy 模块，用于对象的深拷贝操作

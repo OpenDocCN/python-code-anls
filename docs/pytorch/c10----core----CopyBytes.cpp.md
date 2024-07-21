@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\CopyBytes.cpp`
 
-```
+```py
 // 包含 C10 库的头文件 CopyBytes.h 和 Logging.h
 #include <c10/core/CopyBytes.h>
 #include <c10/util/Logging.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDADeviceAssertionHost.cpp`
 
-```
+```py
 /// 引入必要的CUDA头文件
 #include <c10/cuda/CUDADeviceAssertionHost.h>
 #include <c10/cuda/CUDAException.h>

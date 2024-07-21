@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_dce_pass.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入必要的库

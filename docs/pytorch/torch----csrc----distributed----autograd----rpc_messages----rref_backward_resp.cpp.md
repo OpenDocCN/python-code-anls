@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rref_backward_resp.cpp`
 
-```
+```py
 # 包含 Torch 分布式自动求导的 RPC 消息相关头文件
 #include <torch/csrc/distributed/autograd/rpc_messages/rref_backward_resp.h>
 

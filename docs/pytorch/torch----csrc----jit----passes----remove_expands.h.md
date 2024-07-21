@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_expands.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 指令，确保头文件只被编译一次，以防止多重包含的问题。

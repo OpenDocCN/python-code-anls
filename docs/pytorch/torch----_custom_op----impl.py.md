@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_custom_op\impl.py`
 
-```
+```py
 # 设置 mypy 来允许未类型化的定义
 mypy: allow-untyped-defs
 

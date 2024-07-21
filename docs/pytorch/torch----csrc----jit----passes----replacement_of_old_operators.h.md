@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\replacement_of_old_operators.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含
 

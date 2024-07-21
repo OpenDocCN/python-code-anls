@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\onnx.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含
 

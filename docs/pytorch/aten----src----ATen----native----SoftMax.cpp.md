@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SoftMax.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于仅在方法运算符中断言
 

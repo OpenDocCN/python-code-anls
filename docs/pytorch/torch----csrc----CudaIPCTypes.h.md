@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\CudaIPCTypes.h`
 
-```
+```py
 #pragma once
 #ifdef USE_CUDA
 #include <c10/core/Allocator.h>

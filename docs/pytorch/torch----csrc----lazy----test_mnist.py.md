@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\test_mnist.py`
 
-```
+```py
 # 忽略 mypy 的错误信息
 
 # 导入标准库 os

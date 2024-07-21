@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\cudagraphs.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入 functools 模块，用于高阶函数操作
 # 导入 operator 模块，用于操作符操作

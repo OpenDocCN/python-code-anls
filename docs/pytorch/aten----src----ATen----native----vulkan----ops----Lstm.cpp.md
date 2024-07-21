@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Lstm.cpp`
 
-```
+```py
     double scale_in, // input scale factor
     double scale_hx, // hidden state scale factor
     double scale_cx, // cell state scale factor

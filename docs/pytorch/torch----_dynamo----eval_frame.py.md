@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\eval_frame.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # mypy: disable-error-code="method-assign"
 

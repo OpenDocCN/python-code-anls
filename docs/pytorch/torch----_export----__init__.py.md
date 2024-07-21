@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import copy  # 导入copy模块，用于复制对象
 import dataclasses  # 导入dataclasses模块，用于数据类的装饰器

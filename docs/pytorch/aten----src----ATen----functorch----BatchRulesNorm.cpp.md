@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesNorm.cpp`
 
-```
+```py
 // 包含头文件，用于处理批处理规则
 #include <ATen/functorch/BatchRulesHelper.h>
 // 包含头文件，用于处理管道辅助功能

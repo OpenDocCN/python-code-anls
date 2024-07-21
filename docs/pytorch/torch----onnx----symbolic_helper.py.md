@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_helper.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入未类型化定义允许
 from __future__ import annotations
@@ -303,7 +303,7 @@ def parse_args(*arg_descriptors: _ValueDescriptor):
         assert isinstance(b, int)
         assert isinstance(c, list)
         assert isinstance(c[0], float)
-    ```
+    ```py
 
     Args:
         arg_descriptors: 字符串列表，每个元素指定要转换的类型。有效的描述符包括:
@@ -400,7 +400,7 @@ def quantized_args(
     @quantized_args(True, False)
     def foo(g, x, y):
         return x + y
-    ```
+    ```py
 
     is equivalent to
 
@@ -412,7 +412,7 @@ def quantized_args(
             return quantize(out)
         else:
             return foo(g, x, y)
-    ```
+    ```py
 
     Args:
         arg_q_descriptors: A sequence of bool, where each element represents if the

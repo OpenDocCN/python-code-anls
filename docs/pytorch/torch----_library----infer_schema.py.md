@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\infer_schema.py`
 
-```
+```py
 ````
 # 允许未类型化的函数定义，便于 mypy 的类型检查
 # 该行指定了 mypy 的解析选项，允许未指定类型的函数

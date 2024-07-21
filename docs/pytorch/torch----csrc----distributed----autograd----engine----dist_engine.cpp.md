@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\engine\dist_engine.cpp`
 
-```
+```py
 // 包含 C++ 标准库中的队列实现
 #include <queue>
 

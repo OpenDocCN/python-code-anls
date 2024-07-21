@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\bench.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数的库
 import copy  # 用于复制对象的库

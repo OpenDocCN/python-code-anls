@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Layout.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Backend.h>

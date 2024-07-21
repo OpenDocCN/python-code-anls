@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\TensorBody.h`
 
-```
+```py
 #pragma once
 
 #ifdef TORCH_ASSERT_NO_OPERATORS
@@ -578,10 +578,10 @@ at::Tensor tensor_data() const {
   /// The hook should have one of the following signature:
   /// ```
   /// hook(Tensor grad) -> Tensor
-  /// ```
+  /// ```py
   /// ```
   /// hook(Tensor grad) -> void
-  /// ```
+  /// ```py
   /// The hook should not modify its argument, but it can optionally return a new gradient
   /// which will be used in place of `grad`.
   ///
@@ -598,7 +598,7 @@ at::Tensor tensor_data() const {
   /// //  4
   /// //  6
   /// // [ CPUFloatType{3} ]
-  /// // ```
+  /// // ```py
   /// std::cout << v.grad() << std::endl;
   /// v.remove_hook(h);  // removes the hook
   /// @endcode
@@ -611,7 +611,7 @@ at::Tensor tensor_data() const {
   /// The hook should have the following signature:
   /// ```
   /// hook(Tensor grad) -> Tensor
-  /// ```
+  /// ```py
   ///
   /// This function returns the index of the hook in the list which can be used to remove hook.
   ///
@@ -626,7 +626,7 @@ at::Tensor tensor_data() const {
   /// //  4
   /// //  6
   /// // [ CPUFloatType{3} ]
-  /// // ```
+  /// // ```py
   /// std::cout << v.grad() << std::endl;
   /// v.remove_hook(h);  // removes the hook
   /// @endcode

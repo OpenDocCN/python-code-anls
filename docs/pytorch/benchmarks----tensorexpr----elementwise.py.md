@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\elementwise.py`
 
-```
+```py
 # 导入 itertools 库，用于高效迭代操作
 # 导入 operator 库，提供操作符和函数，用于元素级操作
 import itertools

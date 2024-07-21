@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\training_loss.py`
 
-```
+```py
 # 导入命令行参数解析模块
 import argparse
 # 导入检查模块，用于检查源码

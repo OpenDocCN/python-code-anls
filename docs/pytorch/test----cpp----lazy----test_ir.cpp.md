@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_ir.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/core/ScalarType.h>

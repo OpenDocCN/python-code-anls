@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\tests\MetalOpTestRunner.h`
 
-```
+```py
 // 引入 Foundation 框架，包含 Objective-C 所需的基础功能
 #import <Foundation/Foundation.h>
 // 引入 C++ 的无序映射容器头文件

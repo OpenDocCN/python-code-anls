@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\Macros.h`
 
-```
+```py
 #pragma once
 
 #if defined(__CUDACC__) || defined(__HIPCC__)

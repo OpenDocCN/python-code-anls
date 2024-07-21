@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_micro_gemm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import dataclasses  # 导入dataclasses模块，用于数据类的支持

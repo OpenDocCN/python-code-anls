@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8avgpool\up8x9-neon.c`
 
-```
+```py
 /*
  * 版权所有（C）Facebook, Inc. 及其关联公司。
  * 保留所有权利。

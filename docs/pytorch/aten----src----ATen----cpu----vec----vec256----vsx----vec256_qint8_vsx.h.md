@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_qint8_vsx.h`
 
-```
+```py
 // 一旦这个头文件被包含，编译器会确保本文件内容只被包含一次，避免重复定义
 #pragma once
 

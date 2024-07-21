@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\DispatchKeyExtractor.cpp`
 
-```
+```py
 // (1) 更新 nonFallthroughKeys_
 void DispatchKeyExtractor::setOperatorHasFallthroughForKey(DispatchKey k, bool has_fallthrough) {
   if (has_fallthrough) {

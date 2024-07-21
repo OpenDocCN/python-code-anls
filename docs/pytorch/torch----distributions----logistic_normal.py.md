@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\logistic_normal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的约束条件和分布类
 from torch.distributions import constraints

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\modules\__init__.py`
 
-```
+```py
 # 从当前目录下的 fused 模块中导入 _FusedModule 类
 from .fused import _FusedModule  # noqa: F401
 # 从 fused 模块中导入以下类

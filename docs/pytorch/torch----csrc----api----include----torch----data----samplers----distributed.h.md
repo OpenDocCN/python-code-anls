@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\samplers\distributed.h`
 
-```
+```py
 /// 防止头文件被多次包含
 #pragma once
 

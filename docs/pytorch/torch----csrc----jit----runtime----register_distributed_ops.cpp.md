@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_distributed_ops.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 // 包含操作注册的头文件

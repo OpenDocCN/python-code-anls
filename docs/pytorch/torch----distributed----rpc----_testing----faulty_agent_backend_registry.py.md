@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\_testing\faulty_agent_backend_registry.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

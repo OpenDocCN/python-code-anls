@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_ac.py`
 
-```
+```py
 # Owner(s): ["oncall: pt2"]
 # 导入必要的库
 import random

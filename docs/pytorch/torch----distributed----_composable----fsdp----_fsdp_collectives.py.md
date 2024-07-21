@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fsdp\_fsdp_collectives.py`
 
-```
+```py
 # 从 typing 模块中导入需要的类型声明
 from typing import List, NamedTuple, Optional, Tuple, Union
 

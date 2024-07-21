@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\nested\NestedTensorBinaryOps.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 防止头文件被多次包含，保证编译器只包含一次该头文件。

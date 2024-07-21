@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\dialect\common\__init__.py`
 
-```
+```py
 # 定义一个类 Calculator，用于实现基本的数学运算
 class Calculator:
     # 初始化方法，设置初始值

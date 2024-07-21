@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\_gpu_trace.py`
 
-```
+```py
 # 引入类型提示中的 Callable 类型
 from typing import Callable
 

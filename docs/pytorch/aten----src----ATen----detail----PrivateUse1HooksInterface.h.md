@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\PrivateUse1HooksInterface.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Generator.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\modules\embedding_ops.py`
 
-```
+```py
 # flake8: noqa: F401
 # 在导入模块时忽略 flake8 的 F401 错误，即未使用的导入警告
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_abi_check\test_dtype.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/util/BFloat16-math.h>

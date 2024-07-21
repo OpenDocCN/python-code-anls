@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\upsampling.py`
 
-```
+```py
 # 允许在类型检查时定义未加类型注解的函数
 # 从 typing 模块导入 Optional 类型注解
 from typing import Optional

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\LegacyBatchedTensorImpl.cpp`
 
-```
+```py
 // 包含 ATen 库中所需的头文件，用于 LegacyBatchedTensorImpl 类的实现
 #include <ATen/LegacyBatchedTensorImpl.h>
 

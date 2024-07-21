@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\bounds.py`
 
-```
+```py
 # 设置允许未类型化的函数定义，用于静态类型检查工具mypy
 # 导入日志模块
 import logging

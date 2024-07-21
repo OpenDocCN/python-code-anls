@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\fx\test_model_report_fx.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 from typing import Set
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\cloneable.h`
 
-```
+```py
 // 预处理指令，确保本文件在编译时只包含一次
 #pragma once
 

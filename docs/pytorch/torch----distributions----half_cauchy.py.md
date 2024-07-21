@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\half_cauchy.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 math 库，用于数学运算
 import math

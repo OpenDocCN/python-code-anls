@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\shard.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的模块和类
 from dataclasses import dataclass

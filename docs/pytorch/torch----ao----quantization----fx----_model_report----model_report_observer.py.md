@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\_model_report\model_report_observer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 PyTorch 库
 import torch

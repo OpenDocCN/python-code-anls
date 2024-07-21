@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\function_wrapper.py`
 
-```
+```py
 # 定义一个类名为 Node 的节点类，用于构建链表数据结构
 class Node:
     # 类的初始化方法，用于设置节点的初始值和指向下一个节点的指针

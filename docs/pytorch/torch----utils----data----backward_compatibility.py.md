@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\backward_compatibility.py`
 
-```
+```py
 # 声明使用 mypy 时允许未类型化的函数定义
 # 导入 typing_extensions 模块中的 deprecated 别名作为 _deprecated
 from typing_extensions import deprecated as _deprecated

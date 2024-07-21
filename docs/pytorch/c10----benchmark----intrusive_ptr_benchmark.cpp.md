@@ -1,6 +1,6 @@
 # `.\pytorch\c10\benchmark\intrusive_ptr_benchmark.cpp`
 
-```
+```py
 // 包含 C10 库中的相关头文件
 #include <c10/util/intrusive_ptr.h>
 #include <c10/util/irange.h>

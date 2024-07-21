@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_flat_param.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入上下文管理、函数工具、日志记录、操作系统功能、警告管理等模块
 import contextlib

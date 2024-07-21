@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\constants.cpp`
 
-```
+```py
 // 引入 Torch 的头文件 constants.h
 #include <torch/csrc/jit/ir/constants.h>
 

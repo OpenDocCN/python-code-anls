@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Bitset.h`
 
-```
+```py
 #pragma once
 
 #include <cstddef>

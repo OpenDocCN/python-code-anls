@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\testing\catch_utils.hpp`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 防止头文件被多次包含，确保编译器只包含一次该头文件。

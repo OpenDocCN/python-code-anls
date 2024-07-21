@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\update_s3.py`
 
-```
+```py
 """Uploads a new binary to s3 and updates its hash in the config file.
 
 You'll need to have appropriate credentials on the PyTorch AWS buckets, see:

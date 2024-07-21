@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\tensor_cuda.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/ATen.h>

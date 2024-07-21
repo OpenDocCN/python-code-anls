@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_comparison_utils.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["module: internals"]
 

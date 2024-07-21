@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\fx\_equalize.py`
 
-```
+```py
 # 导入模块和函数，用于 AO（Activation Observation）量化的均衡处理
 """
 This file is in the process of migration to `torch/ao/quantization`, and

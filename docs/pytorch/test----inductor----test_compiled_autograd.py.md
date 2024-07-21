@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_compiled_autograd.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入必要的库和模块
 import functools  # 导入 functools 库

@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_export_nonstrict.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 # 尝试导入本地的 test_export 和 testing 模块，如果导入失败则从全局导入

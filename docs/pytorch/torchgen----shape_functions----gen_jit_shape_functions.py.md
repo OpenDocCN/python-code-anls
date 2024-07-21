@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\shape_functions\gen_jit_shape_functions.py`
 
-```
+```py
 #!/usr/bin/env python3
 import os  # 导入标准库 os
 import sys  # 导入标准库 sys

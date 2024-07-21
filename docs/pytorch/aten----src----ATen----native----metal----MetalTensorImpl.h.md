@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalTensorImpl.h`
 
-```
+```py
 #ifndef MetalTensorImpl_h
 #define MetalTensorImpl_h
 

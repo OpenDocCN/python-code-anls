@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\n_shadows_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch 库
 import torch

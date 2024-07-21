@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\transformer.cpp`
 
-```
+```py
 // 引入所需的头文件
 #include <c10/util/irange.h>
 #include <torch/nn/init.h>

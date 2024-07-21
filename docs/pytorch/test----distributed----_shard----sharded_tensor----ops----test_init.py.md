@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\ops\test_init.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 代码维护者信息
 
 import sys  # 导入sys模块，用于与Python解释器进行交互

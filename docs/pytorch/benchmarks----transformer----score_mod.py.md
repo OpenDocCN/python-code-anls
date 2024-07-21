@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\transformer\score_mod.py`
 
-```
+```py
 import argparse
 import itertools
 from collections import defaultdict

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\generate_test_torchscripts.py`
 
-```
+```py
 # 引入必要的类型注解
 from typing import Dict, List, Optional, Tuple
 

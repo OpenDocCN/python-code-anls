@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\pool_test.py`
 
-```
+```py
 # 引入operator_benchmark作为op_bench的别名，用于性能基准测试
 import operator_benchmark as op_bench
 # 引入PyTorch库

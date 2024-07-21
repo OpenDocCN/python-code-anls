@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\source_range.cpp`
 
-```
+```py
 // 包含头文件 <c10/util/irange.h>
 // 用于范围迭代的实用工具函数
 #include <c10/util/irange.h>

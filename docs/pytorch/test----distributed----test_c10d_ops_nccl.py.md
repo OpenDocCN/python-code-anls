@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_ops_nccl.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # This test file contains positive tests for c10d with NCCL backend.
 # During the test, it is expected that ProcessGroup will not be aborted, destroyed or incur fatal error.

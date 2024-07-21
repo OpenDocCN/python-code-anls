@@ -1,6 +1,6 @@
 # `.\pytorch\tools\gen_vulkan_spv.py`
 
-```
+```py
 # 指定当前脚本使用 Python3 解释器
 
 from __future__ import annotations  # 允许在注释中使用类型注释的未来特性

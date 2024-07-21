@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\__init__.py`
 
-```
+```py
 """
 :mod:`torch.optim` is a package implementing various optimization algorithms.
 

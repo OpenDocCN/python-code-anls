@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\constant_pooling.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令，确保当前头文件只被编译一次，避免重复包含

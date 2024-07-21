@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["module: unknown"]
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\PythonOpRegistrationTrampoline.h`
 
-```
+```py
 // 预处理指令，表示本文件只被编译一次
 #pragma once
 

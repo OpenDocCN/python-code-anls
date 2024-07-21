@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_decomposition_utils.py`
 
-```
+```py
 # 添加类型检查声明，允许未经类型定义的函数
 # 导入 PyTorch 库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\AlignOf.h`
 
-```
+```py
 //===--- AlignOf.h - Portable calculation of type alignment -----*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure

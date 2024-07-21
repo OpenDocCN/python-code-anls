@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\higher_order_ops.py`
 
-```
+```py
 # 忽略类型检查错误，针对 mypy 工具的声明
 # Import necessary modules and symbols
 import contextlib                  # 提供支持上下文管理的工具

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\CudaIPCTypes.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <ATen/MapAllocator.h>
 #include <c10/cuda/CUDAGuard.h>

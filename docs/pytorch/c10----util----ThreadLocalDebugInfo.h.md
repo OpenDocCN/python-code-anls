@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ThreadLocalDebugInfo.h`
 
-```
+```py
 #pragma once
 
 

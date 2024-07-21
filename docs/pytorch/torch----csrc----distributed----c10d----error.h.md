@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\error.h`
 
-```
+```py
 // 版权声明及许可信息
 
 // 预处理指令，确保本头文件只被包含一次

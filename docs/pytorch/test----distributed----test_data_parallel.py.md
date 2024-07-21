@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_data_parallel.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 引入上下文管理、函数工具、IO操作、有序字典和深拷贝等必要库

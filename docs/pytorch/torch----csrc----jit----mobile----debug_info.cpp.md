@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\debug_info.cpp`
 
-```
+```py
 #include <torch/csrc/jit/frontend/source_range.h>
 #include <torch/csrc/jit/mobile/debug_info.h>
 #include <torch/csrc/jit/mobile/type_parser.h>

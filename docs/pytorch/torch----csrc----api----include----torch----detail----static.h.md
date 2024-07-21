@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\detail\static.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/utils/variadic.h>

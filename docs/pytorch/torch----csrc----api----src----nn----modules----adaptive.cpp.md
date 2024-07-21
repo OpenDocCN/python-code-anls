@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\adaptive.cpp`
 
-```
+```py
 // 包含C++标准库和Torch库的头文件，用于导入必要的类和函数
 #include <c10/util/irange.h>
 #include <torch/nn/modules/adaptive.h>

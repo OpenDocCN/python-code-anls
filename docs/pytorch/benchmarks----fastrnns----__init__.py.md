@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\__init__.py`
 
-```
+```py
 # 导入.cells模块中的所有内容（忽略F403警告）
 from .cells import *  # noqa: F403
 

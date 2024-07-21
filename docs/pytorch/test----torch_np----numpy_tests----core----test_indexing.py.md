@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_indexing.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入必要的模块和函数
 import functools  # 导入 functools 模块，用于创建偏函数

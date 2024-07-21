@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_input_attr_tracking.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # flake8: noqa
 

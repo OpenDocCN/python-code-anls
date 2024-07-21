@@ -1,6 +1,6 @@
 # `.\pytorch\torch\xpu\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 This package introduces support for the XPU backend, specifically tailored for

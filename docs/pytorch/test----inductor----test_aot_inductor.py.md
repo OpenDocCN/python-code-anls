@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_aot_inductor.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入copy模块，用于复制对象
 import itertools  # 导入itertools模块，用于高效的迭代工具

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_variable_type.py`
 
-```
+```py
 # 生成 VariableType.h/cpp 文件
 #
 # **如果对 VariableType 代码生成做了任何更改，请同时检查是否需要更新 torch/csrc/autograd/autograd_not_implemented_fallback.cpp

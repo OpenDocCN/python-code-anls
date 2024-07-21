@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_concat_linear.cpp`
 
-```
+```py
 // 包含头文件：C10 库中的 irange.h
 // 用于 Torch 的 JIT 框架中的别名分析
 // 用于 Torch 的 JIT 框架中的 IR 表示

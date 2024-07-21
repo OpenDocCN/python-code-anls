@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\decorator.py`
 
-```
+```py
 # 导入mypy的配置选项，允许未标记类型的函数定义
 # 该注释指定了在类型检查时允许未经类型标注的函数定义
 # 这对于部分动态语言（如Python）中的类型检查工具很有用

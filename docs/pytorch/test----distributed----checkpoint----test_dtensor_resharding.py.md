@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_dtensor_resharding.py`
 
-```
+```py
 # 引入PyTorch库
 import torch
 # 导入分布式检查点模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\block_codegen.cpp`
 
-```
+```py
 // 引入头文件block_codegen.h，用于TensorExpr的块级代码生成
 #include <torch/csrc/jit/tensorexpr/block_codegen.h>
 

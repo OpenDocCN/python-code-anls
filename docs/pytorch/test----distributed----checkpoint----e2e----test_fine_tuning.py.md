@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\e2e\test_fine_tuning.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入标准库模块

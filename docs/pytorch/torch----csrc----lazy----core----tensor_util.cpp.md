@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\tensor_util.cpp`
 
-```
+```py
 // 包含 Torch 框架的懒加载模块中的头文件
 #include <torch/csrc/lazy/core/tensor_util.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_create_autodiff_subgraphs.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include "test/cpp/jit/test_utils.h"

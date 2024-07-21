@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\linear.cpp`
 
-```
+```py
 // 包含 Torch 库中的线性函数和初始化模块
 #include <torch/nn/functional/linear.h>
 #include <torch/nn/init.h>

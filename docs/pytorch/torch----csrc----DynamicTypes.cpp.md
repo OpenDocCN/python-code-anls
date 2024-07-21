@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\DynamicTypes.cpp`
 
-```
+```py
 // 引入 Torch 的 Python 头文件
 #include <torch/csrc/python_headers.h>
 

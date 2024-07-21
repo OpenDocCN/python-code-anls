@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_dynamo\compiled_autograd.pyi`
 
-```
+```py
 # 从 typing 模块导入 Callable 类型
 from typing import Callable
 

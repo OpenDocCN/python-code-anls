@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_gemm_template.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义：Any, Callable, cast, List, Optional, Union
 from typing import Any, Callable, cast, List, Optional, Union

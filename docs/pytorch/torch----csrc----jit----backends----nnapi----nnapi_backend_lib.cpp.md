@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\nnapi\nnapi_backend_lib.cpp`
 
-```
+```py
 // 包含标准库头文件
 #include <memory>
 

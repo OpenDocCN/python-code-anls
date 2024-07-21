@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_refs\linalg\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 functools 模块导入 partial 函数
 from functools import partial

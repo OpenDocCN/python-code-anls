@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\input_metadata.h`
 
-```
+```py
 #pragma once
 
 // 包含 ATen 库中的各种头文件，用于张量操作和设备管理

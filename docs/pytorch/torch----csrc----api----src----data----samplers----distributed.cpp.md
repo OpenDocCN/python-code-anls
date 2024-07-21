@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\data\samplers\distributed.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <c10/util/irange.h>
 #include <torch/data/samplers/distributed.h>

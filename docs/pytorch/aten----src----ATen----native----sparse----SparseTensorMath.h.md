@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseTensorMath.h`
 
-```
+```py
 #pragma once
 
 # 防止头文件被重复包含，仅编译一次

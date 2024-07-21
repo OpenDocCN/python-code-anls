@@ -35,7 +35,7 @@ There's two ways you can write kernels for a PyTorch operator. You can write the
 
 This is probably the most simple way to write an operator. Just write a kernel function and register it with the PyTorch operator library.
 
-```
+```py
 namespace { Tensor my_kernel_cpu(const Tensor& a, const Tensor& b) {...} }
 
 static auto registry = torch::RegisterOperators()
@@ -50,7 +50,7 @@ The dispatch key argument (i.e. `CPU()`) takes care that this kernel is only cal
 
 Very short and simple kernels can be written as lambdas directly in the registration call:
 
-```
+```py
 static auto registry = torch::RegisterOperators()
     .op("my_namespace::my_op", torch::RegisterOperators::options()
         .kernel(CPU(), [] (const Tensor& a) -> Tensor{...}));
@@ -62,7 +62,7 @@ These lambdas must be stateless, i.e. not have a closure. The registration will 
 
 You can register catch-all kernels that are called for every backend. This disables dispatch for this operator and just always calls into the kernel you provide. You cannot combine catch-all kernels and regular device-bound kernels for the same operator.
 
-```
+```py
 namespace { Tensor my_kernel_fallback(Tensor a, Tensor b) {...} }
 
 static auto registry = torch::RegisterOperators()
@@ -76,7 +76,7 @@ The other ways of specifying kernels mentioned above (as functions, functors or 
 
 You can use the following syntactic sugar to define a catch-all kernel function more easily:
 
-```
+```py
 namespace { Tensor my_kernel_cpu(const Tensor& a, const Tensor& b) {...}
 
 static auto registry = torch::RegisterOperators()
@@ -85,7 +85,7 @@ static auto registry = torch::RegisterOperators()
 
 or for lambdas:
 
-```
+```py
 static auto registry = torch::RegisterOperators()
  .op("my_namespace::my_op", [] (Tensor a, Tensor b) {...});
 ```
@@ -94,7 +94,7 @@ static auto registry = torch::RegisterOperators()
 
 Multiple operator registrations can be chained into the same registry by calling `.op()` multiple times:
 
-```
+```py
 static auto registry = torch::RegisterOperators()
     .op("my_namespace::my_op_1", torch::RegisterOperators::options()
         .kernel<MyKernel1>(CPU()))
@@ -106,7 +106,7 @@ static auto registry = torch::RegisterOperators()
 
 You can register different kernels for the same operator for different backends.
 
-```
+```py
 namespace {
 Tensor my_kernel_cpu(const Tensor& a, const Tensor& b) {...}
 Tensor my_kernel_cuda(const Tensor& a, const Tensor& b) {...}
@@ -127,7 +127,7 @@ Note that here, the CPU and CUDA kernel were registered directly next to each ot
 
 All examples above automatically inferred the operator schema from the kernel function/lambda. Sometimes, however, you want to specify the schema manually. To specify annotations for example, or default values for arguments (default values will not be inferred from the c++ kernel function), or simply for documentation purposes or to make sure the schema matches your expectations.
 
-```
+```py
 namespace { Tensor my_kernel_cpu(const Tensor& a, const Tensor& b) {...} }
 
 static auto registry = torch::RegisterOperators()
@@ -138,7 +138,7 @@ static auto registry = torch::RegisterOperators()
 
 Or with annotations:
 
-```
+```py
 namespace {
     Tensor my_kernel_cpu(const Tensor& a, int64_t b, at::optional<int64_t> c) {...}
 }
@@ -155,7 +155,7 @@ If the schema is explicitly specified but doesn't match the kernel signature, yo
 
 The kernel function can either return `void` or a single element like `Tensor` in the examples above, or it can return multiple values using `std::tuple` as shown in the following example:
 
-```
+```py
 namespace {
   std::tuple<Tensor, int64_t, Tensor>
      my_kernel_cpu(const Tensor& a, const Tensor& b, int64_t c) {...}
@@ -193,7 +193,7 @@ When multiple kernels are registered for the same operator, they must have the s
 
 If you want to reuse the same operator name for a different schema, you can use overloads. Overloads must be named and the name is appended to the operator name after a dot:
 
-```
+```py
 namespace {
   Tensor my_kernel_cpu_1(const Tensor& a) {...}
   Tensor my_kernel_cpu_2(const Tensor& a, const Tensor& b) {...}
@@ -214,7 +214,7 @@ Kernels registered for the same overload must have exactly matching schemas, but
 
 You can register an operator without a kernel:
 
-```
+```py
 static auto registry = torch::RegisterOperators()
    .op("my_namespace::my_op(Tensor a, Tensor b) -> Tensor");
 ```
@@ -232,7 +232,7 @@ All registered operators are automatically available to PyTorch and JIT under `t
 
 Custom operators are not available to the caffe2 frontend by default, but there's a simple macro you can add if you want to make it available. To expose a CPU kernel:
 
-```
+```py
 // Expose "my_namespace::my_op" custom operator to caffe2.
 // In caffe2, the operator will be called "MyCaffe2OperatorName".
 C10_EXPORT_C10_OP_TO_CAFFE2_CPU(
@@ -241,7 +241,7 @@ C10_EXPORT_C10_OP_TO_CAFFE2_CPU(
 
 And to expose a CUDA kernel:
 
-```
+```py
 C10_EXPORT_C10_OP_TO_CAFFE2_CUDA(
     MyCaffe2OperatorName, "my_namespace::my_op")
 ```

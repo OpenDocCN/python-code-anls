@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\embedding.h`
 
-```
+```py
 #pragma once
 
 
@@ -26,7 +26,7 @@ namespace nn {
 /// ```
 /// Embedding model(EmbeddingOptions(10,
 /// 2).padding_idx(3).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true));
-/// ```
+/// ```py
 struct TORCH_API EmbeddingOptions {
 
 
@@ -102,7 +102,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::embedding(input, weight,
 /// F::EmbeddingFuncOptions().norm_type(2.5).scale_grad_by_freq(true).sparse(true));
-/// ```
+/// ```py
 struct TORCH_API EmbeddingFuncOptions {
   /// 如果指定，`padding_idx` 处的条目不会对梯度产生贡献；
   /// 因此，在训练过程中，`padding_idx` 处的嵌入向量不会被更新，即保持固定的“填充”状态。
@@ -127,7 +127,7 @@ struct TORCH_API EmbeddingFuncOptions {
 /// ```
 /// EmbeddingBag model(EmbeddingBagOptions(10,
 /// 2).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true).mode(torch::kSum));
-/// ```
+/// ```py
 typedef std::variant<enumtype::kSum, enumtype::kMean, enumtype::kMax>
     EmbeddingBagMode;
 /// 定义了一个结构体 `EmbeddingBagOptions`，用于存储嵌入袋的选项参数。
@@ -193,7 +193,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::embedding_bag(input, weight,
 /// F::EmbeddingBagFuncOptions().mode(torch::kSum).offsets(offsets));
-/// ```
+/// ```py
 /// 定义了 EmbeddingBagFuncOptions 结构体，用于存储 EmbeddingBag 函数的参数选项。
 struct TORCH_API EmbeddingBagFuncOptions {
   /// 当 `input` 是一维时使用。`offsets` 确定了 `input` 中每个 bag（序列）的起始索引位置。

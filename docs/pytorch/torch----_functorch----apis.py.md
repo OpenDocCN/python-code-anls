@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\apis.py`
 
-```
+```py
 # 允许 mypy 在未定义类型的情况下进行类型推断
 # 注意事项：我们允许 Dynamo 通过 torch/_dynamo/trace_rules.py 看到这个文件，以便它可以通过 functorch transforms 进行跟踪。
 #       目前，我们不能让 Dynamo 看到 `eager_transforms.py` / `vmap.py`，因为这会破坏很多东西，并且没有一种机制能够选择性地只暴露文件中的某些函数（例如 grad）给 Dynamo。

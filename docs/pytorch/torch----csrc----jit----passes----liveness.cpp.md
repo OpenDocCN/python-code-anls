@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\liveness.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 环境中的头文件：生存期分析
 #include <torch/csrc/jit/passes/liveness.h>
 

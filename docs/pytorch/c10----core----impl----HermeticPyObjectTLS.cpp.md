@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\HermeticPyObjectTLS.cpp`
 
-```
+```py
 #include <c10/core/impl/HermeticPyObjectTLS.h>
 // 包含 HermeticPyObjectTLS.h 头文件，用于声明 HermeticPyObjectTLS 类的接口
 

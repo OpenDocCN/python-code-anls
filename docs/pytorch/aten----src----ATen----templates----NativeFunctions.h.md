@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\NativeFunctions.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}  // 插入由代码生成的注释内容，具体内容动态生成

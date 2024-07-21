@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_functional_collectives_impl.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型声明
 from typing import List, Optional

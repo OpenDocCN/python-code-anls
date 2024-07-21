@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_glob_group.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 引入类型提示模块

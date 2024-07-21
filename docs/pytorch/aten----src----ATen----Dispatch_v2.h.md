@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Dispatch_v2.h`
 
-```
+```py
 // 包含 ATen 库中的 Dispatch.h 头文件
 #include <ATen/Dispatch.h>
 

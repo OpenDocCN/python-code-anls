@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\value_refinement_utils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/jit_type.h>

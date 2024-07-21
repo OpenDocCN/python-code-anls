@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\events\__init__.py`
 
-```
+```py
 #!/usr/bin/env/python3
 """
 Module contains events processing mechanisms that are integrated with the standard python logging.

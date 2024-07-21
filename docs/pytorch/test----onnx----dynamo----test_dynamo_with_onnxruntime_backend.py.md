@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\dynamo\test_dynamo_with_onnxruntime_backend.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 from __future__ import annotations  # 导入 Python 未来版本支持的注解特性
 

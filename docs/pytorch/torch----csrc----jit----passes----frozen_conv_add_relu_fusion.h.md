@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_conv_add_relu_fusion.h`
 
-```
+```py
 #pragma once
 
 这是一个预处理指令，用于确保头文件只包含一次。在编译过程中，当多次引用同一个头文件时，这个指令可以防止重复包含。

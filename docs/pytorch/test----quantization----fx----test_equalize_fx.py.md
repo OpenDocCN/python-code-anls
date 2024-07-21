@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\fx\test_equalize_fx.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch  # 导入 PyTorch 库

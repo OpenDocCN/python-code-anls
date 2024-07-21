@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_sparsifier.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 import itertools  # 导入 itertools 模块，提供用于操作迭代器的函数

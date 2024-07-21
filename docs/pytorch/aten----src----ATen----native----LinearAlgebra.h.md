@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\LinearAlgebra.h`
 
-```
+```py
 #pragma once
 
 

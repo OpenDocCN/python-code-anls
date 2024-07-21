@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\jit\rpc_test_faulty.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入必要的类型
 from typing import Dict, Tuple

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\viz\_cycles.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的库和模块
 import gc  # 导入垃圾回收模块

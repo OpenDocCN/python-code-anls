@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\StackKernel.h`
 
-```
+```py
 // 声明一个命名空间，命名空间为 at::native，用于组织相关的函数和类型
 namespace at { namespace native {
 

@@ -3,7 +3,7 @@
 
 ### To run the benchmark:
 
-```
+```py
 # From pytorch root
 cd benchmarks/instruction_counts
 python main.py
@@ -32,7 +32,7 @@ definition for a set of related benchmarks, and produces one or more concrete
 cases. It's helpful to see an example to understand how the machinery works.
 Consider the following benchmark:
 
-```
+```py
 # `GroupedStmts` is an alias of `GroupedBenchmark.init_from_stmts`
 benchmark = GroupedStmts(
     py_stmt=r"y = x * w",
@@ -59,7 +59,7 @@ benchmark = GroupedStmts(
 It is trivial to generate Timers for the eager forward mode case (ignoring
 `num_threads` for now):
 
-```
+```py
 Timer(
     stmt=benchmark.py_fwd_stmt,
     setup=benchmark.setup.py_setup,
@@ -77,7 +77,7 @@ is part of setup, and the overall computation uses `x` and `w` to produce `y`.
 As a result, we can derive TorchScript'd and AutoGrad variants as well. We can
 deduce that a TorchScript model will take the form:
 
-```
+```py
 @torch.jit.script
 def f(x, w):
     # Paste `benchmark.py_fwd_stmt` into the function body.
@@ -88,7 +88,7 @@ def f(x, w):
 And because we will want to use this model in both Python and C++, we save it to
 disk and load it as needed. At this point Timers for TorchScript become:
 
-```
+```py
 Timer(
     stmt="""
         y = jit_model(x, w)

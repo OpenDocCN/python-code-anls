@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\z3_types.py`
 
-```
+```py
 # 尝试导入 z3 模块，标记为忽略类型检查的导入错误
 try:
     import z3  # type: ignore[import]

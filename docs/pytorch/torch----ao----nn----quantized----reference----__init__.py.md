@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\reference\__init__.py`
 
-```
+```py
 # 导入当前包内所有模块，忽略 F403 错误（模块不是通过正规的导入语句导入的情况）
 from .modules import *  # noqa: F403
 

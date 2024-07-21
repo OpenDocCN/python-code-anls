@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\cond_branch_nonlocal_variables.py`
 
-```
+```py
 # 使用类型检查时允许未类型化的函数定义
 mypy: allow-untyped-defs
 
@@ -37,7 +37,7 @@ class CondBranchNonlocalVariables(torch.nn.Module):
         return y - my_tensor_var - my_primitive_var
 
     return cond(x.shape[0] > 5, true_fn, false_fn, [x])
-    ```
+    ```py
 
     NOTE: If the `pred` is test on a dim with batch size < 2, it will be specialized.
     """

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\__init__.py`
 
-```
+```py
 # 添加类型检查允许未声明的函数
 # 导入必要的库和模块
 import dataclasses          # 导入数据类支持

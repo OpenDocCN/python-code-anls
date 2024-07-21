@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\miniz.h`
 
-```
+```py
 /*
 #pragma once
 

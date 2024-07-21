@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\checkpoint.py`
 
-```
+```py
 # 设置 mypy 来允许未类型化的函数定义
 # 导入必要的库和模块
 import contextlib  # 上下文管理器相关功能的标准库

@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\__init__.py`
 
-```
+```py
 # 定义一个函数，用于计算给定整数的阶乘
 def factorial(n):
     # 如果输入的整数小于等于1，直接返回1作为阶乘的结果

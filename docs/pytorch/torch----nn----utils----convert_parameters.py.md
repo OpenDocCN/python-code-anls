@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\convert_parameters.py`
 
-```
+```py
 # 导入必要的库，从 typing 模块导入 Iterable 和 Optional 类型
 from typing import Iterable, Optional
 

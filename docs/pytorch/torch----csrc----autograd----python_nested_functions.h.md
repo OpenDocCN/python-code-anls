@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_nested_functions.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once，确保本文件只被编译一次
 

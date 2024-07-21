@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cpu_rng_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <ATen/test/rng_test.h>
 #include <ATen/Generator.h>

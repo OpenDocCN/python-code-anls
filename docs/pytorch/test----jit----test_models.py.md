@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_models.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入标准库模块

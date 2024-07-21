@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\dataframe\dataframe_wrapper.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型定义中的 Any 和 Optional
 from typing import Any, Optional

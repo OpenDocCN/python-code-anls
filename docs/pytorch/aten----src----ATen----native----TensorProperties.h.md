@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorProperties.h`
 
-```
+```py
 #pragma once
 // 一般用于头文件，表示此文件只需包含一次
 

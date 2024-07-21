@@ -1,6 +1,6 @@
 # `.\pytorch\torch\multiprocessing\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """torch.multiprocessing is a wrapper around the native :mod:`multiprocessing` module.
 

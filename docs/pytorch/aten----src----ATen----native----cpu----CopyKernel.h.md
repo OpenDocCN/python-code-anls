@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\CopyKernel.h`
 
-```
+```py
 #pragma once
 
 

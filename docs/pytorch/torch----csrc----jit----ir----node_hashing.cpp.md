@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\node_hashing.cpp`
 
-```
+```py
 #include <torch/csrc/jit/ir/ir.h>  // 引入 Torch JIT IR 相关头文件
 
 #include <algorithm>  // 引入标准库中的算法模块

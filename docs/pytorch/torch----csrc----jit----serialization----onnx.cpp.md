@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\onnx.cpp`
 
-```
+```py
 // 包含 C++ 标准库头文件
 #include <c10/util/irange.h>
 // 包含 Torch 序列化到 ONNX 的相关头文件

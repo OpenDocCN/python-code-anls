@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\__init__.py`
 
-```
+```py
 """
 :mod:`torch.distributed.optim` exposes DistributedOptimizer, which takes a list
 of remote parameters (:class:`~torch.distributed.rpc.RRef`) and runs the

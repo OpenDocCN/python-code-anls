@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\chunk_test.py`
 
-```
+```py
 # 导入自定义的操作基准测试模块
 import operator_benchmark as op_bench
 # 导入PyTorch库

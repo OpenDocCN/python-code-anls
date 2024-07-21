@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\oss\run.py`
 
-```
+```py
 import os
 import time
 

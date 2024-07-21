@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\make_boxed_from_unboxed_functor_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <ATen/core/boxing/impl/test_helpers.h>
 

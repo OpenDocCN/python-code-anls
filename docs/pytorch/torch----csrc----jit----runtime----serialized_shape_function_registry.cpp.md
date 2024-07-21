@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\serialized_shape_function_registry.cpp`
 
-```
+```py
 /**
  * @generated
  * This is an auto-generated file. Please do not modify it by hand.

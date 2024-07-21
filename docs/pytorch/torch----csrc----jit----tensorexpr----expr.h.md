@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\expr.h`
 
-```
+```py
 /**
  * This file implements the core classes for Tensor Expressions.
  *

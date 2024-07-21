@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\datasets\mnist.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 

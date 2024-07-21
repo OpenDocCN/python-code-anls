@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_eager_fallback.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once，确保本头文件只被编译一次
 

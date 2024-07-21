@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\utils\clip_grad.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 指令确保头文件只被编译一次
 

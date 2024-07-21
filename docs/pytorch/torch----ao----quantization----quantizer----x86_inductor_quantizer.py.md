@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\x86_inductor_quantizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和函数
 import copy  # 复制对象的模块

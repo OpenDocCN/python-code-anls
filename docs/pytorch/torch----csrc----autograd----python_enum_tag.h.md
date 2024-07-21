@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_enum_tag.h`
 
-```
+```py
 #pragma once
 
 

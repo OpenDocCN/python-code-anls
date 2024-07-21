@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\bounds_inference.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多重包含的预处理指令
 

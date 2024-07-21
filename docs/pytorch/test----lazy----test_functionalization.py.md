@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_functionalization.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入正则表达式模块

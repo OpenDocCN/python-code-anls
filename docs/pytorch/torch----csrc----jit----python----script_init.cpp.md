@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\script_init.cpp`
 
-```
+```py
 // 包含 PyTorch 的 C++ 头文件
 #include <pybind11/detail/common.h>
 #include <pybind11/pytypes.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\graph_rewriter.cpp`
 
-```
+```py
 // 引入头文件，包括使用的库和工具
 #include <torch/csrc/jit/codegen/onednn/graph_fuser.h>
 #include <torch/csrc/jit/ir/alias_analysis.h>

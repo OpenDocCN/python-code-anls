@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_logger.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的模块

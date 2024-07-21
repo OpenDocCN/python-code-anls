@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\llvm_codegen.h`
 
-```
+```py
 #pragma once
 
 #ifdef TORCH_ENABLE_LLVM

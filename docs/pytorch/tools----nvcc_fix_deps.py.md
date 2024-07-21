@@ -1,6 +1,6 @@
 # `.\pytorch\tools\nvcc_fix_deps.py`
 
-```
+```py
 """Tool to fix the nvcc's dependecy file output
 
 Usage: python nvcc_fix_deps.py nvcc [nvcc args]...

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\alignment.h`
 
-```
+```py
 #pragma once
 // 声明此头文件只需包含一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\group_norm_expanded_weights.py`
 
-```
+```py
     # 引入运算符模块，用于处理操作符相关的功能
     import operator
     # 从 functools 模块中引入 reduce 函数，用于进行可迭代对象的累积运算

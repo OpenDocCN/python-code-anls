@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\core\api.py`
 
-```
+```py
 """Key enums and structs used to handle data flow within the benchmark."""
 
 # 引入必要的模块和类

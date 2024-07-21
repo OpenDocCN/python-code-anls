@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\List_test.cpp`
 
-```
+```py
 // 包含 ATen 核心的 List 头文件
 #include <ATen/core/List.h>
 // 包含 Google 测试框架的头文件

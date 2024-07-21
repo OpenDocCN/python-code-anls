@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\serialize\output-archive.cpp`
 
-```
+```py
 // 包含 Torch 序列化所需的头文件
 
 #include <torch/serialize/output-archive.h>

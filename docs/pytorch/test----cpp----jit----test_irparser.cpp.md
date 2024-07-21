@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_irparser.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 的头文件
 
 #include <torch/csrc/jit/ir/ir.h> // 包含 Torch 的 IR 相关头文件

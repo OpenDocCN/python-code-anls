@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\_src\__init__.py`
 
-```
+```py
 # 定义一个名为 process_data 的函数，接收参数 data
 def process_data(data):
     # 创建一个空列表，用于存储处理后的结果

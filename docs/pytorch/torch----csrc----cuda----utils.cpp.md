@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\utils.cpp`
 
-```
+```py
 #ifdef USE_CUDA
 // 当宏定义 USE_CUDA 被定义时编译以下内容
 

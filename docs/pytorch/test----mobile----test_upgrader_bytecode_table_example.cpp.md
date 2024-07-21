@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\test_upgrader_bytecode_table_example.cpp`
 
-```
+```py
 /**
  * @generated
  * This is an auto-generated file. Please do not modify it by hand.

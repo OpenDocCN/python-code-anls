@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\closure.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import os  # 导入操作系统相关的功能

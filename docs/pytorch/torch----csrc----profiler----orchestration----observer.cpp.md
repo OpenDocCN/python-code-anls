@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\orchestration\observer.cpp`
 
-```
+```py
 // 引入 Torch 的性能分析模块中的观察器头文件
 #include <torch/csrc/profiler/orchestration/observer.h>
 

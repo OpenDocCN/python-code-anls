@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需的模块和库
 import contextlib  # 上下文管理器模块，用于创建和管理上下文

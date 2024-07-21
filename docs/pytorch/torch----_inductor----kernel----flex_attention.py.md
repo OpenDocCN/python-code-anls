@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\kernel\flex_attention.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """ Triton Implementation of the flex_attention Kernel"""
 

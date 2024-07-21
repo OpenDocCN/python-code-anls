@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\vulkan_rewrite.cpp`
 
-```
+```py
 // 引入 ATen 库中的头文件和 Torch JIT 的相关组件
 #include <ATen/core/jit_type.h>
 #include <torch/csrc/jit/ir/ir.h>

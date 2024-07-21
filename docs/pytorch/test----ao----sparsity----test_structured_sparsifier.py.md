@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_structured_sparsifier.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入深拷贝函数
 import logging  # 导入日志记录模块

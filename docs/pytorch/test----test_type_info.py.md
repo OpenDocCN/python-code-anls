@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_type_info.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["module: typing"]
 

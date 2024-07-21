@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_parametrization.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入所需的模块和库

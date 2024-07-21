@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\compatibility\runtime_compatibility.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Export.h>  // 导入 C10 库的导出宏定义

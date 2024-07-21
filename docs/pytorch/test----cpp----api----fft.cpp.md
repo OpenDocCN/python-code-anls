@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\fft.cpp`
 
-```
+```py
 // 引入 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

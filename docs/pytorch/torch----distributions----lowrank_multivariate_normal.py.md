@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\lowrank_multivariate_normal.py`
 
-```
+```py
 # mypy: allow-untyped-defs  # 允许不对定义进行类型注解（针对mypy类型检查工具的设置）
 import math  # 导入数学库
 

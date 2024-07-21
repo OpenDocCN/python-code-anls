@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\prepare_binary.cpp`
 
-```
+```py
 // 引入 ATen 和 Torch 库中的相关头文件
 #include <aten/src/ATen/core/jit_type.h>
 #include <torch/csrc/jit/codegen/onednn/prepare_binary.h>

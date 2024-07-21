@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\_checkpoint\__init__.py`
 
-```
+```py
 # 导入标准库中的 json 模块
 import json
 

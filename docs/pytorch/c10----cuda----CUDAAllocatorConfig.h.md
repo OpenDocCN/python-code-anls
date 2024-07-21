@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAAllocatorConfig.h`
 
-```
+```py
 #pragma once
 // 预处理指令：保证头文件只被包含一次
 

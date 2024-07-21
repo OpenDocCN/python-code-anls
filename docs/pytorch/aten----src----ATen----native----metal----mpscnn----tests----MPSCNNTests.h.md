@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\tests\MPSCNNTests.h`
 
-```
+```py
 #ifndef MPSCNNTests_h
 #define MPSCNNTests_h
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_op_decompositions.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入 PyTorch 相关模块

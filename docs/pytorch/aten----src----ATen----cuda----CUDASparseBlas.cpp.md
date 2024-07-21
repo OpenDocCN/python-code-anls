@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDASparseBlas.cpp`
 
-```
+```py
 /*
   Provides the implementations of cuSPARSE function templates.
 */

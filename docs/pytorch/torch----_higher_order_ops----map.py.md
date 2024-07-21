@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\map.py`
 
-```
+```py
 # 引入 torch 库和一些内部模块
 import torch
 import torch.utils._pytree as pytree

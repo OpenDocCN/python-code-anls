@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\matrix_ops.py`
 
-```
+```py
 # 导入 itertools 库，用于生成迭代器
 import itertools
 # 导入类型提示相关的模块

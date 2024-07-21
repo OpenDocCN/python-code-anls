@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\gen_unboxing.py`
 
-```
+```py
 # 导入用于处理文件路径和系统相关操作的模块
 import os.path
 # 导入系统相关的模块

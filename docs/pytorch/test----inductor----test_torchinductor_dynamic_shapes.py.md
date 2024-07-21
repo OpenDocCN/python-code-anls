@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_torchinductor_dynamic_shapes.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 引入标准库模块

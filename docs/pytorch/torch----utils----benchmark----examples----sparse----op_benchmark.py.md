@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\sparse\op_benchmark.py`
 
-```
+```py
 # 引入必要的库和模块
 import numpy as np
 import torch

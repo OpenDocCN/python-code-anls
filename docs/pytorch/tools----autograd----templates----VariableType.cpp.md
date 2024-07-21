@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\VariableType.cpp`
 
-```
+```py
 // 包含自动生成的头文件，用于变量类型工具
 #include "torch/csrc/autograd/VariableTypeUtils.h"
 // 包含自动生成的变量类型头文件

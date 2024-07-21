@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_cpp_extension_versioner.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 collections 模块，用于创建命名元组
 import collections

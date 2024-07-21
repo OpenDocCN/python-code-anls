@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\IndexKernel.h`
 
-```
+```py
 #pragma once
 #include <ATen/native/TensorIterator.h>
 

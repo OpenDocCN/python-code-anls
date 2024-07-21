@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\schemas.py`
 
-```
+```py
 """
 The various dataclasses, Enums, namedtuples etc used in AOTAutograd. This includes
 input/output types, metadata, config, function signatures etc.

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAContext.cpp`
 
-```
+```py
 #include <ATen/cuda/CUDAContext.h>
 #include <c10/cuda/CUDACachingAllocator.h>
 #include <c10/util/CallOnce.h>

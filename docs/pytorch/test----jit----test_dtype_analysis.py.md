@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_dtype_analysis.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入所需的模块和类

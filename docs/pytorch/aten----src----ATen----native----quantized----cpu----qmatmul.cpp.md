@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qmatmul.cpp`
 
-```
+```py
 // 匿名命名空间用于封装局部函数或变量，限制它们的作用域在当前编译单元内
 namespace {
 

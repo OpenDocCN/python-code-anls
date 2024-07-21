@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_traverse.py`
 
-```
+```py
 # 版权声明和导入模块声明
 from typing import (
     Callable,

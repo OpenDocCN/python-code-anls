@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SerialStackImpl.h`
 
-```
+```py
 // Copyright 2004-present Facebook. All Rights Reserved.
 // 版权声明，指出此代码版权归Facebook所有，保留所有权利
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\static_rendezvous_test.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 # 导入上下文管理工具 closing

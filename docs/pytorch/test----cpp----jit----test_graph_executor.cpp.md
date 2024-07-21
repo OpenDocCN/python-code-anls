@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_graph_executor.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include "test/cpp/jit/test_utils.h"  // 引入测试工具函数头文件

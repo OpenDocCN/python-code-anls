@@ -1,6 +1,6 @@
 # `.\pytorch\test\profiler\test_torch_tidy.py`
 
-```
+```py
 # Owner(s): ["oncall: profiler"]
 
 # 如果 tqdm 没有正确关闭，它会保持监视线程活动。

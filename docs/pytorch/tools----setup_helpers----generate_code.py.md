@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\generate_code.py`
 
-```
+```py
 from __future__ import annotations  # 导入未来的注解语法支持
 
 import argparse  # 导入命令行参数解析模块

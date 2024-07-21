@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_config.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入数学库

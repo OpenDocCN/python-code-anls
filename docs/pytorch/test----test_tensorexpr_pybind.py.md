@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_tensorexpr_pybind.py`
 
-```
+```py
 # 导入所需的库和模块，包括 torch、numpy、torch._C._te，以及测试相关的模块和函数
 import torch
 import numpy as np

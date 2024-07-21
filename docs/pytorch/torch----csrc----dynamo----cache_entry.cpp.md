@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\cache_entry.cpp`
 
-```
+```py
 // 引入 Torch Dynamo 缓存条目相关的头文件
 #include <torch/csrc/dynamo/cache_entry.h>
 // 引入 Torch Dynamo 守卫相关的头文件

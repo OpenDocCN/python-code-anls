@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\sgd.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Implementation for Stochastic Gradient Descent optimizer."""
 # 导入需要的模块和类型

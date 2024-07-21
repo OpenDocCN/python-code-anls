@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorDimApply.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Tensor.h>
 #include <c10/util/irange.h>

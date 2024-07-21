@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\__init__.py`
 
-```
+```py
 import builtins
 import copy
 import dataclasses

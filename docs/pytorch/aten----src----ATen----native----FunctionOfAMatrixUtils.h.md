@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FunctionOfAMatrixUtils.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，指示编译器在编译此文件时只包含一次，以防止头文件被多次包含导致的重复定义错误。

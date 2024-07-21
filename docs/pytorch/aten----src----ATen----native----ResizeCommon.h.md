@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ResizeCommon.h`
 
-```
+```py
 #pragma once
 
 

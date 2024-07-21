@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\ts_backend.py`
 
-```
+```py
 # 引入 mypy 模块并设置选项 allow-untyped-defs，允许未类型化的定义
 import torch._C._lazy_ts_backend
 

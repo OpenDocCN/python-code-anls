@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\jit_type_base.h`
 
-```
+```py
 #pragma once
 
 // 包含必要的头文件，用于类型定义和功能声明

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\exception.h`
 
-```
+```py
 // 版权声明和许可证声明，声明此源代码受BSD风格许可证保护，许可证文件位于根目录的LICENSE文件中
 // 版权所有，Facebook公司及其关联公司保留所有权利。
 //

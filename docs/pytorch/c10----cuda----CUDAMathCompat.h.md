@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAMathCompat.h`
 
-```
+```py
 #pragma once
 
 /* This file defines math functions compatible across different gpu

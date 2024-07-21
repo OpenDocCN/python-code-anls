@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\subgraph_rewriter.py`
 
-```
+```py
 # 导入自定义模块和类
 from .graph_module import GraphModule
 from .graph import Graph

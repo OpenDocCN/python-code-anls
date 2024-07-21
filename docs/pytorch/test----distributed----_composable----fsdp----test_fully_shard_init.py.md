@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_init.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入所需的库和模块

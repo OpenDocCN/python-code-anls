@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\mpscnn\MPSImageWrapper.h`
 
-```
+```py
 #ifndef MPSImageWrapper_h
 #define MPSImageWrapper_h
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\RangeFactories.h`
 
-```
+```py
 #include <ATen/native/DispatchStub.h>
 #include <c10/core/Scalar.h>
 

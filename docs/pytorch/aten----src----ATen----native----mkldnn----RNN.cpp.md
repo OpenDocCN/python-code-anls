@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\RNN.cpp`
 
-```
+```py
 #include <ATen/native/RNN.h>
 #include <ATen/ATen.h>
 #include <ATen/Config.h>

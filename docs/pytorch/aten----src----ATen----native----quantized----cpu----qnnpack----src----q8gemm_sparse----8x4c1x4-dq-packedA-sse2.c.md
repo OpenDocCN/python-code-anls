@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gemm_sparse\8x4c1x4-dq-packedA-sse2.c`
 
-```
+```py
 // 定义宏 KERNEL_NAME 为 pytorch_q8gemm_dq_sparse_1x4_ukernel_8x4_packedA_w32__sse2
 #define KERNEL_NAME pytorch_q8gemm_dq_sparse_1x4_ukernel_8x4_packedA_w32__sse2
 // 定义宏 W_INDEX_DTYPE 为 uint32_t

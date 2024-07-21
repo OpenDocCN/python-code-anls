@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\byte_order.cpp`
 
-```
+```py
 // 包含 BFloat16 数据类型定义
 #include <c10/util/BFloat16.h>
 // 包含范围处理的工具函数

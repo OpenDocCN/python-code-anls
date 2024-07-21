@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_nestedtensor.py`
 
-```
+```py
 # 导入所需的模块和库
 import io  # 导入io模块，用于处理文件和流
 import itertools  # 导入itertools模块，提供迭代工具函数

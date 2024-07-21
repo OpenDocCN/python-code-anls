@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\mobile_optimizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """This module contains utility method for mobile model optimization and lint."""
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_misc.cpp`
 
-```
+```py
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 

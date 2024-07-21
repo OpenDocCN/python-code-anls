@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_deploy.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import io  # 导入io模块，用于处理字节流

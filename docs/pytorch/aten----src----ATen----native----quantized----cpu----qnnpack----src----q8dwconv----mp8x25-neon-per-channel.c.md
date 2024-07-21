@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\mp8x25-neon-per-channel.c`
 
-```
+```py
 /*
  * 这段代码实现了基于 ARM NEON 指令集的量化卷积操作，用于深度卷积神经网络加速。
  */

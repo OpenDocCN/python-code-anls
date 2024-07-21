@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\jit_opt_limit.h`
 
-```
+```py
 // 预处理指令，指定本头文件在编译时只包含一次
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\MKLDNNCommon.cpp`
 
-```
+```py
 /**
  * `MKLDNNCommon.h` 包含了使用 MKL-DNN 的常用功能和数据结构的头文件。
  * `OpaqueTensorImpl.h` 包含了用于不透明张量实现的头文件，其中定义了 OpaqueTensorImpl 类。

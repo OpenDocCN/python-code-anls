@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\layer_norm_kernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 layer_norm.h 文件，包含层归一化操作的相关定义和实现
 #include <ATen/native/layer_norm.h>

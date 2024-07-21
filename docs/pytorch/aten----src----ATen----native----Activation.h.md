@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Activation.h`
 
-```
+```py
 #pragma once`
 #pragma once
 

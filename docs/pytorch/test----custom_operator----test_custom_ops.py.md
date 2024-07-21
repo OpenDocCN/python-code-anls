@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\test_custom_ops.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_device_mesh.py`
 
-```
+```py
     @skip_if_lt_x_gpu(4)
     def test_assert_invalid_mesh_tensor(self):
         # 创建一个张量 mesh，用于设备间通信

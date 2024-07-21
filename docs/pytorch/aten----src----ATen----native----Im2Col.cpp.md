@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Im2Col.cpp`
 
-```
+```py
 // 定义宏，仅声明操作符方法
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_benchmark_fusion.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入标准库模块
 import math

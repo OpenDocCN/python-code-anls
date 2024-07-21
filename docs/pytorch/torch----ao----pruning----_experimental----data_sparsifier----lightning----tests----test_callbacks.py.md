@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\lightning\tests\test_callbacks.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的库和模块
 from torch.ao.pruning._experimental.data_sparsifier.data_norm_sparsifier import DataNormSparsifier

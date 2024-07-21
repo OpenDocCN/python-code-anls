@@ -1,6 +1,6 @@
 # `.\pytorch\c10\macros\Export.h`
 
-```
+```py
 #ifndef C10_MACROS_EXPORT_H_
 #define C10_MACROS_EXPORT_H_
 

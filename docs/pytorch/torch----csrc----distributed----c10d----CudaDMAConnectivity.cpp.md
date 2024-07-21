@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\CudaDMAConnectivity.cpp`
 
-```
+```py
 // 如果未定义 USE_ROCM 并且定义了 PYTORCH_C10_DRIVER_API_SUPPORTED
 #if !defined(USE_ROCM) && defined(PYTORCH_C10_DRIVER_API_SUPPORTED)
 

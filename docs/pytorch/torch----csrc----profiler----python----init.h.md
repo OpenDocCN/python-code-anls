@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\python\init.h`
 
-```
+```py
 #pragma once
 // 预处理指令，表示此头文件只包含一次
 

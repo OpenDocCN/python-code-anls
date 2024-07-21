@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\constant_map.h`
 
-```
+```py
 #pragma once
 // 使用预处理器指令 #pragma once，确保头文件只被包含一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_multiprocessing_spawn.py`
 
-```
+```py
 # Owner(s): ["module: multiprocessing"]
 
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\insert_guards.h`
 
-```
+```py
 // 命令预处理器指令，指定此头文件只包含一次
 #pragma once
 

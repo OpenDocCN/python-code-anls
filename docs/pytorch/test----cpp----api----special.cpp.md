@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\special.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 的头文件
 
 #include <torch/special.h>  // 包含 Torch 的特殊函数头文件

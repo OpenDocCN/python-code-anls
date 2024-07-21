@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Functional.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 // 包含 ATen 核心操作注册相关的头文件

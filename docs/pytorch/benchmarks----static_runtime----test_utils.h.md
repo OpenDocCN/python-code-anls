@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\static_runtime\test_utils.h`
 
-```
+```py
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 //
 // This source code is licensed under the BSD-style license found in the

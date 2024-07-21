@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\PythonFallbackKernel.cpp`
 
-```
+```py
 // 引入 TorchDispatchModeTLS.h 中的 Torch 调度模式 TLS 功能
 #include <c10/core/impl/TorchDispatchModeTLS.h>
 // 引入 PythonDispatcherTLS.h 中的 Python 调度器 TLS 功能

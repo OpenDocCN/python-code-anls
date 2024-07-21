@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\poisson.py`
 
-```
+```py
 # 导入必要的模块和类
 from numbers import Number  # 导入 Number 类型用于参数类型检查
 

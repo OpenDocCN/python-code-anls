@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_modules.py`
 
-```
+```py
 # 忽略类型检查错误，用于类型检查工具mypy
 # 导入PyTorch库
 import torch

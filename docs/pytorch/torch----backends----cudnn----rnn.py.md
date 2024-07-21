@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\cudnn\rnn.py`
 
-```
+```py
 # 引入torch.cuda模块，声明允许未类型化的函数定义
 import torch.cuda
 

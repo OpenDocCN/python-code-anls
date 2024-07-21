@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\TensorTopK.cpp`
 
-```
+```py
 // 定义预处理宏，用于指定只有方法操作符可见
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 CUDA 实现的 TensorTopK 头文件

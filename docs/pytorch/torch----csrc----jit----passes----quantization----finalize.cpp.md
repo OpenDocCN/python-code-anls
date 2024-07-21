@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\finalize.cpp`
 
-```
+```py
 // 包含 Torch 库中的量化优化相关头文件
 #include <torch/csrc/jit/passes/quantization/finalize.h>
 

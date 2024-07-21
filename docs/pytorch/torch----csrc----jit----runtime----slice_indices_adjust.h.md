@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\slice_indices_adjust.h`
 
-```
+```py
 #pragma once
 // 预处理指令，表示本头文件只包含一次
 

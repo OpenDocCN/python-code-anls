@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_compute_comm_reordering.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 引入单元测试模块

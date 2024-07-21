@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\match_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入系统模块和torch模块
 import sys

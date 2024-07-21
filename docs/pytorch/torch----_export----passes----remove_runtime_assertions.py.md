@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\remove_runtime_assertions.py`
 
-```
+```py
 # 添加类型提示 `mypy: allow-untyped-defs`，允许在不明确类型的情况下定义函数
 import torch  # 导入 PyTorch 库
 from torch.fx.passes.infra.pass_base import PassBase, PassResult  # 导入 PassBase 和 PassResult 类

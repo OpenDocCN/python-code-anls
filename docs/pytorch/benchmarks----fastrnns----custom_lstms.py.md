@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\custom_lstms.py`
 
-```
+```py
 # 导入必要的模块和库
 import numbers                     # 导入 numbers 模块，用于处理数字类型
 import warnings                    # 导入 warnings 模块，用于警告处理

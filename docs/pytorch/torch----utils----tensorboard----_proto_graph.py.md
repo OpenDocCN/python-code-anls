@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\_proto_graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型定义
 from typing import Optional

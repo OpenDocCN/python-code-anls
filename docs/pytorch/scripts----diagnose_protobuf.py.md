@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\diagnose_protobuf.py`
 
-```
+```py
 ## @package diagnose_protobuf
 # Module scripts.diagnose_protobuf
 """Diagnoses the current protobuf situation.

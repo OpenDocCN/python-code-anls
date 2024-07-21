@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\quantized\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型
 import sys  # 导入 sys 模块

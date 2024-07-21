@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cpu\fused_kernel.h`
 
-```
+```py
 // 防止头文件被多次包含
 #pragma once
 

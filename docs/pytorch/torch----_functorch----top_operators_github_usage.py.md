@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\top_operators_github_usage.py`
 
-```
+```py
 # 忽略 mypy 的错误，用于类型检查工具的声明
 # 多行字符串，包含了一个 Google 表格的链接，用于参考和同步列表
 """

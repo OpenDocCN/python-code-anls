@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_ops_utils.cpp`
 
-```
+```py
 #include <ATen/CPUGeneratorImpl.h>
 // 包含 CPUGeneratorImpl.h 头文件，提供 CPU 生成器的实现
 

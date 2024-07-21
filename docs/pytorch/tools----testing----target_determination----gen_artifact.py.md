@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\gen_artifact.py`
 
-```
+```py
 # 引入未来版本的注解特性，用于函数签名的类型提示
 from __future__ import annotations
 

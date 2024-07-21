@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\ddp_comm_hooks\debugging_hooks.py`
 
-```
+```py
 # 从 typing 模块导入 Any 类型
 from typing import Any
 

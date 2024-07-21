@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\FunctionTraits.h`
 
-```
+```py
 #pragma once
 
 #include <cstddef>

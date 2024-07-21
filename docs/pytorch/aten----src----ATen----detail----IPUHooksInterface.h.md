@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\IPUHooksInterface.h`
 
-```
+```py
 #pragma once
 
 // 引入 ATen 库中相关头文件，包括 Generator 类

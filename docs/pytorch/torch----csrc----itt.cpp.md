@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\itt.cpp`
 
-```
+```py
 #include <torch/csrc/itt_wrapper.h>
 #include <torch/csrc/utils/pybind.h>
 

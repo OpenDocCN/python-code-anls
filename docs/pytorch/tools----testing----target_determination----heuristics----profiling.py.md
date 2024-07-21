@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\profiling.py`
 
-```
+```py
 # 从未来模块中导入注解功能，用于类型提示
 from __future__ import annotations
 

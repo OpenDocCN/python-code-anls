@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\launcher.py`
 
-```
+```py
 # 导入需要的库
 import argparse  # 解析命令行参数的库
 import json  # 处理 JSON 格式数据的库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\_tensor\common_dtensor.py`
 
-```
+```py
 # mypy: ignore-errors  # 忽略类型检查错误
 # Copyright (c) Meta Platforms, Inc. and affiliates  # 版权声明
 

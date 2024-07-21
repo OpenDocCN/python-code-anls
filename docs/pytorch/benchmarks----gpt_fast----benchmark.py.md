@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\gpt_fast\benchmark.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 import csv  # 用于CSV文件的读写操作

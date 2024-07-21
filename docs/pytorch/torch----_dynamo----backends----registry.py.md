@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\registry.py`
 
-```
+```py
 # mypy: ignore-errors  # 忽略类型检查错误，用于标记该文件中不应进行类型检查的部分
 
 import functools  # 导入 functools 模块，用于高阶函数支持

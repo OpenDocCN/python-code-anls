@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\xpu\Event.cpp`
 
-```
+```py
 // 引入 pybind11 库，用于创建 Python 扩展模块
 #include <pybind11/pybind11.h>
 // 引入 Torch 的设备相关头文件

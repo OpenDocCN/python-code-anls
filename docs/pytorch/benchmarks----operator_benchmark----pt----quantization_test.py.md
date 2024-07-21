@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\quantization_test.py`
 
-```
+```py
 # 导入操作基准测试库
 import operator_benchmark as op_bench
 # 导入 PyTorch 库

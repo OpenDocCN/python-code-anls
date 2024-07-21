@@ -1,6 +1,6 @@
 # `.\pytorch\docs\source\scripts\build_opsets.py`
 
-```
+```py
 # 导入必要的库
 import os  # 导入操作系统相关的功能
 from collections import OrderedDict  # 导入有序字典功能

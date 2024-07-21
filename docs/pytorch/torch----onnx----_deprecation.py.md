@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_deprecation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Utility for deprecating functions."""
 

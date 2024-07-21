@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\opinfo_schema.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 import torch  # 导入PyTorch库

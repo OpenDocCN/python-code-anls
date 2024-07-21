@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\missing_vst1_neon.h`
 
-```
+```py
 /* Workaround for missing vst1q_f32_x2 in gcc-8.  */
 
 __extension__ extern __inline void

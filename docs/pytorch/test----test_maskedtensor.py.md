@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_maskedtensor.py`
 
-```
+```py
 # Owner(s): ["module: masked operators"]
 
 # 导入 PyTorch 库

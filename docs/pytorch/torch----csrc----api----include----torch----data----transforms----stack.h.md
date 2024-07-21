@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\transforms\stack.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件只被编译一次
 

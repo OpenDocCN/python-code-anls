@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\monitor\python_init.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 指令确保头文件只被编译一次，防止重复包含
 

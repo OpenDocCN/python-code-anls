@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\quantization.py`
 
-```
+```py
 r"""
 **This file is EXPERIMENTAL and is mostly used for testing purposes! Do not
 rely on it for anything!**

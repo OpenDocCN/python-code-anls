@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ReduceOps.cpp`
 
-```
+```py
 // 定义编译时使用的宏，仅启用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

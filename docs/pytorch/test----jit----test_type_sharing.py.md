@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_type_sharing.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入必要的库

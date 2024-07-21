@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\glsl\texel_access.h`
 
-```
+```py
 /*
  * Texel access utility functions
  */

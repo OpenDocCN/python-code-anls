@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\pimpl-inl.h`
 
-```
+```py
 // This class serves as a marker type for template specialization and SFINAE purposes
 // to identify types that are ModuleHolders.
 struct ModuleHolderIndicator {};

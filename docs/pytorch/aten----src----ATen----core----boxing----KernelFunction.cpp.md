@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\KernelFunction.cpp`
 
-```
+```py
 // 引入 ATen 核心库中的头文件和调度器头文件
 #include <ATen/core/boxing/KernelFunction.h>
 #include <ATen/core/dispatch/Dispatcher.h>

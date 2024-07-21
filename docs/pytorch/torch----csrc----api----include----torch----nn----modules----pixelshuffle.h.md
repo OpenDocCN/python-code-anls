@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\pixelshuffle.h`
 
-```
+```py
 #pragma once
 // 只在编译时包含一次该头文件，避免重复定义
 
@@ -34,7 +34,7 @@ namespace nn {
 /// Example:
 /// ```
 /// PixelShuffle model(PixelShuffleOptions(5));
-/// ```
+/// ```py
 struct TORCH_API PixelShuffleImpl
     : public torch::nn::Cloneable<PixelShuffleImpl> {
   explicit PixelShuffleImpl(const PixelShuffleOptions& options_);
@@ -78,7 +78,7 @@ TORCH_MODULE(PixelShuffle);
 /// Example:
 /// ```
 /// PixelUnshuffle model(PixelUnshuffleOptions(5));
-/// ```
+/// ```py
 struct TORCH_API PixelUnshuffleImpl
     : public torch::nn::Cloneable<PixelUnshuffleImpl> {
   explicit PixelUnshuffleImpl(const PixelUnshuffleOptions& options_);

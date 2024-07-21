@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Deprecated.h`
 
-```
+```py
 #pragma once
 
 /**

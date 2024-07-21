@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\cauchy.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 math 和 numbers 模块
 import math

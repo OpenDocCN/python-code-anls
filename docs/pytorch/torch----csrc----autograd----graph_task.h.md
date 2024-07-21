@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\graph_task.h`
 
-```
+```py
 #pragma once
 #include <ATen/ThreadLocalState.h>
 #include <ATen/core/Tensor.h>

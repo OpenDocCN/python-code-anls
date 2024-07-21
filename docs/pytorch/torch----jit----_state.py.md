@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_state.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """JIT-related state.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\GatedLinearUnit.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于包含必要的头文件
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>  // 引入张量的核心功能头文件

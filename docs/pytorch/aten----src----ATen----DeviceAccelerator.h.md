@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\DeviceAccelerator.h`
 
-```
+```py
 #pragma once
 
 // 引入C10库中的DeviceType定义

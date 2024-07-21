@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAEvent.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/cuda/ATenCUDAGeneral.h>

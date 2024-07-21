@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\ensembling\parallel_train.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 导入命令行参数解析库
 import math  # 导入数学库

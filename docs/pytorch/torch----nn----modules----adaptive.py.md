@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\adaptive.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入命名元组和类型提示需要的模块

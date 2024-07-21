@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_monkeytype_config.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和库
 import inspect  # 导入 inspect 模块，用于获取对象信息

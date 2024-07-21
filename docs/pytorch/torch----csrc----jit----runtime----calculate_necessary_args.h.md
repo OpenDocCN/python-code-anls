@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\calculate_necessary_args.h`
 
-```
+```py
 // 预处理命令，确保头文件只包含一次
 #pragma once
 

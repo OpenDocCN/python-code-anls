@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_arg_flatten.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/hash.h>  // 引入 c10 库中的哈希函数

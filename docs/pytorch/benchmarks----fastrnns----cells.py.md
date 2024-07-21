@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\cells.py`
 
-```
+```py
 # 引入从 typing 模块导入的 Tuple 类型
 from typing import Tuple
 

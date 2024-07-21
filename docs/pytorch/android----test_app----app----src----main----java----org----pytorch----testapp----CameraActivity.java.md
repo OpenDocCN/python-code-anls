@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\app\src\main\java\org\pytorch\testapp\CameraActivity.java`
 
-```
+```py
   // Android 应用程序的摄像头活动类，继承自 AppCompatActivity
   public class CameraActivity extends AppCompatActivity {
     // 调试日志的标签，使用 BuildConfig 中的 LOGCAT_TAG

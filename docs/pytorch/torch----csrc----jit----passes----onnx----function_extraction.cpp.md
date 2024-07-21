@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\function_extraction.cpp`
 
-```
+```py
 // 引入 Torch JIT 日志记录的头文件
 #include <torch/csrc/jit/jit_log.h>
 // 引入 Torch JIT Passes 的 ONNX 相关功能提取的头文件

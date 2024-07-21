@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\mkldnn_rewrite.cpp`
 
-```
+```py
 // 包含 ATen 库的配置和头文件
 #include <ATen/Config.h>
 #include <ATen/code_template.h>

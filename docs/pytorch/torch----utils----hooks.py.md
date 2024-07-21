@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\hooks.py`
 
-```
+```py
 # 引入mypy模块，并允许未类型化的定义
 import torch
 # 引入OrderedDict用于有序字典操作

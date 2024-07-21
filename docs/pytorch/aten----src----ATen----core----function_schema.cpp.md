@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\function_schema.cpp`
 
-```
+```py
 // 包含 ATen 库中的 function_schema.h 头文件
 
 #include <ATen/core/function_schema.h>

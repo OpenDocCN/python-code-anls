@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\XPUGeneratorImpl.cpp`
 
-```
+```py
 /*
  * This namespace contains implementation details for XPU generators within ATen.
  */

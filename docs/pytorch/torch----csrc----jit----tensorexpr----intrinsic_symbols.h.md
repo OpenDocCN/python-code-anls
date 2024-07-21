@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\intrinsic_symbols.h`
 
-```
+```py
 #pragma once
 #ifdef TORCH_ENABLE_LLVM
 #include <c10/util/ArrayRef.h>

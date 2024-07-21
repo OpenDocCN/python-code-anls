@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_backend\test_custom_backend.cpp`
 
-```
+```py
 // 包含 Torch CUDA 相关头文件
 #include <torch/cuda.h>
 // 包含 Torch 脚本模块相关头文件

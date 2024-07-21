@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\UCCUtils.cpp`
 
-```
+```py
 #ifdef USE_C10D_UCC
 // 如果定义了 USE_C10D_UCC 宏，则编译以下代码块
 

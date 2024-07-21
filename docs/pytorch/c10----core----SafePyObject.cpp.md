@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SafePyObject.cpp`
 
-```
+```py
 #include <c10/core/SafePyObject.h>
 // 引入 SafePyObject 类的头文件
 

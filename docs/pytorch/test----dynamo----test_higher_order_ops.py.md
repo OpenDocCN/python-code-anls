@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_higher_order_ops.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的模块和库

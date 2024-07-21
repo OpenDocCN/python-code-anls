@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\reference\modules\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库和 typing 模块
 import torch

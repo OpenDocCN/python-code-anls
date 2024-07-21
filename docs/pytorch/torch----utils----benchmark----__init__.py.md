@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\__init__.py`
 
-```
+```py
 # 导入 Torch 基准测试工具中的常用模块
 from torch.utils.benchmark.utils.common import *  # noqa: F403
 # 导入 Torch 基准测试工具中的计时器模块

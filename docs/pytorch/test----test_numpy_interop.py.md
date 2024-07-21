@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_numpy_interop.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略 mypy 类型检查时的错误
 

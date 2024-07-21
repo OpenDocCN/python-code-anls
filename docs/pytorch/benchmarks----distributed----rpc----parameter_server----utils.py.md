@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\utils.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 
 RPC_SPARSE = "rpc_sparse"  # 定义字符串常量RPC_SPARSE，表示稀疏张量类型

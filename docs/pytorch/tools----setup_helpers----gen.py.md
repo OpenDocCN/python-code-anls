@@ -1,6 +1,6 @@
 # `.\pytorch\tools\setup_helpers\gen.py`
 
-```
+```py
 # 导入处理文件路径和系统的模块
 import os.path
 import sys

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\function_substitution.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/onnx/function_substitution.h>
 
 #include <torch/csrc/jit/jit_log.h>

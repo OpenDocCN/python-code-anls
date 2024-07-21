@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\unique_name_manager.cpp`
 
-```
+```py
 // 包含TensorExpr库中所需的头文件
 
 #include <torch/csrc/jit/tensorexpr/unique_name_manager.h>

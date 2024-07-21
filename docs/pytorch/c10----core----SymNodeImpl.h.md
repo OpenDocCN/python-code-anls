@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymNodeImpl.h`
 
-```
+```py
 #pragma once
 // 一旦编译器到此处，就会防止头文件的多次包含
 

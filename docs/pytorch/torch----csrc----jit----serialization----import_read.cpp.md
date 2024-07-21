@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import_read.cpp`
 
-```
+```py
 namespace torch::jit {
 // 定义函数 readArchiveAndTensors，从流中读取归档和张量数据并解析为 IValue 类型
 IValue readArchiveAndTensors(

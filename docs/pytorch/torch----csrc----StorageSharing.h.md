@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\StorageSharing.h`
 
-```
+```py
 #ifndef THP_STORAGE_SHARING_INC
 #define THP_STORAGE_SHARING_INC
 

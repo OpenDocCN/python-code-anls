@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\test_workflow_module.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # Torch模块导入

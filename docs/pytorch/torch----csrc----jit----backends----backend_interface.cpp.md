@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_interface.cpp`
 
-```
+```py
 #include <torch/csrc/jit/backends/backend_interface.h>
 
 # 包含 Torch 的 JIT 后端接口头文件

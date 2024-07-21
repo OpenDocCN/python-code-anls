@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\sparse_fuzzer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的类型注解和模块
 from typing import Optional, Tuple, Union

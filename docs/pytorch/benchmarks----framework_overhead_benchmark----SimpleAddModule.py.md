@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\framework_overhead_benchmark\SimpleAddModule.py`
 
-```
+```py
 # 从 utils 模块导入 NUM_LOOP_ITERS 常量
 from utils import NUM_LOOP_ITERS
 

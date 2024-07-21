@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_embedding_ops.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的系统库

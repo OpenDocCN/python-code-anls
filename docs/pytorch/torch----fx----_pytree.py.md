@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\_pytree.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 collections 模块导入 namedtuple 类
 from collections import namedtuple

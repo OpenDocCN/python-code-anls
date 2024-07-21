@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\multivariate_normal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import math  # 导入数学模块
 

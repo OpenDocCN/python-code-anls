@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\graph.py`
 
-```
+```py
 # 设置 mypy 来允许未类型化的函数定义
 # 导入必要的模块和库
 import functools  # 提供高阶函数操作

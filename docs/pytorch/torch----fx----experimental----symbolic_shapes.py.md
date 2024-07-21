@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\symbolic_shapes.py`
 
-```
+```py
 # 忽略类型检查错误，这可能是因为某些类型在运行时无法被正确推断
 # 以下是一个多行字符串，提供关于 torch.fx.experimental.symbolic_shapes 模块的详细说明
 """

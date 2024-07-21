@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Histogram.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于条件编译
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

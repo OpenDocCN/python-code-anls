@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_distributed_patterns.py`
 
-```
+```py
 # Owner(s): ["oncall: pt2"]
 
 # 导入必要的库

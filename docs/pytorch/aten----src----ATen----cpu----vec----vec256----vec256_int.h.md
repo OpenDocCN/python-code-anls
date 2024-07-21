@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256_int.h`
 
-```
+```py
 #pragma once
 // 表示只编译一次这个头文件
 

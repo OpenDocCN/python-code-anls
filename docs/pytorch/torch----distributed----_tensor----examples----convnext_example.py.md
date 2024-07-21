@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\examples\convnext_example.py`
 
-```
+```py
 """
 The following example demonstrates how to train a ConvNeXt model
 with intermediate activations sharded across mutliple GPUs via DTensor

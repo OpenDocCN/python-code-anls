@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_package_pickler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 pickle 模块的相关组件，其中 type: ignore[attr-defined] 表示忽略类型检查
 from pickle import (

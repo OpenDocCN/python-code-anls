@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\test\impl\XPUStreamTest.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <c10/util/Optional.h>  // 包含 Optional 类的头文件

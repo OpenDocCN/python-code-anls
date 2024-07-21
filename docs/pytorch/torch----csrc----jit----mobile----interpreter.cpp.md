@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\interpreter.cpp`
 
-```
+```py
 #include <torch/csrc/jit/mobile/interpreter.h>  // 引入移动端解释器的头文件
 
 #include <ATen/core/class_type.h>  // 引入 ATen 类型系统的类类型头文件

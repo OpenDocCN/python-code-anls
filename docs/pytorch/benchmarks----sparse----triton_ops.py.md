@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\sparse\triton_ops.py`
 
-```
+```py
 # 导入 torch 库，用于创建和操作张量
 import torch
 

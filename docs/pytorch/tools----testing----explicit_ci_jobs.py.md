@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\explicit_ci_jobs.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 from __future__ import annotations

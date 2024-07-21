@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_static_runtime.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入所需的库和模块

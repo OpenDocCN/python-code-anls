@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\jit.cpp`
 
-```
+```py
 #include <torch/jit.h>
 // 引入 Torch JIT 模块
 

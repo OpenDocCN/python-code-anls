@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\release_notes\commitlist.py`
 
-```
+```py
 import argparse
 import csv
 import dataclasses

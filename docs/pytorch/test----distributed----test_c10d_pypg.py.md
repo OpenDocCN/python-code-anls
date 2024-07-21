@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_pypg.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入所需的模块和类

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantizable\modules\__init__.py`
 
-```
+```py
 # 导入多头注意力机制模块（Quantized版本）从torch.ao.nn.quantizable.modules.activation中
 from torch.ao.nn.quantizable.modules.activation import MultiheadAttention
 # 导入长短时记忆网络模块（Quantized版本）从torch.ao.nn.quantizable.modules.rnn中

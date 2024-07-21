@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\transformer.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -21,7 +21,7 @@ namespace nn {
 /// TransformerOptions options;
 /// TransformerOptions options(16, 4);
 /// auto options = TransformerOptions().d_model(4).nhead(2).dropout(0.0);
-/// ```
+/// ```py
 struct TORCH_API TransformerOptions {
   // The following constructors are commonly used
   // Please don't add more unless it is proved as a common usage

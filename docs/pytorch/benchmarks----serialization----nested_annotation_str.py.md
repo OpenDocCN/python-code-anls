@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\serialization\nested_annotation_str.py`
 
-```
+```py
 import torch
 import torch.utils.benchmark as benchmark
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_dependency_api.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入需要的模块和函数

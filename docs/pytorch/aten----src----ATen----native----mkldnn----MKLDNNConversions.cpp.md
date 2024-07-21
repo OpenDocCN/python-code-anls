@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\MKLDNNConversions.cpp`
 
-```
+```py
     // 定义预处理器宏，用于仅支持方法操作符
     #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
     // 包含 ATen 库的配置文件

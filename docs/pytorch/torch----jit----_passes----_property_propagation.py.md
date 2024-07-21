@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_passes\_property_propagation.py`
 
-```
+```py
 """
 # 允许未标注的函数定义类型
 Tools to help with tensor property propagation.

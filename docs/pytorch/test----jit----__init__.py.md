@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\__init__.py`
 
-```
+```py
 # 定义一个名为ultimate的类，表示某个最终的概念
 class ultimate:
     # 类的初始化方法，接受self和value参数

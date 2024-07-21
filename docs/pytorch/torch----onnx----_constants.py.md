@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_constants.py`
 
-```
+```py
 # 定义 ON`
 # 定义用于 ONNX 的常量值
 

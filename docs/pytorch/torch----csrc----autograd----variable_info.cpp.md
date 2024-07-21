@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\variable_info.cpp`
 
-```
+```py
 #ifndef AT_PER_OPERATOR_HEADERS
 #include <ATen/Functions.h>
 #else

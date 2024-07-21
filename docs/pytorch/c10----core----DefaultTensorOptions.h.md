@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DefaultTensorOptions.h`
 
-```
+```py
 #pragma once
 
 

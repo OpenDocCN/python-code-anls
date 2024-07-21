@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256_half_neon.h`
 
-```
+```py
 #pragma once
 // 在此头文件中不要定义静态数据！
 // 详见注意事项 [不要使用 AVX 编译初始化器]

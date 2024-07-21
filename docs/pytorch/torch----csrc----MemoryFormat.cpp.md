@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\MemoryFormat.cpp`
 
-```
+```py
 // 包含 Torch 的 MemoryFormat 相关头文件
 
 #include <torch/csrc/MemoryFormat.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\profiler_python.cpp`
 
-```
+```py
 // 引入 Torch 库的 Python 接口，用于分析器模块
 #include <torch/csrc/autograd/profiler_python.h>
 
@@ -981,7 +981,7 @@ void PythonTracer::recordPyCall(
 
 
   TORCH_INTERNAL_ASSERT_DEBUG_ONLY(PyCFunction_Check(arg));
-```  
+```py  
 # 使用宏 `TORCH_INTERNAL_ASSERT_DEBUG_ONLY` 断言 `arg` 是一个 PyCFunction 对象。
 
 
@@ -992,7 +992,7 @@ void PythonTracer::recordPyCall(
 
   // NB: For C calls a new frame is not created, so we use `frame` rather than
   //     `frame->f_back`.
-```  
+```py  
 # 注意：对于 C 调用，不会创建新的帧（frame），因此我们使用 `frame` 而不是 `frame->f_back`。
 
 
@@ -1003,7 +1003,7 @@ void PythonTracer::recordPyCall(
 
 
   queue_->getSubqueue()->emplace_py_call(key, c10::getApproximateTime());
-```  
+```py  
 # 在队列 (`queue_`) 的子队列中插入一个 Python 调用，使用键 `key` 和当前的近似时间 (`c10::getApproximateTime()`)。
 // ============================================================================
 // == Post processing =========================================================

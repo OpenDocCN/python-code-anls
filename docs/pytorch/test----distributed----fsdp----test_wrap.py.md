@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_wrap.py`
 
-```
+```py
 # 导入必要的模块和库
 
 import functools  # 提供了创建偏函数的功能

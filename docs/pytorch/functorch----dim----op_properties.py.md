@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\op_properties.py`
 
-```
+```py
 # 导入 torch 库，用于进行张量操作和神经网络功能
 import torch
 

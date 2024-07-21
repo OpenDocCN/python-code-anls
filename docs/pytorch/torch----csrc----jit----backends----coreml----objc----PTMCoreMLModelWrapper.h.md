@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\objc\PTMCoreMLModelWrapper.h`
 
-```
+```py
 #include <ATen/core/ivalue.h>
 #include <torch/csrc/jit/backends/coreml/objc/PTMCoreMLExecutor.h>
 #include <torch/csrc/jit/backends/coreml/objc/PTMCoreMLTensorSpec.h>

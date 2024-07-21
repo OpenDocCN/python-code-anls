@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_dlpack.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]  # 标明代码所有者，这里是动态的模块
 
 import functools  # 导入 functools 模块，用于创建偏函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\quantized\__init__.py`
 
-```
+```py
 # 导入所有模块，包括当前目录下的 modules 模块
 from .modules import *  # noqa: F403
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\pybind_utils.h`
 
-```
+```py
 // 预处理指令，指定只包含一次此头文件
 #pragma once
 

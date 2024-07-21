@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesBinaryOps.cpp`
 
-```
+```py
 // 包含头文件：定义了批处理规则助手的实现所需的所有必要头文件
 #include <ATen/functorch/BatchRulesHelper.h>
 #include <ATen/functorch/PlumbingHelper.h>

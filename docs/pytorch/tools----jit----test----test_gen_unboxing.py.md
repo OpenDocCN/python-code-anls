@@ -1,6 +1,6 @@
 # `.\pytorch\tools\jit\test\test_gen_unboxing.py`
 
-```
+```py
 import tempfile  # 导入临时文件模块
 import unittest  # 导入单元测试模块
 from unittest.mock import NonCallableMock, patch  # 导入单元测试模块中的模拟对象和补丁功能

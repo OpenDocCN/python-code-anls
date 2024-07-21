@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\__init__.py`
 
-```
+```py
 # 忽略类型检查错误（特定工具可能会使用此指令）
 from .base import VariableTracker
 from .builtin import BuiltinVariable

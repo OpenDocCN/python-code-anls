@@ -1,6 +1,6 @@
 # `.\pytorch\docs\source\scripts\build_activation_images.py`
 
-```
+```py
 """
 This script will generate input-out plots for all of the activation
 functions. These are for use in the documentation, and potentially in

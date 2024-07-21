@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\inductor_utils.py`
 
-```
+```py
 # 忽略类型检查错误，适用于使用 mypy 时
 # 导入必要的库和模块
 import torch

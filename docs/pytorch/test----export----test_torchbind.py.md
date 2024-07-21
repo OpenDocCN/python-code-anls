@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_torchbind.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 # 导入单元测试模块

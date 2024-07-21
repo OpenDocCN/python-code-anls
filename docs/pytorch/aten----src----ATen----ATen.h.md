@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ATen.h`
 
-```
+```py
 #pragma once
 // 如果编译器不是 MSVC 并且 C++ 版本小于 C++17，则抛出错误信息，要求使用兼容 C++17 或更新版本的编译器
 #if !defined(_MSC_VER) && __cplusplus < 201703L

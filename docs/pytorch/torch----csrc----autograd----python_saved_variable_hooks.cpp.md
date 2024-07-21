@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_saved_variable_hooks.cpp`
 
-```
+```py
 namespace py = pybind11;  // 引入 pybind11 命名空间，用于与 Python 的绑定交互
 
 namespace torch::autograd {

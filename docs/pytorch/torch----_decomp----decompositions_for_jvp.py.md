@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_decomp\decompositions_for_jvp.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 inspect 模块，用于获取对象信息
 import inspect

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\subclass_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 This file contains utilities for tracing through __torch_dispatch__ based tensor subclasses and modes.

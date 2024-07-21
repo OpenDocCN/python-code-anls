@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\TorchDispatchUtils.h`
 
-```
+```py
 // 预处理指令，表示此文件在编译时只包含一次
 #pragma once
 

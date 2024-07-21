@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\python_dimname.cpp`
 
-```
+```py
 // 引入包含flat_hash_map的头文件
 #include <c10/util/flat_hash_map.h>
 // 引入torch异常处理头文件

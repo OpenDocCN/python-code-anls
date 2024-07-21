@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_flop_counter.py`
 
-```
+```py
 # 导入必要的模块和类
 import functools
 import unittest

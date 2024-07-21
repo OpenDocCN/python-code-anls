@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\print_report.py`
 
-```
+```py
 # 从未来版本导入类型提示的功能
 from __future__ import annotations
 

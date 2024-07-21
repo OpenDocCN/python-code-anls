@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\configure.py`
 
-```
+```py
 # 指定 Python 解释器路径，以便系统可以执行该脚本
 #!/usr/bin/env python3
 

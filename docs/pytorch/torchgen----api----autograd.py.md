@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\autograd.py`
 
-```
+```py
 # 引入将来版本的注释特性，允许在类型注释中使用类本身
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\typeid_test.cpp`
 
-```
+```py
 #include <c10/util/typeid.h>  // 包含 C10 库的 typeid.h 文件，用于类型相关操作
 #include <gtest/gtest.h>      // 包含 Google Test 框架的头文件，用于单元测试
 

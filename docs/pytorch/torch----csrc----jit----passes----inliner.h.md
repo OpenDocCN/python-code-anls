@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\inliner.h`
 
-```
+```py
 #pragma once
 // 防止头文件重复包含的预处理指令
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\callstack_debug_info_serialization.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Allocator.h>

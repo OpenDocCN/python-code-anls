@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\format_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的库
 import argparse  # 用于命令行参数解析

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\operator_name_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <ATen/core/operator_name.h>  // 引入 ATen 库中的操作符命名相关头文件

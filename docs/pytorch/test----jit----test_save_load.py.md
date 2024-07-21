@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_save_load.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 import io  # 导入用于处理字节流的模块

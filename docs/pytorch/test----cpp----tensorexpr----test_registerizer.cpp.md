@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_registerizer.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include "test/cpp/tensorexpr/test_base.h"  // 引入测试基类的头文件

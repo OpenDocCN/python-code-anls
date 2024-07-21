@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\APoT_tensor.py`
 
-```
+```py
 # 引入 torch 库，用于张量操作
 # 引入 APoTQuantizer 类，来自 torch.ao.quantization.experimental.quantizer 模块，用于进行 APoT 量化
 import torch

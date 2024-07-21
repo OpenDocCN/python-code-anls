@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset10.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来模块导入注释类型，允许未注释的定义
 from __future__ import annotations

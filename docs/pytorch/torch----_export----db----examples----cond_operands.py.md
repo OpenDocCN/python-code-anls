@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\cond_operands.py`
 
-```
+```py
 # 引入torch模块
 import torch
 

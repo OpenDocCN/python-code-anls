@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\dbr_quantization\remove_redundant_aliases.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/dbr_quantization/remove_redundant_aliases.h>
 
 #include <torch/csrc/jit/ir/alias_analysis.h>

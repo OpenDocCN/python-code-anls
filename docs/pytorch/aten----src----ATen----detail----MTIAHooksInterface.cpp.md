@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\MTIAHooksInterface.cpp`
 
-```
+```py
 #include <ATen/detail/MTIAHooksInterface.h>
 
 #include <c10/util/CallOnce.h>

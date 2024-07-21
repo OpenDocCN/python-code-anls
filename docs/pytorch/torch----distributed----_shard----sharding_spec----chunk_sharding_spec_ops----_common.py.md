@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\chunk_sharding_spec_ops\_common.py`
 
-```
+```py
 # mypy: allow-untyped-defs  # 允许未类型化的定义，这是针对类型检查工具Mypy的设置
 
 import torch  # 导入PyTorch库

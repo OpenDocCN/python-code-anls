@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\testing\hooks_for_testing.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/Export.h>  // 包含 Torch 导出相关的头文件
 #include <torch/csrc/jit/api/compilation_unit.h>  // 包含 Torch JIT 编译单元的 API 头文件

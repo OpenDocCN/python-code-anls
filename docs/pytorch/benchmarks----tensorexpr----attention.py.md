@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\attention.py`
 
-```
+```py
 # 这是从MLPerf复制的rnn_attention代码，一些常见大小被硬编码用于基准测试，并且去除了一些控制流。
 # https://github.com/mlperf/training/blob/master/rnn_translator/pytorch/seq2seq/models/attention.py
 

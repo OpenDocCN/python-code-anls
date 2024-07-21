@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupNCCL.hpp`
 
-```
+```py
 #pragma once
 
 #ifdef USE_C10D_NCCL

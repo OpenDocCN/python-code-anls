@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\Operators.cpp`
 
-```
+```py
 // 包含 ATen 库的 Tensor 类和 Dispatcher 类的头文件
 #include <ATen/Tensor.h>
 #include <ATen/core/dispatch/Dispatcher.h>

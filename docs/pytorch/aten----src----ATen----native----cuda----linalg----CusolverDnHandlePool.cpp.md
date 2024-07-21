@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\CusolverDnHandlePool.cpp`
 
-```
+```py
 #if defined(CUDART_VERSION) || defined(USE_ROCM)
 
 # 如果定义了CUDART_VERSION或者USE_ROCM，则编译以下代码块

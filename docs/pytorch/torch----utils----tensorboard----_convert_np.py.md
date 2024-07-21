@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\tensorboard\_convert_np.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """This module converts objects into numpy array."""
 

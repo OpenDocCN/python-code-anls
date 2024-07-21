@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_ignored_modules.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import functools  # 导入 functools 模块，用于高阶函数操作

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\sequence_num.hpp`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h>   // 引入 c10 库的宏定义

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_shard_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import copy  # 导入copy模块，用于复制对象

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\functional.py`
 
-```
+```py
 # 多行字符串文档，用于说明此模块提供了 `nn.functional` 的量化版本
 r"""nn.quantized.functional.
 

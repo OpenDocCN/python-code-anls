@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_inference\aoti_custom_class.cpp`
 
-```
+```py
 // 引入标准异常库
 #include <stdexcept>
 

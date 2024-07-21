@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\mps\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块中的 lru_cache，并起别名为 _lru_cache
 from functools import lru_cache as _lru_cache

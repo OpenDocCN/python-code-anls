@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\symbolic_shape_runtime_fusion.cpp`
 
-```
+```py
 // 包含头文件，引入必要的库和声明
 #include <ATen/core/functional.h>
 #include <ATen/core/interned_strings.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\utils.cpp`
 
-```
+```py
 // 定义了一个命名空间 torch::autograd，用于包含自动求导相关的函数和变量
 namespace torch {
 namespace autograd {

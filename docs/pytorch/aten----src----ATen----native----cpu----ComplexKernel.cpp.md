@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\ComplexKernel.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于控制是否仅支持方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

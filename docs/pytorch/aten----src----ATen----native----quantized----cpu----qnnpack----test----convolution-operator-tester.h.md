@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\convolution-operator-tester.h`
 
-```
+```py
 /*
  * 版权声明和许可信息，指出此代码的版权和许可协议
  * Copyright (c) Facebook, Inc. and its affiliates.

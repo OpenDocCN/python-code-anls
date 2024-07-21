@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\rpc\test_e2e_tensorpipe.cpp`
 
-```
+```py
 #ifdef USE_TENSORPIPE
 // 如果定义了 USE_TENSORPIPE 宏，则编译以下代码
 

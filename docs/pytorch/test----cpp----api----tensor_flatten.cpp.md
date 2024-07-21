@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\tensor_flatten.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 框架的头文件
 
 #include <test/cpp/api/support.h> // 包含测试支持函数的头文件

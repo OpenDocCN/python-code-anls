@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\mutation_guard.py`
 
-```
+```py
 # 引入必要的模块和类
 # mypy: allow-untyped-defs
 # mypy: disable-error-code="method-assign"

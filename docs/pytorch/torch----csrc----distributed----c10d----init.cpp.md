@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\init.cpp`
 
-```
+```py
 // 包含 Torch C++ 和 Python 之间交互的头文件
 #include <torch/csrc/python_headers.h>
 

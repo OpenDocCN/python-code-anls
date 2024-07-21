@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\representation\__init__.py`
 
-```
+```py
 # 导入rewrite模块中的reference_representation_rewrite函数
 from .rewrite import reference_representation_rewrite
 

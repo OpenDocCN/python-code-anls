@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\requantization\q31-ssse3.c`
 
-```
+```py
   /*
    * 根据 Facebook, Inc. 及其附属公司的版权声明。
    * 保留所有权利。

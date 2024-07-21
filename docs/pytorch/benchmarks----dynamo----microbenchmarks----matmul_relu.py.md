@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\matmul_relu.py`
 
-```
+```py
 from benchmark_helper import time_with_torch_timer  # 导入自定义的基准测试辅助函数
 
 import torch  # 导入PyTorch库

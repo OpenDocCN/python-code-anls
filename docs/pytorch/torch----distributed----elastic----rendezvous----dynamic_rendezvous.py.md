@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\dynamic_rendezvous.py`
 
-```
+```py
 # 设置类型提示，允许未类型化的定义
 # 版权声明和许可信息，源代码使用 BSD 风格许可证，详见根目录下的 LICENSE 文件
 import inspect  # 导入用于检查对象的函数和类的模块

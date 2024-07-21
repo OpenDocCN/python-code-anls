@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\CustomClassTracer.cpp`
 
-```
+```py
 // 包含头文件 CustomClassTracer.h 和 mutex
 #include <torch/csrc/jit/mobile/model_tracer/CustomClassTracer.h>
 #include <mutex>

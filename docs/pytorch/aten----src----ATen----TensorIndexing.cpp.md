@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorIndexing.cpp`
 
-```
+```py
 // 引入 ATen 库中的 TensorIndexing.h 头文件
 
 #include <ATen/TensorIndexing.h>

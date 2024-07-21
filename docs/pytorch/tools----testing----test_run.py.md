@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\test_run.py`
 
-```
+```py
 # 引入 future 模块的 annotations 功能，支持在类定义中使用注解
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\init.cpp`
 
-```
+```py
 #include <pybind11/pytypes.h>
 #include <torch/csrc/utils/pybind.h>
 #include <torch/csrc/utils/python_arg_parser.h>

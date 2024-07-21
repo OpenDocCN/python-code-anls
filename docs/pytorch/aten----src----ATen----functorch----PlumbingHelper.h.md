@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\PlumbingHelper.h`
 
-```
+```py
 // Copyright (c) Facebook, Inc. and its affiliates.
 // All rights reserved.
 //

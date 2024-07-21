@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\wrapper_benchmark.py`
 
-```
+```py
 #`
 # 允许未指定类型的函数定义
 # mypy: allow-untyped-defs

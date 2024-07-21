@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_prefix.h`
 
-```
+```py
 #pragma once
 
 #include <algorithm>  // 包含算法标准库，提供各种算法函数

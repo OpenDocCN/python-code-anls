@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_pytree.py`
 
-```
+```py
 # Owner(s): ["module: pytree"]
 
 # 引入必要的模块和库

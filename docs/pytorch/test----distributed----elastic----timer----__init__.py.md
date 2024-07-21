@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\timer\__init__.py`
 
-```
+```py
 # 版权声明，说明此段代码的版权归 Facebook, Inc. 及其关联公司所有。
 # 保留所有权利。
 #

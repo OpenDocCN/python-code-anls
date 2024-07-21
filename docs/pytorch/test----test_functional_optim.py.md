@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_functional_optim.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import unittest  # 导入单元测试框架

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_runner.py`
 
-```
+```py
 # 导入必要的模块 argparse：用于命令行参数解析
 import argparse
 

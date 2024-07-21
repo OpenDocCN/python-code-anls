@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_prims\debug_prims.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入上下文管理模块
 import contextlib

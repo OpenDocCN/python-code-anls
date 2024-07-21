@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_models.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 引入单元测试模块

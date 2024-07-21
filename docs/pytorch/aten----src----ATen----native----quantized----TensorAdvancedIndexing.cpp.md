@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\TensorAdvancedIndexing.cpp`
 
-```
+```py
 // 包含 ATen 库中的各种头文件
 #include <ATen/ATen.h>
 #include <ATen/MemoryOverlap.h>

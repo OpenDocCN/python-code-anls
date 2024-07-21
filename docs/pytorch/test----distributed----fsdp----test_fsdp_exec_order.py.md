@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_exec_order.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统模块

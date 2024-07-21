@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\make_assets.py`
 
-```
+```py
 # 导入torchvision库中的模型模块
 from torchvision import models
 

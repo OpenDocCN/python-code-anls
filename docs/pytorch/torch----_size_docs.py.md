@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_size_docs.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Adds docstrings to torch.Size functions"""
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\record_function_ops.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件，用于线程本地状态、自定义类型扩展和记录函数
 #include <ATen/ThreadLocalState.h>
 #include <ATen/cpp_custom_type_hack.h>

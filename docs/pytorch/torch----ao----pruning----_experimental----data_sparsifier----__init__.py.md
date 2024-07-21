@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\__init__.py`
 
-```
+```py
 # 导入当前目录中的base_data_sparsifier模块中的BaseDataSparsifier类
 from .base_data_sparsifier import BaseDataSparsifier
 # 导入当前目录中的data_norm_sparsifier模块中的DataNormSparsifier类

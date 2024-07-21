@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\map\combinatorics.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型
 import random  # 导入随机数生成模块

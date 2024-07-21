@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\UnaryOpsKernel.cpp`
 
-```
+```py
 // 定义宏以禁用 Torch 的运算符断言
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库的一元操作头文件

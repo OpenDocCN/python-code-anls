@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\dropout.cpp`
 
-```
+```py
 #include <torch/nn/options/dropout.h>
 
 

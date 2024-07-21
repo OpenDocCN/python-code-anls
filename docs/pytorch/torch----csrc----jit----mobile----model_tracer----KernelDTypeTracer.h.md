@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\KernelDTypeTracer.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/record_function.h>

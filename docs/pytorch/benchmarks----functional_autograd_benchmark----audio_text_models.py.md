@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\audio_text_models.py`
 
-```
+```py
 import torchaudio_models as models  # 导入名为 models 的 torchaudio 模块
 
 from utils import check_for_functorch, extract_weights, GetterReturnType, load_weights  # 从 utils 模块中导入函数和类型

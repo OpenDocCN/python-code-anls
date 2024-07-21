@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_ir_verifier.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <stdexcept>  // 包含异常处理相关的头文件

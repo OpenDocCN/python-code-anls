@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\code_context.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入types模块，用于处理Python对象的类型信息
 import types

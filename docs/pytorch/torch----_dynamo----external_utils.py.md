@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\external_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # This module contains functions that *will be allowed* by dynamo
 

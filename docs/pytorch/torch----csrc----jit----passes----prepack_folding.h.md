@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\prepack_folding.h`
 
-```
+```py
 #pragma once
 
 # 指令：确保头文件只被编译一次，以防止重复包含

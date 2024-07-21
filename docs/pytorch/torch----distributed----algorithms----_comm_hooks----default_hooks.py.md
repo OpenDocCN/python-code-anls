@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\_comm_hooks\default_hooks.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块
 import functools

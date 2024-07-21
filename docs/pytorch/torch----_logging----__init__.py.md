@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_logging\__init__.py`
 
-```
+```py
 # 导入 torch 内部日志注册模块
 # 这是 torch 日志系统的顶层模块，用于处理日志记录
 # 设计文档详见：https://docs.google.com/document/d/1ZRfTWKa8eaPq1AxaiHrq4ASTPouzzlPiuquSBEJYwS8/edit#

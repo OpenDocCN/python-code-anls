@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dynamic_shape_slicing.py`
 
-```
+```py
 # 引入torch模块，用于进行深度学习相关操作
 import torch
 

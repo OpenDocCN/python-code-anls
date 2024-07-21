@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\lazy_test.cpp`
 
-```
+```py
 #include <atomic>  // 引入原子操作相关的头文件
 #include <thread>  // 引入线程相关的头文件
 #include <vector>  // 引入向量容器相关的头文件

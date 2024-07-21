@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ParallelOpenMP.cpp`
 
-```
+```py
 #include <ATen/Config.h>
 #include <ATen/core/jit_type.h>
 #if AT_PARALLEL_OPENMP

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\ScalarTypeToTypeMeta.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/ScalarType.h> // 包含标量类型相关的头文件

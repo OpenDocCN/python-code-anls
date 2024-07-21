@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\nnapi\nnapi_model_loader.h`
 
-```
+```py
 #ifndef NNAPI_MODEL_LOADER_H_  // 如果未定义 NNAPI_MODEL_LOADER_H_ 宏，则进入条件编译
 #define NNAPI_MODEL_LOADER_H_
 

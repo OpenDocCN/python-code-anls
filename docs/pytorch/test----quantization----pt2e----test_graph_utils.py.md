@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_graph_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 # 导入必要的库和模块
 import copy  # 导入深拷贝函数用于复制对象

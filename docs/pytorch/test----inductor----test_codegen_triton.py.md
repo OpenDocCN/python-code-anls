@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_codegen_triton.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入上下文管理模块
 import contextlib

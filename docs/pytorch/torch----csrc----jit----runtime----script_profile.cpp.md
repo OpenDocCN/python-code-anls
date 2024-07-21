@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\script_profile.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/script_profile.h>
 
 #include <atomic>  // 引入原子操作支持

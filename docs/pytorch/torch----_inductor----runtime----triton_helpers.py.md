@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\runtime\triton_helpers.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 triton 库及其语言模块
 import triton

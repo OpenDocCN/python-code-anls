@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\FunctionalStorageImpl.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Tensor.h>

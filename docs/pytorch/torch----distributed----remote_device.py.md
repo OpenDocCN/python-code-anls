@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\remote_device.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型和模块
 from typing import Optional, Union

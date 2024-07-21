@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\_imported_class_test\very\__init__.py`
 
-```
+```py
 # 导入必要的模块：os（操作系统功能）和 shutil（高级文件操作功能）
 import os
 import shutil

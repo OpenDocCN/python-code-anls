@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\UpSampleNearest2d.cpp`
 
-```
+```py
 // 定义宏，仅使用方法操作符进行断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量相关头文件

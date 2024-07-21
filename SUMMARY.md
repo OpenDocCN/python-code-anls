@@ -26,6 +26,7 @@
 +   [PandasTA 源码解析](docs/pandas-ta/README.md)
 +   [PokéLLMon 源码解析](docs/pokellmon/README.md)
 +   [PythonMarkdown 源码解析](docs/python-markdown-ai/README.md)
++   [PyTorch 源码解析](docs/pytorch/README.md)
 +   [PyZelda 源码解析](docs/pyzelda-ai/README.md)
 +   [QLoRA 源码解析](docs/qlora-ai/README.md)
 +   [RWKV 源码解析](docs/rwkv/README.md)

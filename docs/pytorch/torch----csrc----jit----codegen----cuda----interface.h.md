@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\cuda\interface.h`
 
-```
+```py
 #pragma once
 
 

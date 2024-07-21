@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\class_method.py`
 
-```
+```py
 # 引入 torch 模块，用于深度学习任务
 import torch
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_cuda.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入标准库和第三方库

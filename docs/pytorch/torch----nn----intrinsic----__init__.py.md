@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\__init__.py`
 
-```
+```py
 # 导入torch.ao.nn.intrinsic包中的特定模块
 from torch.ao.nn.intrinsic import ConvBn1d
 from torch.ao.nn.intrinsic import ConvBn2d

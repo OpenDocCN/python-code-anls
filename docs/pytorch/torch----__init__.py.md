@@ -1,6 +1,6 @@
 # `.\pytorch\torch\__init__.py`
 
-```
+```py
 """
 The torch package contains data structures for multi-dimensional
 tensors and defines mathematical operations over these tensors.

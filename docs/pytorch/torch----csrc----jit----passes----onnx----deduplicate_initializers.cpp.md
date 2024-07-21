@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\deduplicate_initializers.cpp`
 
-```
+```py
 // 引入 Torch JIT 相关的头文件
 #include <torch/csrc/jit/jit_log.h>
 #include <torch/csrc/jit/passes/onnx/deduplicate_initializers.h>

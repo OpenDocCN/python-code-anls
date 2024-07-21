@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\concat_opt.h`
 
-```
+```py
 #pragma once
 
 // `#pragma once` 是一个预处理器指令，用于确保头文件只被编译一次，避免重复包含。

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\context.h`
 
-```
+```py
 #pragma once
 
 

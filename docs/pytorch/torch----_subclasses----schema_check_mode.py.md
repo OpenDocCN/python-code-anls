@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_subclasses\schema_check_mode.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # Import necessary modules and classes

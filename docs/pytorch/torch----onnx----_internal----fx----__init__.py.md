@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\__init__.py`
 
-```
+```py
 # 导入本地模块中的 ONNXTorchPatcher 类
 from .patcher import ONNXTorchPatcher
 # 导入本地模块中的 save_model_with_external_data 函数

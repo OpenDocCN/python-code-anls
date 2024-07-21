@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\transformer\better_transformer_vs_mha_functional.py`
 
-```
+```py
 """
 Tests the performance of torch.nn.MultiheadAttention's fast path (BetterTransformer)
 vs the slow path (torch.nn.functional.multi_head_attention)

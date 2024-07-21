@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cpu_repro.py`
 
-```
+```py
 # 导入必要的库和模块
 import contextlib  # 提供上下文管理功能的模块
 import copy  # 提供对象复制功能的模块

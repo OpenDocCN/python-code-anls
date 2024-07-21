@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\naming.cpp`
 
-```
+```py
 // 包含头文件：torch/csrc/jit/passes/onnx/naming.h 和 torch/csrc/onnx/onnx.h
 #include <torch/csrc/jit/passes/onnx/naming.h>
 #include <torch/csrc/onnx/onnx.h>

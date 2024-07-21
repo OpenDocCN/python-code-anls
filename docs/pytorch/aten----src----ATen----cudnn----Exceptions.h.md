@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cudnn\Exceptions.h`
 
-```
+```py
 # 导入需要使用的模块
 import os
 import sys

@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\app\src\main\java\org\pytorch\testapp\MainActivity.java`
 
-```
+```py
     // 导入所需的 Android 和 PyTorch 库
     package org.pytorch.testapp;
 

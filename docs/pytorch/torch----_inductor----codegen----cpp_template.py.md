@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_template.py`
 
-```
+```py
 # 引入必要的模块和库
 # mypy: allow-untyped-defs 允许未类型化的定义（针对静态类型检查工具mypy的设置）
 import ctypes  # 提供与C语言兼容的数据类型

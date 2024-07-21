@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\quantized\cpu\qnnpack_utils.h`
 
-```
+```py
 #pragma once
 // 指令，确保头文件只被编译一次
 

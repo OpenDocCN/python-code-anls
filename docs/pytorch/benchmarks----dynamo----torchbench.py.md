@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\torchbench.py`
 
-```
+```py
 #!/usr/bin/env python3
 import functools
 import gc

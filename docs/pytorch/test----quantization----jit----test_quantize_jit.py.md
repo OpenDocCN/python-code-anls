@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\jit\test_quantize_jit.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # torch 库引入

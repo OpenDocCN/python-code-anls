@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\logging_handlers.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定 Python 解释器路径
 

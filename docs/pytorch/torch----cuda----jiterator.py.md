@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\jiterator.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入正则表达式库和类型定义库
 import re

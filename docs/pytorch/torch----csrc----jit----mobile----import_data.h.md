@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\import_data.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/TensorBase.h>

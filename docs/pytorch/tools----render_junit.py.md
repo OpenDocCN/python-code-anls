@@ -1,6 +1,6 @@
 # `.\pytorch\tools\render_junit.py`
 
-```
+```py
 #!/usr/bin/env python3
 从 __future__ 导入注解
 

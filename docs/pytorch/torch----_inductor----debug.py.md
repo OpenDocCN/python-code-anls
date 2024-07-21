@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\debug.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import collections  # 导入collections模块，用于命名元组等数据结构
 import contextlib  # 导入contextlib模块，用于创建上下文管理器和处理上下文相关的异常

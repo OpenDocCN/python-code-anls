@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\fx_microbenchmarks.py`
 
-```
+```py
 # 导入时间测量工具模块
 import timeit
 # 导入 PyTorch FX 模块

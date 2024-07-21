@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\maskedtensor\binary.py`
 
-```
+```py
 # 引入 torch 库，用于张量操作
 import torch
 

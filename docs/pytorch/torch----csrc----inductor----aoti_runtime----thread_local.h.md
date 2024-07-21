@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runtime\thread_local.h`
 
-```
+```py
 #pragma once
 // 包含 torch/csrc/inductor/aoti_runtime/arrayref_tensor.h 头文件
 

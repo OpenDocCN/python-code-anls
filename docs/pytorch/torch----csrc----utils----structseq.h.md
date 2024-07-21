@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\structseq.h`
 
-```
+```py
 #pragma once
 
 这行代码指示预处理器在编译时只包含一次当前文件，避免重复包含。

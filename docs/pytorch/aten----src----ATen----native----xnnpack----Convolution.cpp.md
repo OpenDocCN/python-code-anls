@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Convolution.cpp`
 
-```
+```py
 // #ifdef USE_XNNPACK 宏定义条件编译，检查是否启用了 XNNPACK 库
 
 #include <vector> // 引入标准库中的 vector 头文件

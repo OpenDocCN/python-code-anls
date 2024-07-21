@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\ppl_models.py`
 
-```
+```py
 # 从自定义模块 utils 中导入 GetterReturnType 类型
 from utils import GetterReturnType
 

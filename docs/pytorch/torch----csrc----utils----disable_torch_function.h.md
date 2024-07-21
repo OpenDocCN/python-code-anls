@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\disable_torch_function.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件只被编译一次
 

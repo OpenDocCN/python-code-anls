@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\TypeTraits.h`
 
-```
+```py
 #pragma once
 // 指示编译器只包含此头文件一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\TracerRunner.cpp`
 
-```
+```py
 /**
  * 包含必要的头文件以及命名空间声明
  */

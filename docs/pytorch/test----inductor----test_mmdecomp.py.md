@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_mmdecomp.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 # 导入必要的库

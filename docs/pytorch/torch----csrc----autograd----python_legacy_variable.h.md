@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_legacy_variable.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once指令，确保此头文件只被编译一次，避免重复包含
 

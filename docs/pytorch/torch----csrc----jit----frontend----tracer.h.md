@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\tracer.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含
 

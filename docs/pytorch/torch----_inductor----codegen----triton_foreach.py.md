@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\triton_foreach.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 itertools 模块，用于生成迭代器和处理迭代器操作的工具函数
 import itertools

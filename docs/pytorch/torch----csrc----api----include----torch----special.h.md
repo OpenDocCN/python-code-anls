@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\special.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>  // 引入 ATen 库，用于张量操作
@@ -16,7 +16,7 @@ namespace special {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::gammaln(t);
-/// ```
+/// ```py
 inline Tensor gammaln(const Tensor& self) {
   // 调用 Torch 库函数计算伽马函数的对数
   return torch::special_gammaln(self);
@@ -36,7 +36,7 @@ inline Tensor& gammaln_out(Tensor& result, const Tensor& self) {
 /// auto t = torch::randn(128, dtype=kDouble);
 /// auto s = torch::randn(128, dtype=kDouble);
 /// torch::special::gammainc(s, t);
-/// ```
+/// ```py
 inline Tensor gammainc(const Tensor& self, const Tensor& other) {
   // 调用 Torch 库函数计算正则化的下不完全伽马函数
   return torch::special_gammainc(self, other);
@@ -59,7 +59,7 @@ inline Tensor& gammainc_out(
 /// auto t = torch::randn(128, dtype=kDouble);
 /// auto s = torch::randn(128, dtype=kDouble);
 /// torch::special::gammaincc(s, t);
-/// ```
+/// ```py
 inline Tensor gammaincc(const Tensor& self, const Tensor& other) {
   // 调用 Torch 库函数计算正则化的上不完全伽马函数
   return torch::special_gammaincc(self, other);
@@ -81,7 +81,7 @@ inline Tensor& gammaincc_out(
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::multigammaln(t, 1);
-/// ```
+/// ```py
 inline Tensor multigammaln(const Tensor& self, int64_t p) {
   // 调用 Torch 库函数计算维度为 `p` 的多元对数伽马函数
   return torch::special_multigammaln(self, p);
@@ -100,7 +100,7 @@ inline Tensor& multigammaln_out(Tensor& result, const Tensor& self, int64_t p) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::polygamma(2, t);
-/// ```
+/// ```py
 inline Tensor polygamma(int64_t n, const Tensor& self) {
   // 调用 Torch 库函数计算输入上的第 `n` 阶数的 digamma 函数的对数导数
   return torch::special_polygamma(n, self);
@@ -118,7 +118,7 @@ inline Tensor& polygamma_out(Tensor& result, int64_t n, const Tensor& self) {
 /// Example:
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
-/// ```
+/// ```py
 /// Computes the digamma function, which is the logarithmic derivative of the gamma function.
 /// See https://pytorch.org/docs/main/special.html#torch.special.digamma
 ///
@@ -126,7 +126,7 @@ inline Tensor& polygamma_out(Tensor& result, int64_t n, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::digamma(t);
-/// ```
+/// ```py
 inline Tensor digamma(const Tensor& self) {
   return torch::special_digamma(self);
 }
@@ -143,7 +143,7 @@ inline Tensor& digamma_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::entr(t);
-/// ```
+/// ```py
 inline Tensor entr(const Tensor& self) {
   return torch::special_entr(self);
 }
@@ -160,7 +160,7 @@ inline Tensor& entr_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::erf(t);
-/// ```
+/// ```py
 inline Tensor erf(const Tensor& self) {
   return torch::special_erf(self);
 }
@@ -177,7 +177,7 @@ inline Tensor& erf_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::erfc(t);
-/// ```
+/// ```py
 inline Tensor erfc(const Tensor& self) {
   return torch::special_erfc(self);
 }
@@ -194,7 +194,7 @@ inline Tensor& erfc_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::erfcx(t);
-/// ```
+/// ```py
 inline Tensor erfcx(const Tensor& self) {
   return torch::special_erfcx(self);
 }
@@ -211,7 +211,7 @@ inline Tensor& erfcx_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::erfinv(t);
-/// ```
+/// ```py
 inline Tensor erfinv(const Tensor& self) {
   return torch::special_erfinv(self);
 }
@@ -228,19 +228,19 @@ inline Tensor& erfinv_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::logsumexp(t, /*dim=*/1);
-/// ```
+/// ```py
 /// Generates a 3x3 tensor of random numbers from a standard normal distribution.
 /// Example:
 /// ```
 /// auto t = torch::randn(3, 3);
-/// ```
+/// ```py
 auto t = torch::randn(3, 3);
 
 /// Computes the logsumexp operation along specified dimensions of the input tensor.
 /// Example:
 /// ```
 /// torch::special::logsumexp(t, 1);
-/// ```
+/// ```py
 torch::special::logsumexp(t, 1);
 
 /// Computes the inverse cumulative distribution function (quantile) of the standard
@@ -249,7 +249,7 @@ torch::special::logsumexp(t, 1);
 /// ```
 /// auto t = torch::rand(128, dtype=kDouble);
 /// torch::special::ndtri(t);
-/// ```
+/// ```py
 auto t = torch::rand(128, dtype=kDouble);
 torch::special::ndtri(t);
 
@@ -259,7 +259,7 @@ torch::special::ndtri(t);
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::log_ndtr(t);
-/// ```
+/// ```py
 auto t = torch::randn(128, dtype=kDouble);
 torch::special::log_ndtr(t);
 
@@ -268,7 +268,7 @@ torch::special::log_ndtr(t);
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::logit(t);
-/// ```
+/// ```py
 auto t = torch::randn(128, dtype=kDouble);
 torch::special::logit(t);
 
@@ -281,7 +281,7 @@ torch::special::logit(t);
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::expm1(t);
-/// ```
+/// ```py
 inline Tensor expm1(const Tensor& self) {
   return torch::special_expm1(self);
 }
@@ -293,7 +293,7 @@ inline Tensor expm1(const Tensor& self) {
 /// ```
 /// auto t = torch::empty_like(input_tensor);
 /// torch::special::expm1_out(t, input_tensor);
-/// ```
+/// ```py
 inline Tensor& expm1_out(Tensor& result, const Tensor& self) {
   return torch::special_expm1_out(result, self);
 }
@@ -306,7 +306,7 @@ inline Tensor& expm1_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 /// auto y = torch::randn(128, dtype=kDouble);
 /// torch::special::xlogy(x, y);
-/// ```
+/// ```py
 inline Tensor xlogy(const Tensor& self, const Tensor& other) {
   return torch::special_xlogy(self, other);
 }
@@ -355,7 +355,7 @@ inline Tensor& xlogy_out(
 /// auto x = torch::randn(128, dtype=kDouble);
 /// auto y = torch::randn(128, dtype=kDouble);
 /// torch::special::xlog1py(x, y);
-/// ```
+/// ```py
 inline Tensor xlog1py(const Tensor& self, const Tensor& other) {
   return torch::special_xlog1py(self, other);
 }
@@ -404,7 +404,7 @@ inline Tensor& xlog1py_out(
 /// auto x = torch::randn(128, dtype=kDouble);
 /// auto y = torch::randn(128, dtype=kDouble);
 /// torch::special::zeta(x, y);
-/// ```
+/// ```py
 inline Tensor zeta(const Tensor& self, const Tensor& other) {
   return torch::special_zeta(self, other);
 }
@@ -448,7 +448,7 @@ inline Tensor& zeta_out(
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::i0(t);
-/// ```
+/// ```py
 inline Tensor i0(const Tensor& self) {
   return torch::special_i0(self);
 }
@@ -464,7 +464,7 @@ inline Tensor& i0_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::ndtr(t);
-/// ```
+/// ```py
 inline Tensor ndtr(const Tensor& self) {
   return torch::special_ndtr(self);
 }
@@ -480,7 +480,7 @@ inline Tensor& ndtr_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::i0e(t);
-/// ```
+/// ```py
 inline Tensor i0e(const Tensor& self) {
   return torch::special_i0e(self);
 }
@@ -496,7 +496,7 @@ inline Tensor& i0e_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::i1(t);
-/// ```
+/// ```py
 inline Tensor i1(const Tensor& self) {
   return torch::special_i1(self);
 }
@@ -512,7 +512,7 @@ inline Tensor& i1_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::i1e(t);
-/// ```
+/// ```py
 inline Tensor i1e(const Tensor& self) {
   return torch::special_i1e(self);
 }
@@ -531,7 +531,7 @@ inline Tensor& i1e_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::sinc(t);
-/// ```
+/// ```py
 inline Tensor sinc(const Tensor& self) {
   // 使用 torch 库计算输入张量的 sinc 函数
   return torch::special_sinc(self);
@@ -543,7 +543,7 @@ inline Tensor sinc(const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::sinc_out(out_tensor, t);
-/// ```
+/// ```py
 inline Tensor& sinc_out(Tensor& result, const Tensor& self) {
   // 使用 torch 库计算输入张量的 sinc 函数，并将结果写入给定的输出张量
   return torch::special_sinc_out(result, self);
@@ -557,7 +557,7 @@ inline Tensor& sinc_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::round(t);
-/// ```
+/// ```py
 inline Tensor round(const Tensor& self) {
   // 使用 torch 库将输入张量的元素四舍五入到最接近的整数
   return torch::special_round(self);
@@ -569,7 +569,7 @@ inline Tensor round(const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::round_out(out_tensor, t);
-/// ```
+/// ```py
 inline Tensor& round_out(Tensor& result, const Tensor& self) {
   // 使用 torch 库将输入张量的元素四舍五入到最接近的整数，并将结果写入给定的输出张量
   return torch::special_round_out(result, self);
@@ -583,7 +583,7 @@ inline Tensor& round_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::log1p(t);
-/// ```
+/// ```py
 inline Tensor log1p(const Tensor& self) {
   // 使用 torch 库计算输入张量每个元素的 log(1 + x)
   return torch::special_log1p(self);
@@ -595,7 +595,7 @@ inline Tensor log1p(const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, dtype=kDouble);
 /// torch::special::log1p_out(out_tensor, t);
-/// ```
+/// ```py
 inline Tensor& log1p_out(Tensor& result, const Tensor& self) {
   // 使用 torch 库计算输入张量每个元素的 log(1 + x)，并将结果写入给定的输出张量
   return torch::special_log1p_out(result, self);
@@ -609,7 +609,7 @@ inline Tensor& log1p_out(Tensor& result, const Tensor& self) {
 /// ```
 /// auto t = torch::randn(128, 128, dtype=kDouble);
 /// torch::special::log_softmax(t, 0);
-/// ```
+/// ```py
 inline Tensor log_softmax(
     const Tensor& self,
     int64_t dim,
@@ -626,7 +626,7 @@ inline Tensor log_softmax(
 /// ```
 /// auto t = torch::randn(128, 128, dtype=kDouble);
 /// torch::special::softmax(t, 0);
-/// ```
+/// ```py
 inline Tensor softmax(
     const Tensor& self,
     int64_t dim,
@@ -643,7 +643,7 @@ inline Tensor softmax(
 /// ```
 /// auto x = torch::randn(128, dtype=kDouble);
 /// torch::special::airy_ai(x);
-/// ```
+/// ```py
 inline Tensor airy_ai(const Tensor& x) {
   // 使用 torch 库计算输入张量的 Airy 函数 Ai
   return torch::special_airy_ai(x);
@@ -655,7 +655,7 @@ inline Tensor airy_ai(const Tensor& x) {
 /// ```
 /// auto x = torch::randn(128, dtype=kDouble);
 /// torch::special::airy_ai_out(out_tensor, x);
-/// ```
+/// ```py
 inline Tensor& airy_ai_out(Tensor& y, const Tensor& x) {
   // 使用 torch 库计算输入张量的 Airy 函数 Ai，并将结果写入给定的输出张量
   return torch::special_airy_ai_out(y, x);
@@ -669,7 +669,7 @@ inline Tensor& airy_ai_out(Tensor& y, const Tensor& x) {
 /// ```
 /// auto x = torch::randn(128, dtype=kDouble);
 /// torch::special::bessel_j0(x);
-/// ```
+/// ```py
 inline Tensor bessel_j0(const Tensor& self) {
   // 使用 torch 库计算输入张量的第一类零阶贝塞尔函数
   return torch::special_bessel_j0(self);
@@ -681,7 +681,7 @@ inline Tensor bessel_j0(const Tensor& self) {
 /// ```
 /// auto x = torch::randn(128, dtype=kDouble);
 /// torch::special::bessel_j0_out(out_tensor, x);
-/// ```
+/// ```py
 inline Tensor& bessel_j0_out(Tensor& result, const Tensor& self) {
   // 使用 torch 库计算输入张量的第一类零阶贝塞尔函数，并将结果写入给定的输出张量
   return torch::special_bessel_j0_out(result, self);
@@ -696,7 +696,7 @@ inline Tensor& bessel_j0_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::bessel_j1(x);
-/// ```
+/// ```py
 inline Tensor bessel_j1(const Tensor& self) {
   // Delegate computation to PyTorch's special_bessel_j1 function
   return torch::special_bessel_j1(self);
@@ -711,7 +711,7 @@ inline Tensor bessel_j1(const Tensor& self) {
 /// torch::Tensor result;
 ///
 /// torch::special::bessel_j1_out(result, x);
-/// ```
+/// ```py
 inline Tensor& bessel_j1_out(Tensor& result, const Tensor& self) {
   // Delegate computation to PyTorch's special_bessel_j1_out function
   return torch::special_bessel_j1_out(result, self);
@@ -727,7 +727,7 @@ inline Tensor& bessel_j1_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::bessel_y0(x);
-/// ```
+/// ```py
 inline Tensor bessel_y0(const Tensor& self) {
   // Delegate computation to PyTorch's special_bessel_y0 function
   return torch::special_bessel_y0(self);
@@ -742,7 +742,7 @@ inline Tensor bessel_y0(const Tensor& self) {
 /// torch::Tensor result;
 ///
 /// torch::special::bessel_y0_out(result, x);
-/// ```
+/// ```py
 inline Tensor& bessel_y0_out(Tensor& result, const Tensor& self) {
   // Delegate computation to PyTorch's special_bessel_y0_out function
   return torch::special_bessel_y0_out(result, self);
@@ -758,7 +758,7 @@ inline Tensor& bessel_y0_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::bessel_y1(x);
-/// ```
+/// ```py
 inline Tensor bessel_y1(const Tensor& self) {
   // Delegate computation to PyTorch's special_bessel_y1 function
   return torch::special_bessel_y1(self);
@@ -773,7 +773,7 @@ inline Tensor bessel_y1(const Tensor& self) {
 /// torch::Tensor result;
 ///
 /// torch::special::bessel_y1_out(result, x);
-/// ```
+/// ```py
 inline Tensor& bessel_y1_out(Tensor& result, const Tensor& self) {
   // Delegate computation to PyTorch's special_bessel_y1_out function
   return torch::special_bessel_y1_out(result, self);
@@ -790,7 +790,7 @@ inline Tensor& bessel_y1_out(Tensor& result, const Tensor& self) {
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_t(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_t(const Tensor& x, const Tensor& n) {
   // Delegate computation to PyTorch's special_chebyshev_polynomial_t function
   return torch::special_chebyshev_polynomial_t(x, n);
@@ -805,7 +805,7 @@ inline Tensor chebyshev_polynomial_t(const Tensor& x, const Tensor& n) {
 /// auto n = 5.0;
 /// 
 /// torch::special::chebyshev_polynomial_t(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_t(const Scalar& x, const Tensor& n) {
   // Delegate computation to PyTorch's special_chebyshev_polynomial_t function
   return torch::special_chebyshev_polynomial_t(x, n);
@@ -820,7 +820,7 @@ inline Tensor chebyshev_polynomial_t(const Scalar& x, const Tensor& n) {
 /// auto n = 5.0;
 /// 
 /// torch::special::chebyshev_polynomial_t(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_t(const Tensor& x, const Scalar& n) {
   // Delegate computation to PyTorch's special_chebyshev_polynomial_t function
   return torch::special_chebyshev_polynomial_t(x, n);
@@ -836,7 +836,7 @@ inline Tensor chebyshev_polynomial_t(const Tensor& x, const Scalar& n) {
 /// torch::Tensor output;
 ///
 /// torch::special::chebyshev_polynomial_t_out(output, x, n);
-/// ```
+/// ```py
 inline Tensor& chebyshev_polynomial_t_out(
     Tensor& output,
     const Tensor& x,
@@ -855,7 +855,7 @@ inline Tensor& chebyshev_polynomial_t_out(
 /// torch::Tensor output;
 ///
 /// torch::special::chebyshev_polynomial_t_out(output, x, n);
-/// ```
+/// ```py
 inline Tensor& chebyshev_polynomial_t_out(
     Tensor& output,
     const Scalar& x,
@@ -874,7 +874,7 @@ inline Tensor& chebyshev_polynomial_t_out(
 /// torch::Tensor output;
 ///
 /// torch::special::chebyshev_polynomial_t_out(output, x, n);
-/// ```
+/// ```py
 inline Tensor& chebyshev_polynomial_t_out(
     Tensor& output,
     const Tensor& x,
@@ -894,7 +894,7 @@ inline Tensor& chebyshev_polynomial_t_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_u(x, n);
-/// ```
+/// ```py
 /// 使用 Torch 提供的函数计算第一类 Chebyshev 多项式 U(x, n)，返回计算结果
 inline Tensor chebyshev_polynomial_u(const Tensor& x, const Tensor& n) {
   return torch::special_chebyshev_polynomial_u(x, n);
@@ -945,7 +945,7 @@ inline Tensor& chebyshev_polynomial_u_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_v(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_v(const Tensor& x, const Tensor& n) {
   return torch::special_chebyshev_polynomial_v(x, n);
 }
@@ -961,7 +961,7 @@ inline Tensor chebyshev_polynomial_v(const Tensor& x, const Tensor& n) {
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_v(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_v(const Scalar& x, const Tensor& n) {
   return torch::special_chebyshev_polynomial_v(x, n);
 }
@@ -977,7 +977,7 @@ inline Tensor chebyshev_polynomial_v(const Scalar& x, const Tensor& n) {
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_v(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_v(const Tensor& x, const Scalar& n) {
   return torch::special_chebyshev_polynomial_v(x, n);
 }
@@ -1017,7 +1017,7 @@ inline Tensor& chebyshev_polynomial_v_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_w(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_w(const Tensor& x, const Tensor& n) {
   return torch::special_chebyshev_polynomial_w(x, n);
 }
@@ -1033,7 +1033,7 @@ inline Tensor chebyshev_polynomial_w(const Tensor& x, const Tensor& n) {
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_w(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_w(const Scalar& x, const Tensor& n) {
   return torch::special_chebyshev_polynomial_w(x, n);
 }
@@ -1049,7 +1049,7 @@ inline Tensor chebyshev_polynomial_w(const Scalar& x, const Tensor& n) {
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::chebyshev_polynomial_w(x, n);
-/// ```
+/// ```py
 inline Tensor chebyshev_polynomial_w(const Tensor& x, const Scalar& n) {
   return torch::special_chebyshev_polynomial_w(x, n);
 }
@@ -1089,7 +1089,7 @@ inline Tensor& chebyshev_polynomial_w_out(
 ///
 /// ```
 /// Generate a tensor `x` filled with random numbers from a standard normal distribution.
-/// ```
+/// ```py
 /// auto x = torch::randn(128, dtype=kDouble);
 /// Generate a random tensor of size 128x128 filled with double precision values.
 auto n = torch::randn(128, dtype=kDouble);
@@ -1153,7 +1153,7 @@ inline Tensor& laguerre_polynomial_l_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::legendre_polynomial_p(x, n);
-/// ```
+/// ```py
 inline Tensor legendre_polynomial_p(const Tensor& x, const Tensor& n) {
   return torch::special_legendre_polynomial_p(x, n);
 }
@@ -1206,7 +1206,7 @@ inline Tensor& legendre_polynomial_p_out(
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::modified_bessel_i0(x);
-/// ```
+/// ```py
 inline Tensor modified_bessel_i0(const Tensor& self) {
   return torch::special_modified_bessel_i0(self);
 }
@@ -1224,7 +1224,7 @@ inline Tensor& modified_bessel_i0_out(Tensor& result, const Tensor& self) {
 ///
 /// ```
 /// auto x = torch::randn(128, dtype=kDouble);
-/// ```
+/// ```py
 /// Calculate the modified Bessel function of the first kind of order 1 for a given tensor `self`.
 inline Tensor modified_bessel_i1(const Tensor& self) {
   return torch::special_modified_bessel_i1(self);
@@ -1243,7 +1243,7 @@ inline Tensor& modified_bessel_i1_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::modified_bessel_k0(x);
-/// ```
+/// ```py
 inline Tensor modified_bessel_k0(const Tensor& self) {
   return torch::special_modified_bessel_k0(self);
 }
@@ -1261,7 +1261,7 @@ inline Tensor& modified_bessel_k0_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::modified_bessel_k1(x);
-/// ```
+/// ```py
 inline Tensor modified_bessel_k1(const Tensor& self) {
   return torch::special_modified_bessel_k1(self);
 }
@@ -1279,7 +1279,7 @@ inline Tensor& modified_bessel_k1_out(Tensor& result, const Tensor& self) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::scaled_modified_bessel_k0(x);
-/// ```
+/// ```py
 inline Tensor scaled_modified_bessel_k0(const Tensor& x) {
   return torch::special_scaled_modified_bessel_k0(x);
 }
@@ -1297,7 +1297,7 @@ inline Tensor& scaled_modified_bessel_k0_out(Tensor& y, const Tensor& x) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::scaled_modified_bessel_k1(x);
-/// ```
+/// ```py
 inline Tensor scaled_modified_bessel_k1(const Tensor& x) {
   return torch::special_scaled_modified_bessel_k1(x);
 }
@@ -1316,7 +1316,7 @@ inline Tensor& scaled_modified_bessel_k1_out(Tensor& y, const Tensor& x) {
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::shifted_chebyshev_polynomial_t(x, n);
-/// ```
+/// ```py
 inline Tensor shifted_chebyshev_polynomial_t(const Tensor& x, const Tensor& n) {
   return torch::special_shifted_chebyshev_polynomial_t(x, n);
 }
@@ -1375,7 +1375,7 @@ inline Tensor& shifted_chebyshev_polynomial_t_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::shifted_chebyshev_polynomial_u(x, n);
-/// ```
+/// ```py
 inline Tensor shifted_chebyshev_polynomial_u(const Tensor& x, const Tensor& n) {
   return torch::special_shifted_chebyshev_polynomial_u(x, n);
 }
@@ -1435,7 +1435,7 @@ inline Tensor& shifted_chebyshev_polynomial_u_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::shifted_chebyshev_polynomial_v(x, n);
-/// ```
+/// ```py
 inline Tensor shifted_chebyshev_polynomial_v(const Tensor& x, const Tensor& n) {
   return torch::special_shifted_chebyshev_polynomial_v(x, n);
 }
@@ -1486,7 +1486,7 @@ inline Tensor& shifted_chebyshev_polynomial_v_out(
 /// auto n = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::shifted_chebyshev_polynomial_w(x, n);
-/// ```
+/// ```py
 inline Tensor shifted_chebyshev_polynomial_w(const Tensor& x, const Tensor& n) {
   return torch::special_shifted_chebyshev_polynomial_w(x, n);
 }
@@ -1511,7 +1511,7 @@ inline Tensor shifted_chebyshev_polynomial_w(const Tensor& x, const Scalar& n) {
 /// auto x = torch::randn(128, dtype=kDouble);
 ///
 /// torch::special::spherical_bessel_j0(x);
-/// ```
+/// ```py
 inline Tensor spherical_bessel_j0(const Tensor& x) {
   return torch::special_spherical_bessel_j0(x);
 }

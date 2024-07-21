@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\default_comm_hooks.hpp`
 
-```
+```py
 #pragma once
 // 引入 Torch 的分布式通信相关头文件
 #include <torch/csrc/distributed/c10d/ProcessGroup.hpp>

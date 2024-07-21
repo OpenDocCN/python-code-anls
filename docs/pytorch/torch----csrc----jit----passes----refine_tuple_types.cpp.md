@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\refine_tuple_types.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/refine_tuple_types.h>
 #include <torch/csrc/jit/runtime/graph_iterator.h>
 

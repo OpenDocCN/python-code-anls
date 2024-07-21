@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mkl\Sparse.h`
 
-```
+```py
 // 声明编译器指令，指定此处代码仅编译一次，类似于头文件保护
 #pragma once
 

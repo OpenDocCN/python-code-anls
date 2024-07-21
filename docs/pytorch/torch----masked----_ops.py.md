@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于发出警告信息
 import warnings

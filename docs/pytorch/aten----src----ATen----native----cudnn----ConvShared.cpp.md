@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\ConvShared.cpp`
 
-```
+```py
 // 定义编译时仅使用方法操作符的宏，以便包含正确的头文件
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\dcgan.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\_stubs.py`
 
-```
+```py
 from typing import Any, Callable, Dict, Protocol, runtime_checkable
 
 

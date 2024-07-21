@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\MathConstants.cpp`
 
-```
+```py
 // 如果在使用 MSVC 编译器环境下，并且没有定义 _USE_MATH_DEFINES 宏，则定义 _USE_MATH_DEFINES 宏
 #ifdef _MSC_VER
 #ifndef _USE_MATH_DEFINES

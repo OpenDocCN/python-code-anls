@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\fft.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>
@@ -15,7 +15,7 @@ namespace fft {
 /// ```
 /// auto t = torch::randn(128, dtype=kComplexDouble);
 /// torch::fft::fft(t);
-/// ```
+/// ```py
 inline Tensor fft(
     const Tensor& self,
     std::optional<SymInt> n = c10::nullopt,
@@ -31,7 +31,7 @@ inline Tensor fft(
 /// ```
 /// auto t = torch::randn(128, dtype=kComplexDouble);
 /// torch::fft::ifft(t);
-/// ```
+/// ```py
 inline Tensor ifft(
     const Tensor& self,
     std::optional<SymInt> n = c10::nullopt,
@@ -47,7 +47,7 @@ inline Tensor ifft(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kComplexDouble);
 /// torch::fft::fft2(t);
-/// ```
+/// ```py
 inline Tensor fft2(
     const Tensor& self,
     OptionalIntArrayRef s = c10::nullopt,
@@ -63,7 +63,7 @@ inline Tensor fft2(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kComplexDouble);
 /// torch::fft::ifft2(t);
-/// ```
+/// ```py
 inline Tensor ifft2(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,
@@ -79,7 +79,7 @@ inline Tensor ifft2(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kComplexDouble);
 /// torch::fft::fftn(t);
-/// ```
+/// ```py
 inline Tensor fftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,
@@ -95,7 +95,7 @@ inline Tensor fftn(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kComplexDouble);
 /// torch::fft::ifftn(t);
-/// ```
+/// ```py
 inline Tensor ifftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,
@@ -114,7 +114,7 @@ inline Tensor ifftn(
 /// auto t = torch::randn(128);
 /// auto T = torch::fft::rfft(t);
 /// assert(T.is_complex() && T.numel() == 128 / 2 + 1);
-/// ```
+/// ```py
 inline Tensor rfft(
     const Tensor& self,
     std::optional<SymInt> n = c10::nullopt,   // Optional parameter for FFT size
@@ -133,7 +133,7 @@ inline Tensor rfft(
 /// auto T = torch::randn(128 / 2 + 1, torch::kComplexDouble);
 /// auto t = torch::fft::irfft(t, /*n=*/128);
 /// assert(t.is_floating_point() && T.numel() == 128);
-/// ```
+/// ```py
 inline Tensor irfft(
     const Tensor& self,
     std::optional<SymInt> n = c10::nullopt,   // Optional parameter for output size
@@ -149,7 +149,7 @@ inline Tensor irfft(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kDouble);
 /// torch::fft::rfft2(t);
-/// ```
+/// ```py
 inline Tensor rfft2(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,   // Optional parameter for FFT size
@@ -165,7 +165,7 @@ inline Tensor rfft2(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kComplexDouble);
 /// torch::fft::irfft2(t);
-/// ```
+/// ```py
 inline Tensor irfft2(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,   // Optional parameter for output size
@@ -181,7 +181,7 @@ inline Tensor irfft2(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kDouble);
 /// torch::fft::rfftn(t);
-/// ```
+/// ```py
 inline Tensor rfftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,   // Optional parameter for FFT size
@@ -197,7 +197,7 @@ inline Tensor rfftn(
 /// ```
 /// auto t = torch::randn({128, 128}, dtype=kComplexDouble);
 /// torch::fft::irfftn(t);
-/// ```
+/// ```py
 inline Tensor irfftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,   // Optional parameter for output size
@@ -220,7 +220,7 @@ inline Tensor irfftn(
 /// auto t = torch::randn({128, 65}, torch::kComplexDouble);
 /// auto T = torch::fft::hfftn(t, /*s=*/{128, 128});
 /// assert(T.is_floating_point() && T.numel() == 128 * 128);
-/// ```
+/// ```py
 inline Tensor hfftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,
@@ -235,7 +235,7 @@ inline Tensor hfftn(
 /// auto T = torch::randn({128, 128}, torch::kDouble);
 /// auto t = torch::fft::hfftn(T);
 /// assert(t.is_complex() && t.size(1) == 65);
-/// ```
+/// ```py
 inline Tensor hfftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,   // Optional size of the FFT
@@ -252,7 +252,7 @@ inline Tensor hfftn(
 /// auto T = torch::randn({128, 128}, torch::kDouble);
 /// auto t = torch::fft::ihfftn(T);
 /// assert(t.is_real() && t.size(1) == 128);
-/// ```
+/// ```py
 inline Tensor ihfftn(
     const Tensor& self,
     at::OptionalIntArrayRef s = c10::nullopt,   // Optional size of the FFT
@@ -266,7 +266,7 @@ inline Tensor ihfftn(
 /// Example:
 /// ```
 /// auto frequencies = torch::fft::fftfreq(128, torch::kDouble);
-/// ```
+/// ```py
 inline Tensor fftfreq(int64_t n, double d, const TensorOptions& options = {}) {
   return torch::fft_fftfreq(n, d, options);
 }
@@ -277,7 +277,7 @@ inline Tensor fftfreq(int64_t n, double d, const TensorOptions& options = {}) {
 /// Example:
 /// ```
 /// auto frequencies = torch::fft::fftfreq(128);
-/// ```
+/// ```py
 inline Tensor fftfreq(int64_t n, const TensorOptions& options = {}) {
   return torch::fft_fftfreq(n, /*d=*/1.0, options);
 }
@@ -287,7 +287,7 @@ inline Tensor fftfreq(int64_t n, const TensorOptions& options = {}) {
 /// Example:
 /// ```
 /// auto frequencies = torch::fft::rfftfreq(128, torch::kDouble);
-/// ```
+/// ```py
 inline Tensor rfftfreq(int64_t n, double d, const TensorOptions& options) {
   return torch::fft_rfftfreq(n, d, options);
 }
@@ -298,7 +298,7 @@ inline Tensor rfftfreq(int64_t n, double d, const TensorOptions& options) {
 /// Example:
 /// ```
 /// auto frequencies = torch::fft::rfftfreq(128);
-/// ```
+/// ```py
 inline Tensor rfftfreq(int64_t n, const TensorOptions& options) {
   return torch::fft_rfftfreq(n, /*d=*/1.0, options);
 }
@@ -310,7 +310,7 @@ inline Tensor rfftfreq(int64_t n, const TensorOptions& options) {
 /// ```
 /// auto x = torch::randn({127, 4});
 /// auto centred_fft = torch::fft::fftshift(torch::fft::fftn(x));
-/// ```
+/// ```py
 inline Tensor fftshift(
     const Tensor& x,
     at::OptionalIntArrayRef dim = c10::nullopt) {   // Dimensions along which to perform fftshift
@@ -325,7 +325,7 @@ inline Tensor fftshift(
 /// auto shift = torch::fft::fftshift(x);
 /// auto unshift = torch::fft::ifftshift(shift);
 /// assert(torch::allclose(x, unshift));
-/// ```
+/// ```py
 inline Tensor ifftshift(
     const Tensor& x,
     at::OptionalIntArrayRef dim = c10::nullopt) {   // Dimensions along which to perform ifftshift

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SparseTensorUtils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Parallel.h>

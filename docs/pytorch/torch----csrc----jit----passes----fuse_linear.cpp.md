@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fuse_linear.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，用于线性层融合优化
 #include <torch/csrc/jit/passes/fuse_linear.h>
 #include <torch/csrc/jit/passes/graph_rewrite_helper.h>

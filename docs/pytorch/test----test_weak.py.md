@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_weak.py`
 
-```
+```py
 # Owner(s): ["module: meta tensors"]
 
 # 导入必要的模块和库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\symbolic_opset7.py`
 
-```
+```py
 """
 Note [ONNX operators that are added/updated from opset 7 to opset 8]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

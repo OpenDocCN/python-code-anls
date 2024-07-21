@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\avx_mathfun.h`
 
-```
+```py
 #pragma once
 /*
    AVX implementation of sin, cos, sincos, exp and log

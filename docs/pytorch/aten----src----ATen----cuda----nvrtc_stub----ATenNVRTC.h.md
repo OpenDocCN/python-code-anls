@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\nvrtc_stub\ATenNVRTC.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含
 

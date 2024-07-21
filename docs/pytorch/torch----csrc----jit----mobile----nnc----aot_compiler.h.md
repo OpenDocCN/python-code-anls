@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\nnc\aot_compiler.h`
 
-```
+```py
 // 预处理指令，指示编译器在编译本文件时只包含一次
 #pragma once
 

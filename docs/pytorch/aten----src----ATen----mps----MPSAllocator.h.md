@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSAllocator.h`
 
-```
+```py
 // 版权声明，该部分代码版权归 Apple Inc. 所有
 #pragma once
 

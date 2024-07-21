@@ -1,6 +1,6 @@
 # `.\pytorch\torch\monitor\__init__.py`
 
-```
+```py
 # 从 torch._C._monitor 模块导入所有内容，禁止 pylint 报错 F403
 from torch._C._monitor import *  # noqa: F403
 

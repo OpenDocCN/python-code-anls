@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\batchnorm.cpp`
 
-```
+```py
 #include <torch/nn/options/batchnorm.h>
 
 # 包含 Torch 的 BatchNorm 头文件

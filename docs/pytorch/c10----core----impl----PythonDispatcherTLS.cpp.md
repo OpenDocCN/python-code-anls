@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\PythonDispatcherTLS.cpp`
 
-```
+```py
 #include <c10/core/DispatchKey.h>
 #include <c10/core/impl/LocalDispatchKeySet.h>
 #include <c10/core/impl/PythonDispatcherTLS.h>

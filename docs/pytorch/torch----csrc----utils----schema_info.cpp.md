@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\schema_info.cpp`
 
-```
+```py
 // 定义命名空间 torch::utils
 namespace torch::utils {
 // 将参数名称和值添加到 SchemaInfo 对象中

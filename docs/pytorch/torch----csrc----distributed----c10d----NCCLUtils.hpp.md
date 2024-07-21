@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\NCCLUtils.hpp`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_C10D_NCCL，则包含下面的头文件和代码
 #ifdef USE_C10D_NCCL

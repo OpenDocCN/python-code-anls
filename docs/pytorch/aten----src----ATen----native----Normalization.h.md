@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Normalization.h`
 
-```
+```py
 #pragma once
 // 预处理指令，指示编译器仅包含本文件一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\core\timer.h`
 
-```
+```py
 #ifndef CAFFE2_CORE_TIMER_H_
 #define CAFFE2_CORE_TIMER_H_
 

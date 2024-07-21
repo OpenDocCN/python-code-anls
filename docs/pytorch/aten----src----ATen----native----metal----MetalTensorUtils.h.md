@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalTensorUtils.h`
 
-```
+```py
 // 包含 ATen 库中相关头文件，用于张量操作
 #include <ATen/Tensor.h>
 #include <ATen/native/metal/MetalContext.h>

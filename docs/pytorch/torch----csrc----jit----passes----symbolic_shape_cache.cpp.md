@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\symbolic_shape_cache.cpp`
 
-```
+```py
 // 包含 Torch 库的符号形状分析和形状缓存相关头文件
 #include <torch/csrc/jit/passes/symbolic_shape_analysis.h>
 #include <torch/csrc/jit/passes/symbolic_shape_cache.h>

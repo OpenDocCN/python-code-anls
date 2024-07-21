@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\freezing_patterns.py`
 
-```
+```py
 # 设置类型检查工具允许未注释的函数定义
 mypy: allow-untyped-defs
 

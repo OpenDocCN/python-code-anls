@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\utils\convert_parameters.h`
 
-```
+```py
 // 只包含一次的预处理指令，确保本文件只被编译一次
 #pragma once
 

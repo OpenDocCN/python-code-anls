@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_expanded_weights.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 # 导入单元测试模块
 import unittest

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\lower_grad_of.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/lower_grad_of.h>
 // 包含 LowerGradOf 所需的头文件
 

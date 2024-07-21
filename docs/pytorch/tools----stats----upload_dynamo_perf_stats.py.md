@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_dynamo_perf_stats.py`
 
-```
+```py
 from __future__ import annotations
 # 导入将来版本的类型注解支持
 

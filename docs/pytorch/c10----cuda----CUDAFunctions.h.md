@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAFunctions.h`
 
-```
+```py
 #pragma once
 
 // 提供对常用 CUDA API 函数的 C++ 封装

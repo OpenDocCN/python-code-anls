@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_exc.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 引入日志记录模块

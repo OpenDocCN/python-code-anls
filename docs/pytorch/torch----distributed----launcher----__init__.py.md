@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\launcher\__init__.py`
 
-```
+```py
 #!/usr/bin/env/python3
 
 # 指定这个脚本使用的解释器是 /usr/bin/env/python3，确保在不同环境中都能正确执行Python3脚本

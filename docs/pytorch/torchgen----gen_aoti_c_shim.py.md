@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen_aoti_c_shim.py`
 
-```
+```py
 # 导入必要的模块和函数
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\reduce_ops_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <torch/types.h>

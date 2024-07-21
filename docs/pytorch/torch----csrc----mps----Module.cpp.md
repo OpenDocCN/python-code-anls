@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\mps\Module.cpp`
 
-```
+```py
 // 包含 ATen 库头文件
 #include <ATen/ATen.h>
 // 包含 C10 实用工具中的 CallOnce 头文件

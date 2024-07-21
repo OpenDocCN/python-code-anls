@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\BFloat16-inl.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h>  // 包含 c10 宏定义

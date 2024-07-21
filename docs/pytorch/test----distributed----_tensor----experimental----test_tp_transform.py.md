@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\experimental\test_tp_transform.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import defaultdict  # 导入默认字典模块
 from typing import Dict  # 导入字典类型提示

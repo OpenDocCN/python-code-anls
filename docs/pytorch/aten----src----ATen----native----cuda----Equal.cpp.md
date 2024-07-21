@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\Equal.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的 Tensor 类定义

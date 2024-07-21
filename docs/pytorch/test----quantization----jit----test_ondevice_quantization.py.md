@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\jit\test_ondevice_quantization.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import io  # 导入 io 模块，用于处理文件流

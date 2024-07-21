@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\samplers\base.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>

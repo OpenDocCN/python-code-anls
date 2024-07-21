@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\replacement_of_old_operators.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/replacement_of_old_operators.h>
 // 引入替换旧操作符的头文件
 

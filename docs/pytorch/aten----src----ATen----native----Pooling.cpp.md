@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Pooling.cpp`
 
-```
+```py
 // 定义宏，仅包含方法操作符断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入张量核心功能库

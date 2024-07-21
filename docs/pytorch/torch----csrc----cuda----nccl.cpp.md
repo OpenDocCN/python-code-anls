@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\nccl.cpp`
 
-```
+```py
 #include <ATen/core/functional.h>
 #include <torch/csrc/cuda/device_set.h>
 #include <torch/csrc/cuda/nccl.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\op_allowlist.h`
 
-```
+```py
 #pragma once
 // TODO: 统一为 C10_MOBILE。理论上此头文件可用于 OSS。
 

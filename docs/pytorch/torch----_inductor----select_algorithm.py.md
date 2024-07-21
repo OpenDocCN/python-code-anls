@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\select_algorithm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import builtins                 # 内建模块

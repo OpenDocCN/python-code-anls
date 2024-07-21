@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\decompose_mem_bound_mm.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块
 import logging

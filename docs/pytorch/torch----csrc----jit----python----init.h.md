@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\init.h`
 
-```
+```py
 #pragma once
 
 

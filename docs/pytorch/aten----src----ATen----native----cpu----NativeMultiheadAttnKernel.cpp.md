@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\NativeMultiheadAttnKernel.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\inductor_mm.py`
 
-```
+```py
 import triton  # 导入 triton 库
 from benchmark_helper import time_with_torch_timer  # 从 benchmark_helper 模块导入 time_with_torch_timer 函数
 

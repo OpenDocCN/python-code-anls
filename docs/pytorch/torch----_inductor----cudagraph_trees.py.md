@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\cudagraph_trees.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 CUDA graph trees are a safety abstraction over CUDAGraphs, similar to make_graph_callables,

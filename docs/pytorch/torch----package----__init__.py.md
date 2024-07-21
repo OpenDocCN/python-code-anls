@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\__init__.py`
 
-```
+```py
 # 导入用于检查模块是否来自特定包的函数
 from .analyze.is_from_package import is_from_package
 # 导入表示文件结构的Directory类

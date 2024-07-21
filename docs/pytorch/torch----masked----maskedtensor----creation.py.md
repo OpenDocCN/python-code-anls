@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\maskedtensor\creation.py`
 
-```
+```py
 # 指定类型检查选项，允许未标记类型的定义
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

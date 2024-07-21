@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Type_no_demangle.cpp`
 
-```
+```py
 #include <c10/macros/Macros.h>
 // 包含 c10 库中的宏定义文件 Macros.h
 

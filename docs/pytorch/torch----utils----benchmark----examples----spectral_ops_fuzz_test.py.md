@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\spectral_ops_fuzz_test.py`
 
-```
+```py
 """Microbenchmarks for the torch.fft module"""
 # 导入必要的模块和库
 from argparse import ArgumentParser  # 用于解析命令行参数的模块

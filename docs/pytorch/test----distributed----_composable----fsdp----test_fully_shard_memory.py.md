@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_memory.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 指定代码所有者为分布式团队
 
 import functools  # 导入 functools 模块

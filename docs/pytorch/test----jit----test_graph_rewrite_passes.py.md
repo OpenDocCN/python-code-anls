@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_graph_rewrite_passes.py`
 
-```
+```py
 # 导入PyTorch相关库
 import torch
 import torch._C

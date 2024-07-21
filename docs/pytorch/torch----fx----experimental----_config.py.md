@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\_config.py`
 
-```
+```py
 # Import the 'os' module for operating system functionalities
 import os
 # Import the 'sys' module for system-specific parameters and functions

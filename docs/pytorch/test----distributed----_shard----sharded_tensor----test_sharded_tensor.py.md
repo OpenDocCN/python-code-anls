@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\test_sharded_tensor.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入必要的模块和库
 import copy                     # 导入深拷贝函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\symbolic_shape_registry.cpp`
 
-```
+```py
 // 包含头文件：定义了在运行时需要使用的各种依赖库
 #include <c10/util/Exception.h>
 #include <torch/csrc/jit/frontend/ir_emitter.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_ci_sanity_check_fail.py`
 
-```
+```py
 # Owner(s): ["module: ci"]
 # Sanity check for CI setup in GHA.  This file is expected to fail so it can trigger reruns
 

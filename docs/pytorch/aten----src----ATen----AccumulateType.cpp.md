@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\AccumulateType.cpp`
 
-```
+```py
 // 包含 ATen 库中的 AccumulateType.h 文件
 
 namespace at {

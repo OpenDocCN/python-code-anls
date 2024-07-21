@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\lexer.cpp`
 
-```
+```py
 namespace torch::jit {
 
 // 静态常量，表示不同二元操作符的优先级映射表

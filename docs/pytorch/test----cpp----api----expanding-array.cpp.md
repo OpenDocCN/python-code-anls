@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\expanding-array.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 包含 Google Test 框架的头文件
 
 #include <c10/util/irange.h> // 包含用于生成整数范围的头文件

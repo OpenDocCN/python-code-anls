@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\stubs.py`
 
-```
+```py
 # 禁用 flake8 对 F401 错误的检查，允许未使用的导入存在
 r"""
 This file is in the process of migration to `torch/ao/quantization`, and

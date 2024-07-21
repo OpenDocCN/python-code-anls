@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\erase_number_types.cpp`
 
-```
+```py
 // 引入 Torch 库中的相关头文件，用于擦除数值类型
 #include <torch/csrc/jit/passes/erase_number_types.h>
 

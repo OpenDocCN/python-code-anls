@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_compile.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入所需模块和库

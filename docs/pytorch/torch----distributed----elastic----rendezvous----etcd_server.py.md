@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\etcd_server.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

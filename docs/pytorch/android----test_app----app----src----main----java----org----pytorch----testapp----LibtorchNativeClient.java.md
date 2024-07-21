@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\app\src\main\java\org\pytorch\testapp\LibtorchNativeClient.java`
 
-```
+```py
 package org.pytorch.testapp;
 
 import com.facebook.soloader.nativeloader.NativeLoader;

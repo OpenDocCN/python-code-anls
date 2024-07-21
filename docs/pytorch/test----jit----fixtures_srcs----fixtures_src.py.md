@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\fixtures_srcs\fixtures_src.py`
 
-```
+```py
 # 导入 Union 类型以支持多种可能的输入类型
 from typing import Union
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\unpickled_python_remote_call.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保本文件内容只被编译一次
 

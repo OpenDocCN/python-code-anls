@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\quantizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库及相关模块
 import torch

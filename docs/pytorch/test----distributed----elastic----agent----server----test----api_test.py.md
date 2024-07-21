@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\agent\server\test\api_test.py`
 
-```
+```py
 class RoleInstanceInfoTest(unittest.TestCase):
     def test_role_instance_info_constructor(self):
         role_instance_info = _RoleInstanceInfo(

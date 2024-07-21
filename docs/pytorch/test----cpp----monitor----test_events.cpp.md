@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\monitor\test_events.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/csrc/monitor/events.h>  // 包含 Torch 监控模块中事件相关的头文件

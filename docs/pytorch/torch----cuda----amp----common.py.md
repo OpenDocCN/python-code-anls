@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\amp\common.py`
 
-```
+```py
 # 设置 mypy 参数以允许未类型化的定义
 # 导入 find_spec 函数用于检查模块是否存在
 from importlib.util import find_spec

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lite_interpreter_runtime\resources.h`
 
-```
+```py
 #pragma once
 
 #include <string>

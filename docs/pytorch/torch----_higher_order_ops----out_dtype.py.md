@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\out_dtype.py`
 
-```
+```py
 # 引入 torch 库和相关子模块
 import torch
 import torch.utils._pytree as pytree

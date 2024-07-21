@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_builtins.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的模块和库

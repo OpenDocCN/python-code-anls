@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_load_bc_packages.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 从 pathlib 库导入 Path 类，从 unittest 库导入 skipIf 函数

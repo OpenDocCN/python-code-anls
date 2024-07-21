@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qembeddingbag_prepack.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Tensor.h>
 

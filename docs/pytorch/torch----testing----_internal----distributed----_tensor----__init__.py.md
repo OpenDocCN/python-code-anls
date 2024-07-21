@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\_tensor\__init__.py`
 
-```
+```py
 # 定义一个名为 `calculate_sum` 的函数，接收一个参数 `numbers`
 def calculate_sum(numbers):
     # 初始化变量 `sum` 为 0，用于存储计算后的总和

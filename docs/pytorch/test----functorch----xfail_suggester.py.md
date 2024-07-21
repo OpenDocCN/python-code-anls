@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\xfail_suggester.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 

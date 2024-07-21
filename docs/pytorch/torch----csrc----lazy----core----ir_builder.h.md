@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ir_builder.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/ScalarType.h>

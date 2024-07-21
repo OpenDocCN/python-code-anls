@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\scalar_type_analysis.cpp`
 
-```
+```py
 // 包含C++头文件：范围操作（例如irange）
 #include <c10/util/irange.h>
 // 包含Torch的JIT日志相关头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\LocalDispatchKeySet.h`
 
-```
+```py
 #pragma once
 // 指示编译器仅包含此头文件一次
 

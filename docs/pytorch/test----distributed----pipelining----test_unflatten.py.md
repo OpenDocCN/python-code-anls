@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\pipelining\test_unflatten.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 导入分布式训练相关模块

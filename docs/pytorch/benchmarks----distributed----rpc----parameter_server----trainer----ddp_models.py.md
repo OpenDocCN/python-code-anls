@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\ddp_models.py`
 
-```
+```py
 # 导入分布式数据并行包中的DistributedDataParallel作为DDP
 from torch.nn.parallel import DistributedDataParallel as DDP
 

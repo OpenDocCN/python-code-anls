@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\black_linter.py`
 
-```
+```py
 # 从未来导入注释支持，以便在函数签名中使用类型注释
 from __future__ import annotations
 

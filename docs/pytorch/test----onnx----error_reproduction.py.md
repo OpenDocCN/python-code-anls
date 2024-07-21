@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\error_reproduction.py`
 
-```
+```py
 """Error reproduction utilities for op consistency tests."""
 
 # 引入未来版本的注释允许，确保代码在不同 Python 版本中的兼容性

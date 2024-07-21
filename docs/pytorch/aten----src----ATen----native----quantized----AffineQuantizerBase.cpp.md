@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\AffineQuantizerBase.cpp`
 
-```
+```py
 #include <ATen/native/quantized/AffineQuantizerBase.h>
 #include <c10/util/irange.h>
 #include <cfenv>

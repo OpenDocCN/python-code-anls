@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_conv_folding.cpp`
 
-```
+```py
 #include <ATen/Utils.h>
 #include <c10/core/ScalarType.h>
 #include <c10/util/Exception.h>

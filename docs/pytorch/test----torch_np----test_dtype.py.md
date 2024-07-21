@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_dtype.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 从 unittest 模块导入 expectedFailure 别名为 xfail

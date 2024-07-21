@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\nn\api\__init__.py`
 
-```
+```py
 # 导入必要的模块
 import os
 from typing import List

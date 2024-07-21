@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\padding.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类型定义
 from typing import Sequence, Tuple

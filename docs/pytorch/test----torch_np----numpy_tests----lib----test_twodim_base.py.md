@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\lib\test_twodim_base.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """Test functions for matrix module

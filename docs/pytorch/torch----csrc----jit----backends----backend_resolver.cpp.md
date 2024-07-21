@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_resolver.cpp`
 
-```
+```py
 // 包含头文件：用于 Torch 的 JIT 后端解析器
 #include <torch/csrc/jit/backends/backend_resolver.h>
 // 包含头文件：用于 Torch 的前端糖值处理

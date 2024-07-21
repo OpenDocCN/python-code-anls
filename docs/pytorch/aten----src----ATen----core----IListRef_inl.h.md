@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\IListRef_inl.h`
 
-```
+```py
 /*
  * Specializations of `IListRefTagImplBase` that implement the default
  * implementation for `IListRefTag::Unboxed`.

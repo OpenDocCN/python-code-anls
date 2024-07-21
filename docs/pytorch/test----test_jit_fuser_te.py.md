@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_fuser_te.py`
 
-```
+```py
 # Owner(s): ["NNC"]
 
 # 导入所需的库和模块

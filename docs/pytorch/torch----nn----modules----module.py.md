@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\module.py`
 
-```
+```py
 # 引入需要的模块和库
 import functools  # 提供高阶函数操作
 import itertools  # 提供迭代工具

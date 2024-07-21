@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\stub.c`
 
-```
+```py
 // 包含 Python.h 头文件，用于在 C/C++ 中调用 Python API
 #include <Python.h>
 

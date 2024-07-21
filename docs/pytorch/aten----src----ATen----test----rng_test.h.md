@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\rng_test.h`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 #include <ATen/Generator.h>  // 引入 ATen 库中生成器相关的头文件
 #include <ATen/Tensor.h>  // 引入 ATen 库中张量相关的头文件

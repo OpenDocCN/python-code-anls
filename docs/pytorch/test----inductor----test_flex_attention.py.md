@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_flex_attention.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # flake8: noqa: B950
 

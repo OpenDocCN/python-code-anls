@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_aoti.pyi`
 
-```
+```py
 # 从 ctypes 模块中导入 c_void_p 类型，用于处理指针操作
 
 # 从 torch 模块中导入 Tensor 类型

@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\examples\example2.c`
 
-```
+```py
     sprintf(archive_filename, "%u.txt", i);
     // 根据当前循环的索引值构造文件名，格式为 "%u.txt"
     sprintf(data, "%u %s %u", (N - 1) - i, s_pTest_str, i);

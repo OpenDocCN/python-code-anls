@@ -1,6 +1,6 @@
 # `.\pytorch\tools\coverage_plugins_package\setup.py`
 
-```
+```py
 # 导入setuptools模块，用于打包和发布Python软件包，忽略类型检查
 import setuptools  # type: ignore[import]
 

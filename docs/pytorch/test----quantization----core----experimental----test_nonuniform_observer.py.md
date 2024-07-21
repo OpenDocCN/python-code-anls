@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\test_nonuniform_observer.py`
 
-```
+```py
 # 所有权者：["oncall: quantization"]
 
 # 从 torch 库中导入 APoTObserver 类

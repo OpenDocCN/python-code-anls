@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\observer.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ThreadLocalDebugInfo.h>  // 包含线程本地调试信息头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\joint_graph.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的库和模块
 import itertools  # 导入 itertools 库，提供迭代工具

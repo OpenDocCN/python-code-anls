@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\sparse\quantized\linear.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义
 from typing import Optional

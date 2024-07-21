@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_backend\custom_backend.h`
 
-```
+```py
 // 包含 Torch 的 JIT 后端接口头文件
 #include <torch/csrc/jit/backends/backend.h>
 // 包含 Torch 的 JIT 后端详细信息头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\objc\PTMCoreMLExecutor.h`
 
-```
+```py
 #import <torch/csrc/jit/backends/coreml/objc/PTMCoreMLFeatureProvider.h>
 
 # 导入 PTMCoreMLFeatureProvider.h 文件，这是 Torch 框架在 CoreML 后端的一个特定功能提供者的 Objective-C 头文件。

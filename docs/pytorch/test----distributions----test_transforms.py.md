@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributions\test_transforms.py`
 
-```
+```py
 # 导入所需模块和函数库，包括IO操作、数值判断、测试框架和PyTorch相关模块
 import io
 from numbers import Number

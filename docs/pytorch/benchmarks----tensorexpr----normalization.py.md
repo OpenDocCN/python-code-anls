@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\normalization.py`
 
-```
+```py
 # 导入 benchmark 和 tensor_engine 模块
 from . import benchmark, tensor_engine
 

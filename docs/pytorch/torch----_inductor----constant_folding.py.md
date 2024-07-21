@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\constant_folding.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 collections 模块
 import collections

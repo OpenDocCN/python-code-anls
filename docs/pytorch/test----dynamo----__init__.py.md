@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\__init__.py`
 
-```
+```py
 # 定义一个名为 `calculate_factorial` 的函数，用于计算给定整数的阶乘
 def calculate_factorial(n):
     # 初始化一个变量 `result`，用于存储阶乘的结果，初始值为1

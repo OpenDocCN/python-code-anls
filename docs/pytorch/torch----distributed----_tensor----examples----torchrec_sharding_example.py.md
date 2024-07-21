@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\examples\torchrec_sharding_example.py`
 
-```
+```py
 """
 # mypy: allow-untyped-defs
 """

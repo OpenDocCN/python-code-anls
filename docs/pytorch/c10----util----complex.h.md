@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\complex.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once确保头文件只被包含一次
 

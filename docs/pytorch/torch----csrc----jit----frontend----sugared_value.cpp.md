@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\sugared_value.cpp`
 
-```
+```py
 // 引入 Torch JIT 前端的相关头文件
 #include <torch/csrc/jit/frontend/sugared_value.h>
 

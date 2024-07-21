@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\mp8x27-sse2.c`
 
-```
+```py
 /*
  * 包含必要的头文件
  */

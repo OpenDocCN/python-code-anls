@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\testowners_linter.py`
 
-```
+```py
 # 指定 Python 解释器路径为 /usr/bin/env python3
 #!/usr/bin/env python3
 

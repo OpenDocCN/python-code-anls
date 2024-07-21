@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_trace.py`
 
-```
+```py
 """
 Tracing.
 

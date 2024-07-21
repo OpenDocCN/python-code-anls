@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\BucketizationUtils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

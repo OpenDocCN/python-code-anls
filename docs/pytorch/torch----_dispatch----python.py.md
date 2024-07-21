@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dispatch\python.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import itertools  # 导入 itertools 模块，用于生成迭代器的工具函数

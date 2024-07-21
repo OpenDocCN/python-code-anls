@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\TypeTraits_test.cpp`
 
-```
+```py
 // 包含头文件 TypeTraits.h 和 gtest.h
 #include <c10/util/TypeTraits.h>
 #include <gtest/gtest.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\jit_utils.py`
 
-```
+```py
 # 忽略类型检查错误，这个是为了特定的检查工具
 # Torch
 from torch.autograd import Variable

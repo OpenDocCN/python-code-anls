@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\linalg.py`
 
-```
+```py
 # 忽略 mypy 类型检查时可能产生的错误
 # 导入 itertools、random、unittest 和 partial 函数
 import itertools
@@ -895,7 +895,7 @@ def sample_inputs_linalg_ldl_solve(
             )
 
 
-``````
+``````py
 # 定义函数 `sample_inputs_linalg_lstsq`，生成用于测试线性最小二乘问题的输入样本
 def sample_inputs_linalg_lstsq(op_info, device, dtype, requires_grad=False, **kwargs):
     # 导入生成随机良条件矩阵的工具函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dynamic_shape_view.py`
 
-```
+```py
 # 导入torch模块，用于构建和操作神经网络
 import torch
 

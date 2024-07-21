@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\cudagraph_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和函数
 import dataclasses

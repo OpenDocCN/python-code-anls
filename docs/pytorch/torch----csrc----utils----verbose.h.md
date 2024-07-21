@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\verbose.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/python_headers.h>
 // 使用 `#pragma once` 确保头文件只被编译一次，避免重复包含

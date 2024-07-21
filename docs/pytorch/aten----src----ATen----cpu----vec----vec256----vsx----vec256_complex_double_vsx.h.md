@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_complex_double_vsx.h`
 
-```
+```py
 #pragma once
 // 引入ATen库的CPU向量化指令集
 #include <ATen/cpu/vec/intrinsics.h>

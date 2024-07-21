@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchedTensorImpl.h`
 
-```
+```py
 // 版权声明和许可声明，指出此源代码受到 BSD 风格许可证保护，许可文件位于源代码根目录下的 LICENSE 文件中
 // 包含 C++ 标准库中的 <bitset> 头文件
 // 包含 ATen 库中的头文件，如 ArrayRef、SmallVector 和 Tensor

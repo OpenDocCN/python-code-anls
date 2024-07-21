@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\kernel_function_legacy_test.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

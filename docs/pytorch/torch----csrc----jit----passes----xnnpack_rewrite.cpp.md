@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\xnnpack_rewrite.cpp`
 
-```
+```py
 // 包含头文件：ATen库的jit_type.h和native/xnnpack/OpContext.h
 #include <ATen/core/jit_type.h>
 #include <ATen/native/xnnpack/OpContext.h>

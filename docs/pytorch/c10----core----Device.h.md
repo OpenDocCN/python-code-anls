@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Device.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/DeviceType.h>

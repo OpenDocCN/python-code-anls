@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\argparse_util_test.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: distributed"]
 

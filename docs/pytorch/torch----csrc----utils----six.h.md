@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\six.h`
 
-```
+```py
 #pragma`
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\androidTest\java\org\pytorch\suite\PytorchInstrumentedTestSuite.java`
 
-```
+```py
 // 导入JUnit的RunWith和Suite类
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

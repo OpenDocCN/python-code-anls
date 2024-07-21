@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_nep50_examples.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """Test examples for NEP 50."""

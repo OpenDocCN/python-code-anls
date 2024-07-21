@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ops\utils.h`
 
-```
+```py
 // 包含 vector 标准库头文件，用于定义和操作动态数组
 #include <vector>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\__init__.py`
 
-```
+```py
 # 声明一个文档字符串，介绍了 PyTorch Profiler 工具的功能和用途
 # 允许未类型化定义，用于 mypy 检查
 r"""

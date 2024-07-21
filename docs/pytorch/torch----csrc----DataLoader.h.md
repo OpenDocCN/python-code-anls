@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\DataLoader.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 库的 Python 头文件
 #include <torch/csrc/python_headers.h>

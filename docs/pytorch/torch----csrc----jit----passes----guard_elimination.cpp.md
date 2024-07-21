@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\guard_elimination.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/guard_elimination.h>
 
 #include <torch/csrc/jit/ir/alias_analysis.h>

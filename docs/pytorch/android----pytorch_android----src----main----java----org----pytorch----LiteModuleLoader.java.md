@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\LiteModuleLoader.java`
 
-```
+```py
 package org.pytorch;
 
 import android.content.res.AssetManager;

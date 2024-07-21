@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\interpreter.h`
 
-```
+```py
 #pragma once
 // 用于防止头文件被多次包含的预处理指令
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\compiler.cpp`
 
-```
+```py
 // 引入Torch库中的头文件，用于混合编译器的相关功能
 #include <torch/csrc/jit/codegen/fuser/compiler.h>
 

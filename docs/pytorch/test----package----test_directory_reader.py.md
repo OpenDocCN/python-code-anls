@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_directory_reader.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入所需的模块和库

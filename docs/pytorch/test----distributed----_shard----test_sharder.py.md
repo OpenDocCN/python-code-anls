@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\test_sharder.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入必要的库和模块
 import copy  # 导入copy模块，用于对象的复制操作

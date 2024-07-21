@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\concat.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于支持数值计算
 
 import torch  # 导入 PyTorch 库，用于深度学习任务

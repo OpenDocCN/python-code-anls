@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\ProcessGroupNCCLTest.cpp`
 
-```
+```py
 #include <chrono> // 包含时间库，用于处理时间相关操作
 #include <iostream> // 包含标准输入输出流库，用于控制台输入输出
 

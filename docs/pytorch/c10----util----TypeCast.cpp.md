@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\TypeCast.cpp`
 
-```
+```py
 // 包含 C10 库的 TypeCast.h 头文件
 
 #include <c10/util/TypeCast.h>

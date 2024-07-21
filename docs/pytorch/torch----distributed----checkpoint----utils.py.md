@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入性能分析工具
 import cProfile

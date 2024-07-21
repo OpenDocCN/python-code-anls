@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入上下文管理器和类型提示所需的库
 from contextlib import contextmanager

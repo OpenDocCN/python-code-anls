@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_kernels.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 import copy  # 导入深拷贝模块，用于复制对象

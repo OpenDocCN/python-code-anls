@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\exec_linter.py`
 
-```
+```py
 """
 EXEC: Ensure that source files are not executable.
 """

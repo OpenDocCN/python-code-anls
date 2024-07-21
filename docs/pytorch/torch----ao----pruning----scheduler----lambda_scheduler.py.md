@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\scheduler\lambda_scheduler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于显示警告信息
 import warnings

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\init.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 inspect 模块，用于检查函数签名
 import inspect

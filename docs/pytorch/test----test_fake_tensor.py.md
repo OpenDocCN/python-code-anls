@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_fake_tensor.py`
 
-```
+```py
 # 导入所需的模块和库
 import contextlib                 # 提供上下文管理工具的模块
 import copy                       # 提供对象复制功能的模块

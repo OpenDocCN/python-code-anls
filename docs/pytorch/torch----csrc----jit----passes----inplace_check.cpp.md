@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\inplace_check.cpp`
 
-```
+```py
 // 包含 Torch 库中的头文件，用于 JIT pass 的原位操作检查
 #include <torch/csrc/jit/passes/inplace_check.h>
 

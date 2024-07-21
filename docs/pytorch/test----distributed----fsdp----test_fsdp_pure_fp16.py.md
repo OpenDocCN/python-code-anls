@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_pure_fp16.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统模块

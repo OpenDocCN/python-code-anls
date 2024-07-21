@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\DeviceGuardImplInterface.cpp`
 
-```
+```py
 // 引入头文件：包含设备保护实现接口的定义
 #include <c10/core/impl/DeviceGuardImplInterface.h>
 

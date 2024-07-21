@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_deploy.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入必要的模块和类

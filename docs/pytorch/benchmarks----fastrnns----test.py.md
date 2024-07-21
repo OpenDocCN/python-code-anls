@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\test.py`
 
-```
+```py
 import argparse  # 导入 argparse 模块，用于处理命令行参数
 
 import torch  # 导入 PyTorch 库

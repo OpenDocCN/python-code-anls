@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\test_adaround_eager.py`
 
-```
+```py
 # Owner(s): ["oncall: speech_infra"]
 
 # 导入所需的库和模块

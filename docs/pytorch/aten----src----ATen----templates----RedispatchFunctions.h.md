@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\RedispatchFunctions.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}  // 插入生成注释，通常用于自动生成的代码中

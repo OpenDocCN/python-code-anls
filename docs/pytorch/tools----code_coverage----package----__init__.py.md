@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\__init__.py`
 
-```
+```py
 # 定义一个函数，接收一个整数列表作为参数
 def process_numbers(nums):
     # 创建一个空列表，用于存储处理后的数字

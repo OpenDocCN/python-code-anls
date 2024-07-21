@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\linear.h`
 
-```
+```py
 #pragma once
 
 // `#pragma once` 是预处理器指令，用于确保头文件只被包含一次，增加编译效率。
@@ -24,7 +24,7 @@ namespace nn {
 /// Example:
 /// ```
 /// Linear model(LinearOptions(5, 2).bias(false));
-/// ```
+/// ```py
 struct TORCH_API LinearOptions {
   LinearOptions(int64_t in_features, int64_t out_features);
   /// size of each input sample
@@ -47,7 +47,7 @@ struct TORCH_API LinearOptions {
 /// Example:
 /// ```
 /// Flatten model(FlattenOptions().start_dim(2).end_dim(4));
-/// ```
+/// ```py
 struct TORCH_API FlattenOptions {
   /// first dim to flatten
   TORCH_ARG(int64_t, start_dim) = 1;
@@ -68,7 +68,7 @@ struct TORCH_API FlattenOptions {
 /// ```
 /// Unflatten unnamed_model(UnflattenOptions(0, {2, 2}));
 /// Unflatten named_model(UnflattenOptions("B", {{"B1", 2}, {"B2", 2}}));
-/// ```
+/// ```py
 struct TORCH_API UnflattenOptions {
   typedef std::vector<std::pair<std::string, int64_t>> namedshape_t;
 
@@ -96,7 +96,7 @@ struct TORCH_API UnflattenOptions {
 /// Example:
 /// ```
 /// Bilinear model(BilinearOptions(3, 2, 4).bias(false));
-/// ```
+/// ```py
 struct TORCH_API BilinearOptions {
   BilinearOptions(
       int64_t in1_features,

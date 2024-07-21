@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cutlass_lib_extensions\gemm_operation_extensions.py`
 
-```
+```py
 # 引入 `try_import_cutlass` 函数从 `..cutlass_utils` 模块中
 # 如果导入成功，则继续执行以下代码
 from ..cutlass_utils import try_import_cutlass

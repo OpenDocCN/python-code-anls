@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_parsing.py`
 
-```
+```py
 # 引入必要的模块和函数
 from typing import Any, Callable, Dict
 from unittest import mock

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\softargmax-operator-tester.h`
 
-```
+```py
 /*
  * 版权声明和许可信息
  * 本源代码使用 BSD 风格许可证授权，许可细节详见源代码根目录下的 LICENSE 文件

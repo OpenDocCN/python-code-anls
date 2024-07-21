@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块
 import logging

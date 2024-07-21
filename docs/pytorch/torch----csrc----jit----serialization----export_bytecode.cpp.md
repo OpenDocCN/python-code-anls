@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\export_bytecode.cpp`
 
-```
+```py
 #include <torch/csrc/jit/serialization/export_bytecode.h>
 #include <utility>
 

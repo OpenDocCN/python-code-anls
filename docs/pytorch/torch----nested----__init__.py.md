@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nested\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型定义
 from typing import List, Optional, Tuple, Union

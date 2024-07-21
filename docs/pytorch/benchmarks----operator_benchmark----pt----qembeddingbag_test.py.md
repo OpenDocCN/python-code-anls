@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qembeddingbag_test.py`
 
-```
+```py
 # 导入必要的库 numpy
 import numpy
 # 从 pt 模块中导入 configs

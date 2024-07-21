@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\xpu\detail\Matmul.cpp`
 
-```
+```py
 // 引入C10的XPU函数头文件
 #include <c10/xpu/XPUFunctions.h>
 

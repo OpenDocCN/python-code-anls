@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_type_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入ONNX、JIT和torch类型转换和操作的实用工具
 """Utilities for converting and operating on ONNX, JIT and torch types."""

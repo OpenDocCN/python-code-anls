@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\actionlint_linter.py`
 
-```
+```py
 # 从未来版本导入注解功能，支持类型注解
 from __future__ import annotations
 

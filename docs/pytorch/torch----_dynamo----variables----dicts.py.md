@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\dicts.py`
 
-```
+```py
 # 忽略 mypy 的错误信息，这通常用于在类型检查时排除特定的错误或警告
 # 导入必要的模块和类
 import collections  # 导入集合模块，用于操作集合数据类型

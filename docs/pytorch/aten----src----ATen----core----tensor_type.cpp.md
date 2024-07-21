@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\tensor_type.cpp`
 
-```
+```py
 namespace c10 {
 
 namespace {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\parametrize.py`
 
-```
+```py
 # 配置类型系统以允许未类型化的函数定义
 # 导入必要的模块
 import collections
@@ -119,14 +119,14 @@ class ParametrizationList(ModuleList):
             may change the dtype and shape of the tensor. Default: `False`
             Warning: the parametrization is not checked for consistency upon registration.
             Enable this flag at your own risk.
-    ```
+    ```py
     
     original: Tensor
     unsafe: bool
     
     ```
     Define class attributes `original` of type `Tensor` and `unsafe` of type `bool`.
-    ```
+    ```py
     
     def __init__(
         self,
@@ -141,13 +141,13 @@ class ParametrizationList(ModuleList):
             modules (Sequence[Module]): A sequence of modules representing the parametrizations.
             original (Union[Tensor, Parameter]): The tensor or parameter to be parametrized.
             unsafe (bool, optional): Flag indicating if the parametrization may alter dtype and shape. Defaults to False.
-        ```
+        ```py
         
         self.original = original
         self.unsafe = unsafe
         ```
         Initialize instance attributes `self.original` and `self.unsafe` with provided arguments.
-        ```
+        ```py
     
     def forward(self) -> Tensor:
         ```
@@ -158,13 +158,13 @@ class ParametrizationList(ModuleList):
         
         Raises:
             RuntimeError: If parametrization is attempted during script execution mode.
-        ```
+        ```py
         
         if torch.jit.is_scripting():
             raise RuntimeError("Parametrization is not working with scripting.")
         ```
         Raise a runtime error if the script is in execution mode, as parametrization is not supported.
-        ```
+        ```py
         
         # Unpack the originals for the first parametrization
         if self.is_tensor:
@@ -174,7 +174,7 @@ class ParametrizationList(ModuleList):
             x = self[0](*originals)
         ```
         Depending on whether `self` is a tensor or not, unpack the original tensor or tensors (if more than one).
-        ```
+        ```py
         
         # It's not possible to call self[1:] here, so we have to be a bit more cryptic
         # Also we want to skip all non-integer keys
@@ -184,12 +184,12 @@ class ParametrizationList(ModuleList):
             curr_idx += 1
         ```
         Iterate over attributes indexed from 1 onwards, applying parametrizations sequentially to `x`.
-        ```
+        ```py
         
         return x
         ```
         Return the final computed tensor `x`.
-    ```
+    ```py
 def _inject_new_class(module: Module) -> None:
     r"""Set up a module to be parametrized.
 

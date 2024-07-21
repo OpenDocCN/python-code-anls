@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\FunctionalizeFallbackKernel.cpp`
 
-```
+```py
 // 包含头文件：ATen 核心调度器的分发器
 #include <ATen/core/dispatch/Dispatcher.h>
 // 包含头文件：ATen 的遗留类型分发

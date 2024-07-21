@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp.py`
 
-```
+```py
 # 添加类型注释，允许未定义的函数
 def reduction_init(reduction_type: str, dtype: torch.dtype) -> None:
     # 检查是否是 Windows 系统

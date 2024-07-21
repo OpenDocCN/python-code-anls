@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymBool.cpp`
 
-```
+```py
 namespace c10 {
 
 # 进入命名空间 c10

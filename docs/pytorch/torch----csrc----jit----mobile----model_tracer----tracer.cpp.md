@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\tracer.cpp`
 
-```
+```py
 /**
  * This program is designed to trace operations and operators within Torch Mobile models.
  * It accepts multiple model files (.ptl) with bundled inputs and executes them using

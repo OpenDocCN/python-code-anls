@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\debug_info.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/profiler/unwind/dwarf_enums.h>
 #include <torch/csrc/profiler/unwind/dwarf_symbolize_enums.h>

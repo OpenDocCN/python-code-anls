@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\cond_predicate.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\runtime\__init__.py`
 
-```
+```py
 # 导入必要的模块：os（操作系统接口）、shutil（高级文件操作）、glob（文件名模式匹配）、random（生成伪随机数）
 import os
 import shutil

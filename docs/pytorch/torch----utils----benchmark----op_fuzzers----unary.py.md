@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\op_fuzzers\unary.py`
 
-```
+```py
 # 引入 numpy 和 torch 库
 import numpy as np
 import torch

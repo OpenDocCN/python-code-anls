@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_torch_functions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏：TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于指定仅方法运算符的情况
 

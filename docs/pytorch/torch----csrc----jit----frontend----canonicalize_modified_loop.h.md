@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\canonicalize_modified_loop.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被包含一次
 

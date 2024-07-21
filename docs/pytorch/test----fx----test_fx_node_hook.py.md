@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_fx_node_hook.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 # 导入 torch 库和相关的模块
 import torch

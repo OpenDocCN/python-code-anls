@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\InferenceMode.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/AutogradState.h>

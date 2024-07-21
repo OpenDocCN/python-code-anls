@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\error_report.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 前端错误报告模块的头文件
 #include <torch/csrc/jit/frontend/error_report.h>
 

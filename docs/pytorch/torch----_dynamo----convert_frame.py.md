@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\convert_frame.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入标准库模块
 import collections                 # 提供额外的数据结构和函数集合

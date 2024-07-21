@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\u8lut32norm\scalar.c`
 
-```
+```py
 /*
 c
 /*

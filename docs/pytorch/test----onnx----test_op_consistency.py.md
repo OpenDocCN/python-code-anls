@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_op_consistency.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 """Test consistency between the output values of torch.onnx exported operators

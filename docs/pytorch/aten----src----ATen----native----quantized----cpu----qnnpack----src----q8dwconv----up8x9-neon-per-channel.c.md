@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8dwconv\up8x9-neon-per-channel.c`
 
-```
+```py
 /*
  * 版权声明：
  * 版权所有（c）Facebook, Inc. 及其关联公司。

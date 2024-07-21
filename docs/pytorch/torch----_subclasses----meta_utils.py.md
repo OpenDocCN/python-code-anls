@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_subclasses\meta_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 启用 mypy，允许未类型化的函数定义
 

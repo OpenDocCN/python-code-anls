@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_bytecode_utils.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 import collections  # 导入collections模块，用于处理容器数据类型

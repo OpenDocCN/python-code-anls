@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_exception.h`
 
-```
+```py
 #pragma once
 // 包含 C10 库中的异常处理头文件
 #include <c10/util/Exception.h>

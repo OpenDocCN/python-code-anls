@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\__init__.py`
 
-```
+```py
 # 导入 torch.masked._ops 模块中的函数和变量
 from torch.masked._ops import (
     _canonical_dim,          # 导入 _canonical_dim 函数，用于规范化维度

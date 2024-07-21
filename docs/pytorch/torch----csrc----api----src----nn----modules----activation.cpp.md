@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\activation.cpp`
 
-```
+```py
 // 使用 torch 库中的模块和函数来定义激活函数的行为
 #include <torch/nn/functional/activation.h>
 #include <torch/nn/init.h>

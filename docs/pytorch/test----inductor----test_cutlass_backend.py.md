@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cutlass_backend.py`
 
-```
+```py
 # 导入所需的库和模块
 # 作者：["module: inductor"]
 import logging  # 导入日志记录模块

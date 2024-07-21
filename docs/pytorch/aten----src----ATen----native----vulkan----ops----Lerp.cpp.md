@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Lerp.cpp`
 
-```
+```py
 // 引入Vulkan操作的通用头文件
 #include <ATen/native/vulkan/ops/Common.h>
 // 引入Torch库头文件

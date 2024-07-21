@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\detail\DeviceThreadHandles.h`
 
-```
+```py
 // Some stateful GPU libraries, such as cuDNN, cuBLAS, use handles to store states.
 // These handles are tied to device, and these libraries require/recommend not sharing handles across host threads.
 // 

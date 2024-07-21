@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\operations\Indexing.h`
 
-```
+```py
 // 设置编译选项，仅允许方法操作符使用 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

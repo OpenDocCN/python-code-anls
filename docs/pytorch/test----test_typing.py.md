@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_typing.py`
 
-```
+```py
 # 导入所需的模块和库
 import itertools  # 提供迭代工具的函数
 import os  # 提供与操作系统交互的功能

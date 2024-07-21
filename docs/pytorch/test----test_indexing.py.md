@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_indexing.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 import operator  # 导入 operator 模块，用于操作符的函数

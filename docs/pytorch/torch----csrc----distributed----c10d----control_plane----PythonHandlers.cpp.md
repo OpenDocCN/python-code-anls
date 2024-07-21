@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\control_plane\PythonHandlers.cpp`
 
-```
+```py
 // 引入 Torch 分布式控制平面的头文件 Handlers.hpp
 #include <torch/csrc/distributed/c10d/control_plane/Handlers.hpp>
 

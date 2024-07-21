@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\defer_size_check.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 指令，确保此头文件只被编译一次，避免重复包含导致的编译错误

@@ -1,6 +1,6 @@
 # `.\pytorch\third_party\miniz-2.1.0\examples\example5.c`
 
-```
+```py
 // example5.c - Demonstrates how to use miniz.c's low-level tdefl_compress() and tinfl_inflate() API's for simple file to file compression/decompression.
 // The low-level API's are the fastest, make no use of dynamic memory allocation, and are the most flexible functions exposed by miniz.c.
 // Public domain, April 11 2012, Rich Geldreich, richgel99@gmail.com. See "unlicense" statement at the end of tinfl.c.

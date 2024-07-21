@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\discover_coverage.py`
 
-```
+```py
 import copy  # 导入 copy 模块，用于深拷贝和浅拷贝操作
 import enum  # 导入 enum 枚举类型模块，用于定义枚举类
 import pprint  # 导入 pprint 模块，用于漂亮打印数据结构

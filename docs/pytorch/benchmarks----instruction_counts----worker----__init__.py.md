@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\worker\__init__.py`
 
-```
+```py
 # 定义一个函数，计算斐波那契数列的第 n 项
 def fibonacci(n):
     # 如果 n 小于等于 0，直接返回 0

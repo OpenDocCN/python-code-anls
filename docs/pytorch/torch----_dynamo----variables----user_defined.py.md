@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\user_defined.py`
 
-```
+```py
 # 忽略类型检查错误，适用于 mypy 工具
 # Imports 导入了所需的模块和库
 

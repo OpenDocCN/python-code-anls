@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\delayed_mul_tensor.py`
 
-```
+```py
 # 导入 torch 库，用于张量操作
 import torch
 

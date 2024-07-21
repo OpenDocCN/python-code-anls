@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\data_parallel.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作符模块，用于对比设备属性
 import operator

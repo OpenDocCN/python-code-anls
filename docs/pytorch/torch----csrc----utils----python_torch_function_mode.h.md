@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_torch_function_mode.h`
 
-```
+```py
 #pragma once
 // 包含头文件 PythonTorchFunctionTLS.h，该头文件应属于 ATen 库
 #include <ATen/PythonTorchFunctionTLS.h>

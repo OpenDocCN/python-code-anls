@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_scheduler\base_data_scheduler.py`
 
-```
+```py
 # 导入必要的模块和函数
 from functools import wraps  # 导入 wraps 装饰器，用于保留函数的元数据
 import weakref  # 导入 weakref 模块，用于创建弱引用

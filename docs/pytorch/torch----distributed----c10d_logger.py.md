@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\c10d_logger.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

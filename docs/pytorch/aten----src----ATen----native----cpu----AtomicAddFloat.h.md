@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\AtomicAddFloat.h`
 
-```
+```py
 #ifndef ATOMIC_ADD_FLOAT
 #define ATOMIC_ADD_FLOAT
 

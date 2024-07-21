@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data.h`
 
-```
+```py
 #pragma once
 // 使用预处理器指令 `#pragma once`，确保头文件只被编译一次，避免重复包含
 

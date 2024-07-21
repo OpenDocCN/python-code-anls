@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkl\LinearAlgebra.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_NO_OPERATORS，并包含 MKL 线性代数头文件
 #define TORCH_ASSERT_NO_OPERATORS
 #include <ATen/native/mkl/LinearAlgebra.h>

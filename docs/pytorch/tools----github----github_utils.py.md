@@ -1,6 +1,6 @@
 # `.\pytorch\tools\github\github_utils.py`
 
-```
+```py
 """GitHub Utilities"""
 
 # 导入所需模块和类型

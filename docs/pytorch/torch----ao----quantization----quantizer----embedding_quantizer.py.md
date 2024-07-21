@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\embedding_quantizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入未类型化的函数定义允许声明
 from __future__ import annotations

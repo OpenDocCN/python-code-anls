@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\__init__.py`
 
-```
+```py
 """
 torchgen
 

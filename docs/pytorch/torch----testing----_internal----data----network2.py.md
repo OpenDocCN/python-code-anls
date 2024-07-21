@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\data\network2.py`
 
-```
+```py
 # 忽略类型检查错误，针对 mypy 工具
 # 导入 PyTorch 的神经网络模块 nn
 import torch.nn as nn

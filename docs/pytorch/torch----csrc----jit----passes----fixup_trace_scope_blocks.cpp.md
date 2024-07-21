@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\fixup_trace_scope_blocks.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/fixup_trace_scope_blocks.h>
 
 #include <c10/util/irange.h>

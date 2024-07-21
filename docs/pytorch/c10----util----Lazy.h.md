@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Lazy.h`
 
-```
+```py
 #pragma once
 
 #include <atomic>

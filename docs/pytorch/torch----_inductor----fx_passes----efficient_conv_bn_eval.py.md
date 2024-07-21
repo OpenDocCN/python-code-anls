@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\efficient_conv_bn_eval.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库中需要使用的模块
 import torch

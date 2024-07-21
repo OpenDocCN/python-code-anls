@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_retraceability.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 # 尝试导入本地模块test_export和testing，如果失败则导入全局模块test_export和testing

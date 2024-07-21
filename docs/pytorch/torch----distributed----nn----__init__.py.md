@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\__init__.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 

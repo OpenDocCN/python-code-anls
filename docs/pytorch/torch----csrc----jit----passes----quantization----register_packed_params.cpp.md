@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\register_packed_params.cpp`
 
-```
+```py
 // 包含标准库头文件：堆栈
 #include <stack>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\check_alias_annotation.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 模块中的头文件，用于别名注释的检查
 #include <torch/csrc/jit/passes/utils/check_alias_annotation.h>
 

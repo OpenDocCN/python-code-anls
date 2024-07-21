@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_node_lowering.h`
 
-```
+```py
 #pragma once
 
 # 使用 pragma once 指令，确保头文件只被编译一次，防止重复包含

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\metrics\MetricsLogger.py`
 
-```
+```py
 from .CPUMetric import CPUMetric  # 导入CPUMetric类，用于处理CPU相关的性能指标
 from .CUDAMetric import CUDAMetric  # 导入CUDAMetric类，用于处理CUDA相关的性能指标
 

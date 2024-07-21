@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_tree_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]  # 指明代码的所有者信息
 
 from collections import OrderedDict  # 导入 OrderedDict 类

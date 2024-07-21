@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_mkldnn.py`
 
-```
+```py
 # Owner(s): ["module: mkldnn"]
 
 # 导入必要的模块和函数

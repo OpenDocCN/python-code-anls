@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\pointwise.py`
 
-```
+```py
 # 从 model 模块导入 get_custom_op_library_path 函数
 from model import get_custom_op_library_path
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\_lazy_graph_module.py`
 
-```
+```py
 # 添加类型检查允许未声明的函数
 mypy: allow-untyped-defs
 # 导入上下文管理器

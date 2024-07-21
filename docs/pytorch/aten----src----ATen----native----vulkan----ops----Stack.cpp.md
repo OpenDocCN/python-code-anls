@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Stack.cpp`
 
-```
+```py
 // 引入 Vulkan 操作的共享头文件
 #include <ATen/native/vulkan/ops/Common.h>
 

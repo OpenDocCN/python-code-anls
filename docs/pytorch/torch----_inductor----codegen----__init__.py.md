@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\__init__.py`
 
-```
+```py
 # 导入所需的模块：json 用于处理 JSON 数据，os 用于操作文件和目录
 import json
 import os

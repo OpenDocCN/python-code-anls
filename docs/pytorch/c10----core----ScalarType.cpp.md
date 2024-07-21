@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\ScalarType.cpp`
 
-```
+```py
 #include <c10/core/ScalarType.h>
 #include <c10/util/Array.h>
 #include <array>

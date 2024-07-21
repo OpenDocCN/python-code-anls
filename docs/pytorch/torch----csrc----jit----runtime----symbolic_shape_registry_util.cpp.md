@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\symbolic_shape_registry_util.cpp`
 
-```
+```py
 # 包含 Torch 的 IR emitter 头文件
 #include <torch/csrc/jit/frontend/ir_emitter.h>
 

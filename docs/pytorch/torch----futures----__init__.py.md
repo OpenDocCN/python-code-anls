@@ -1,6 +1,6 @@
 # `.\pytorch\torch\futures\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 __future__ 模块中的 annotations 功能
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\linalg\BatchLinearAlgebraLibBlas.cpp`
 
-```
+```py
 // Note [BatchLinearAlgebraLib split implementation files]
 //
 // There are two files that implement the interfaces found in

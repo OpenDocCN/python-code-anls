@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\transformer.py`
 
-```
+```py
 # 指定允许未类型化的函数定义（用于类型检查）
 # 导入必要的库和模块
 import copy  # 导入copy模块，用于对象的深拷贝操作

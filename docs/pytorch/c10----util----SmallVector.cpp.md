@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\SmallVector.cpp`
 
-```
+```py
 /// LLVM/ADT/SmallVector.cpp - 实现了 SmallVector 类
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.

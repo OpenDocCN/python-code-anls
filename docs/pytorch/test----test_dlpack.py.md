@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_dlpack.py`
 
-```
+```py
 # Owner(s): ["module: tests"]
 
 # 导入需要的模块和函数

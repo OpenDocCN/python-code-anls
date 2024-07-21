@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_input.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import sys

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_subclass.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 import tempfile  # 导入用于创建临时文件和目录的模块

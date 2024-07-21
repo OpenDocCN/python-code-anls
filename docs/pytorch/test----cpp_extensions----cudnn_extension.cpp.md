@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cudnn_extension.cpp`
 
-```
+```py
 /*
  * CuDNN ReLU extension. Simple function but contains the general structure of
  * most CuDNN extensions:

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\utils.py`
 
-```
+```py
 # 引入标准库 contextlib 用于支持上下文管理器
 import contextlib
 # 引入 typing 库中的 Tuple 和 Union 类型，用于类型标注

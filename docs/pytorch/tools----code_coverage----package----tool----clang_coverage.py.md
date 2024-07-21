@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\clang_coverage.py`
 
-```
+```py
 # 导入未来版本的注释，用于支持类型注解
 from __future__ import annotations
 

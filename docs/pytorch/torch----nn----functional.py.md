@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\functional.py`
 
-```
+```py
 # 导入模块和库
 import importlib  # 导入模块导入工具
 import math  # 导入数学函数库
@@ -1666,7 +1666,7 @@ def dropout2d(
     For example, the :math:`j`-th channel of the :math:`i`-th sample in the
     batched input is a 2D tensor :math:`\text{input}[i, j]` of the input tensor.
     Each channel will be zeroed out independently on every forward call with
-    ```
+    ```py
     # 如果输入具有 Torch 函数，调用 Torch 函数处理
     if has_torch_function_unary(input):
         return handle_torch_function(

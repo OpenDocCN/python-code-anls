@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Register.cpp`
 
-```
+```py
 #ifdef USE_VULKAN_API
 // 包含 Vulkan 相关的头文件，用于 Vulkan API 的操作
 #include <ATen/native/quantized/PackedParams.h>

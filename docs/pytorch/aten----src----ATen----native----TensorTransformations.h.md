@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorTransformations.h`
 
-```
+```py
 // 引入 ATen 核心张量头文件
 #include <ATen/core/Tensor.h>
 

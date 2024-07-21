@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\_model_report\__init__.py`
 
-```
+```py
 # 导入必要的模块：os（操作系统接口）和 json（处理 JSON 格式数据）
 import os
 import json

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_dtensor_ops.py`
 
-```
+```py
 # 载入单元测试框架
 import unittest
 # 载入警告模块

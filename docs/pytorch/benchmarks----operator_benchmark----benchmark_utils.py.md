@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_utils.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于处理命令行参数
 import bisect  # 提供二分查找算法

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_test_selections.py`
 
-```
+```py
 from __future__ import annotations
 # 导入用于支持类型注解的特性（Python 3.10+）
 

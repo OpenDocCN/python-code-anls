@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\parser\__init__.py`
 
-```
+```py
 # 导入所需的模块：io 用于处理字节流，zipfile 用于处理 ZIP 文件
 import io
 import zipfile

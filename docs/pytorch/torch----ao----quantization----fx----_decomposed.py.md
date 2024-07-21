@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\_decomposed.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 math 库
 import math

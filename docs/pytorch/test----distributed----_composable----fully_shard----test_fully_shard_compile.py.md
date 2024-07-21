@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fully_shard\test_fully_shard_compile.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\transformerlayer.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>  // 包含了 torch 库中的参数处理模块
@@ -21,7 +21,7 @@ using activation_t = std::variant<
 /// Example:
 /// ```
 /// auto options = TransformerEncoderLayer(512, 8).dropout(0.2);
-/// ```
+/// ```py
 struct TORCH_API TransformerEncoderLayerOptions {
   /* implicit */ TransformerEncoderLayerOptions(int64_t d_model, int64_t nhead);  // 构造函数声明，参数为输入特征数 d_model 和头数 nhead
 
@@ -50,7 +50,7 @@ struct TORCH_API TransformerEncoderLayerOptions {
 /// ```
 /// TransformerDecoderLayer model(TransformerDecoderLayerOptions(512,
 /// 8).dropout(0.2));
-/// ```
+/// ```py
 struct TORCH_API TransformerDecoderLayerOptions {
   TransformerDecoderLayerOptions(int64_t d_model, int64_t nhead);  // 构造函数声明，参数为输入特征数 d_model 和头数 nhead
 

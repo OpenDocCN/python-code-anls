@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\llvm_jit_strings.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令，确保当前头文件只被编译一次，以防止多重包含。

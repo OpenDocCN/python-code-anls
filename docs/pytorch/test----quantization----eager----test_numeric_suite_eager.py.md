@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\eager\test_numeric_suite_eager.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 引入单元测试模块

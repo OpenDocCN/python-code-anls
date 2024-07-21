@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\interpreter\can_emit_inline.h`
 
-```
+```py
 /*
 #pragma once
 

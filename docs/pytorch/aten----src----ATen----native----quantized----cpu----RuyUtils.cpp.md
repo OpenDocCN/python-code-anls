@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\RuyUtils.cpp`
 
-```
+```py
 #ifdef USE_RUY_QMATMUL
 // 如果定义了 USE_RUY_QMATMUL 宏，则包含以下代码块
 

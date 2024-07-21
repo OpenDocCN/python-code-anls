@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_inference\compile_model.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 
 from torch.export import Dim  # 从 torch.export 模块导入 Dim 类

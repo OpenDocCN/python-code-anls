@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_autograd_functions.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once指令确保头文件只被包含一次，防止重复定义错误
 

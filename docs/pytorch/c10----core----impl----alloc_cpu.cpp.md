@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\alloc_cpu.cpp`
 
-```
+```py
 // 包含C10核心实现的CPU分配器头文件
 #include <c10/core/impl/alloc_cpu.h>
 

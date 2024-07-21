@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\llvm_jit.cpp`
 
-```
+```py
 #ifdef TORCH_ENABLE_LLVM
 // 如果定义了 TORCH_ENABLE_LLVM，则编译以下代码块
 

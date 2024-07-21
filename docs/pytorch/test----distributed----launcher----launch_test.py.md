@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\launcher\launch_test.py`
 
-```
+```py
     #!/usr/bin/env python3
     # Owner(s): ["oncall: r2p"]
 

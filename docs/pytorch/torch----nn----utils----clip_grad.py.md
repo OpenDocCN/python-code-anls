@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\clip_grad.py`
 
-```
+```py
 # 标记该文件允许未类型化的定义
 # 导入 functools 库，用于函数式编程工具
 import functools

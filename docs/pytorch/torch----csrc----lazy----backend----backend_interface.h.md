@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\backend_interface.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Tensor.h>

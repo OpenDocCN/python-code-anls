@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec512\vec512_complex_float.h`
 
-```
+```py
 #pragma once
 
 // DO NOT DEFINE STATIC DATA IN THIS HEADER!

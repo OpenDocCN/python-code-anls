@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\compile_worker\__main__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块：命令行参数解析、日志记录、操作系统相关功能、类型提示
 import argparse

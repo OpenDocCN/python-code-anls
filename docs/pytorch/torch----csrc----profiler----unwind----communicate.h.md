@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\communicate.h`
 
-```
+```py
 #pragma once
 #include <ext/stdio_filebuf.h> // 包含使用 __gnu_cxx 扩展的 stdio_filebuf 头文件
 #include <sys/wait.h>          // 包含等待进程结束的头文件

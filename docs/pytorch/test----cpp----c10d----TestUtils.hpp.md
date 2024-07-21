@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\TestUtils.hpp`
 
-```
+```py
 #pragma once
 
 #ifndef _WIN32

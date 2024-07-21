@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\extension_backends\triton\extension_codegen_backend.py`
 
-```
+```py
 # 导入所需模块和类
 from torch._inductor.codegen import triton, wrapper
 from torch._inductor.codegen.common import DeviceOpOverrides

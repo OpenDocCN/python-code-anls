@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\operatorbench.py`
 
-```
+```py
 # 指定脚本的解释器为 Python 3
 #!/usr/bin/env python3
 

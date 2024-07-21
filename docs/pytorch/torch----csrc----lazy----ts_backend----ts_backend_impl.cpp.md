@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_backend_impl.cpp`
 
-```
+```py
 #include <torch/csrc/lazy/ts_backend/ts_backend_impl.h>
 // 引入 TorchScript 后端的实现头文件
 

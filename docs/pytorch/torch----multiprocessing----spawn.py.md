@@ -1,6 +1,6 @@
 # `.\pytorch\torch\multiprocessing\spawn.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import logging  # 导入日志模块
 import multiprocessing  # 导入多进程模块

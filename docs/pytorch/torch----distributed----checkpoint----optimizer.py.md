@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\optimizer.py`
 
-```
+```py
 # 导入必要的库
 import dataclasses
 from typing import cast, Dict, List, Optional, Sequence, Tuple, Union

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesHelper.cpp`
 
-```
+```py
 // 包含 BatchRulesHelper.h 和 WrapDimUtils.h 头文件，用于实现批处理相关的功能
 #include <ATen/functorch/BatchRulesHelper.h>
 #include <ATen/WrapDimUtils.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_datapipe.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # Owner(s): ["module: dataloader"]

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesLinearAlgebra.cpp`
 
-```
+```py
 // 声明命名空间 at::functorch 内部的类型别名
 // 一个输出的类型别名，包含一个张量和一个可选的整数
 typedef std::tuple<Tensor, optional<int64_t>> oneOutput;

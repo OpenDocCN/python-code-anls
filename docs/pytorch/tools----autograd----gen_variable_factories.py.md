@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_variable_factories.py`
 
-```
+```py
 # 生成将 ATen 张量工厂方法包装为变量的 C++ 函数。
 # 
 # 这段代码用于生成一个文件：variable_factories.h

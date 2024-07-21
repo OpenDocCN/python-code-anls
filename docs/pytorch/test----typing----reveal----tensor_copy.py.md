@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\reveal\tensor_copy.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\dynamo\test_exporter_api.py`
 
-```
+```py
 # 导入必要的模块和库
 import io  # 提供了用于读写的核心工具
 import os  # 提供了与操作系统进行交互的功能

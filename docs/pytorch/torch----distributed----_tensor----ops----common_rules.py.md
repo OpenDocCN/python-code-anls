@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\common_rules.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # 导入必要的类型提示和模块
 from typing import cast, Dict, List, Optional, Tuple

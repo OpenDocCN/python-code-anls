@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\data\DummyData.py`
 
-```
+```py
 # 导入随机数模块
 import random
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\cuda\SparseBlas.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>
 #include <ATen/ExpandUtils.h>

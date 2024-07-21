@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_nn.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 从 abc 模块导入 abstractmethod 抽象方法

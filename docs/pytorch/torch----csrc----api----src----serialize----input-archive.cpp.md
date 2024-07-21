@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\serialize\input-archive.cpp`
 
-```
+```py
 // 包含 Torch 序列化输入存档所需的头文件
 #include <torch/serialize/input-archive.h>
 

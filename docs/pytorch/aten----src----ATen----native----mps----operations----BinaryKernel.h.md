@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\operations\BinaryKernel.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_alias_sensitive.cpp`
 
-```
+```py
 #include <ATen/core/jit_type.h>
 #include <torch/csrc/jit/ir/alias_analysis.h>
 #include <torch/csrc/jit/ir/ir_views.h>

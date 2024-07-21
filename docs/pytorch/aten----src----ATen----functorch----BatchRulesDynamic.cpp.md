@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesDynamic.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 // 包含批处理规则的辅助函数和批处理的回退策略

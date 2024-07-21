@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\EmptyTensor.cpp`
 
-```
+```py
 // 定义错误消息：如果PyTorch代码未启用MPS，则报告错误
 #define MPS_ERROR_NOT_COMPILED "PyTorch code is not compiled with MPS enabled"
 // 定义错误消息：MPS后端仅支持MacOS 12.3+版本

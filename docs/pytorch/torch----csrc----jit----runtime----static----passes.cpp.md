@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\passes.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/static/passes.h>
 
 #include <torch/csrc/jit/ir/alias_analysis.h>

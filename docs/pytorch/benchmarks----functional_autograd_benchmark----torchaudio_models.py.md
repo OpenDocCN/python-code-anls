@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\torchaudio_models.py`
 
-```
+```py
 # 导入所需的库和模块
 import math  # 导入数学库
 from collections import OrderedDict  # 导入有序字典模块

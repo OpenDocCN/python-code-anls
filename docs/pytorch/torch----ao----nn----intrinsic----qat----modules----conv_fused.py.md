@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\qat\modules\conv_fused.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入数学库和 PyTorch 库及其模块
 import math

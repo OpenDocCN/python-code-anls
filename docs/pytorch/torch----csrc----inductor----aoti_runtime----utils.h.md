@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runtime\utils.h`
 
-```
+```py
 // 防止头文件被多次包含，只在第一次包含时有效
 #pragma once
 

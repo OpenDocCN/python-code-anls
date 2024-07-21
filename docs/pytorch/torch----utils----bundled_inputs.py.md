@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\bundled_inputs.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 from typing import Any, TypeVar, Optional, Tuple, List, NamedTuple, Union, Sequence, Dict, Callable

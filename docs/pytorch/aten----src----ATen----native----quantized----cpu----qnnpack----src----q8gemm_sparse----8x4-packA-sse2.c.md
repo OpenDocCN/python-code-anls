@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gemm_sparse\8x4-packA-sse2.c`
 
-```
+```py
 // 定义了一个名为 pytorch_q8gemm_sparse_packA_ukernel_8x4__sse2 的函数，用于稀疏矩阵乘法的矩阵A的打包处理
 void pytorch_q8gemm_sparse_packA_ukernel_8x4__sse2(
     const size_t mr,                    // 每个矩阵块的行数

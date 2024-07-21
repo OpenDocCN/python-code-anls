@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_vendor\packaging\_structures.py`
 
-```
+```py
 # 定义一个代表正无穷的类型
 class InfinityType:
     # 返回对象的字符串表示为"Infinity"

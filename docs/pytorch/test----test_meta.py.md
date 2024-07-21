@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_meta.py`
 
-```
+```py
 # Owner(s): ["module: decompositions"]
 
 import itertools  # 导入 itertools 模块，提供迭代工具函数

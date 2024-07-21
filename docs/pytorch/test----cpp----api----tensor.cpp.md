@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\tensor.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <test/cpp/api/support.h>
 

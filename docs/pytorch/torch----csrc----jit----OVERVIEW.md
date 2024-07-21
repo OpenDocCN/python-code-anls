@@ -123,7 +123,7 @@ Each Method has a FunctionSchema that describes the Types of the arguments and r
 
 Graphs are the root of the intermediate representation (IR) used to define the implementation of TorchScript functions. If you are familiar with [LLVM](llvm.org), they are analogous to an `llvm::Function` object. A `Graph` is composed of `Nodes`, `Blocks`, and `Values`. `Nodes` are instructions (e.g. do a matrix multiply). `Nodes` are organized into `Blocks` of sequentially executed `Nodes`. Each `Node` produces a list of output `Values`, and also consumes a list of input `Values`. As an example, a user may write the following TorchScript code:
 
-```python
+```py
 @torch.jit.script
 def f(a, b):
   c = a + b
@@ -133,7 +133,7 @@ def f(a, b):
 ```
 
 The frontend, described later in this document will turn into a `Graph`:
-```
+```py
 graph(%0 : Double(2),
       %1 : Double(2)):
   %2 : int = prim::Constant[value=1]()
@@ -221,7 +221,7 @@ Blocks also contain a list of input and output values. The meaning of these valu
 ### If ###
 If-statement (`prim::If`) `Blocks` have no inputs, and the outputs are the new values of variables in the outer block whose values were altered in the if-statement.
 Example IR for an if-statement looks like:
-```
+```py
 %y_1, ..., %y_r = prim::If(%condition)
   block0():  # TRUE BRANCH, never takes arguments, has to return r outputs
     %t_1, ..., %t_k = some::node(%a_value_from_outer_block)
@@ -235,7 +235,7 @@ Values corresponding to `%y_1, ..., %y_r` will become either `%t_1, ..., %t_r`, 
 
 Here's an example translation of a Python program and its corresponding IR:
 
-```python
+```py
 def f(a, b, c):
     d = a + b
     if c:
@@ -245,7 +245,7 @@ def f(a, b, c):
     return e
 ```
 
-```
+```py
 graph(%a : Dynamic,
       %b : Dynamic,
       %c : Dynamic):
@@ -268,7 +268,7 @@ The outputs of the if-statement serve a role similar to that of a Φ (Phi) funct
 
 ### Loops ###
 Loops are implemented with `prim::Loop` which covers both `while` and `for` loops. A valid instantiation of this node always looks like this:
-```
+```py
 %y_1, ..., %y_r = prim::Loop(%max_trip_count, %initial_condition, %x_1, ..., %x_r)
   block0(%i, %a_1, ..., %a_r):
     %b_1, ..., %b_m = some::node(%a_value_from_outer_block, %a_1)
@@ -277,7 +277,7 @@ Loops are implemented with `prim::Loop` which covers both `while` and `for` loop
 ```
 
 The simplest way to explain the semantics is to consider this Python-like pseudo-code:
-```python
+```py
 y_1, ..., y_r = x_1, ..., x_r
 condition = initial_condition
 i = 0
@@ -299,7 +299,7 @@ while condition and i < max_trip_count:
 
 For example, this program:
 
-```python
+```py
 def f(x):
     z = x
     for i in range(x.size(0)):
@@ -309,7 +309,7 @@ def f(x):
 
 can be translated as:
 
-```
+```py
 graph(%z.1 : Dynamic):
   %3 : bool = prim::Constant[value=1]()
   %1 : int = prim::Constant[value=0]()
@@ -324,14 +324,14 @@ graph(%z.1 : Dynamic):
 ### With ###
 With-statements are represented in two different ways. For most of the compilation and optimization process, they are represented as a pair of `prim::Enter` and `prim::Exit` nodes that wrap the nodes corresponding to the body of the with-statement. However, with-statements are temporarily represented for the duration of the [`exit_transform` pass](frontend/exit_transforms.cpp) using a block-based representation in which a `prim::With` node is inserted after the `prim::Exit` node, all of the nodes between the `prim::Exit` and `prim::Enter` are moved into the first block of the `prim::With`, and the `prim::Exit` is moved into the second block of the `prim::With`. For example, this program:
 
-```
+```py
 with c as increment:
   y = x + increment
 ```
 
 can be translated as:
 
-```
+```py
 %2 : int = prim::Constant[value=1]()
 %increment.1 : int = prim::Enter(%c.1)
 %y.1 : Tensor = aten::add(%x.1, %increment.1, %2)
@@ -340,7 +340,7 @@ can be translated as:
 
 and will temporarily be transformed to:
 
-```
+```py
 %increment.1 : int = prim::Enter(%c.1)
 = prim::With()
   block0():
@@ -399,7 +399,7 @@ An initial `IValue` to `Value` mapping is set up between the inputs to the funct
 
 As the trace runs, individual operators create `Nodes` in the `Graph` being traced to record what happens. This code is currently generated per operator in [tools/autograd/gen_variable_type.py](/tools/autograd/gen_variable_type.py). It results in code that looks like the following:
 
-```cpp
+```py
 torch::jit::Node* node = nullptr;
 std::shared_ptr<jit::tracer::TracingState> tracer_state;
 if (jit::tracer::isTracing()) {
@@ -443,7 +443,7 @@ The following sections look into each the stages in the script frontend in detai
 
 Our frontends produce ASTs in the form of Tree objects. Trees are similar to [s-expressions](https://en.wikipedia.org/wiki/S-expression). Leafs (i.e. Atoms) are always strings. Compound trees have a `kind` (e.g `TK_CONST` or `TK_IDENT` defined in [lexer.h](frontend/lexer.h)) and a list of sub-trees.  For instance, the Tree for `z.sigmoid() - (x + y)` is:
 
-```
+```py
  (-
         (+
           (variable (ident x))
@@ -468,7 +468,7 @@ Each Tree also has a mandatory SourceRange object that describes the range of te
 
 Trees are easy to construct, visualize and traverse, but extracting information from a large compound tree like that of a function definition is unwieldy since it requires numeric indexing. Tree _Views_ are a small layer on top of a tree that make it possible to create and de-structure trees of particular kinds. For example, here is the tree view for the apply node which provides named accessors for its subtrees: the function being called, the inputs, and the attributes (i.e. kwargs):
 
-```cpp
+```py
 struct Apply : public Expr {
   Expr callee() const {
     return Expr(subtree(0));
@@ -484,7 +484,7 @@ struct Apply : public Expr {
 
 The typical way to traverse a tree is to `switch` on the kind and then construct the appropriate Tree view:
 
-```cpp
+```py
 switch (tree.kind()) {
   case TK_VAR:
           auto var = Var(tree); // construct tree view
@@ -524,7 +524,7 @@ When loading TorchScript code directly from a string, we using a standard Lexer+
 
 Similar to Python, the Lexer handles the white-space sensitive nature of Python blocks. The Tokens `TK_INDENT`, `TK_DEDENT`, and `TK_NEWLINE` are injected into the token stream when code first becomes indented, when it dedents, and at the end of a statement. For instance for this stream:
 
-```cpp
+```py
 if
   .
   .
@@ -538,7 +538,7 @@ We would get a token stream `TK_IF TK_NEWLINE TK_INDENT . TK_NEWLINE . TK_NEWLIN
 
 Tokens are either keywords (`def`), operators (`+`), literals (`3.4`), or identifiers (`foo`). A `token_kind` integer identifies what it is and is the exact same type as the `kind` of a Tree. For single-character Tokens (e.g. `+`), the kind is the same as the character, enable statements like:
 
-```cpp
+```py
 if (lexer.nextIf('+')) {
         // handle + ...
 }
@@ -614,7 +614,7 @@ If a block has an exit node, no further instructions will be executed until the 
 
 Python example:
 
-```python
+```py
 while i < 5:
   if i == 3:
     i += 1
@@ -624,7 +624,7 @@ while i < 5:
 
 -> transforms to
 
-```python
+```py
 continue_loop = i < 5
 while continue_loop:
   if i == 3:
@@ -640,7 +640,7 @@ while continue_loop:
 
 The pass also keeps track of nodes or blocks that will always throw Exceptions so that we do not unnecessarily conditionalize execution. In the following example, we can treat the if statement as always Returning and remove the `print` statement.
 
-```python
+```py
 if i < 0:
   raise Exception("Negative input")
 else:
@@ -653,7 +653,7 @@ In the above example, the if statement will have one output: `math.sqrt(i)` on t
 We initially considered doing the Transform pass before Loads and Stores were removed from the graph. However, this breaks when a loop carried variable
 is captured in a break or continue and then is refined in the rest of the loop body. In the below example, at the point of the `continue`, `x` has type `Optional[int]` but is refined to `int` after the continue statement.
 
-```python
+```py
 ...
 if cond:
   if i < 3:
@@ -666,7 +666,7 @@ print(x)
 ```
 If we were to rearrange the graph before loads & stores were removed:
 
-```python
+```py
 if cond:
   if i < 3:
     x = torch.jit.annotate(Optional[int], None)
@@ -713,14 +713,14 @@ A value of a reference type points to an underlying memory location where the da
 
 It is important to remember that TorchScript uses these semantics for `Tensors` so not all computation on `Tensor` is pure. Individual `Tensors` may be *views* of the same underlying data. Views are established by special view creating operations, such as indexing into a Tensor:
 
-```python
+```py
 t = torch.rand(3, 4)
 t2 =  t[0] # view of one slice of t
 ```
 
 Some builtin operators also mutably write to the underlying `Tensor`. In the standard library these operators are always named with a trailing underscore, or take a named `out` `Tensor` where the result is written:
 
-```python
+```py
 t2.relu_() # inplace relu operator, note t is modified as well!
 torch.add(t, t, out=t) # update t, without using temporary memory if possible
 ```
@@ -742,7 +742,7 @@ is not distinguishable from the original execution order. These semantics are ne
 
 We also provide user-accessible parallel execution through the `fork` and `wait` primitives. The `fork` primitive begins execution of `fn` in parallel with the current thread of execution, immediately returning a Future object that will hold the result of the forked function. The `wait` method of the future then causes the invoking thread to wait for the value being computed by `fn`.
 
-```python
+```py
 def fn(arg0, arg1, ...):
   ...
   return v
@@ -770,7 +770,7 @@ IValue contains methods to check the type (e.g. `isTensor()`) and to convert to 
 
 All builtin operators are represented using a stack machine concept. An operator pops its arguments off the top of the stack and pushes its result to the stack:
 
-```cpp
+```py
 using Stack = std::vector<IValue>;
 using Operation = std::function<void(Stack*)>;
 
@@ -815,7 +815,7 @@ However, we do need to ensure that values are destructed immediately after their
 
 The following is an example program in `Graph` form and its equivalent in interpreter [Instructions](runtime/instruction.h):
 
-```
+```py
 graph(%x : Tensor,
       %hx : Tensor,
       %cx : Tensor,
@@ -847,7 +847,7 @@ graph(%x : Tensor,
   return (%30)
 ```
 
-```
+```py
 0, 1, 2, 3, 4, 5, 6 = Load
 7 = Constant
 8 = t move(3)
@@ -882,7 +882,7 @@ In this section, we use a running example program that computes one step of an L
 
 This section will use an example this LSTM program:
 
-```python
+```py
 @torch.jit.script
 def LSTMCellS(x, hx, cx, w_ih, w_hh, b_ih, b_hh):
     gates = x.mm(w_ih.t()) + hx.mm(w_hh.t()) + b_ih + b_hh
@@ -898,7 +898,7 @@ def LSTMCellS(x, hx, cx, w_ih, w_hh, b_ih, b_hh):
 
 After going through the frontend, we start with this unoptimized graph:
 
-```
+```py
 graph(%x : Tensor,
       %hx : Tensor,
       %cx : Tensor,
@@ -951,7 +951,7 @@ In the "Specialization" section above, it is mentioned that "rank, but not size"
 To control these settings, you can use `torch._C._jit_set_fusion_strategy()`; it takes as an argument a list of tuples in the format `(type, number)` where `type` is a string in `{"DYNAMIC" ,"STATIC"}` and `number` is an integer.
 
 For example:
-```
+```py
 torch._C._jit_set_fusion_strategy([
     ("STATIC", 2),
     ("DYNAMIC", 20),
@@ -964,7 +964,7 @@ This will make two attempts to generate static-shape graphs, and after that fall
 
 On a code cache miss, we generate a new optimized `Graph` on the fly (`compileSpec`). It starts by creating a copy of the initial `Graph` and setting the input types to the specialized `Tensor` types observed in this specialization. TensorType inputs to the `Graph` will get refined with types that know the device, number of dimensions, and requires grad state.
 
-```
+```py
 # post specialization, inputs are now specialized types
 graph(%x : Float(*, *),
       %hx : Float(*, *),
@@ -1006,7 +1006,7 @@ It then runs inference passes to calculate properties of the graph given this pa
 * It propagates constants, pre-computing as much as possible
 * It propagates the input ranks, dtypes, devices, and requires_grad information to the rest of the graph where possible.
 
-```
+```py
 graph(%x : Float(*, *),
       %hx : Float(*, *),
       %cx : Float(*, *),
@@ -1049,7 +1049,7 @@ Current derivative preserving passes:
 * Unrolling small loops
 * Batching matrix multiplications that result from unrolling loops
 
-```
+```py
 graph(%x : Float(*, *),
       %hx : Float(*, *),
       %cx : Float(*, *),
@@ -1087,7 +1087,7 @@ Note the two phases for compilation of fusion groups: First, the `FuseGraph` pas
 
 In the case where no gradients are required, the optimization process is finished, a Code object is constructed from the `Graph`, it is added to the code cache, and then an InterpreterState is constructed and run.
 
-```
+```py
 graph(%x : Float(*, *),
       %hx : Float(*, *),
       %cx : Float(*, *),
@@ -1146,7 +1146,7 @@ Many `Graphs` will require gradients (i.e. one of the inputs will have a `requir
 
 The creating of derivative subgraphs is done using a similar approach to finding fusion groups: adjacent operations with known gradient formulas are grouped together into `prim::DifferentiableGraph` nodes. We only generate these nodes if we can find a large enough subgraph where optimization is likely to be profitable since there is some overhead involved in entering and exiting a differentiable subgraph.
 
-```
+```py
 graph(%x : Float(*, *),
       %hx : Float(*, *),
       %cx : Float(*, *),
@@ -1293,7 +1293,7 @@ Multiple files can be configured by separating each file name with a colon
 You can call opt limiter by calling a macro `JIT_OPT_ALLOWED`. It will return true if
 we haven't reached the optimization limit yet. Typical usage:
 
-```cpp
+```py
 if (!JIT_OPT_ALLOWED) {
     GRAPH_DUMP(...); //supplied from jit_log
     return;
@@ -1310,7 +1310,7 @@ A DifferentiableGraphOp combines an explicit forward `Graph` `f` with a paired b
 ## Handling Mutability ##
 ### Aliasing and mutation in the PyTorch API
 In PyTorch, `Tensors` are reference types. Operators can return "views" of the input `Tensor`, creating a new `Tensor` object that shares the same underlying storage as the original:
-```python
+```py
 a = torch.rand(2, 3)
 b = a
 # At this point, `a` and `b` share their storage.
@@ -1319,7 +1319,7 @@ c = b[0]
 ```
 
 Some operators will *mutate* one or more of their operands in-place. These are typically denoted with a trailing underscore, or by taking an `out` argument as input:
-```python
+```py
 a = torch.zeros(2, 3)
 b = torch.ones(2, 3)
 a.add_(b)  # in-place add, so `a` is modified.
@@ -1330,31 +1330,31 @@ torch.add(a, b, out=a) # another way to express the same thing
 The JIT's `FunctionSchema`  allows operator writers to add annotations specifying the aliasing and mutation behavior of an operator. Optimization passes will use this information to determine whether transformations are semantics-preserving. This section provides a description of the alias annotation language, assuming that the reader already knows what `FunctionSchema` looks like.
 
 First, here is a pure function which always returns new memory:
-```
+```py
 add(Tensor a, Tensor b) -> Tensor
 ```
 The type `Tensor` with no annotations is sugar for "fresh, read-only `Tensor`". So since there are no annotations on anything, we know that this operator creates no aliases and mutates no inputs.
 
 Next, a function that returns an alias to one of the inputs.:
-```
+```py
 view(Tensor(a) self, int[] size) -> Tensor(a)
 ```
 The shared `(a)` annotation on `self` and the output signify that the `Tensors` will share the same storage. Another way to say is that `self` and the output belong to the same "alias set" `a`.
 
 Now a function that writes in-place to one of the inputs (note the trailing underscore):
-```
+```py
 add_(Tensor(a!) self, Tensor other) -> Tensor(a!)
 ```
 The `!` annotation means that this operator writes to the specified alias set (in this case `a`).
 
 Sometimes we don't have enough information to provide an exact alias annotation. For example, here is the operator to extract an element from a list:
-```
+```py
 list_select(Tensor[] list, int idx) -> Tensor(*)
 ```
 Note the alias set `*`. This is the **wildcard set**. These are values which we conservatively analyze. Containers, such as lists and dictionaries, Graph inputs, and class attributes are conservatively analyzed to all alias. In most cases, people shouldn't be writing operators with wildcard annotations. They are used as temporary workaround for when our alias analysis isn't sophisticated enough to understand something yet but we don't want to block feature development.
 
 Similarly, we have operators which result in Tensors being contained in a list. In this case, to preserve the relationship between output list and input, we annotate that the input enters the wildcard set with the `(a -> *)` syntax.
-```
+```py
 func: chunk(Tensor(a -> *) self, int chunks, int dim=0) -> Tensor(a)[]
 ```
 
@@ -1369,17 +1369,17 @@ An alias analysis pass consumes the per-operator aliasing information to constru
 The core data structure in the AliasDb is called `MemoryDAG`, which is a DAG where the edges are "may point to" relationships and the  vertices are aliasing `Element`s. The most common kind of `Element` is an IR `Value`, but there are other kinds of things that can alias that aren't first-class `Value`s in the IR, like wildcards or contained types (such as in a list or tuple).
 
 The alias analysis pass walks through the nodes in a graph, examining schema `AliasInfo`  objects and adding edges in the `MemoryDAG` accordingly. For example, for the node:
-```
+```py
 %output : Tensor = aten::view(%self, %size)
 ```
 the analyzer will examine the schema for `view()`:
-```
+```py
 view(Tensor(a) self, int[] size) -> Tensor(a)
 ```
 and add an edge from `%output` to `%self`. The alias analysis pass is flow-insensitive, as we are only adding "points-to" edges when processing a node.
 
 As a more involved example, the following TorchScript snippet:
-```python
+```py
 @torch.jit.script
 def foo(a : Tensor, b : Tensor):
   c = 2 * b
@@ -1456,7 +1456,7 @@ otherwise they're checked as `nonfusible_nodes` as well.
 On the other hand, if `should_autodiff_node=False`, the graph can still have `prim::DifferentiableGraph` with other nodes, but not `nonfusible_nodes` and `fusible_nodes`.
 
 To make writing tests easier, you only need to write out node names if it's different from the function name. Below are a few examples:
-```python
+```py
 ('conv1d', ...), # No symbolic gradient formula
 ('avg_pool2d', ..., (True,)), # Has symbolic gradient formula, only has one nonfusible node aten::avg_pool2d
 ('nll_loss', ..., (True, 'aten::nll_loss_forward')), # Is replaced by a different node in its symbolic gradient formula
@@ -1475,7 +1475,7 @@ to check which function schema the test triggers.
 The Python Printer takes a `Graph` and produces Python-like code that represents the same graph. Using some special values in [serialization/import_source.cpp](serialization/import_source.cpp), this code can be read back in by the compiler to produce the same `Graph`. In Python a `ScriptModule`'s `code` property shows the Python Printed graph.
 
 The table below shows the graph and code for this small `ScriptModule`:
-```python
+```py
 class M(torch.jit.ScriptModule):
     @torch.jit.script_method
     def forward(self, x, y, z):
@@ -1490,7 +1490,7 @@ m = M()
 ```
 
 `m.graph`
-```
+```py
 graph(%x.1 : Tensor,
       %y : int,
       %z : float):
@@ -1508,7 +1508,7 @@ graph(%x.1 : Tensor,
 ```
 
 `m.code`
-```python
+```py
 def forward(self,
     x: Tensor,
     y: int,

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\rnn.py`
 
-```
+```py
 import warnings
 from typing import Iterable, List, NamedTuple, Optional, Tuple, Union
 

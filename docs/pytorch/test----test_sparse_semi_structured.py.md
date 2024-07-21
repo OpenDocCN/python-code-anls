@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_sparse_semi_structured.py`
 
-```
+```py
 # Owner(s): ["module: sparse"]
 # 引入必要的库和模块
 import itertools  # 导入 itertools 库，用于生成迭代器的工具函数

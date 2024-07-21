@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Activation.cpp`
 
-```
+```py
 #ifdef USE_XNNPACK
 // 包含 XNNPACK 相关的头文件
 #include <ATen/native/xnnpack/Common.h>

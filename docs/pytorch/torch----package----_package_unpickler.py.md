@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_package_unpickler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入兼容的 pickle 模块
 import _compat_pickle

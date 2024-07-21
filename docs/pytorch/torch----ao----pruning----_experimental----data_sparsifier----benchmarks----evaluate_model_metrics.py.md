@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\benchmarks\evaluate_model_metrics.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型注解所需的模块
 from typing import Dict, List
@@ -24,7 +24,7 @@ def inference_and_evaluation(dlrm, test_dataloader, device):
     """Perform inference and evaluation on the test dataset.
     The function returns the dictionary that contains evaluation metrics such as accuracy, f1, auc,
     precision, recall.
-    Note: This function is a rewritten version of ```inference()``` present in dlrm_s_pytorch.py
+    Note: This function is a rewritten version of ```inference()```py present in dlrm_s_pytorch.py
 
     Args:
         dlrm (nn.Module)

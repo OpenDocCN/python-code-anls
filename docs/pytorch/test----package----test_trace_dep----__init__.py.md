@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_trace_dep\__init__.py`
 
-```
+```py
 # 导入 yaml 模块，用于处理 YAML 格式的数据
 import yaml
 

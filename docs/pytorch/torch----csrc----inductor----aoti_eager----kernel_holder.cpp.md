@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_eager\kernel_holder.cpp`
 
-```
+```py
 #if !defined(C10_MOBILE) && !defined(ANDROID)
 #include <torch/csrc/inductor/aoti_eager/kernel_holder.h>
 

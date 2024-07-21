@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\accumulate_grad.cpp`
 
-```
+```py
 // 包含头文件，用于自动求导模块中的梯度累积操作
 #include <torch/csrc/autograd/functions/accumulate_grad.h>
 

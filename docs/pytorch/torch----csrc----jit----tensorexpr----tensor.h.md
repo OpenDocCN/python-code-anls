@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\tensor.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/Export.h>  // 引入 Torch 导出宏

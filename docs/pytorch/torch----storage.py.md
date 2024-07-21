@@ -1,6 +1,6 @@
 # `.\pytorch\torch\storage.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块和类型定义
 import collections  # 导入 collections 模块

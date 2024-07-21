@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\lists.py`
 
-```
+```py
 # mypy: ignore-errors
 # 导入必要的模块和函数
 import collections  # 导入 collections 模块，用于处理各种集合类型

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\group_norm_kernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义预处理指令，用于指定仅支持特定方法的操作符
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\data_parallel.py`
 
-```
+```py
 # 设置 mypy 来允许未类型化的函数定义
 mypy: allow-untyped-defs
 # 导入操作符模块，用于运算符相关操作

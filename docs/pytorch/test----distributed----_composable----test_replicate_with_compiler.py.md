@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\test_replicate_with_compiler.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入所需的库和模块

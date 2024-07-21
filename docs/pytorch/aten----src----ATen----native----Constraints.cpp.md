@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Constraints.cpp`
 
-```
+```py
 // 包含 C++ 标准库头文件，用于导入 <limits> 库
 #include <limits>
 // 定义宏，用于设置 TORCH_ASSERT_ONLY_METHOD_OPERATORS

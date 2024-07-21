@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\metrics\RpcMetricsHandler.h`
 
-```
+```py
 #pragma once
 #include <c10/util/Registry.h>
 #include <string>

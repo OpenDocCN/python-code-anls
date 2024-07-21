@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_parametrization.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 # 导入 pickle 库，用于对象的序列化和反序列化操作
 import pickle

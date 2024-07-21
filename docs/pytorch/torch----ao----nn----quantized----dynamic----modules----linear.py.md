@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\dynamic\modules\linear.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库
 import torch

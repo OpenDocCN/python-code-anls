@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\gen_test_model.py`
 
-```
+```py
 import io  # 导入io模块，用于处理字节流
 import sys  # 导入sys模块，用于系统相关操作
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\examples\memory_tracker_example.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入torchvision库
 import torchvision

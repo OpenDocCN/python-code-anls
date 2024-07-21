@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\deduplicate_initializers.h`
 
-```
+```py
 #pragma once
 // 使用指令指示编译器只包含该文件一次，避免多重包含的问题
 

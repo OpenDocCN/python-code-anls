@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\impl\CUDAGuardImpl.cpp`
 
-```
+```py
 #include <c10/cuda/impl/CUDAGuardImpl.h>
 // 包含 CUDAGuardImpl 的头文件
 

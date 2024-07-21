@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\train\optim\sgd.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h> // 包含 torch 库中的 arg 模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\dispatch_and_compile_graph.py`
 
-```
+```py
 """
 This module dispatches the graphs to either the forward-only or joint compilation
 pathways, taking into account the AOTConfig and the collected ViewAndMutationMetadata.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\stubs\itt.cpp`
 
-```
+```py
 // 包含头文件：用于字符串流操作
 #include <sstream>
 

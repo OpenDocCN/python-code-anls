@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Col2Im.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于某些特定的方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

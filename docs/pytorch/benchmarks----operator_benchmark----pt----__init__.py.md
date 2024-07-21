@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\__init__.py`
 
-```
+```py
 # 导入必要的模块：os 模块提供了与操作系统交互的功能，shutil 模块提供了高级文件操作功能
 import os
 import shutil

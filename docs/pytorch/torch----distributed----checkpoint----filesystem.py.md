@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\filesystem.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类
 import collections  # 引入集合模块

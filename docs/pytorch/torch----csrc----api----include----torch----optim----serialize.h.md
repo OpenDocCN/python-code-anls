@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\serialize.h`
 
-```
+```py
 #pragma once
 // 预处理指令：确保此头文件仅被编译一次
 
@@ -326,7 +326,7 @@ void serialize(
 // 定义一个函数，接受一个常量引用类型的 BufferContainer 参数
 archive.write(
     key + "/size", torch::tensor(static_cast<int64_t>(buffers.size())));
-```  
+```py  
 
 // 使用 archive 对象写入键为 key+"/size" 的条目，其值是 buffers 容器的大小转换成整数的张量
 for (const auto index : c10::irange(buffers.size())) {
@@ -335,7 +335,7 @@ for (const auto index : c10::irange(buffers.size())) {
 // 遍历 buffers 容器中的每个索引，index 变量会依次取到容器中的每个索引值
 archive.write(
     key + "/" + std::to_string(index), buffers[index], /*is_buffer=*/true);
-```  
+```py  
 
 // 使用 archive 对象写入键为 key+"/"+当前索引值 的条目，其值为 buffers 容器中对应索引的数据，并标记其为缓冲区数据
 }

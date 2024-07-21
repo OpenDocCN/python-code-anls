@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cudnn\Pooling.cpp`
 
-```
+```py
 // 包含 C10 异常处理工具的头文件
 #include <c10/util/Exception.h>
 #ifdef USE_CUDA

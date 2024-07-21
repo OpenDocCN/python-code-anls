@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\XPUGeneratorImpl.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Generator.h>  // 包含 ATen 库中的 Generator 头文件

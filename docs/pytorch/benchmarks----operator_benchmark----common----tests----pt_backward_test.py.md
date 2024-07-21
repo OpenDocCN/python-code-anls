@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\tests\pt_backward_test.py`
 
-```
+```py
 # 导入名为operator_benchmark的模块，并重命名为op_bench
 import operator_benchmark as op_bench
 

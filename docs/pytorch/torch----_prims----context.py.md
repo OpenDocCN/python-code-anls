@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_prims\context.py`
 
-```
+```py
 # 指定允许未类型化的函数定义，用于类型检查器mypy
 # 导入functools模块，用于LRU缓存功能
 import functools

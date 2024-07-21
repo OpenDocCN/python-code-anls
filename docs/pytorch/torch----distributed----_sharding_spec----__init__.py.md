@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_sharding_spec\__init__.py`
 
-```
+```py
 # 为了向后兼容，保留旧的包引入，一旦所有内容迁移到 `torch.distributed._shard` 包中，应该删除此文件。
 import sys  # 导入系统模块，用于操作系统相关功能
 import warnings  # 导入警告模块，用于发出和控制警告消息

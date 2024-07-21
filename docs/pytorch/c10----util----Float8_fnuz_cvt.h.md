@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Float8_fnuz_cvt.h`
 
-```
+```py
 /*
  * 在 c10::detail 命名空间中定义了一个模板函数，用于将以 f8 E4M3FNUZ 或 bf8 E5M2FNUZ 格式表示的
  * 8位浮点数转换为32位浮点数的值。

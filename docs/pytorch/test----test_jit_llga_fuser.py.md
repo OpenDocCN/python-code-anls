@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_llga_fuser.py`
 
-```
+```py
 # Owner(s): ["module: mkldnn"]
 
 # 导入系统相关模块

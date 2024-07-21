@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_compat.h`
 
-```
+```py
 #ifndef PYTHON_COMPAT
 #define PYTHON_COMPAT
 

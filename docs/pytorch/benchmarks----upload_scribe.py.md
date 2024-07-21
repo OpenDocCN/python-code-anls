@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\upload_scribe.py`
 
-```
+```py
 """Scribe Uploader for Pytorch Benchmark Data
 
 Currently supports data in pytest-benchmark format but can be extended.

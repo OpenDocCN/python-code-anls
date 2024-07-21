@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fully_shard.py`
 
-```
+```py
 # 导入必要的类型定义
 from typing import Callable, Iterable, Optional, Union
 from typing_extensions import deprecated

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_ops_to_mkldnn.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 // 包含 ATen 库的配置信息

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\NativeFunction.h`
 
-```
+```py
 #pragma once
 // 声明指令，指示编译器仅包含本文件一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_debug_handler.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/ivalue.h>
 

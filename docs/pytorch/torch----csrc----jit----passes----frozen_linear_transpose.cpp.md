@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_linear_transpose.cpp`
 
-```
+```py
 #include <torch/csrc/jit/ir/ir.h>
 #include <torch/csrc/jit/ir/ir_views.h>
 #include <torch/csrc/jit/jit_log.h>

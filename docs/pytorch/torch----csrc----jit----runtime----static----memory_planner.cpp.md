@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\memory_planner.cpp`
 
-```
+```py
 // 包含 C++ 头文件：c10 核心库中的对齐相关功能
 #include <c10/core/alignment.h>
 // 包含 Torch JIT 静态内存规划器的头文件

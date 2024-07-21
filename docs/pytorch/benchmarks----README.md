@@ -6,7 +6,7 @@ It also provides mechanisms to compare PyTorch with other frameworks.
 
 ## Setup environment
 Make sure you're on a machine with CUDA, torchvision, and pytorch installed. Install in the following order:
-```
+```py
 # Install torchvision. It comes with the pytorch stable release binary
 conda install pytorch torchvision -c pytorch
 

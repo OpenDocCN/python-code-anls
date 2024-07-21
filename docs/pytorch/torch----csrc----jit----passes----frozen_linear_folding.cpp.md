@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_linear_folding.cpp`
 
-```
+```py
 // 引入 Torch 的头文件，用于定义常量、IR 结构和图优化的函数
 #include <torch/csrc/jit/ir/constants.h>
 #include <torch/csrc/jit/ir/ir.h>

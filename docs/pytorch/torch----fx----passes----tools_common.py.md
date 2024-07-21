@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\tools_common.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型定义，允许未标注类型的函数
 from typing import List, Tuple, Union, Dict, Any, Set, Mapping, Optional

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\BackoffTest.cpp`
 
-```
+```py
 // 包含c10/util/irange.h头文件，用于范围迭代器
 #include <c10/util/irange.h>
 // 包含测试所需的StoreTestCommon.hpp头文件

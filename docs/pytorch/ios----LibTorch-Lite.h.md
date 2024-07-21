@@ -1,6 +1,6 @@
 # `.\pytorch\ios\LibTorch-Lite.h`
 
-```
+```py
 #ifndef LibTorch_Lite_h
 #define LibTorch_Lite_h
 // 包含 Torch 移动端模型导入相关的头文件

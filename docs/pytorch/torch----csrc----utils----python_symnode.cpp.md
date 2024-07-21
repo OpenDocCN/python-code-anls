@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_symnode.cpp`
 
-```
+```py
 #include <torch/csrc/utils/python_symnode.h>
 
 namespace torch {

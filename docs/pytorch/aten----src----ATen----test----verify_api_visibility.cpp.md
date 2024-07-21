@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\verify_api_visibility.cpp`
 
-```
+```py
 # 包含 ATen 库的头文件
 #include <ATen/ATen.h>
 

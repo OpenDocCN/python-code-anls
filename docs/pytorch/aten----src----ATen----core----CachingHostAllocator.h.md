@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\CachingHostAllocator.h`
 
-```
+```py
 // 包含C10核心库中的Allocator.h，提供内存分配相关功能
 #include <c10/core/Allocator.h>
 // 包含C10工具库中的Optional.h，提供可选值类型的支持

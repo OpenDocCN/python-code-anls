@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\VariableHooksInterface.h`
 
-```
+```py
 #pragma once
 // 该指令确保头文件只被包含一次，避免重复定义
 

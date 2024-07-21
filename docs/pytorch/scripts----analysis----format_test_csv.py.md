@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\analysis\format_test_csv.py`
 
-```
+```py
 """
 This script takes a pytest CSV file produced by pytest --csv foo.csv
 and summarizes it into a more minimal CSV that is good for uploading

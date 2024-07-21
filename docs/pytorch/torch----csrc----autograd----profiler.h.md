@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\profiler.h`
 
-```
+```py
 #pragma once
 
 此处使用 `#pragma once` 是一种预处理指令，用于确保头文件只被包含一次。这样可以防止在编译时出现多次包含同一头文件而导致的重定义错误。

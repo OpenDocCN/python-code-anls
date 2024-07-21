@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\FileStore.cpp`
 
-```
+```py
 // 包含 Torch 分布式文件存储相关的头文件
 #include <torch/csrc/distributed/c10d/FileStore.hpp>
 

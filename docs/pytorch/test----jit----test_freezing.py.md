@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_freezing.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入所需的库和模块

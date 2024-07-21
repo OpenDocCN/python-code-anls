@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\half_support.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/codegen.h>

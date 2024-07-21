@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\Dispatcher.h`
 
-```
+```py
     // 指令，确保头文件仅被包含一次
 #pragma once
 

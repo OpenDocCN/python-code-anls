@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\deterministic.py`
 
-```
+```py
 # 设置类型检查时允许未声明的函数和方法
 # 导入 sys 模块，用于访问和修改 Python 运行时的参数和函数
 # 导入 types 模块，用于操作 Python 中的类型和类对象

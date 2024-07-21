@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\standalone\itt_observer.h`
 
-```
+```py
 #include <torch/csrc/profiler/api.h>
 
 # 包含 Torch 的性能分析器 API 头文件

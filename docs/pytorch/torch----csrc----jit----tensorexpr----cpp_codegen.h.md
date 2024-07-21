@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\cpp_codegen.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 库中的头文件，用于张量表达式的代码生成
 #include <torch/csrc/jit/tensorexpr/codegen.h>

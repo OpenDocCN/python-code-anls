@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\enum.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架的头文件
 
 #include <torch/torch.h>  // 引入 PyTorch C++ API 的头文件

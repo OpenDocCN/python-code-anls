@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型声明
 from typing import Dict, Any, List, Callable, Union, Tuple, Type

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\serde\schema.py`
 
-```
+```py
 # NOTE: This is a placeholder for iterating on export serialization schema design.
 #       Anything is subject to change and no guarantee is provided at this point.
 # 用于导出序列化模式设计的占位符，请注意这里的任何内容都可能会更改，目前不提供任何保证。

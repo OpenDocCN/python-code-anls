@@ -1,6 +1,6 @@
 # `.\pytorch\torch\library.h`
 
-```
+```py
 #pragma once
 /// \file
 ///
@@ -58,7 +58,7 @@
 /// TORCH_LIBRARY_IMPL(myops, XLA, m) {
 ///   m.impl("mul", &mul_xla_impl);
 /// }
-/// ```
+/// ```py
 
 #include <ATen/core/op_registration/infer_schema.h>
 /// Include for inferFunctionSchemaFromFunctor, which infers a function schema from a functor.
@@ -383,7 +383,7 @@ inline CppFunction dispatch(c10::DeviceType type, Func&& raw_f) {
 /// 通常，模式被简单地作为字符串传递，但如果需要指定自定义的别名分析，可以
 /// 用此函数调用替换字符串。
 ///
-/// ```
+/// ```py
 /// // 默认别名分析（FROM_SCHEMA）
 /// m.def("def3(Tensor self) -> Tensor");
 /// // 纯函数别名分析
@@ -536,7 +536,7 @@ class SelectiveStr {
 ///    m.impl("add", ...);
 ///    ...
 /// }
-/// ```
+/// ```py
 ///
 class TORCH_API Library final {
  public:
@@ -597,7 +597,7 @@ class TORCH_API Library final {
   /// TORCH_LIBRARY(myops, m) {
   ///   m.def("add(Tensor self, Tensor other) -> Tensor");
   /// }
-  /// ```
+  /// ```py
 
   template <typename Schema>
   Library& def(
@@ -641,7 +641,7 @@ Library& impl_abstract_pystub(const char* pymodule, const char* context = "") {
 /// TORCH_LIBRARY(myops, m) {
 ///   m.def("add", add_fn);
 /// }
-/// ```
+/// ```py
 template <typename NameOrSchema, typename Func>
 Library& def(NameOrSchema&& raw_name_or_schema, Func&& raw_f,
     const std::vector<at::Tag>& tags = {}) & {
@@ -673,7 +673,7 @@ Library& def(NameOrSchema&& raw_name_or_schema, Func&& raw_f,
   /// TORCH_LIBRARY_IMPL(myops, CUDA, m) {
   ///   m.impl("add", add_cuda);
   /// }
-  /// ```
+  /// ```py
   template <typename Name, typename Func>
   Library& impl(
       Name name,
@@ -827,7 +827,7 @@ Library& impl(detail::SelectiveStr<false>, Func&& /*raw_f*/) & {
   ///
   /// // 详见 aten/src/ATen/core/dispatch/backend_fallback_test.cpp
   /// // 获取关于包装回退的完整示例
-  /// ```
+  /// ```py
   template <typename Func>
   // 注册回退实现的函数模板
   Library& fallback(Func&& raw_f) & {

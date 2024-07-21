@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rref_impl.cpp`
 
-```
+```py
 #include <torch/csrc/distributed/rpc/rref_impl.h>
 
 #include <ATen/record_function.h>

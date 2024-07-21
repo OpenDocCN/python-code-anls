@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\sconv\6x8-psimd.c`
 
-```
+```py
 /*
  * 该函数实现了一个特定形状的卷积操作（6x8），利用PSIMD库进行加速计算。
  * 它将卷积核w与输入数据a的子集进行相乘累加，结果保存在输出数组c中。

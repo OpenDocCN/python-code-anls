@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\conv_serialization.h`
 
-```
+```py
 // 预编译指令，确保头文件只被包含一次
 #pragma once
 

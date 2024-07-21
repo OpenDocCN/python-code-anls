@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_pruning_op.py`
 
-```
+```py
 # 导入所需的模块和函数
 import hypothesis.strategies as st  # 导入Hypothesis库中的策略模块
 from hypothesis import given  # 导入Hypothesis库中的给定装饰器

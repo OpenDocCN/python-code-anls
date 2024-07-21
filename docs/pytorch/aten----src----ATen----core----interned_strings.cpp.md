@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\interned_strings.cpp`
 
-```
+```py
 // aten_interned_strings.h 包含所有操作符的名称
 #undef TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

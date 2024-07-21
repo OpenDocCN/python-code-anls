@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_pass_infra.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入必要的库和模块

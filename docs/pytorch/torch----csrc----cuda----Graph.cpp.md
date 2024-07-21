@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Graph.cpp`
 
-```
+```py
 // 引入 Torch Python 头文件
 #include <torch/csrc/python_headers.h>
 

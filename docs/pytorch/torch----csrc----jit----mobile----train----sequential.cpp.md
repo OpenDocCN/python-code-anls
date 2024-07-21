@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\train\sequential.cpp`
 
-```
+```py
 // 包含 Torch 库中相关的头文件
 #include <torch/csrc/jit/mobile/train/sequential.h>
 #include <torch/types.h>

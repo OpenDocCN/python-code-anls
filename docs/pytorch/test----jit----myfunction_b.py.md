@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\myfunction_b.py`
 
-```
+```py
 """
 Helper function used in test_decorator.py. We define it in a
 separate file on purpose to test that the names in different modules

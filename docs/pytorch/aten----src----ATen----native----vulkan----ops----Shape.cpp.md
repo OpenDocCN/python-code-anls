@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Shape.cpp`
 
-```
+```py
 // 引入 ATen Vulkan 相关的头文件
 #include <ATen/InferSize.h>
 #include <ATen/native/vulkan/ops/Common.h>

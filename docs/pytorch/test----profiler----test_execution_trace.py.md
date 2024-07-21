@@ -1,6 +1,6 @@
 # `.\pytorch\test\profiler\test_execution_trace.py`
 
-```
+```py
 # Owner(s): ["oncall: profiler"]
 
 # if tqdm is not shutdown properly, it will leave the monitor thread alive.

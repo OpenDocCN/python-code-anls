@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\operations\MultiTensorApply.h`
 
-```
+```py
 #pragma once
 // 包含 ATen 库的 Tensor 头文件
 #include <ATen/core/Tensor.h>

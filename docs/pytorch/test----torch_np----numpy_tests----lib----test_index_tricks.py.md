@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\lib\test_index_tricks.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]  # 标记代码所有者为模块 dynamo
 
 import functools  # 导入 functools 模块

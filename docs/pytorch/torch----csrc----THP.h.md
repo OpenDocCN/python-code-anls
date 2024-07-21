@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\THP.h`
 
-```
+```py
 // 如果 THP_H 未定义，则定义 THP_H 宏，避免多次包含
 #ifndef THP_H
 #define THP_H

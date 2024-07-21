@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ir_util.cpp`
 
-```
+```py
 // 包含 Torch 库中 IR 工具的头文件
 #include <torch/csrc/lazy/core/ir_util.h>
 

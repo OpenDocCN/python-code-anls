@@ -1,6 +1,6 @@
 # `.\pytorch\torch\return_types.py`
 
-```
+```py
 import inspect  # 导入inspect模块，用于检查对象的类型和内部结构
 
 import torch  # 导入PyTorch库

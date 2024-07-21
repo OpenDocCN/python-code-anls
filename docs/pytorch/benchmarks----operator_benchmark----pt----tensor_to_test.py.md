@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\tensor_to_test.py`
 
-```
+```py
 # 导入 operator_benchmark 库，用作性能测试
 import operator_benchmark as op_bench
 # 导入 PyTorch 库

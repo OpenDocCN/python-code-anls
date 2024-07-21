@@ -63,7 +63,7 @@ For an example of using the MultiProcessTestCase to run a test on multiple GPUs,
 All the unit tests can be found under the [test/distributed](../../test/distributed) directory and RPC tests in particular are under [test/distributed/rpc](../../test/distributed/rpc). A few examples on how to run unit tests:
 
 
-```
+```py
 # Run the c10d unit tests.
 python test/distributed/test_c10d_common.py
 python test/distributed/test_c10d_gloo.py

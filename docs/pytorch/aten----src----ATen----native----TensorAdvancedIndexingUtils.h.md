@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorAdvancedIndexingUtils.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Tensor.h>
 #include <ATen/native/IndexingUtils.h>

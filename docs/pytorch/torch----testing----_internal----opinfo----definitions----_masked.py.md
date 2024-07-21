@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\_masked.py`
 
-```
+```py
 # 忽略 mypy 的错误提示
 
 # 导入所需的库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\activation.h`
 
-```
+```py
 #pragma once
 
 // 包含 ATen 库的分发头文件，用于多种 CPU/GPU 操作的分发
@@ -56,7 +56,7 @@ inline Tensor elu(Tensor input, double alpha, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::elu(x, F::ELUFuncOptions().alpha(0.42).inplace(true));
-/// ```
+/// ```py
 // ELU 激活函数接口，根据 ELUFuncOptions 参数调用内部实现函数
 inline Tensor elu(Tensor input, const ELUFuncOptions& options = {}) {
   return detail::elu(std::move(input), options.alpha(), options.inplace());
@@ -91,7 +91,7 @@ inline Tensor selu(Tensor input, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::selu(input, F::SELUFuncOptions(false));
-/// ```
+/// ```py
 // SELU 激活函数接口，根据 SELUFuncOptions 参数调用内部实现函数
 inline Tensor selu(Tensor input, const SELUFuncOptions& options = {}) {
   return detail::selu(std::move(input), options.inplace());
@@ -120,7 +120,7 @@ inline Tensor hardshrink(const Tensor& input, double lambda) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::hardshrink(x, F::HardshrinkFuncOptions().lambda(0.42));
-/// ```
+/// ```py
 // Hardshrink 函数接口，根据 HardshrinkFuncOptions 参数调用内部实现函数
 inline Tensor hardshrink(
     const Tensor& input,
@@ -158,7 +158,7 @@ inline Tensor hardtanh(
 /// namespace F = torch::nn::functional;
 /// F::hardtanh(x,
 /// F::HardtanhFuncOptions().min_val(-1.0).max_val(1.0).inplace(true));
-/// ```
+/// ```py
 inline Tensor hardtanh(Tensor input, const HardtanhFuncOptions& options = {}) {
   return detail::hardtanh(
       std::move(input),
@@ -197,7 +197,7 @@ inline Tensor leaky_relu(
 /// namespace F = torch::nn::functional;
 /// F::leaky_relu(x,
 /// F::LeakyReLUFuncOptions().negative_slope(0.42).inplace(true));
-/// ```
+/// ```py
 inline Tensor leaky_relu(
     Tensor input,
     const LeakyReLUFuncOptions& options = {}) {
@@ -258,7 +258,7 @@ inline Tensor log_softmax(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::log_softmax(input, F::LogSoftmaxFuncOptions(1));
-/// ```
+/// ```py
 inline Tensor log_softmax(const Tensor& input, const LogSoftmaxFuncOptions& options) {
   return detail::log_softmax(input, options.dim(), options.dtype());
 }
@@ -301,7 +301,7 @@ inline Tensor log_softmax(const Tensor& input, int64_t dim, c10::optional<Scalar
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::log_softmax(input, LogSoftmaxFuncOptions(1));
-/// ```
+/// ```py
 inline Tensor log_softmax(
     const Tensor& input,
     const LogSoftmaxFuncOptions& options) {
@@ -334,7 +334,7 @@ inline Tensor glu(const Tensor& input, int64_t dim) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::glu(input, GLUFuncOptions(1));
-/// ```
+/// ```py
 inline Tensor glu(const Tensor& input, const GLUFuncOptions& options = {}) {
   // 调用 detail 命名空间中的 glu 函数，并返回结果
   return detail::glu(input, options.dim());
@@ -408,7 +408,7 @@ inline Tensor relu(Tensor input, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::relu(x, F::ReLUFuncOptions().inplace(true));
-/// ```
+/// ```py
 inline Tensor relu(Tensor input, const ReLUFuncOptions& options = {}) {
   return detail::relu(std::move(input), options.inplace());
 }
@@ -434,7 +434,7 @@ inline Tensor relu6(Tensor input, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::relu6(x, F::ReLU6FuncOptions().inplace(true));
-/// ```
+/// ```py
 inline Tensor relu6(Tensor input, const ReLU6FuncOptions& options = {}) {
   return detail::relu6(std::move(input), options.inplace());
 }
@@ -465,7 +465,7 @@ inline Tensor rrelu(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::rrelu(x, F::RReLUFuncOptions().lower(0.1).upper(0.4).inplace(true));
-/// ```
+/// ```py
 inline Tensor rrelu(Tensor input, const RReLUFuncOptions& options = {}) {
   return detail::rrelu(
       std::move(input),
@@ -500,7 +500,7 @@ inline Tensor celu(Tensor input, double alpha, bool inplace) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::celu(x, 0.1);  // 默认不支持 inplace 操作
-/// ```
+/// ```py
 inline Tensor celu(Tensor input, double alpha, bool inplace = false) {
   return detail::celu(std::move(input), alpha, inplace);
 }
@@ -510,7 +510,7 @@ inline Tensor celu(Tensor input, double alpha, bool inplace = false) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::celu(x, F::CELUFuncOptions().alpha(0.42).inplace(true));
-/// ```
+/// ```py
 inline Tensor celu(Tensor input, const CELUFuncOptions& options = {}) {
   // 调用 detail 命名空间中的 celu 函数，传递输入张量、alpha 和 inplace 参数
   return detail::celu(std::move(input), options.alpha(), options.inplace());
@@ -536,7 +536,7 @@ inline Tensor softplus(const Tensor& input, double beta, double threshold) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::softplus(x, F::SoftplusFuncOptions().beta(0.5).threshold(3.0));
-/// ```
+/// ```py
 inline Tensor softplus(
     const Tensor& input,
     const SoftplusFuncOptions& options = {}) {
@@ -564,7 +564,7 @@ inline Tensor softshrink(const Tensor& input, double lambda) {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::softshrink(x, F::SoftshrinkFuncOptions(0.42));
-/// ```
+/// ```py
 inline Tensor softshrink(
     const Tensor& input,
     const SoftshrinkFuncOptions& options = {}) {

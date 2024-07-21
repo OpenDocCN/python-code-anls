@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fsdp\_fsdp_init.py`
 
-```
+```py
 import itertools
 from typing import List, Optional, Set, Tuple, Union
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\custom_config.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来导入注解，允许未类型化的定义
 from __future__ import annotations

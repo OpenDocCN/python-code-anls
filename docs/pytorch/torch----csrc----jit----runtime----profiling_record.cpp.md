@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\profiling_record.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/profiling_record.h>
 
 #include <ATen/core/symbol.h>

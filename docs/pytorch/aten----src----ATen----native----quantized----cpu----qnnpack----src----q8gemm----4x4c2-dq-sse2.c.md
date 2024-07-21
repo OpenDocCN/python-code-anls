@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gemm\4x4c2-dq-sse2.c`
 
-```
+```py
   /*
    * 设置四个128位整数寄存器初始为零
    */

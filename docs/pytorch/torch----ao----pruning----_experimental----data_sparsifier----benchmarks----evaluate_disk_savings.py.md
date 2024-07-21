@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\benchmarks\evaluate_disk_savings.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型检查相关库，允许未指定类型的函数定义
 from typing import Dict, List

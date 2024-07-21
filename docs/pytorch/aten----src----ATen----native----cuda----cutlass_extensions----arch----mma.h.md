@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\arch\mma.h`
 
-```
+```py
 /**
  * @file
  * @brief Templates exposing architecture support for multiply-add operations

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\gpt_fast\generate.py`
 
-```
+```py
 import dataclasses  # 导入用于定义数据类的模块
 import itertools  # 导入用于迭代操作的模块
 import time  # 导入时间相关的模块

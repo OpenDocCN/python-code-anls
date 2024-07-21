@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_activation_sparsifier.py`
 
-```
+```py
 # 导入所需的库和模块
 import copy  # 导入copy模块，用于深拷贝对象
 import logging  # 导入logging模块，用于日志记录

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\pyobject_preservation.cpp`
 
-```
+```py
 #include <torch/csrc/utils/pyobject_preservation.h>
 // 引入 torch 的 PyObject 保留工具头文件
 

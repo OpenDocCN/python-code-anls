@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_fuser.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入所需的模块和库

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_prims_common\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来导入annotations特性，允许使用类型注解
 from __future__ import annotations

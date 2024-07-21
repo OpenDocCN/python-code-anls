@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\__init__.pyi`
 
-```
+```py
 # 从 torch.fx._symbolic_trace 模块导入以下函数和类：
 # symbolic_trace - 用于符号化跟踪的函数
 # Tracer - 符号化跟踪器的类

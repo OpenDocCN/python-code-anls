@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\batch_mm.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/batch_mm.h>
 
 #include <ATen/core/functional.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_storage_docs.py`
 
-```
+```py
 # 添加了一个特定文档字符串给所有的存储类方法
 """Adds docstrings to Storage functions"""
 

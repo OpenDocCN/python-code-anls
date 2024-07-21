@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\nested_function.py`
 
-```
+```py
 # 引入torch模块，用于神经网络相关操作
 # mypy: allow-untyped-defs 允许不带类型注释的函数定义
 import torch

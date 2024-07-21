@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\xpu_caching_host_allocator_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <ATen/ATen.h>  // 包含 PyTorch ATen 库的头文件

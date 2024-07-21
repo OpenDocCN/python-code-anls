@@ -1,6 +1,6 @@
 # `.\pytorch\test\scripts\run_cuda_memcheck.py`
 
-```
+```py
 # 设置脚本使用 Python3 解释器运行
 #!/usr/bin/env python3
 

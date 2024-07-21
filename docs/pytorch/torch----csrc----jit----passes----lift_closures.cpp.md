@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\lift_closures.cpp`
 
-```
+```py
 // 包含 Torch 的头文件 lift_closures.h，用于闭包的提升操作
 #include <torch/csrc/jit/passes/lift_closures.h>
 

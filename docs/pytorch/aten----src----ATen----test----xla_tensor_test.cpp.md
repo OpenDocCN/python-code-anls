@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\xla_tensor_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/ATen.h>

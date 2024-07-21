@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\FlattenIndicesKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，用于仅仅在方法操作符上执行 Torch 断言
 

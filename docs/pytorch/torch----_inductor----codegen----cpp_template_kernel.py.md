@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_template_kernel.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型定义
 import itertools  # 导入 itertools 模块，用于迭代器操作

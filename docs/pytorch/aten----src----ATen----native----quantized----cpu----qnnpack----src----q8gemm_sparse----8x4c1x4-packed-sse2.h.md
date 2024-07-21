@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gemm_sparse\8x4c1x4-packed-sse2.h`
 
-```
+```py
 #pragma once
 // 预处理命令，表示本头文件只包含一次
 

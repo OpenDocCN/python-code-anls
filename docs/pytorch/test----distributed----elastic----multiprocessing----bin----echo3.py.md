@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\multiprocessing\bin\echo3.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定脚本使用的 Python 解释器路径
 

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\historical_class_failure_correlation.py`
 
-```
+```py
 from __future__ import annotations
 # 导入用于支持类型提示的特性
 

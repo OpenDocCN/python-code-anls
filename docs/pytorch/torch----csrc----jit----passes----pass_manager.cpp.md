@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\pass_manager.cpp`
 
-```
+```py
 // 包含 Torch 的 JIT 模块中的 Pass Manager 头文件
 #include <torch/csrc/jit/passes/pass_manager.h>
 

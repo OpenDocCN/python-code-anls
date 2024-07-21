@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Module.cpp`
 
-```
+```py
 #ifndef WIN32
 // 全局变量，用于标记是否处于不良的 fork 环境中
 static bool in_bad_fork = false; // True for children forked after cuda init
@@ -452,7 +452,7 @@ PyObject* THCPModule_cudaJiteratorCompileAndLaunchKernel(
 
 
   HANDLE_TH_ERRORS
-```  
+```py  
 # 开始处理异常，宏定义的错误处理开始
 
 
@@ -463,7 +463,7 @@ PyObject* THCPModule_cudaJiteratorCompileAndLaunchKernel(
 
   {
     pybind11::gil_scoped_release no_gil;
-```  
+```py  
 # 创建一个 `no_gil` 的对象，用于在其生命周期内释放全局解释器锁 (GIL)
 
 
@@ -473,7 +473,7 @@ PyObject* THCPModule_cudaJiteratorCompileAndLaunchKernel(
 
 
   }
-```  
+```py  
 # `no_gil` 对象的生命周期结束，GIL 重新获取
 
 
@@ -483,7 +483,7 @@ PyObject* THCPModule_cudaJiteratorCompileAndLaunchKernel(
 
 
   END_HANDLE_TH_ERRORS
-```  
+```py  
 # 结束异常处理宏定义的作用域
 PyObject* THCPModule_cudaCachingAllocator_set_allocator_settings(
     PyObject* _unused,

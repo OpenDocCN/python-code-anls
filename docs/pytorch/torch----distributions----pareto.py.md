@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\pareto.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的约束条件模块
 from torch.distributions import constraints

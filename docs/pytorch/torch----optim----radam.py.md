@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\radam.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Implementation for the RAdam algorithm."""
 # 引入必要的模块和类型声明

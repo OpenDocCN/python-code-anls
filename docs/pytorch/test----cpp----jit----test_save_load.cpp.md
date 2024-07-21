@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_save_load.cpp`
 
-```
+```py
 #include <gtest/gtest.h> // 引入 Google Test 框架的头文件
 
 #include <test/cpp/jit/test_utils.h> // 引入测试实用工具的头文件

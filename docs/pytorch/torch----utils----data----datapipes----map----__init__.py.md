@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\map\__init__.py`
 
-```
+```py
 # 导入功能性数据管道模块中的各种数据处理类和函数
 from torch.utils.data.datapipes.map.callable import MapperMapDataPipe as Mapper
 from torch.utils.data.datapipes.map.combinatorics import (

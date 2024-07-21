@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\DistributionKernels.cpp`
 
-```
+```py
 // 定义宏以仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的必要头文件

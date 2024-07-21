@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\microbenchmarks.py`
 
-```
+```py
 import argparse
 import operator
 import time

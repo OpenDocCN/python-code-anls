@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_subclasses.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入必要的模块和函数
 import functools  # 导入 functools 模块

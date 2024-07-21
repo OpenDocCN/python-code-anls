@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\combined_traceback.cpp`
 
-```
+```py
 // 引入 Torch 框架的性能分析模块相关头文件
 #include <torch/csrc/profiler/combined_traceback.h>
 #include <torch/csrc/utils/cpp_stacktraces.h>

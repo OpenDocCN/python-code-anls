@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Generator.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Generator.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir.cpp`
 
-```
+```py
 // 引入头文件声明用于 Torch 的张量表达式和语句
 #include <torch/csrc/jit/tensorexpr/ir.h>
 #include <torch/csrc/jit/tensorexpr/stmt.h>

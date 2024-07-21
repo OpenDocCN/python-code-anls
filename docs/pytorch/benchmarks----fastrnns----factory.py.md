@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\factory.py`
 
-```
+```py
 # 导入命名元组类型和类型提示
 from collections import namedtuple
 from typing import List, Tuple

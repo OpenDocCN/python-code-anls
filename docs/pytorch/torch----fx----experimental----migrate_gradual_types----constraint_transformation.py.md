@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\constraint_transformation.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入必要的模块
 import copy  # 导入copy模块，用于对象的深拷贝操作

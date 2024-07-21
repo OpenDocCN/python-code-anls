@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\compare.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Example of Timer and Compare APIs:
 

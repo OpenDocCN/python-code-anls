@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\debug\visualize_sharding.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义
 from typing import List, Sequence, Tuple

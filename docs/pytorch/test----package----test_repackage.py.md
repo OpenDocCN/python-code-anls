@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_repackage.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入所需模块

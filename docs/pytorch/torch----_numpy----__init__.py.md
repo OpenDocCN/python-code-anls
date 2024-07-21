@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\__init__.py`
 
-```
+```py
 # 忽略类型检查错误，适用于类型检查工具如mypy
 # 从当前包导入fft, linalg, random模块
 from . import fft, linalg, random

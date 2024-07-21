@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\interface.h`
 
-```
+```py
 // 防止头文件重复包含，只在第一次引入时有效
 #pragma once
 

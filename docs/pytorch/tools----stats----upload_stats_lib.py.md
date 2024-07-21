@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_stats_lib.py`
 
-```
+```py
 # 从未来版本中导入注释类型，这样代码可以与较旧的 Python 版本兼容
 from __future__ import annotations
 

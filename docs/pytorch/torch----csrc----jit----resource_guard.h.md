@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\resource_guard.h`
 
-```
+```py
 #pragma once
 #include <functional>  // 包含函数对象标准库头文件
 

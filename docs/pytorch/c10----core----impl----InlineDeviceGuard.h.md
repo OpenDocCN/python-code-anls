@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\InlineDeviceGuard.h`
 
-```
+```py
 #pragma once
 
 // This file provides implementations of InlineDeviceGuard and

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_model.py`
 
-```
+```py
 # 从 io 模块导入 BytesIO 类，用于操作二进制数据的内存缓冲区
 # 从 textwrap 模块导入 dedent 函数，用于去除多行字符串的缩进
 # 从 unittest 模块导入 skipIf 装饰器，根据条件跳过测试用例

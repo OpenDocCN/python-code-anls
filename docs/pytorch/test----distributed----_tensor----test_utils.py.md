@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import itertools  # 导入 itertools 库，用于生成迭代器的工具函数

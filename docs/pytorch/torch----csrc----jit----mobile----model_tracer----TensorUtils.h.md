@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\TensorUtils.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令，确保头文件只被编译一次，避免重复包含

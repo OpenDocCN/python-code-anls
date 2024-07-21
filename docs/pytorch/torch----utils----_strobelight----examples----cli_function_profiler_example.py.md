@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_strobelight\examples\cli_function_profiler_example.py`
 
-```
+```py
 # 引入torch模块，用于深度学习任务
 import torch
 

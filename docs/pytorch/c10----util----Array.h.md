@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Array.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 指令，确保头文件只被编译一次
 

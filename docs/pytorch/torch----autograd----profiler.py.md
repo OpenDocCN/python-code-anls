@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\profiler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需模块和类
 from collections import defaultdict  # 导入 defaultdict 类

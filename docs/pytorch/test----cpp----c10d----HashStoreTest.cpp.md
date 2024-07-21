@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\HashStoreTest.cpp`
 
-```
+```py
 #include <c10/util/irange.h> // 引入用于迭代的辅助头文件
 #include "StoreTestCommon.hpp" // 引入自定义的存储测试公共头文件
 

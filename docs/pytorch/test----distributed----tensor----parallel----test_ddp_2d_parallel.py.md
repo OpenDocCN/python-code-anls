@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_ddp_2d_parallel.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入PyTorch相关模块

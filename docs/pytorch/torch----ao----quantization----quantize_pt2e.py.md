@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantize_pt2e.py`
 
-```
+```py
 # 导入PyTorch库中需要的模块
 import torch
 # 从torch.fx模块中导入GraphModule和Node类

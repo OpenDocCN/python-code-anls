@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\quantization.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/tensorexpr/kernel.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\resolver.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/jit_type.h>

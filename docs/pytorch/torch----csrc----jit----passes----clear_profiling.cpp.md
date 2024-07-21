@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\clear_profiling.cpp`
 
-```
+```py
 // 包含清除分析信息的头文件
 #include <torch/csrc/jit/passes/clear_profiling.h>
 

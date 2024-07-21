@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_import_utils.py`
 
-```
+```py
 # 引入类型提示允许未定义的函数
 mypy: allow-untyped-defs
 

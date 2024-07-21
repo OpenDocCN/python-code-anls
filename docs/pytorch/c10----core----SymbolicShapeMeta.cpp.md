@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymbolicShapeMeta.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <c10/core/Contiguity.h>
 #include <c10/core/MemoryFormat.h>

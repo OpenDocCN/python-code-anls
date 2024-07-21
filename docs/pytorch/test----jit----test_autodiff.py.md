@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_autodiff.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入必要的类型注解 List

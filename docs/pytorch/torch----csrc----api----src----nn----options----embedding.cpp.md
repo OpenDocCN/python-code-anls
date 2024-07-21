@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\embedding.cpp`
 
-```
+```py
 #include <torch/nn/options/embedding.h>  // 包含了 torch 库中的 embedding 相关选项头文件
 
 namespace torch {  // 进入 torch 命名空间

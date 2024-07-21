@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\hoist_conv_packed_params.cpp`
 
-```
+```py
 #include <stack>
 
 #include <torch/csrc/jit/api/module.h>

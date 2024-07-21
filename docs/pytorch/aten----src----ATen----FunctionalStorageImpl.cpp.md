@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\FunctionalStorageImpl.cpp`
 
-```
+```py
 // 实现ViewMeta类的成员函数，将当前实例转换为指定输出索引的新实例
 ViewMeta ViewMeta::to_out_idx(int64_t out_idx) {
   // 如果输出索引与当前实例的输出索引相同，则直接返回当前实例

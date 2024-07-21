@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\custom_ops.cpp`
 
-```
+```py
 # 引入 PyTorch 的 Tensor 类
 #include <ATen/Tensor.h>
 

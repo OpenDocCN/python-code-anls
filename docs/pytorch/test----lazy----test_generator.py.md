@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_generator.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入PyTorch库

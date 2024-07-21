@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\Linear.cpp`
 
-```
+```py
 // 如果定义了预编译宏 USE_XNNPACK，则包含以下头文件和命名空间
 #ifdef USE_XNNPACK
 

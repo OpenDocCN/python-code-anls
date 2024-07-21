@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\python\init.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once指令，确保本文件只被编译一次，防止头文件重复包含导致的编译错误
 

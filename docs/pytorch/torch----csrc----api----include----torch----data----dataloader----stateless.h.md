@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\dataloader\stateless.h`
 
-```
+```py
 #pragma once
 
 #include <torch/data/dataloader/base.h>  // 引入 Torch 数据加载器基类的头文件

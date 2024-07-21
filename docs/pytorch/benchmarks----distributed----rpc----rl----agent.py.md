@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\rl\agent.py`
 
-```
+```py
 # 导入运算符模块
 import operator
 # 导入多线程模块

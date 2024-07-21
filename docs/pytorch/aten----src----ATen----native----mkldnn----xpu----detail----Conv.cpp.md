@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\xpu\detail\Conv.cpp`
 
-```
+```py
 #include <c10/xpu/XPUFunctions.h>
 
 #include <ATen/ATen.h>

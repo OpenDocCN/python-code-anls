@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\VariableType.h`
 
-```
+```py
 #pragma once
 // 表示该头文件仅被编译一次包含
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\KernelDTypeTracer.cpp`
 
-```
+```py
 // 包含头文件：用于 Torch 的移动端 JIT 编译器模块中的核心功能
 #include <torch/csrc/jit/mobile/model_tracer/KernelDTypeTracer.h>
 

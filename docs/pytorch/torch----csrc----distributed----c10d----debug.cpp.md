@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\debug.cpp`
 
-```
+```py
 // 版权声明及许可信息
 // Meta Platforms, Inc. 及其关联公司保留所有权利。
 //

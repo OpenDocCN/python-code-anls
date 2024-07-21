@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\operation.py`
 
-```
+```py
 # 定义加法操作符 '+'
 op_add = '+'
 # 定义减法操作符 '-'

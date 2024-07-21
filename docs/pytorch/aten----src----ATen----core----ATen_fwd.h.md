@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\ATen_fwd.h`
 
-```
+```py
 // #pragma once 指令：确保此头文件只被编译一次，避免重复包含
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\TypeIndex.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ConstexprCrc.h>  // 包含 ConstexprCrc.h 头文件，提供 constexpr CRC 相关功能

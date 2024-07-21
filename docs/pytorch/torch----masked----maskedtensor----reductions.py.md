@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\maskedtensor\reductions.py`
 
-```
+```py
 # 设置 mypy 选项，允许未标记类型的定义
 # 版权声明
 import warnings  # 导入警告模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\data_norm_sparsifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\kernel_runtime_context.h`
 
-```
+```py
 #pragma once
 
 #include "event_tracer.h"  // 包含事件跟踪器头文件

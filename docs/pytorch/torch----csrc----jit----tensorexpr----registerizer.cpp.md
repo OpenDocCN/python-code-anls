@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\registerizer.cpp`
 
-```
+```py
 // 包含头文件 <torch/csrc/jit/tensorexpr/registerizer.h> 和 <iostream>
 #include <torch/csrc/jit/tensorexpr/registerizer.h>
 #include <iostream>

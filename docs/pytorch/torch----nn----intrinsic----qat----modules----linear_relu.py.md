@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\intrinsic\qat\modules\linear_relu.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""Intrinsic QAT Modules.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_dynamo\eval_frame.pyi`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类型定义
 import types  # 导入 Python 的 types 模块

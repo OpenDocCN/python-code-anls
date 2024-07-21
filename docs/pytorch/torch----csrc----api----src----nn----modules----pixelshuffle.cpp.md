@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\pixelshuffle.cpp`
 
-```
+```py
 // 引入 Torch 库中的像素重排头文件
 #include <torch/nn/modules/pixelshuffle.h>
 

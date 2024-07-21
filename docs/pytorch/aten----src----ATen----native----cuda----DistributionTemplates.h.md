@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\DistributionTemplates.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/AccumulateType.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\prepare_binary.h`
 
-```
+```py
 #pragma once
 // 预处理二元操作以便用于LLGA
 

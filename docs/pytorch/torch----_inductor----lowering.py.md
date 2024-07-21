@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\lowering.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import functools  # 提供了一些有用的功能，如 functools.partial

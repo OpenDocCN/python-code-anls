@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\replicate.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入弱引用模块，用于管理对象的弱引用
 import weakref

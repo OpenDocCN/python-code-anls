@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\EmptyTensor.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_NO_OPERATORS，用于禁用运算符
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库的空张量、CUDA 和 XPU 接口、运行环境上下文、私有使用接口、CPU 分配器等头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\definitions\__init__.py`
 
-```
+```py
 # 定义一个名为 extract_numbers 的函数，接收一个字符串参数 s
 def extract_numbers(s):
     # 创建一个空列表，用于存储提取出来的数字

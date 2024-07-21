@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\docs\source\conf.py`
 
-```
+```py
 # 当前文件的执行目录被设置为其所在的目录。
 
 # 并非所有可能的配置值都在此自动生成的文件中。

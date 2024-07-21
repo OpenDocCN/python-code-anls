@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\_utils\collate.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 包含了由 _BaseDataLoaderIter 工作线程使用的方法定义。
 

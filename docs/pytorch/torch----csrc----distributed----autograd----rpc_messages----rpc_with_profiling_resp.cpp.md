@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\rpc_with_profiling_resp.cpp`
 
-```
+```py
 namespace torch {
 namespace distributed {
 namespace autograd {

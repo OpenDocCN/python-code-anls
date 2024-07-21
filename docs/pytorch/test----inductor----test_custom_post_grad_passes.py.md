@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_custom_post_grad_passes.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入上下文管理工具、运算符操作及默认字典数据结构
 import contextlib

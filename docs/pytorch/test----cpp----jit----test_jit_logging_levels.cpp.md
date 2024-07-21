@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_jit_logging_levels.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 引入 Google Test 框架头文件
 #include <test/cpp/jit/test_utils.h>  // 引入测试工具头文件
 

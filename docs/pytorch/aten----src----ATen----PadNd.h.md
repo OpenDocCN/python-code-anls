@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\PadNd.h`
 
-```
+```py
 #pragma once
 #include <c10/util/Exception.h>
 #include <c10/util/string_view.h>

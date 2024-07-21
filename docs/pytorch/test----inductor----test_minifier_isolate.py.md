@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_minifier_isolate.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 引入单元测试模块
 import unittest

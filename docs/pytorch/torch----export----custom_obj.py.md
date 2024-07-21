@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\custom_obj.py`
 
-```
+```py
 from dataclasses import dataclass
 # 导入 dataclass 模块，用于创建数据类
 

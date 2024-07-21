@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec512\vec512_qint.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含
 

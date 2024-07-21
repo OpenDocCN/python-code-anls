@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\api.py`
 
-```
+```py
 # 设置 mypy 选项允许未类型化的定义
 # 版权声明，禁止复制和修改
 # 此源代码受 BSD 风格许可证保护，详见根目录下的 LICENSE 文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\util.h`
 
-```
+```py
 #pragma once
 
 #include <cstddef>  // C++ 标准库：提供 size_t 和 nullptr_t 定义

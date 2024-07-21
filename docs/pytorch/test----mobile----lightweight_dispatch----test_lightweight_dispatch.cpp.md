@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\lightweight_dispatch\test_lightweight_dispatch.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 // 添加负号标志到过滤器字符串

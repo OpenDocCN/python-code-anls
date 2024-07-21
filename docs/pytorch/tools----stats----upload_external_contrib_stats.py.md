@@ -1,6 +1,6 @@
 # `.\pytorch\tools\stats\upload_external_contrib_stats.py`
 
-```
+```py
 # 从未来导入标注，允许使用函数中的类型提示
 from __future__ import annotations
 

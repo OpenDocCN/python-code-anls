@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\experimental\observer.py`
 
-```
+```py
 """
 This module implements nonuniform observers used to collect statistics about
 the values observed during calibration (PTQ) or training (QAT).

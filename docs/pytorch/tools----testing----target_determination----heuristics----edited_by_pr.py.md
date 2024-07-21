@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\edited_by_pr.py`
 
-```
+```py
 from __future__ import annotations
 # 导入用于支持类型注解的特性
 

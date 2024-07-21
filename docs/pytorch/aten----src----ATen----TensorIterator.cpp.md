@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorIterator.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏，仅包含方法操作符
 

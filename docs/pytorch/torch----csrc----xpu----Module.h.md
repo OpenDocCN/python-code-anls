@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\xpu\Module.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 指令，确保当前头文件在编译时只被包含一次，避免多重包含问题

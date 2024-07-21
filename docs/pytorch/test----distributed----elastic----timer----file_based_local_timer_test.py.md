@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\timer\file_based_local_timer_test.py`
 
-```
+```py
 # Owner(s): ["oncall: r2p"]
 
 # Copyright (c) Meta Platforms, Inc. and its affiliates.

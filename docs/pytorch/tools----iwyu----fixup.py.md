@@ -1,6 +1,6 @@
 # `.\pytorch\tools\iwyu\fixup.py`
 
-```
+```py
 import re  # 导入正则表达式模块
 import sys  # 导入系统相关模块
 

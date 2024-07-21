@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAException.cpp`
 
-```
+```py
 // 引入必要的头文件，包括 CUDA 异常处理和相关工具
 #include <c10/cuda/CUDAException.h>
 

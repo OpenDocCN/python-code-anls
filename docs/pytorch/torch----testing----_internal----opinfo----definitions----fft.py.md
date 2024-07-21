@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\opinfo\definitions\fft.py`
 
-```
+```py
 # 忽略 mypy 类型检查的错误
 # 导入单元测试模块
 import unittest

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Vitals.h`
 
-```
+```py
 #pragma once
 #include <ostream>
 #include <sstream>

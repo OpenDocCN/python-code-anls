@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cudnn\ConvPrepack.cpp`
 
-```
+```py
 #ifdef USE_CUDA
 #include <ATen/cuda/CUDAConfig.h>  // 用于获取 AT_CUDNN_ENABLED 的定义
 

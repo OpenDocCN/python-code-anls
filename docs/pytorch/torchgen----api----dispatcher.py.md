@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\api\dispatcher.py`
 
-```
+```py
 # 引入未来版本的注解语法支持
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\slice_indices_adjust.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，包含了运行时切片索引调整的函数声明
 #include <torch/csrc/jit/runtime/slice_indices_adjust.h>
 

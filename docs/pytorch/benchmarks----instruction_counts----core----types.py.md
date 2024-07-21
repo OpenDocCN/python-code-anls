@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\core\types.py`
 
-```
+```py
 # 引入必要的类型注解模块
 from typing import Any, Dict, Optional, Tuple, Union
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\TensorAccessor.h`
 
-```
+```py
 #pragma once
 
 #include <c10/macros/Macros.h>  // 引入 C10 库的宏定义

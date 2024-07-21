@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\thread_init_test.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件
 #include <ATen/ATen.h>
 // 包含 ATen 库中的并行处理相关头文件

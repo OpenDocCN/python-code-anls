@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_wrapper_cpu.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import functools  # 提供函数式编程的工具

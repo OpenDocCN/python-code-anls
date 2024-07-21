@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorIterator.h`
 
-```
+```py
 #pragma once
 #include <ATen/TensorIterator.h>
 

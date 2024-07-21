@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\hash_provider.cpp`
 
-```
+```py
 `
 #include <torch/csrc/jit/tensorexpr/hash_provider.h>  // 引入头文件以使用HashProvider类和相关定义
 

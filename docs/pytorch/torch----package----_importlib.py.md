@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_importlib.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import _warnings  # 导入_warnings模块，用于处理警告
 import os.path  # 导入os.path模块，用于处理路径相关操作

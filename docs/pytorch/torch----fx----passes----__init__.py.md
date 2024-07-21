@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\__init__.py`
 
-```
+```py
 # 导入模块，用于图形绘制
 from . import graph_drawer
 # 导入模块，用于图形操作

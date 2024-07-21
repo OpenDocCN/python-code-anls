@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\test.py`
 
-```
+```py
 import os  # 导入操作系统模块
 import unittest  # 导入单元测试模块
 

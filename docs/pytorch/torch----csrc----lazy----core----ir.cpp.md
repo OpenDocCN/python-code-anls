@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ir.cpp`
 
-```
+```py
 // 引入 Torch Lazy 模块的头文件，用于后续操作
 #include <torch/csrc/lazy/backend/backend_interface.h>
 #include <torch/csrc/lazy/core/cache.h>

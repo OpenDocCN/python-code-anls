@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Pipeline.cpp`
 
-```
+```py
 // 包含 Vulkan API 的 Pipeline 头文件
 
 namespace at {

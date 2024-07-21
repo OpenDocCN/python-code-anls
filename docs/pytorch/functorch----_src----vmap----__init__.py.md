@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\_src\vmap\__init__.py`
 
-```
+```py
 # 从 torch._functorch.vmap 模块中导入以下函数和类：
 # _add_batch_dim: 添加批次维度的函数
 # _broadcast_to_and_flatten: 广播和展平的函数

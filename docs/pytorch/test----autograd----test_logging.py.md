@@ -1,6 +1,6 @@
 # `.\pytorch\test\autograd\test_logging.py`
 
-```
+```py
 # Owner(s): ["module: autograd"]
 # 导入 logging 模块，用于记录日志
 import logging

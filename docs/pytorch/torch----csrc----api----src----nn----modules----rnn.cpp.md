@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\rnn.cpp`
 
-```
+```py
 // 包含 PyTorch 的 RNN 模块头文件
 #include <torch/nn/modules/rnn.h>
 
@@ -964,7 +964,7 @@ std::tuple<PackedSequence, Tensor> GRUImpl::forward_with_packed_input(
 # 定义一个函数，参数为 Tensor hx，表示隐藏状态。
 
   const auto& input = packed_input.data();
-```  
+```py  
 # 获取 packed_input 的数据部分，并将其引用赋给 input。
 
   const auto& batch_sizes = packed_input.batch_sizes();
@@ -972,7 +972,7 @@ std::tuple<PackedSequence, Tensor> GRUImpl::forward_with_packed_input(
 # 获取 packed_input 的 batch_sizes 部分，并将其引用赋给 batch_sizes。
 
   const auto& sorted_indices = packed_input.sorted_indices();
-```  
+```py  
 # 获取 packed_input 的 sorted_indices 部分，并将其引用赋给 sorted_indices。
 
   const auto& unsorted_indices = packed_input.unsorted_indices();
@@ -980,7 +980,7 @@ std::tuple<PackedSequence, Tensor> GRUImpl::forward_with_packed_input(
 # 获取 packed_input 的 unsorted_indices 部分，并将其引用赋给 unsorted_indices。
 
   auto max_batch_size = batch_sizes[0].item<int64_t>();
-```  
+```py  
 # 计算 batch_sizes 中的最大批次大小，并将其赋给 max_batch_size。
 
   auto [output, hidden] = this->forward_helper(
@@ -990,7 +990,7 @@ std::tuple<PackedSequence, Tensor> GRUImpl::forward_with_packed_input(
 
   auto output_packed =
       PackedSequence(output, batch_sizes, sorted_indices, unsorted_indices);
-```  
+```py  
 # 创建一个新的 PackedSequence 对象 output_packed，使用 output、batch_sizes、sorted_indices 和 unsorted_indices 作为参数。
 
   return std::make_tuple(

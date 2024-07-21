@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\dataloader_options.h`
 
-```
+```py
 #pragma once
 // 引入 Torch 库中的参数定义和类型定义
 #include <torch/arg.h>

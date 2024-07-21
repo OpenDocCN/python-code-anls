@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\onnx\init.h`
 
-```
+```py
 #pragma once
 
 

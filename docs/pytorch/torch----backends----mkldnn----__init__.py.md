@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\mkldnn\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入系统模块
 import sys

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\as_strided_test.py`
 
-```
+```py
 # 从 typing 模块导入 List 类型
 from typing import List
 

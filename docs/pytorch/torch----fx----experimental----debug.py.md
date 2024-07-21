@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\debug.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch.fx 库中的 fx 模块
 import torch.fx as fx

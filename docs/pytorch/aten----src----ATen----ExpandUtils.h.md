@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ExpandUtils.h`
 
-```
+```py
 #pragma once
 
 #ifndef AT_PER_OPERATOR_HEADERS

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\gamma.py`
 
-```
+```py
 # 引入必要的模块和类
 from numbers import Number  # 导入数字类型模块
 

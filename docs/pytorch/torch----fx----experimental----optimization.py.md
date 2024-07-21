@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\optimization.py`
 
-```
+```py
 # 添加类型检查的标志，允许未定义类型的函数
 # 模块导入：导入 torch.fx 库作为 fx 别名
 # 导入 torch.fx.node 模块中的 Argument, Target 类

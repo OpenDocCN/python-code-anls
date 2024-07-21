@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Module.h`
 
-```
+```py
 #ifndef THP_MODULE_INC
 #define THP_MODULE_INC
 

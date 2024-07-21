@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_object_collectives.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的库

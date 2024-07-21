@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\sparsifier\nearly_diagonal_sparsifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch库
 import torch

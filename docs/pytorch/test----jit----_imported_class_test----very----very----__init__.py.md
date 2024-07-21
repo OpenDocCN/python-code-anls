@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\_imported_class_test\very\very\__init__.py`
 
-```
+```py
 # 导入requests库，用于发送HTTP请求
 import requests
 

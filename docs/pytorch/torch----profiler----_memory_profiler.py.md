@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\_memory_profiler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类
 import collections  # 引入collections模块，用于定义特定数据结构

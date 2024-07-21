@@ -1,6 +1,6 @@
 # `.\pytorch\ios\TestApp\custom_build\custom_build.py`
 
-```
+```py
 # 导入yaml模块，用于将操作名列表写入YAML格式文件
 import yaml
 # 从torchvision模块中导入models子模块，该子模块包含预定义的模型架构

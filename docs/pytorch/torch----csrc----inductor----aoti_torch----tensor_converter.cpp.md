@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\tensor_converter.cpp`
 
-```
+```py
 // 引入 Torch 的头文件，用于张量转换和实用函数
 #include <torch/csrc/inductor/aoti_torch/tensor_converter.h>
 #include <torch/csrc/inductor/aoti_torch/utils.h>

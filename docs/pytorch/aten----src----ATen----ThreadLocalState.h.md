@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ThreadLocalState.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/InferenceMode.h>

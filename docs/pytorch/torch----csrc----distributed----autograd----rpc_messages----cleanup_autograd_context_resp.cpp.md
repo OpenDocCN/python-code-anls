@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\rpc_messages\cleanup_autograd_context_resp.cpp`
 
-```
+```py
 // 包含头文件 <torch/csrc/distributed/autograd/rpc_messages/cleanup_autograd_context_resp.h>
 
 namespace torch {

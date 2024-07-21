@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Formatting.cpp`
 
-```
+```py
 // 包含 ATen 核心库中的格式化头文件
 #include <ATen/core/Formatting.h>
 // 包含 C10 实用工具中的范围遍历头文件

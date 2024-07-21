@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\launcher\bin\test_script_init_method.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: r2p"]
 

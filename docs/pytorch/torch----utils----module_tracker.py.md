@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\module_tracker.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 weakref 模块，用于创建弱引用对象
 import weakref

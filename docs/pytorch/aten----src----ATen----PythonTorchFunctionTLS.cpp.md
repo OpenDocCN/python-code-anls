@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\PythonTorchFunctionTLS.cpp`
 
-```
+```py
 // 包含头文件 PythonTorchFunctionTLS.h 和 TensorImpl.h
 #include <ATen/PythonTorchFunctionTLS.h>
 #include <c10/core/TensorImpl.h>

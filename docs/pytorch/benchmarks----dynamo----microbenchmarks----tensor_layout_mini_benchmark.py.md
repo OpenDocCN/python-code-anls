@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\tensor_layout_mini_benchmark.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 from torch._inductor import ir  # 从torch._inductor导入ir模块
 from torch._inductor.runtime.runtime_utils import do_bench  # 从torch._inductor.runtime.runtime_utils导入do_bench函数

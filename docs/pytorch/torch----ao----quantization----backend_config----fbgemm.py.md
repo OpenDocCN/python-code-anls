@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\fbgemm.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 导入配置相关的工具函数

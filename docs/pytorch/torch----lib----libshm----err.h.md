@@ -1,6 +1,6 @@
 # `.\pytorch\torch\lib\libshm\err.h`
 
-```
+```py
 // 宏定义 `SYSCHECK_ERR_RETURN_NEG1(expr)`，用于检查表达式 `expr` 的返回值
 // 如果 `expr` 返回 `-1`，则进入循环体
 while (true) {

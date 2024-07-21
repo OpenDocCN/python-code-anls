@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\DistributionTemplates.h`
 
-```
+```py
 // 仅在编译一次时加载本文件
 #pragma once
 

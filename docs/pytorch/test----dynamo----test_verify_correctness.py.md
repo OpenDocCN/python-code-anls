@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_verify_correctness.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 引入operator模块，用于操作符重载和函数调用
 import operator

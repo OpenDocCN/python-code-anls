@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\comm_analysis.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于支持函数式编程工具
 import math  # 导入 math 模块，提供数学函数
 from enum import IntEnum  # 导入 IntEnum 枚举类型，用于定义整数枚举

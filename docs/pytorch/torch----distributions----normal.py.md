@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\normal.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 math 模块，用于数学计算
 import math

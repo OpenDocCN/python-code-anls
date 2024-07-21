@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\optests\fake_tensor.py`
 
-```
+```py
 # 忽略类型检查错误，针对mypy工具的设置
 # 导入torch._subclasses模块，这是一个下划线开头的内部模块，不建议直接使用
 import torch._subclasses

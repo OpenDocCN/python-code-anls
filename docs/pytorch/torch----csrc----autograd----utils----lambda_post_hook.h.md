@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\utils\lambda_post_hook.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/autograd/function_hook.h>

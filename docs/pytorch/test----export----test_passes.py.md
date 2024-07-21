@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_passes.py`
 
-```
+```py
 """
 PYTEST_DONT_REWRITE (prevents pytest from rewriting assertions, which interferes
 with test_functionalization_with_native_python_assertion)

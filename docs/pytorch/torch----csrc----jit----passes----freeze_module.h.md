@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\freeze_module.h`
 
-```
+```py
 /** \brief This file defines freezing Torchscript module API.
  *
  * This API has python-binding and can be invoked directly or as a part of

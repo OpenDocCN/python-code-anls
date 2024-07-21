@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\tensorexpr\test_aten.cpp`
 
-```
+```py
 // 引入所需的头文件：算法、字符串流、异常处理、Google 测试框架、C10 宏定义、C10 范围工具、自定义头文件
 #include <algorithm>
 #include <sstream>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\quantization_type.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/quantization/quantization_type.h>  // 包含量化类型定义的头文件
 
 namespace torch {

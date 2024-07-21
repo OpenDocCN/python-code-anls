@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\python_comm.cpp`
 
-```
+```py
 #include <ATen/core/functional.h>
 #include <pybind11/pybind11.h>
 #include <torch/csrc/cuda/Stream.h>

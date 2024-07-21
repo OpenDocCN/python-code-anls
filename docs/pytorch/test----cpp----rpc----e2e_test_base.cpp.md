@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\rpc\e2e_test_base.cpp`
 
-```
+```py
 # 包含自定义头文件 "e2e_test_base.h"
 #include "e2e_test_base.h"
 

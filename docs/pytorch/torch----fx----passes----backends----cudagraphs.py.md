@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\backends\cudagraphs.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库
 import torch

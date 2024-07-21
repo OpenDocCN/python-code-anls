@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Generator.h`
 
-```
+```py
 /**
  * Note [Generator]
  * ~~~~~~~~~~~~~~~~

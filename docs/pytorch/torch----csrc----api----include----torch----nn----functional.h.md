@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional.h`
 
-```
+```py
 #pragma once
 
 

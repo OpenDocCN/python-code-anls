@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\op_registration\adaption.h`
 
-```
+```py
 #pragma once
 // 检查和更新共同设备的函数。该函数接收一个可选的共同设备引用、张量列表、调用方法和参数名称。
 inline void check_and_update_common_device(optional<Device>& common_device, const List<optional<at::Tensor>>& tensors, at::CheckedFrom methodName, at::CheckedFrom argName) {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\exported_program.py`
 
-```
+```py
 # my`
 # 允许未类型化定义，以支持更灵活的类型检查
 # mypy: allow-untyped-defs

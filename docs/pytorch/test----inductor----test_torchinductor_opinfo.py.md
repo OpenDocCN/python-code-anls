@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_torchinductor_opinfo.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入必要的模块和库
 import atexit                # 用于注册退出函数的模块

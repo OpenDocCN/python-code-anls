@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\_numeric_suite_fx.py`
 
-```
+```py
 """
 This module contains tooling to compare weights and activations
 across models. Example usage::

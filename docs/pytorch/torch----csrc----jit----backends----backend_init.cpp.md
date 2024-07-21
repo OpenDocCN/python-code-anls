@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_init.cpp`
 
-```
+```py
 #include <torch/csrc/jit/backends/backend_init.h>
 
 #include <pybind11/iostream.h>

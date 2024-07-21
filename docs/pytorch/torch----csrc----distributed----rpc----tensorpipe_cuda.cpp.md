@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\tensorpipe_cuda.cpp`
 
-```
+```py
 #include <torch/csrc/distributed/rpc/tensorpipe_agent.h>
 #include <torch/csrc/distributed/rpc/tensorpipe_utils.h>
 

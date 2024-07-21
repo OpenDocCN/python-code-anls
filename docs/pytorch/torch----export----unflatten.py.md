@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\unflatten.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import abc  # 抽象基类模块
@@ -476,7 +476,7 @@ class _ModuleFrame:
         # 记录已看到的节点，使用节点名称作为键
         self.seen_nodes[node.name] = node
 
-```  
+```py  
     # 从平面图形的节点列表中按顺序运行所有节点
     def run_outer(self):
         i = 0

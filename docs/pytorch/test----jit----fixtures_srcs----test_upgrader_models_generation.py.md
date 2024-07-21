@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\fixtures_srcs\test_upgrader_models_generation.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入PyTorch库

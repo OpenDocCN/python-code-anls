@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lazy\device_context.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入线程库和类型定义相关模块
 import threading

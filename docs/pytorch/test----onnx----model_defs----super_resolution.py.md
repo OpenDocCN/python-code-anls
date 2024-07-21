@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\super_resolution.py`
 
-```
+```py
 # 导入 PyTorch 神经网络模块和初始化模块
 import torch.nn as nn
 import torch.nn.init as init

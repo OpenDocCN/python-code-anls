@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_mutation.cpp`
 
-```
+```py
 // 包含 Torch 中移除变异的相关头文件
 #include <torch/csrc/jit/passes/remove_mutation.h>
 #include <torch/csrc/jit/passes/restore_mutation.h>

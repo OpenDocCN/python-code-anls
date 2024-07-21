@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\_imported_class_test\foo.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 
 from . import bar  # 导入当前目录下的 bar 模块

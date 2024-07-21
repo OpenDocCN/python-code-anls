@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\tree_map.py`
 
-```
+```py
 # 导入 functorch._C 模块中的 dim 对象
 from functorch._C import dim
 

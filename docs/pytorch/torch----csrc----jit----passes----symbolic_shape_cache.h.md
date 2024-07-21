@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\symbolic_shape_cache.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>

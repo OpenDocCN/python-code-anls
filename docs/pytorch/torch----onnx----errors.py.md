@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\errors.py`
 
-```
+```py
 # 引入ONNX导出器的异常模块
 """ONNX exporter exceptions."""
 

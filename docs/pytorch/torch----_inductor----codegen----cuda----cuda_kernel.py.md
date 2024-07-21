@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cuda_kernel.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型声明
 import logging

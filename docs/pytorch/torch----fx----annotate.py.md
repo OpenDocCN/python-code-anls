@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\annotate.py`
 
-```
+```py
 # 引入类型提示允许未定义的函数
 from torch.fx.proxy import Proxy
 # 导入兼容性模块

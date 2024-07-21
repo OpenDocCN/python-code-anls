@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\gpt_fast\mixtral_moe_model.py`
 
-```
+```py
 # 导入必要的模块和库
 from dataclasses import dataclass
 from typing import Optional

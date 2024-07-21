@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\group_batch_fusion.py`
 
-```
+```py
 # 添加类型检查允许未类型化的定义
 # 导入必要的模块和库
 import collections

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cuda_trace.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 
 import sys  # 导入sys模块，用于访问系统相关功能

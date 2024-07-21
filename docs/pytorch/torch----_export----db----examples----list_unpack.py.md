@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\list_unpack.py`
 
-```
+```py
 # 设置类型提示允许未类型化的函数定义
 # 从 typing 模块导入 List 类型
 from typing import List

@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\lennard_jones\lennard_jones.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 导入神经网络模块

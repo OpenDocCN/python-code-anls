@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\NamedTensor.cpp`
 
-```
+```py
 // 定义预处理指令，禁用 Torch 张量操作符的断言
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库中的命名张量相关头文件

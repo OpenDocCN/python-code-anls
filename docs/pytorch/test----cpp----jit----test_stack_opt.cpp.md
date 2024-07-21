@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_stack_opt.cpp`
 
-```
+```py
 // 包含 ATen 库函数头文件
 #include <ATen/Functions.h>
 // 包含 Google Test 测试框架头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Functions to export models into the ONNX IR format.
 

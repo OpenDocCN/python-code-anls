@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\my_custom_ops2.py`
 
-```
+```py
 # 从模块 `model` 中导入 `get_custom_op_library_path` 函数
 from model import get_custom_op_library_path
 

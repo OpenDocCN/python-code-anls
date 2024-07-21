@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\extension_backends\cpp\extension_codegen_backend.py`
 
-```
+```py
 from torch._inductor.codegen import cpp, cpp_wrapper_cpu, wrapper
 from torch._inductor.scheduler import BaseScheduling
 from torch._inductor.virtualized import V

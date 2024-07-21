@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_deviceguard.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 # 导入 Mock 类，用于创建模拟对象

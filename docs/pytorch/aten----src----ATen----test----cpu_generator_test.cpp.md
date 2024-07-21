@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cpu_generator_test.cpp`
 
-```
+```py
 // 引入 Google 测试框架的头文件
 #include <gtest/gtest.h>
 

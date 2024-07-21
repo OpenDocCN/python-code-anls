@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\graph_drawer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入哈希函数和一些类型定义工具

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\irange_test.cpp`
 
-```
+```py
 // 包含头文件 <c10/util/irange.h>，这个头文件提供了用于生成整数序列的函数
 #include <c10/util/irange.h>
 

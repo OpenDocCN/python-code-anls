@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\flop_counter.py`
 
-```
+```py
 # 设置允许未标注的函数定义，用于类型检查
 mypy: allow-untyped-defs
 

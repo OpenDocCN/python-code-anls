@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharding_spec\chunk_sharding_spec.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 dataclasses 模块导入 dataclass 装饰器
 from dataclasses import dataclass

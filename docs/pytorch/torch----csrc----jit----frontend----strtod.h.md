@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\strtod.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalDevice.h`
 
-```
+```py
 #ifndef PYTORCH_MOBILE_METAL_DEVICE_H_
 #define PYTORCH_MOBILE_METAL_DEVICE_H_
 

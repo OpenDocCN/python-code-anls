@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\THCP.h`
 
-```
+```py
 #ifndef THCP_H
 #define THCP_H
 // 如果 THCP_H 宏未定义，则定义它，用于防止头文件被多次包含

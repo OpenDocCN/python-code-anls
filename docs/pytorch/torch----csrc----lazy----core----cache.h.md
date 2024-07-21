@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\cache.h`
 
-```
+```py
 /**
  * Cache utils in this file is adapted from PyTorch/XLA
  * https://github.com/pytorch/xla/blob/master/third_party/xla_client/cache.h

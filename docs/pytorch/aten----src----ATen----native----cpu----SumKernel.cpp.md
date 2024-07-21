@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SumKernel.cpp`
 
-```
+```py
 /* 禁用 Torch 运算符断言，包含必要的头文件和命名空间 */
 
 #define TORCH_ASSERT_NO_OPERATORS

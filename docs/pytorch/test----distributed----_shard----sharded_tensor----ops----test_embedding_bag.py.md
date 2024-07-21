@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\ops\test_embedding_bag.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 拥有者信息，指明代码归属的责任人员
 
 import sys  # 导入系统模块

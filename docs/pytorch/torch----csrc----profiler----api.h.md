@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\api.h`
 
-```
+```py
 #pragma once
 
 // 包含了 torch/csrc/profiler/orchestration/observer.h 头文件

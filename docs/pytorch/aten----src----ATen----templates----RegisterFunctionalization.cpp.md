@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\RegisterFunctionalization.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义宏 TORCH_ASSERT_ONLY_METHOD_OPERATORS，用于限定仅包含方法操作符
 

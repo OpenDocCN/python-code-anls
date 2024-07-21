@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\cpp\preprocess.cpp`
 
-```
+```py
 // 包含 pybind11 库，用于 Python 和 C++ 之间的互操作
 #include <pybind11/pybind11.h>
 // 包含 Torch 的 JIT 后端相关的头文件

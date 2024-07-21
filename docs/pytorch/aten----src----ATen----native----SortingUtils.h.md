@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SortingUtils.h`
 
-```
+```py
 #pragma once
 // 只允许本头文件被编译一次
 

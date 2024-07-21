@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\utils\logging.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

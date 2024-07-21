@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_triton_kernels.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # flake8: noqa: E731
 # Skip do not assign a lambda expression, use a def

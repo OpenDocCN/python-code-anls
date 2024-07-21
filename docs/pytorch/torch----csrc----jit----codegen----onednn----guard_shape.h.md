@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\guard_shape.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件仅被编译一次，以避免重复包含
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vec256.h`
 
-```
+```py
 #pragma once
 
 // DO NOT DEFINE STATIC DATA IN THIS HEADER!

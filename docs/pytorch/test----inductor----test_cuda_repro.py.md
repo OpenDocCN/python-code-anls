@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cuda_repro.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 引入必要的模块和库
 import gc  # Python 的垃圾回收模块

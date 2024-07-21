@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_guard_manager.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入 functools 和 weakref 模块

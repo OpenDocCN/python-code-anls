@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\operator_options.h`
 
-```
+```py
 #pragma once
 // 预处理指令，表示该头文件只包含一次，防止多次包含同一文件
 #include <ATen/core/dispatch/OperatorOptions.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\sgemm\6x8-psimd.c`
 
-```
+```py
 /*
  * 引入 psimd.h 头文件，其中包含 SIMD 操作的函数和定义
  */

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\dataloader.py`
 
-```
+```py
 # 设置 mypy 参数，允许未类型化的定义
 r"""定义 DataLoader 和与 _BaseDataLoaderIter 子类相关的迭代器。
 

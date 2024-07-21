@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\vec_test_all_types.h`
 
-```
+```py
 #pragma once
 #include <ATen/cpu/vec/vec.h>
 #include <ATen/cpu/vec/functional.h>

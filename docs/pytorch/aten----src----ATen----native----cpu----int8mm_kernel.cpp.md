@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\int8mm_kernel.cpp`
 
-```
+```py
 // 定义宏，用于指定仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库的 Tensor 类

@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\conftest.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入系统模块

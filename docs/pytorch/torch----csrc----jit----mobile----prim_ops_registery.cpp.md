@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\prim_ops_registery.cpp`
 
-```
+```py
 # 包含 Torch 框架中移动端原语操作注册相关的头文件
 #include <torch/csrc/jit/mobile/prim_ops_registery.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\Allocator.h`
 
-```
+```py
 // 防止头文件重复包含，只在第一次包含时有效
 #pragma once
 

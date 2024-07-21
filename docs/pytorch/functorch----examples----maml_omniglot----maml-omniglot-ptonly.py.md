@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\maml_omniglot\maml-omniglot-ptonly.py`
 
-```
+```py
     argparser = argparse.ArgumentParser()
     # 创建一个参数解析器对象
 

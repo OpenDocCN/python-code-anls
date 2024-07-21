@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\python\init.cpp`
 
-```
+```py
 // 包含 Torch Profiler 初始化相关的头文件
 #include <torch/csrc/profiler/python/init.h>
 

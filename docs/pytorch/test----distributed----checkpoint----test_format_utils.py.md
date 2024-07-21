@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_format_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 引入PyTorch库和分布式相关模块

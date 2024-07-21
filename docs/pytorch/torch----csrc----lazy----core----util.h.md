@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\util.h`
 
-```
+```py
 /**
  * 大部分工具是从 PyTorch/XLA 适配而来
  * https://github.com/pytorch/xla/blob/master/third_party/xla_client/util.h

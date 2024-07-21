@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_shape_functions.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import math
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union

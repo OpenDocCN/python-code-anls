@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\op_registry.cpp`
 
-```
+```py
 // 包含 Torch JIT passes 中的 op_registry.h 头文件
 #include <torch/csrc/jit/passes/utils/op_registry.h>
 

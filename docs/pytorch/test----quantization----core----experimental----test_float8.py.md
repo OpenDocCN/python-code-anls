@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\test_float8.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 引入单元测试相关模块

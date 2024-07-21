@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cuda_env.py`
 
-```
+```py
 # 导入 functools 模块，用于支持 LRU 缓存功能
 # 导入 logging 模块，用于记录日志信息
 # 导入 typing 模块中的 Optional 类型，表示返回值可以为 None

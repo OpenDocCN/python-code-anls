@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\autograd\autograd.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/autograd/context/container.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\qconfig_mapping_utils.py`
 
-```
+```py
 # 导入必要的模块和函数，包括torch、re、defaultdict、OrderedDict等
 # mypy: allow-untyped-defs 用于指示mypy允许未标记类型的函数
 import torch

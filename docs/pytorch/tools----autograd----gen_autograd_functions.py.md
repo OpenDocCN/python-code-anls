@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\gen_autograd_functions.py`
 
-```
+```py
 # 生成 ATen 操作的 C++ 自动求导函数的代码
 #
 # 这段代码生成两个文件：

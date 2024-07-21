@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_shard_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入 PyTorch 库

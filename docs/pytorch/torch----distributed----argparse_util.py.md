@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\argparse_util.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

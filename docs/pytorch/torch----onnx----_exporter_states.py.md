@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_exporter_states.py`
 
-```
+```py
 from __future__ import annotations
 # 导入了用于未来版本兼容的 annotations 特性
 

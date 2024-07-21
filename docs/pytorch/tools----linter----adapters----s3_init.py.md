@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\s3_init.py`
 
-```
+```py
 # 导入必要的库
 import argparse                 # 解析命令行参数的库
 import hashlib                  # 提供多种哈希算法的库

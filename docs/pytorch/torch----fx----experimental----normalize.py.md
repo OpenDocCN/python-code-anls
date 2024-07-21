@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\normalize.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块和类型
 import operator  # 导入operator模块，用于操作符相关功能

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\sparse\spmv.py`
 
-```
+```py
 import argparse  # 导入处理命令行参数的模块
 import sys  # 导入系统相关的模块
 

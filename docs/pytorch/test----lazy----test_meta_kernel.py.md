@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_meta_kernel.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入 PyTorch 库

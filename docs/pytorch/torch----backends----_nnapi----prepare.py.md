@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\_nnapi\prepare.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需的类型注解模块
 from typing import List, Optional

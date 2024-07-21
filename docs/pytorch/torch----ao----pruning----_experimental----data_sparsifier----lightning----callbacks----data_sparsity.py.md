@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\lightning\callbacks\data_sparsity.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 collections 模块中导入 defaultdict 类
 from collections import defaultdict

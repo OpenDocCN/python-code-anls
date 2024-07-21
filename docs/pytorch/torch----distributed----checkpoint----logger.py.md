@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\logger.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块，用于高阶函数的支持
 import functools

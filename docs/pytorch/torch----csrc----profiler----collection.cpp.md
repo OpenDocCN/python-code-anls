@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\collection.cpp`
 
-```
+```py
 // 包含 Torch 的性能分析模块中的相关头文件
 #include <torch/csrc/profiler/collection.h>
 #include <torch/csrc/profiler/orchestration/vulkan.h>

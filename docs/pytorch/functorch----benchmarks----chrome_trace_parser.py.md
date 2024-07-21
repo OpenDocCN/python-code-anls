@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\benchmarks\chrome_trace_parser.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入必要的模块
 import argparse  # 解析命令行参数的模块

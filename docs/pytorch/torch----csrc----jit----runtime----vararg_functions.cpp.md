@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\vararg_functions.cpp`
 
-```
+```py
 // 包含 TorchScript 运行时的变长函数头文件
 #include <torch/csrc/jit/runtime/vararg_functions.h>
 

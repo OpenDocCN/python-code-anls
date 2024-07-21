@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fsdp\_fsdp_api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类
 from dataclasses import dataclass

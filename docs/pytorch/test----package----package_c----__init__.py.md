@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_c\__init__.py`
 
-```
+```py
 # 设置变量 result 的值为字符串 "package_c"
 result = "package_c"
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_util.py`
 
-```
+```py
 # 忽略 mypy 的错误信息
 # 导入 torch 和标准库以外的各种实用工具
 """Assorted utilities, which do not need anything other then torch and stdlib.

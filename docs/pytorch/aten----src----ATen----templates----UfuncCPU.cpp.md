@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\UfuncCPU.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 
 # 定义预处理器指令 TORCH_ASSERT_NO_OPERATORS，用于在编译时禁用特定的运算符重载检查

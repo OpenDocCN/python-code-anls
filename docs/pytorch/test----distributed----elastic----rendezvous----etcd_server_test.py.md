@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\etcd_server_test.py`
 
-```
+```py
 # 导入所需的标准库和第三方库
 import os
 import sys

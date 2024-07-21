@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\UnsafeFromTH.h`
 
-```
+```py
 #pragma once
 // 包含 ATen 库中的 Tensor 头文件
 #include <ATen/core/Tensor.h>

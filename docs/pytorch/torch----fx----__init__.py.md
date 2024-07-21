@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\__init__.py`
 
-```
+```py
 r'''
 FX is a toolkit for developers to use to transform ``nn.Module``
 instances. FX consists of three main components: a **symbolic tracer,**

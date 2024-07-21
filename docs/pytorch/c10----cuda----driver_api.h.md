@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\driver_api.h`
 
-```
+```py
 #pragma once
 // 包含 CUDA 的头文件
 #include <cuda.h>

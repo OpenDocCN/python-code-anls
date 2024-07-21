@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cuda_primary_ctx.py`
 
-```
+```py
 # Owner(s): ["module: cuda"]
 
 # 导入系统模块和单元测试模块

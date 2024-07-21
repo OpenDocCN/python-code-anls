@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_autograd_functions.cpp`
 
-```
+```py
 //`
 #include <ATen/Operators.h> // 包含 ATen 的运算符头文件
 #include <ATen/native/CPUFallback.h> // 包含 CPU 备用功能的头文件

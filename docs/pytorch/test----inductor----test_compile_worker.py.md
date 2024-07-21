@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_compile_worker.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入操作符模块和操作系统模块
 import operator

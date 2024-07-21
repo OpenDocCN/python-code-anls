@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\jit\test_deprecated_jit_quant.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch  # 导入 PyTorch 模块

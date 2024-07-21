@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8gemm\4x4c2-sse2.c`
 
-```
+```py
   /*
    * 从权重矩阵中加载第一个 128 位的数据，初始化累加器
    */

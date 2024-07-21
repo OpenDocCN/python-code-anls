@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\LazyIr.h`
 
-```
+```py
 // 指令：#pragma once，确保本文件只被编译一次
 #pragma once
 

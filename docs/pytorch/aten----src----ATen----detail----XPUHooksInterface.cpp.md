@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\XPUHooksInterface.cpp`
 
-```
+```py
 // 包含 ATen 库中的 XPUHooksInterface 头文件
 #include <ATen/detail/XPUHooksInterface.h>
 

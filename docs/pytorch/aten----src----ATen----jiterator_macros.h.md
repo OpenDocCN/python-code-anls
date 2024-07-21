@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\jiterator_macros.h`
 
-```
+```py
 #pragma once
 // 指令：保证头文件只被编译一次
 

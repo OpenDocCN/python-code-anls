@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_hook.cpp`
 
-```
+```py
 // 包含 Torch 自动求导的 Python 钩子相关头文件
 #include <torch/csrc/autograd/python_hook.h>
 

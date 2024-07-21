@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\profiler\perf_events.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <torch/csrc/profiler/events.h>  // 包含 Torch 的性能分析器事件头文件

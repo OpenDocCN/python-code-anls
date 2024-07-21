@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupWrapper.hpp`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 指令确保头文件只被编译一次，避免多重包含导致的重定义错误

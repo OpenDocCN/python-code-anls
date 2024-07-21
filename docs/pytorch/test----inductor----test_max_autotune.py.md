@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_max_autotune.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 引入所需的模块和库
 import json  # 导入处理 JSON 格式数据的模块

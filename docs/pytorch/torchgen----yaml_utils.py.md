@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\yaml_utils.py`
 
-```
+```py
 # 安全加载快速的 C Yaml 加载器/转储器（如果可用）
 try:
     from yaml import CSafeLoader as Loader

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_exceptions.cpp`
 
-```
+```py
 // 引入Torch库中的头文件，用于异常处理和常量优化
 #include <torch/csrc/jit/passes/constant_pooling.h>
 #include <torch/csrc/jit/passes/constant_propagation.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\FakeQuantPerChannelAffine.cpp`
 
-```
+```py
 // 包含 ATen 库中的相关头文件
 #include <ATen/ATen.h>
 #include <ATen/Dispatch.h>

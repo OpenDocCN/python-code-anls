@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\operator-run.c`
 
-```
+```py
 /*
  * 该文件包含了 QNNPACK 库中 Q8GEMM 相关的实现，用于量化卷积操作。
  */
@@ -1039,7 +1039,7 @@ static void compute_u8softargmax(
 
   const uint8_t* x =
       (const uint8_t*)((uintptr_t)context->x + context->x_stride * batch_index);
-```  
+```py  
 # 从输入上下文中获取输入数据指针 `x`，通过对 `x_stride` 乘以 `batch_index` 计算出在批处理中的偏移位置，并将其转换为 `const uint8_t*` 类型。  
 
 
@@ -1050,7 +1050,7 @@ static void compute_u8softargmax(
 
 
   const size_t n = context->n;
-```  
+```py  
 # 获取上下文中的 `n` 值，表示处理的元素数量。  
 
 
@@ -1060,7 +1060,7 @@ static void compute_u8softargmax(
 
 
   const size_t adjustment = x_max ^ 255;
-```  
+```py  
 # 计算一个调整值 `adjustment`，通过对 `x_max` 取异或 `255` 得到。  
 
 
@@ -1070,7 +1070,7 @@ static void compute_u8softargmax(
 
 
   context->lut_norm_ukernel(n, x, t, y);
-```  
+```py  
 # 调用上下文中的 `lut_norm_ukernel` 函数，执行归一化处理，将处理后的结果存储到输出数据 `y` 中。  
 // 为了任何 ukernel 类型，在批处理大小为 0 时没有工作要做。
 if (op->batch_size == 0) {

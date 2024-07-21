@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\op_fuzzers\spectral.py`
 
-```
+```py
 # 引入类型注释允许未定义的函数
 # import math 模块用于数学运算
 import math

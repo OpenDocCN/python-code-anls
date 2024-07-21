@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\memory_snapshot.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被包含一次
 

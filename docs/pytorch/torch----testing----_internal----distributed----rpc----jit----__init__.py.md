@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\jit\__init__.py`
 
-```
+```py
 # 定义一个函数，名称为 read_zip，接受一个参数 fname（表示文件名）
 def read_zip(fname):
     # 以二进制模式打开文件 fname，并读取其内容，然后封装成 BytesIO 对象并赋给变量 bio

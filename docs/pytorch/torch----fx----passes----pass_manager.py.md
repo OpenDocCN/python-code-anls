@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\pass_manager.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数装饰器
 from functools import wraps
@@ -66,7 +66,7 @@ def log_hook(fn: Callable, level=logging.INFO) -> Callable:
             inplace_wrapper(log_hook(my_pass))
         ]
     )
-    ```
+    ```py
 
     Args:
         fn (Callable[Type1, Type2])
@@ -176,7 +176,7 @@ def these_before_those_pass_constraint(these: Callable, those: Callable):
     constraints = [
         these_before_those_pass_constraint(pass_a, pass_b)
     ]
-    ```
+    ```py
 
     Args:
         these (Callable): 应该先发生的 pass

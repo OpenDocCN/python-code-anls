@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils.h`
 
-```
+```py
 // 如果 THP_UTILS_H 未定义，则定义 THP_UTILS_H，用于防止多次包含
 #ifndef THP_UTILS_H
 #define THP_UTILS_H

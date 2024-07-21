@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_sparsifier\lightning\callbacks\_data_sparstity_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块
 import logging

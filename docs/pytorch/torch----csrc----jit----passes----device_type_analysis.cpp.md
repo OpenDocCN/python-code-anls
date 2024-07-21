@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\device_type_analysis.cpp`
 
-```
+```py
 // 包含 ATen 库的相关头文件
 #include <ATen/core/interned_strings.h>
 #include <ATen/core/jit_type.h>

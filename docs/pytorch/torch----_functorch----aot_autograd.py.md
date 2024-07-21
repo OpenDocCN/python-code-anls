@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\aot_autograd.py`
 
-```
+```py
 # 忽略 mypy 的类型检查错误
 # 导入 itertools 库，用于创建迭代器的工具函数
 import itertools

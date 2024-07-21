@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_clip_grad_norm.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import itertools  # 导入 itertools 模块，用于生成迭代器的工具函数

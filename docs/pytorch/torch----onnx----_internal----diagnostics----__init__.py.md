@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\diagnostics\__init__.py`
 
-```
+```py
 # 从 _diagnostic 模块中导入以下函数和类：
 # - create_export_diagnostic_context: 创建导出诊断上下文的函数
 # - diagnose: 诊断函数

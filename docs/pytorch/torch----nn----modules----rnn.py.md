@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\rnn.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和类型
 import math

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_gloo.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 import copy  # 导入深拷贝模块，用于复制对象

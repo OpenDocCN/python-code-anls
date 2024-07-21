@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalTensorImplStorage.h`
 
-```
+```py
 namespace at::native::metal {
 
 // 进入 at::native::metal 命名空间

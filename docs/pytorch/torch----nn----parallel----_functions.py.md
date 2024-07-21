@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\_functions.py`
 
-```
+```py
 import warnings  # 导入警告模块
 from typing import List, Optional  # 导入类型提示模块
 

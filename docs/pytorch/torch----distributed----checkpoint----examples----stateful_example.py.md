@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\examples\stateful_example.py`
 
-```
+```py
 # 设置 mypy，允许未类型化的定义
 # 所有者信息，指定为 ["oncall: distributed"]
 

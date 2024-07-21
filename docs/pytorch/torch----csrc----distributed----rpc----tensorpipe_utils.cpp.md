@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\tensorpipe_utils.cpp`
 
-```
+```py
 // 包含TensorPipe工具的头文件
 #include <torch/csrc/distributed/rpc/tensorpipe_utils.h>
 

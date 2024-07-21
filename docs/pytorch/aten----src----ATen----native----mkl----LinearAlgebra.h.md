@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkl\LinearAlgebra.h`
 
-```
+```py
 #pragma once
 #include <ATen/Config.h>
 #include <ATen/native/TransposeType.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_codegen.py`
 
-```
+```py
 # 从未来导入 annotations 特性，用于支持注解的类型提示
 from __future__ import annotations
 

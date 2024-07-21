@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_fsdp_backward_prefetch.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统库

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_int32_vsx.h`
 
-```
+```py
 // 预处理指令，指示编译器只包含该头文件一次
 #pragma once
 

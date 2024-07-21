@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\subprocess_handler\__init__.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 设置脚本使用的 Python 解释器路径为 /usr/bin/env python3
 

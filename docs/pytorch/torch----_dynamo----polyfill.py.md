@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\polyfill.py`
 
-```
+```py
 """
 Python polyfills for common builtins.
 """

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\sharded_grad_scaler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入日志模块
 import logging

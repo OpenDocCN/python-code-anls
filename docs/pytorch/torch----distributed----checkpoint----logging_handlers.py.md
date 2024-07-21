@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\logging_handlers.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入列表类型的类型提示

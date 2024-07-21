@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_inplace_ops.cpp`
 
-```
+```py
 // 包含 Torch 库中的头文件，用于移除原地操作
 #include <torch/csrc/jit/passes/remove_inplace_ops.h>
 // 包含标准输入输出流库

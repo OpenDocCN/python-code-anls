@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\asgd.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块和类型声明
 from typing import List, Optional, Tuple, Union

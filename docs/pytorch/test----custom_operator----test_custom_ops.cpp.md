@@ -1,6 +1,6 @@
 # `.\pytorch\test\custom_operator\test_custom_ops.cpp`
 
-```
+```py
 // 引入C++标准库头文件和Torch相关头文件
 #include <c10/util/irange.h>
 #include <torch/script.h>

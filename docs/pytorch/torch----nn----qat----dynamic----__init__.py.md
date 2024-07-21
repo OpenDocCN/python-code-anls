@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\qat\dynamic\__init__.py`
 
-```
+```py
 # 禁止 flake8 检查引入的模块中未使用的变量或导入
 # 用于包装整段文本，说明这是关于 QAT 动态模块的文档字符串
 r"""QAT Dynamic Modules.

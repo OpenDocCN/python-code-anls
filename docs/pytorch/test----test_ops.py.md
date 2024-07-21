@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_ops.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 import contextlib  # 导入上下文管理模块，用于管理上下文中的资源

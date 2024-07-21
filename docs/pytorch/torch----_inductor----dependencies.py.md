@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\dependencies.py`
 
-```
+```py
 # 设置 mypy：允许未类型化的定义
 import abc  # 导入抽象基类模块
 import collections  # 导入集合模块

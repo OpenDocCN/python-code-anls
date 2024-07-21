@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nested\_internal\nested_tensor.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from typing import Tuple  # 导入必要的类型提示
 

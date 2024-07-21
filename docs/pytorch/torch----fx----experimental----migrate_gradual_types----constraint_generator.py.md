@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\constraint_generator.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\oss\utils.py`
 
-```
+```py
 # 导入必要的模块和包
 from __future__ import annotations
 import os

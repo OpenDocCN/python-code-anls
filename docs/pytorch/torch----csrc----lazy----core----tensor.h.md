@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\tensor.h`
 
-```
+```py
 #pragma once
 // 使用预处理器指令#pragma once，确保头文件只被编译一次，防止重复包含
 

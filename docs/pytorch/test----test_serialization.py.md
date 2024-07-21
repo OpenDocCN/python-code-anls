@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_serialization.py`
 
-```
+```py
 # Owner(s): ["module: serialization"]
 
 # 导入必要的模块和库

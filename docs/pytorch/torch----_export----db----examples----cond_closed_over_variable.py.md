@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\cond_closed_over_variable.py`
 
-```
+```py
 # 导入 torch 库，这是 PyTorch 深度学习库的入口
 import torch
 

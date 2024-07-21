@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_decompose_mem_bound_mm.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 引入日志模块

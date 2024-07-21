@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_int64_vsx.h`
 
-```
+```py
 // 预处理指令，确保头文件仅被包含一次
 #pragma once
 

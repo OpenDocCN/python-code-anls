@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型注释
 from typing import List

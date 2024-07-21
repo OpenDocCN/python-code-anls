@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\core\experimental\test_quantizer.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 # 导入量化函数

@@ -1,6 +1,6 @@
 # `.\pytorch\test\edge\event_tracer.h`
 
-```
+```py
 /*
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\ViewFuncs.cpp`
 
-```
+```py
 #include <torch/csrc/autograd/generated/ViewFuncs.h>
 // 包含 Torch 的自动生成视图函数的头文件 ViewFuncs.h
 

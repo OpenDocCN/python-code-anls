@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\DistributionsHelper.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Array.h>

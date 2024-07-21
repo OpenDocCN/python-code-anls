@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\benchmarks\quantize_per_channel.cpp`
 
-```
+```py
 // 包含 ATen 库和标准输入输出流的头文件
 #include <ATen/ATen.h>
 #include <iostream>

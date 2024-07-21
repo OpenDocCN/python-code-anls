@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\import_read.h`
 
-```
+```py
 #pragma once
 
 

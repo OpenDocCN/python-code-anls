@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_legacy.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 # 导入 sys 模块，用于访问系统相关功能
 import sys

@@ -1,6 +1,6 @@
 # FX Graph Mode Quantization Design Doc
 High Level FX Graph Mode Quantization Flow
-```
+```py
 float_model            QConfigMapping           BackendConfig
     \                          |                        /
      \                         |                      /
@@ -31,14 +31,14 @@ The FX graph representation is pretty close to python/eager mode, it preserves m
 ## High Level Flow with Simple Example
 
 `prepare_fx`:
-```
+```py
 Floating Point Model --> (1.1 `_fuse_fx`) --> Fused Model
                      --> (1.2 QAT Module Swap) --> Model with QAT modules
                      --> (1.3 Insert Observers) --> Prepared Model
 ```
 
 `convert_fx`:
-```
+```py
 Prepared Model --> (2.1 `convert_to_reference`) --> Reference Quantized Model
                --> (2.2 Lower to Native Backend) --> Quantized Model
 ```
@@ -47,7 +47,7 @@ In the following, I’ll first have a detailed description for each step, and th
 
 ### 0. Original Model
 
-```
+```py
 class LinearReLUModule(torch.nn.Module):
    def __init__(self):
        super().__init__()
@@ -59,7 +59,7 @@ class LinearReLUModule(torch.nn.Module):
 ```
 
 ### 1.1 Fusion
-```
+```py
 fused: GraphModule(
   (linear): LinearReLU(
     (0): Linear(in_features=5, out_features=10, bias=True)
@@ -79,7 +79,7 @@ What we did in this example are:
 
 `backend_config` configurations relevant to this step are:
 
-```
+```py
 def fuse_linear_relu(is_qat, linear, relu):
     return nni.LinearReLU(linear, relu)
 
@@ -100,7 +100,7 @@ BackendPatternConfig((torch.nn.Linear, torch.nn.ReLU))
 Example usage of `root_node_getter` and `extra_input_getter`: https://gist.github.com/jerryzh168/8bea7180a8ba3c279f2c9b050f2a69a6
 
 ### 1.2 QAT Module Swap
-```
+```py
 GraphModule(
   (linear): LinearReLU(
     in_features=5, out_features=10, bias=True
@@ -117,7 +117,7 @@ In this step we swap the fused module to qat module, for example, swap nn.intrin
 For modules that has corresponding QAT modules we’ll call eager mode `convert` function with a mapping from float module to QAT module which will swap all float module (and fused module) with QAT module, this step is exactly the same as eager mode quantization, just called inside the `prepare_fx/prepare_qat_fx` function.
 
 `backend_config` configurations relevant in this step are:
-```
+```py
 BackendPatternConfig(nni.LinearReLU)
     .set_qat_module(nniqat.LinearReLU)
 ```
@@ -126,7 +126,7 @@ The pattern used to initialize BackendPatternConfig is the class type for origin
 `set_qat_module` sets the qat module class corresponding to the module class specified in the pattern.
 
 ### 1.3 QuantDeQuantStub and Observer/FakeQuantize Insertion
-```
+```py
 GraphModule(
   (activation_post_process_0): MinMaxObserver(min_val=inf, max_val=-inf)
   (linear): LinearReLU(
@@ -151,7 +151,7 @@ QuantDeQuantStubs are inserted based on the `qconfig_mapping` provided by users.
 
 Detailed walkthrough for this step in `prepare_qat_fx` (inserting QDQStub and FakeQuantize modules):
 Note: We could also insert QStub and DQStub in this step when users request to change the interface dtype for the model, standalone module or custom modules.
-```
+```py
 # fused and qat swapped model
 # graph 1:
 input - qat_linear_relu - output
@@ -185,7 +185,7 @@ To talk about what happens in this step, let’s first define some terms. Let’
 
 The end goal for this step is to insert QDQStubs at edges so that we produce a graph of quantized reference model when each QDQStub represents a quantize operator followed by a dequantize operator.
 
-```
+```py
 # graph 2:
 input - QDQStub1 (FakeQuantize) - qat_linear_relu - QDQStub2 (FakeQuantize) - output
                                       |
@@ -198,7 +198,7 @@ Note: weight + FakeQuantize is a part of qat_linear_relu
 
 The overall logic to insert QDQStub1 and QDQStub2 inplace is the following:
 0. For each node in the original graph, we compute the target_dtype for input and output for it based on qconfig, for graph1, configured with qconfig_mapping, we have:
-```
+```py
 # node_name_to_target_dtype_info =
 # {
 #     # this is placeholder node in FX Graph
@@ -229,12 +229,12 @@ Note: this map is generated before we insert qdqstub to graph1, and will not cha
 
 Questions: How to avoid inserting duplicate QDQStubs?
 e.g. when we have a single input being used by multiple ops:
-```
+```py
 input — linear1 —-
      \--- linear2 —
 ```
 how do we make sure we only insert one QDQStub for input of both linear1 and linear2?
-```
+```py
 input - QDQStub — linear1 -
              \ —- linear2 -
 ```
@@ -244,7 +244,7 @@ with the same target_dtype, that is, if we already inserted a QDQStub with dtype
 
 Question: What is the logic for keeping output to be float32?
 Let’s say the output of `qat_linear_relu` Node is configured as float32, both in qconfig_mapping and backend_config:
-```
+```py
 # qconfig_mapping (simplified, shown as dict)
 {'qat_linear_relu': QConfig(
   weight=MinMaxObserver.with_args(dtype=torch.qint8),
@@ -265,7 +265,7 @@ Note that this does not prevent other operators following `qat_linear_relu` to i
 the output of `qat_linear_relu` will also be the input of a node following `qat_linear_relu`.
 
 `backend_config` configurations used in this step:
-```
+```py
 BackendConfig(nniqat.LinearReLU)
     .set_observation_type(ObservationType.OUTPUT_USE_DIFFERENT_OBSERVER_AS_INPUT)
     .set_dtype_configs([
@@ -282,7 +282,7 @@ Pattern in this case is the same as before, it defines the pattern for the subgr
 `OUTPUT_SHARE_OBSERVER_WITH_INPUT` means the output observer is shared with input, they will be the same instance. This is useful for operators like cat.
 
 `set_dtype_configs`: sets a list of supported (activation, weight, bias, etc.) dtype combinations for qconfigs for the pattern. Note that we represent different modes of quantization (static/dynamic/`weight_only`) purely through this combination, for example, fbgemm static quantization can be represented as:
-```
+```py
 {
   "input_activation": torch.quint8,
   "weight": torch.qint8,
@@ -300,7 +300,7 @@ Note: we are referring to observer here, which is an implementation detail, we c
 After we insert observers, we run the model to calibrate observers or to fine tune. This step is identical to eager mode quantization. After that the observer/fakequantize modules contain sufficient information to determine quantization parameters according to the observed data.
 
 ### 3.1 Conversion to Reference Quantized Model
-```
+```py
 quantized: GraphModule(
   (linear): LinearReLU(
     (0): QuantizedLinear(Reference)(in_features=5, out_features=10, bias=True)
@@ -328,7 +328,7 @@ After we insert observers, we’ll need to convert the model to a reference quan
 (2). for weighted modules like linear/conv, we convert them to corresponding reference quantized module.
 
 Example:
-```
+```py
 # graph 1
 input - QDQStub1 (FakeQuantize) - qat_linear_relu - QDQStub2 (FakeQuantize) - output
                                       |
@@ -360,7 +360,7 @@ To decide which quantize node we want to use, we’ll look at:
 
 The quantize operator we can choose from right now are: (quantize_per_tensor, quantize_per_channel, to, quantize_per_tensor_dynamic)
 
-```
+```py
 backend_config configurations used in this step:
 BackendConfig(nniqat.LinearReLU)
     .set_root_module(nn.Linear)
@@ -381,7 +381,7 @@ Basically, the corresponding reference quantized module for both `nniqat.LinearR
 `set_fused_module`: This is the corresponding fused module class for the pattern, used to identify fused modules that needs to be converted to reference quantized module
 
 ### 3.2 Lower to PyTorch Native Backend
-```
+```py
 GraphModule(
   (linear): QuantizedLinearReLU(in_features=5, out_features=10, scale=1.0, zero_point=0, qscheme=torch.per_tensor_affine)
 )
@@ -401,17 +401,17 @@ Currently, PyTorch has native quantized backends: fbgemm and qnnpack, so we need
 In general there are three types of patterns:
 
 * Static quantization:
-```
+```py
 dequantize -> float_op -> quantize_per_tensor
 ```
 
 * Dynamic quantization:
-```
+```py
 quantize_per_tensor_dynamic -> dequantize -> float_op
 ```
 
 * Weight only quantization:
-```
+```py
                                        input - float_op - output
       weight - quantize_per_tensor - dequantize /
 ```

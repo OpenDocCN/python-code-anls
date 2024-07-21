@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\testing.py`
 
-```
+```py
 # 导入 functools 模块，用于高阶函数（higher-order functions）操作
 import functools
 # 导入 unittest 模块，用于编写和运行单元测试

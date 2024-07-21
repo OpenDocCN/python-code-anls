@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_vmap.py`
 
-```
+```py
 # 导入必要的库和模块
 import contextlib  # 提供运行时上下文管理的工具
 import functools  # 提供了创建偏函数（partial）和高阶函数（higher-order functions）的工具

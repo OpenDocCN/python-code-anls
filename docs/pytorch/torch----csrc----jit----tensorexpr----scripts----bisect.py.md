@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\scripts\bisect.py`
 
-```
+```py
 # 忽略类型检查错误，这里是为了避免 mypy 对代码进行类型检查时报错
 # import subprocess 模块用于执行外部命令
 import subprocess

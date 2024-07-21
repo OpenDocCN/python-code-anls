@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\Sorting.cpp`
 
-```
+```py
 // 定义宏，仅在包含头文件时启用 assert 操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\nn\api\remote_module.py`
 
-```
+```py
 # 指定 Python 解释器路径和 mypy 选项
 #!/usr/bin/python3
 # 允许未类型化的函数定义

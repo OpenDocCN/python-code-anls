@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\shape_analysis.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/shape_analysis.h>
 
 #include <c10/util/Exception.h>

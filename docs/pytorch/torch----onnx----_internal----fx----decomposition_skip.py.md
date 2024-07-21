@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\decomposition_skip.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """A context manager that disables the decomposition of certain ops during dynamo tracing.
 

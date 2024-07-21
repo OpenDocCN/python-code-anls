@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\_shard\sharded_tensor\_test_st_common.py`
 
-```
+```py
 # 忽略类型检查错误，这通常用于类型检查工具
 # 导入所需的库和模块
 import copy  # 导入深拷贝模块，用于复制对象

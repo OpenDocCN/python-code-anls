@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesFactory.cpp`
 
-```
+```py
 // 头文件包含，引入所需的库文件
 #include <ATen/functorch/BatchRulesHelper.h>
 #include <c10/core/SymIntArrayRef.h>

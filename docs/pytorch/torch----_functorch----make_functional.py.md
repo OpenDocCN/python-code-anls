@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\make_functional.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 import copy  # 导入 copy 模块，用于对象的浅拷贝和深拷贝操作
@@ -241,7 +241,7 @@ def make_functional_with_buffers_deprecated_v1(model: nn.Module):
     model = nn.Linear(3, 3)
     weights, buffers, func, _, _ = make_functional_with_buffers_deprecated_v1(model)
     func(weights, buffers, (x,))
-    ```
+    ```py
 
     And here is an example of applying the grad transform:
     ```
@@ -250,7 +250,7 @@ def make_functional_with_buffers_deprecated_v1(model: nn.Module):
     weights, buffers, func, _, _ = make_functional_with_buffers_deprecated_v1(model)
     func(weights, buffers, (x,))
     grad_weights = grad(func)(weights, buffers, (x,))
-    ```
+    ```py
 
     To put the state back into a model, use `load_state`.
     """

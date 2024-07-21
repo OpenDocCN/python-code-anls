@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\modules\__init__.py`
 
-```
+```py
 # 添加类型提示，允许未经类型定义的函数
 mypy: allow-untyped-defs
 

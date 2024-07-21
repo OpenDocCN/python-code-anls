@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Clone.cpp`
 
-```
+```py
 // 引入 Vulkan 相关的头文件
 #include <ATen/native/vulkan/ops/Common.h>
 #include <torch/library.h>

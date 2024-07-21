@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mps\operations\FusedAdamWAmsgradKernelImpl.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once，确保头文件只被编译一次，防止重复包含
 

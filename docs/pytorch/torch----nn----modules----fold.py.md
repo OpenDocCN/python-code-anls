@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\fold.py`
 
-```
+```py
 # 导入 torch.nn.functional 中的 F 模块，用于调用神经网络函数
 # 导入 Tensor 类型，用于定义函数的参数和返回类型
 # 导入 torch.nn.common_types 模块中的 _size_any_t，用于定义函数参数类型

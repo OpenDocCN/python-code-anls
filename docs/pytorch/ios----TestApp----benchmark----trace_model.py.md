@@ -1,6 +1,6 @@
 # `.\pytorch\ios\TestApp\benchmark\trace_model.py`
 
-```
+```py
 # 从torchvision模块中导入models子模块，该子模块包含预定义的视觉模型
 from torchvision import models
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\conv_ops.py`
 
-```
+```py
 # 导入必要的模块和类型声明
 from typing import List
 

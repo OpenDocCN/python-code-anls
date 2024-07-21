@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\torchbind.py`
 
-```
+```py
 # 设置类型检查工具 mypy，允许未声明类型的函数
 mypy: allow-untyped-defs
 

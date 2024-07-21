@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_checkpoint_wrapper.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 引入上下文管理、单元测试模块，以及深拷贝函数和偏函数

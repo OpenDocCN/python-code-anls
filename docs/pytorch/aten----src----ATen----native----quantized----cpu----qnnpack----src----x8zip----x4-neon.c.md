@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\x8zip\x4-neon.c`
 
-```
+```py
 /*
  * 使用 ARM NEON 指令集对输入数据进行处理，将四个连续的 uint8_t 数组打包成一个 uint8x8x4_t 结构。
  * 这个函数假设输入的数据长度 n 至少为 8。

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tools\test_memory_tracker.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入所需的模块和库
 import os

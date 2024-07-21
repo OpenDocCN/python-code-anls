@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\adaptive.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -16,7 +16,7 @@ namespace nn {
 /// ```
 /// AdaptiveLogSoftmaxWithLoss model(AdaptiveLogSoftmaxWithLossOptions(8, 10,
 /// {4, 8}).div_value(2.).head_bias(true));
-/// ```
+/// ```py
 struct TORCH_API AdaptiveLogSoftmaxWithLossOptions {
   /* implicit */ AdaptiveLogSoftmaxWithLossOptions(
       int64_t in_features,            // 输入张量中的特征数

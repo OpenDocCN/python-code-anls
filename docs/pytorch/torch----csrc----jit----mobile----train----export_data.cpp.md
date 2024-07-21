@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\train\export_data.cpp`
 
-```
+```py
 /**
  * 包含 Torch 库中移动端训练所需的头文件
  */

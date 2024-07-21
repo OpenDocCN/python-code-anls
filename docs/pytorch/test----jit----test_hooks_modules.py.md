@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_hooks_modules.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入需要的模块

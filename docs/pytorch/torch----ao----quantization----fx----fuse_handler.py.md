@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\fuse_handler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch 库
 import torch

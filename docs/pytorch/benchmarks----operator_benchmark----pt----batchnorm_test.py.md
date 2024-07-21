@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\batchnorm_test.py`
 
-```
+```py
 import operator_benchmark as op_bench  # 导入 operator_benchmark 库，用于性能基准测试
 import torch  # 导入 PyTorch 库
 import torch.nn.functional as F  # 导入 PyTorch 的 functional 模块

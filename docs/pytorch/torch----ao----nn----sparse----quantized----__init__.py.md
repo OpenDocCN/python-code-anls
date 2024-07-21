@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\sparse\quantized\__init__.py`
 
-```
+```py
 # 导入torch.ao.nn.sparse.quantized模块中的dynamic符号
 from torch.ao.nn.sparse.quantized import dynamic
 

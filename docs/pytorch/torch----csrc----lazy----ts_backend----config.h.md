@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\config.h`
 
-```
+```py
 #pragma once
 // 包含<c10/util/Flags.h>头文件，该头文件提供了处理标志的功能
 

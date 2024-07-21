@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作符模块
 import operator

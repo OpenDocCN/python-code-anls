@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ops\from_blob.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Tensor.h>
 

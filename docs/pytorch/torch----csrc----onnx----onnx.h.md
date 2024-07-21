@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\onnx\onnx.h`
 
-```
+```py
 #pragma once
 // 声明了一个命名空间 torch::onnx
 

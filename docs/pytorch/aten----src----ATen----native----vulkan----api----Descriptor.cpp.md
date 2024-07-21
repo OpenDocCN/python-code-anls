@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Descriptor.cpp`
 
-```
+```py
 // 包含Vulkan的描述符相关头文件
 #include <ATen/native/vulkan/api/Descriptor.h>
 #include <ATen/native/vulkan/api/Utils.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_strobelight\examples\cli_function_profiler_example.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 

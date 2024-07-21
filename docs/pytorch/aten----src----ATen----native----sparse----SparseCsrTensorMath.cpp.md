@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseCsrTensorMath.cpp`
 
-```
+```py
 // 定义预处理器宏，用于在 Torch 中仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

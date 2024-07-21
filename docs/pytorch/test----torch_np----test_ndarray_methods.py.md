@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\test_ndarray_methods.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入必要的模块和函数

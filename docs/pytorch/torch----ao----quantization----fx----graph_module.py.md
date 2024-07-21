@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\graph_module.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入PyTorch库
 import torch

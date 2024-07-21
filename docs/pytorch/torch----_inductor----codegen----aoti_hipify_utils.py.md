@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\aoti_hipify_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入正则表达式模块
 import re

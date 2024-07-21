@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\test\lut-norm-microkernel-tester.h`
 
-```
+```py
 /*
  * 版权所有（c）Facebook，Inc.及其关联公司。
  * 保留所有权利。

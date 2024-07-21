@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\multiprocessing\init.h`
 
-```
+```py
 #pragma once
 
 

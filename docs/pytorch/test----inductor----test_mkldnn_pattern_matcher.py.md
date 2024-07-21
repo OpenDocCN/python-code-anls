@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_mkldnn_pattern_matcher.py`
 
-```
+```py
 # Owner(s): ["oncall: cpu inductor"]
 # 引入所需的模块和库
 import contextlib  # 上下文管理工具模块

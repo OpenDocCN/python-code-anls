@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\prepare.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 PyTorch 相关模块和函数
 import torch

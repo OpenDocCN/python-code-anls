@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\checkpoint_utils.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入必要的模块

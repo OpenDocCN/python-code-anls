@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\PythonFallbackKernel.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/TorchDispatchUtils.h>
 

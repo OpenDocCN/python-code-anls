@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\shim_common.cpp`
 
-```
+```py
 // 包含 C10 库的头文件，这些头文件定义了 C10 核心数据类型和操作
 #include <c10/core/DeviceType.h>
 #include <c10/core/GradMode.h>

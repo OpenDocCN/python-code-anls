@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_cse_pass.py`
 
-```
+```py
 # Owner(s): ["oncall: fx"]
 
 import random  # 导入 random 模块

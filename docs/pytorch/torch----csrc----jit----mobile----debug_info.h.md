@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\debug_info.h`
 
-```
+```py
 /*
  * MobileDebugTable:
  * Deserializes debug_pkl and callstack_map records from PT model's zip archive

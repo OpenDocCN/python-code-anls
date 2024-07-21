@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_lowrank.py`
 
-```
+```py
 """Implement various linear algebra algorithms for low rank matrices.
 """
 

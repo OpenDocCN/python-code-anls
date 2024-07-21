@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_mkldnn.py`
 
-```
+```py
 # 忽略 mypy 的错误提示
 
 # 导入必要的库

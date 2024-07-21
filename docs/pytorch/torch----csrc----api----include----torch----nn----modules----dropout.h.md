@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\dropout.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 
@@ -72,7 +72,7 @@ class _DropoutNd : public torch::nn::Cloneable<Derived> {
 /// Example:
 /// ```
 /// Dropout model(DropoutOptions().p(0.42).inplace(true));
-/// ```
+/// ```py
 // Dropout 类，应用于 1-D 输入的 dropout 操作
 class TORCH_API DropoutImpl : public detail::_DropoutNd<DropoutImpl> {
  public:
@@ -108,7 +108,7 @@ TORCH_MODULE(Dropout);
 /// Example:
 /// ```
 /// Dropout2d model(Dropout2dOptions().p(0.42).inplace(true));
-/// ```
+/// ```py
 // Dropout2d 类，应用于 2-D 输入的 dropout 操作
 class TORCH_API Dropout2dImpl : public detail::_DropoutNd<Dropout2dImpl> {
  public:
@@ -143,7 +143,7 @@ TORCH_MODULE(Dropout2d);
 /// 示例：
 /// ```
 /// Dropout3d model(Dropout3dOptions().p(0.42).inplace(true));
-/// ```
+/// ```py
 class TORCH_API Dropout3dImpl : public detail::_DropoutNd<Dropout3dImpl> {
  public:
   using detail::_DropoutNd<Dropout3dImpl>::_DropoutNd;
@@ -170,7 +170,7 @@ TORCH_MODULE(Dropout3d);
 /// 示例：
 /// ```
 /// AlphaDropout model(AlphaDropoutOptions(0.2).inplace(true));
-/// ```
+/// ```py
 class TORCH_API AlphaDropoutImpl : public detail::_DropoutNd<AlphaDropoutImpl> {
  public:
   using detail::_DropoutNd<AlphaDropoutImpl>::_DropoutNd;
@@ -195,7 +195,7 @@ TORCH_MODULE(AlphaDropout);
 /// 示例：
 /// ```
 /// FeatureAlphaDropout model(FeatureAlphaDropoutOptions(0.2).inplace(true));
-/// ```
+/// ```py
 class TORCH_API FeatureAlphaDropoutImpl
     : public detail::_DropoutNd<FeatureAlphaDropoutImpl> {
  public:

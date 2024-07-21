@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\python_stub.h`
 
-```
+```py
 #pragma once
 
 

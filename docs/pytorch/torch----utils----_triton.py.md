@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_triton.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools 模块，用于实现函数的缓存
 import functools

@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_pytorch_onnx_shape_inference.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 import io  # 导入 io 模块

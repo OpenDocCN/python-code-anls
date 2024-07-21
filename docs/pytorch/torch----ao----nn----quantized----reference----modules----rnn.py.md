@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\reference\modules\rnn.py`
 
-```
+```py
 
     # 初始化权重量化参数字典，并将其属性赋值给当前对象
     def _init_weight_qparams_dict(self, weight_qparams_dict, device):

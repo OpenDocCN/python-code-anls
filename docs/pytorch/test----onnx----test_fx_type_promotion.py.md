@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_fx_type_promotion.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 导入必要的模块和函数

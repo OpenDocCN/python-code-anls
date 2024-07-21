@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\testing\__init__.py`
 
-```
+```py
 # 忽略类型检查错误，适用于mypy工具
 # 从本地的utils模块中导入多个函数和变量
 from .utils import (

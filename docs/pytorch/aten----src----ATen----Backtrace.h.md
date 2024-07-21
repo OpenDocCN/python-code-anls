@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Backtrace.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/Backtrace.h>
 

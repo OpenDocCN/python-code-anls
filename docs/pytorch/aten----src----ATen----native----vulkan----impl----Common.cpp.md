@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\impl\Common.cpp`
 
-```
+```py
 namespace at {
 namespace native {
 namespace vulkan {

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\MetaGuardImpl.cpp`
 
-```
+```py
 #include <c10/core/impl/DeviceGuardImplInterface.h>
 #include <c10/macros/Macros.h>
 

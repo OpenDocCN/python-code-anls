@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ao_sparse\library.cpp`
 
-```
+```py
 // 定义预处理宏，用于声明仅支持方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

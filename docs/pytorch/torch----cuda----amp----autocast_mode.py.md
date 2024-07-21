@@ -1,6 +1,6 @@
 # `.\pytorch\torch\cuda\amp\autocast_mode.py`
 
-```
+```py
 # 指定允许未类型化的函数定义
 # 导入 functools 和 typing 模块中的 Any 类型
 import functools

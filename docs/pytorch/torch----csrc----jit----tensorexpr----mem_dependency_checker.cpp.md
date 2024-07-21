@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\mem_dependency_checker.cpp`
 
-```
+```py
 // 包含头文件，声明了一些必要的类和函数
 #include <torch/csrc/jit/tensorexpr/mem_dependency_checker.h>
 

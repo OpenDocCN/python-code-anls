@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\utils.py`
 
-```
+```py
 # 设置类型检查允许未声明类型的函数和变量
 # import 语句导入必要的模块和类
 import collections.abc

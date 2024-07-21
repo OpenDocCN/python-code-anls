@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tools\mem_tracker.py`
 
-```
+```py
 import math  # 导入数学模块
 import os  # 导入操作系统接口模块
 import re  # 导入正则表达式模块

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_gen_backend_stubs.py`
 
-```
+```py
 # Owner(s): ["module: codegen"]
 
 # 引入未来版本的注解特性

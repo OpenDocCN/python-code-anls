@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\tempfile.cpp`
 
-```
+```py
 // 引入C10库的异常处理、临时文件和格式化工具
 #include <c10/util/Exception.h>
 #include <c10/util/tempfile.h>

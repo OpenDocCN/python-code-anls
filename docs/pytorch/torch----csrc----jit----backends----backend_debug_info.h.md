@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_debug_info.h`
 
-```
+```py
 #pragma once
 
 #ifndef BUILD_LITE_INTERPRETER

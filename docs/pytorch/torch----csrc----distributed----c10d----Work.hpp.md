@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\Work.hpp`
 
-```
+```py
 #pragma once
 // 只允许本头文件被包含一次，避免重复定义
 

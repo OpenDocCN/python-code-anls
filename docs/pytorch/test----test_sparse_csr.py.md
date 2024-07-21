@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_sparse_csr.py`
 
-```
+```py
 # Owner(s): ["module: sparse"]
 
 # 导入必要的库和模块

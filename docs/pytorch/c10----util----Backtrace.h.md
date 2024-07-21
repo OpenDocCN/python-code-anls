@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Backtrace.h`
 
-```
+```py
 #ifndef C10_UTIL_BACKTRACE_H_
 #define C10_UTIL_BACKTRACE_H_
 

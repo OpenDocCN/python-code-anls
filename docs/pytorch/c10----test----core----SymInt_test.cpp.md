@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\SymInt_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <c10/core/SymInt.h>

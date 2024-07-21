@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\associative_scan.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和函数
 import functools

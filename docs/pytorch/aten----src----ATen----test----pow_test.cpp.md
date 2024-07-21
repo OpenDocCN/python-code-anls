@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\pow_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/native/Pow.h>

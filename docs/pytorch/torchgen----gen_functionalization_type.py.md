@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen_functionalization_type.py`
 
-```
+```py
 # 从未来版本导入注释，用于支持类型注释
 from __future__ import annotations
 

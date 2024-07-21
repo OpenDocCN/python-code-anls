@@ -1,6 +1,6 @@
 # `.\pytorch\torch\export\_unlift.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块和类型声明
 import copy  # 导入copy模块，用于对象的深复制

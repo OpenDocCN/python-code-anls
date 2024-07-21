@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\IndexingUtils.cpp`
 
-```
+```py
 // 定义预处理器宏，用于仅支持方法操作符的 Torch 断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库中的索引工具头文件

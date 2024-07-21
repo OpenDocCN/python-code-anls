@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\csrc\dim\minpybind.h`
 
-```
+```py
 // 声明并保护代码的版权信息和许可证信息
 // BSD风格许可证，详见根目录下的LICENSE文件
 #pragma once

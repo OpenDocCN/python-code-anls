@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\dynamic_ir.cpp`
 
-```
+```py
 // 引入 Torch 动态 IR 头文件
 #include <torch/csrc/lazy/ts_backend/dynamic_ir.h>
 

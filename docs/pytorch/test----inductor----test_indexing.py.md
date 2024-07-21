@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_indexing.py`
 
-```
+```py
 # 导入必要的模块和库
 import os  # 导入操作系统接口模块
 import unittest  # 导入单元测试框架

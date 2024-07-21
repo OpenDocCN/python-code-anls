@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\mkldnn_lowerings.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需的模块和类型
 from typing import List, Optional

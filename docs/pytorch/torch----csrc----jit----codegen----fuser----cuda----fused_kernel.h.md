@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cuda\fused_kernel.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保头文件只被包含一次
 

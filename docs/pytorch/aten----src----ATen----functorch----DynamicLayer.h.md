@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\DynamicLayer.h`
 
-```
+```py
 // 版权声明和许可信息
 // 本源代码根据 BSD 风格许可证授权，许可条款详见源代码根目录下的 LICENSE 文件。
 

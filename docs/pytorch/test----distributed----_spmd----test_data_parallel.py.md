@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_spmd\test_data_parallel.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的模块和类

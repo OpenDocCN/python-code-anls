@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_test_run.py`
 
-```
+```py
 # 导入系统、单元测试模块以及路径操作模块
 import sys
 import unittest

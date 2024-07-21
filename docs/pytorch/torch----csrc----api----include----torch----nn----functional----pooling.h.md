@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\pooling.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>  // 包含用于处理范围的头文件
@@ -38,7 +38,7 @@ inline Tensor avg_pool1d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::avg_pool1d(x, F::AvgPool1dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 inline Tensor avg_pool1d(
     const Tensor& input,
     const AvgPool1dFuncOptions& options) {
@@ -84,7 +84,7 @@ inline Tensor avg_pool2d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::avg_pool2d(x, F::AvgPool2dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 inline Tensor avg_pool2d(
     const Tensor& input,
     const AvgPool2dFuncOptions& options) {
@@ -162,7 +162,7 @@ inline Tensor max_pool1d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_pool1d(x, F::MaxPool1dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 inline Tensor max_pool1d(
     const Tensor& input,
     const MaxPool1dFuncOptions& options) {
@@ -199,7 +199,7 @@ inline std::tuple<Tensor, Tensor> max_pool1d_with_indices(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_pool1d_with_indices(x, F::MaxPool1dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 inline std::tuple<Tensor, Tensor> max_pool1d_with_indices(
     const Tensor& input,
     const MaxPool1dFuncOptions& options) {
@@ -238,7 +238,7 @@ inline Tensor max_pool2d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_pool2d(x, F::MaxPool2dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 inline Tensor max_pool2d(
     const Tensor& input,
     const MaxPool2dFuncOptions& options) {
@@ -275,7 +275,7 @@ inline std::tuple<Tensor, Tensor> max_pool2d_with_indices(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::max_pool2d_with_indices(x, F::MaxPool2dFuncOptions(3).stride(2));
-/// ```
+/// ```py
 inline std::tuple<Tensor, Tensor> max_pool2d_with_indices(
     const Tensor& input,
     const MaxPool2dFuncOptions& options) {
@@ -347,7 +347,7 @@ inline std::tuple<Tensor, Tensor> max_pool3d_with_indices(
 /// 查看 `torch::nn::functional::MaxPool3dFuncOptions` 类的文档，了解此函数的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::max_pool3d_with_indices(x, F::MaxPool3dFuncOptions(3).stride(2));
 /// ```
@@ -378,7 +378,7 @@ inline std::tuple<Tensor, Tensor> adaptive_max_pool1d_with_indices(
 /// 查看 `torch::nn::functional::AdaptiveMaxPool1dFuncOptions` 类的文档，了解此函数的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::adaptive_max_pool1d_with_indices(x, F::AdaptiveMaxPool1dFuncOptions(3));
 /// ```
@@ -403,11 +403,11 @@ inline Tensor adaptive_max_pool1d(
 /// 查看 `torch::nn::functional::AdaptiveMaxPool1dFuncOptions` 类的文档，了解此函数的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// ```
 /// 调用 adaptive_max_pool1d 函数，对输入张量进行自适应最大池化操作，输出大小为3
-/// ```
+/// ```py
 inline Tensor adaptive_max_pool1d(
     const Tensor& input,
     const AdaptiveMaxPool1dFuncOptions& options) {
@@ -433,7 +433,7 @@ inline std::tuple<Tensor, Tensor> adaptive_max_pool2d_with_indices(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_max_pool2d_with_indices(x, F::AdaptiveMaxPool2dFuncOptions(3));
-/// ```
+/// ```py
 inline std::tuple<Tensor, Tensor> adaptive_max_pool2d_with_indices(
     const Tensor& input,
     const AdaptiveMaxPool2dFuncOptions& options) {
@@ -459,7 +459,7 @@ inline Tensor adaptive_max_pool2d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_max_pool2d(x, F::AdaptiveMaxPool2dFuncOptions(3));
-/// ```
+/// ```py
 inline Tensor adaptive_max_pool2d(
     const Tensor& input,
     const AdaptiveMaxPool2dFuncOptions& options) {
@@ -485,7 +485,7 @@ inline std::tuple<Tensor, Tensor> adaptive_max_pool3d_with_indices(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_max_pool3d_with_indices(x, F::AdaptiveMaxPool3dFuncOptions(3));
-/// ```
+/// ```py
 inline std::tuple<Tensor, Tensor> adaptive_max_pool3d_with_indices(
     // 定义一个函数，执行自适应三维最大池化操作，接受输入张量和自适应最大池化的选项参数
     const Tensor& input,
@@ -524,7 +524,7 @@ inline Tensor adaptive_max_pool3d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_max_pool3d(x, F::AdaptiveMaxPool3dFuncOptions(3));
-/// ```
+/// ```py
 // 解释了 adaptive_max_pool3d 函数的功能和用法，包括了链接到 PyTorch 文档和示例代码
 
 inline Tensor adaptive_max_pool3d(
@@ -566,7 +566,7 @@ inline Tensor adaptive_avg_pool1d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_avg_pool1d(x, F::AdaptiveAvgPool1dFuncOptions(3));
-/// ```
+/// ```py
 // 解释了 adaptive_avg_pool1d 函数的功能和用法，包括了链接到 PyTorch 文档和示例代码
 
 inline Tensor adaptive_avg_pool1d(
@@ -608,7 +608,7 @@ inline Tensor adaptive_avg_pool2d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_avg_pool2d(x, F::AdaptiveAvgPool2dFuncOptions(3));
-/// ```
+/// ```py
 // 解释了 adaptive_avg_pool2d 函数的功能和用法，包括了链接到 PyTorch 文档和示例代码
 
 inline Tensor adaptive_avg_pool2d(
@@ -643,7 +643,7 @@ inline Tensor adaptive_avg_pool3d(
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::adaptive_avg_pool3d(x, F::AdaptiveAvgPool3dFuncOptions(3));
-/// ```
+/// ```py
 inline Tensor adaptive_avg_pool3d(
     const Tensor& input,
     const AdaptiveAvgPool3dFuncOptions& options) {
@@ -746,7 +746,7 @@ inline std::vector<int64_t> _unpool_output_size(
 /// namespace F = torch::nn::functional;
 /// F::max_unpool1d(x, indices,
 ///                 F::MaxUnpool1dFuncOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 inline Tensor max_unpool1d(
     const Tensor& input,                           // 输入张量
     const Tensor& indices,                         // 池化时记录的索引张量
@@ -773,7 +773,7 @@ namespace detail {
 /// namespace F = torch::nn::functional;
 /// F::max_unpool2d(x, indices,
 ///                 F::MaxUnpool2dFuncOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 inline Tensor max_unpool2d(
     const Tensor& input,                           // 输入张量
     const Tensor& indices,                         // 池化时记录的索引张量
@@ -801,7 +801,7 @@ inline Tensor max_unpool2d(
 /// namespace F = torch::nn::functional;
 /// F::max_unpool2d(x, indices,
 ///                 F::MaxUnpool2dFuncOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 inline Tensor max_unpool2d(
     const Tensor& input,                           // 输入张量
     const Tensor& indices,                         // 池化时记录的索引张量
@@ -828,7 +828,7 @@ namespace detail {
 /// namespace F = torch::nn::functional;
 /// F::max_unpool3d(x, indices,
 ///                 F::MaxUnpool3dFuncOptions(3).stride(2).padding(1));
-/// ```
+/// ```py
 inline Tensor max_unpool3d(
     const Tensor& input,                           // 输入张量
     const Tensor& indices,                         // 池化时记录的索引张量
@@ -917,7 +917,7 @@ inline std::tuple<Tensor, Tensor> fractional_max_pool2d_with_indices(
 /// 查看 `torch::nn::functional::FractionalMaxPool2dFuncOptions` 类的文档以了解此函数支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::fractional_max_pool2d_with_indices(x,
 /// F::FractionalMaxPool2dFuncOptions(3).output_size(2));
@@ -951,7 +951,7 @@ inline Tensor fractional_max_pool2d(
 /// 在文档中查看 `torch::nn::functional::FractionalMaxPool2dFuncOptions` 类，了解这个功能支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::fractional_max_pool2d(x,
 /// F::FractionalMaxPool2dFuncOptions(3).output_size(2));
@@ -1014,7 +1014,7 @@ inline std::tuple<Tensor, Tensor> fractional_max_pool3d_with_indices(
 /// 查看文档以了解 `torch::nn::functional::FractionalMaxPool3dFuncOptions` 类支持的可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::fractional_max_pool3d_with_indices(x,
 /// F::FractionalMaxPool3dFuncOptions(3).output_size(2));
@@ -1054,7 +1054,7 @@ inline Tensor fractional_max_pool3d(
 /// 此函数实现了 3D 分数最大池化操作，参考 `torch::nn::functional::FractionalMaxPool3dFuncOptions` 类的文档了解可选参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::fractional_max_pool3d(x, F::FractionalMaxPool3dFuncOptions(3).output_size(2));
 /// ```
@@ -1102,7 +1102,7 @@ inline Tensor lp_pool1d(
 /// 此函数实现了 1D LP 池化操作，参考 https://pytorch.org/docs/main/nn.functional.html#torch.nn.functional.lp_pool1d 获取详细信息。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::lp_pool1d(x, F::LPPool1dFuncOptions(2, 3).stride(2));
 /// ```
@@ -1151,7 +1151,7 @@ inline Tensor lp_pool2d(
 /// 此函数实现了 2D LP 池化操作，参考 https://pytorch.org/docs/main/nn.functional.html#torch.nn.functional.lp_pool2d 获取详细信息。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::lp_pool2d(x, F::LPPool2dFuncOptions(2, 3).stride(2));
 /// ```

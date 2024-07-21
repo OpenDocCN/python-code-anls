@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # flake8: noqa: F403
 

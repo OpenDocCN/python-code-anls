@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_typing_utils.py`
 
-```
+```py
 """Miscellaneous utilities to aid with typing."""
 
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qembeddingbag.cpp`
 
-```
+```py
 // 微调实现，当 FBGEMM 不可用时备用方案
 template <
     typename IndexType,  // 索引类型

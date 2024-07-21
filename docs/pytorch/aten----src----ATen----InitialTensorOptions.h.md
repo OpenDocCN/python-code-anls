@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\InitialTensorOptions.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 指令确保头文件只被包含一次，防止多重包含导致的编译错误。

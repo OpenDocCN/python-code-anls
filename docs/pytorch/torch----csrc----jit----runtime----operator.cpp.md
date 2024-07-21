@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\operator.cpp`
 
-```
+```py
 #include <torch/csrc/jit/runtime/operator.h>
 
 #include <ATen/ATen.h>

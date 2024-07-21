@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8avgpool\up8xm-sse2.c`
 
-```
+```py
 /*
  * 包含必要的头文件，用于声明和定义所需的函数和数据类型
  */

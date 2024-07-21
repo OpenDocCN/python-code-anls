@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\decomposition_registry.h`
 
-```
+```py
 #pragma once
 // 这个文件是临时的，直到native_functions.yaml和derivatives.yaml被合并。
 // 理想情况下，所有内容都应该放入native_functions.yaml

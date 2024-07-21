@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\MT19937RNGEngine.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>

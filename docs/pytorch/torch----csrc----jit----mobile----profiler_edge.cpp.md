@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\profiler_edge.cpp`
 
-```
+```py
 // 包含 C10 核心分配器头文件
 #include <c10/core/Allocator.h>
 // 包含 C10 异常处理头文件

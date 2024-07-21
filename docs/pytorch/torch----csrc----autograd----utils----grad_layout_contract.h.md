@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\utils\grad_layout_contract.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Tensor.h>

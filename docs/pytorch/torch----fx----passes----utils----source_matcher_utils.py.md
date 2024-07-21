@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\utils\source_matcher_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入所需模块和类
 from dataclasses import dataclass, field

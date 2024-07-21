@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\relaxed_bernoulli.py`
 
-```
+```py
 # 设置类型检查允许未标注的定义
 # 从numbers模块导入Number类
 from numbers import Number

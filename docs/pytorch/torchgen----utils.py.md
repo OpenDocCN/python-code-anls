@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\utils.py`
 
-```
+```py
 # 引入未来版本的类型注解，允许在类型注解中使用TypeVar等特定语法
 from __future__ import annotations
 

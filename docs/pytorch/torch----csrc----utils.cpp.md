@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils.cpp`
 
-```
+```py
 // 引入必要的头文件
 #include <fmt/core.h>
 #include <torch/csrc/DynamicTypes.h>

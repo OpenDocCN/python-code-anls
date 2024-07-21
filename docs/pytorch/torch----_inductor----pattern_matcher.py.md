@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\pattern_matcher.py`
 
-```
+```py
 """
 # Inductor Pattern Matcher
 

@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\rl\coordinator.py`
 
-```
+```py
 import time  # 导入时间模块，用于处理时间相关操作
 
 import numpy as np  # 导入NumPy库，用于数值计算

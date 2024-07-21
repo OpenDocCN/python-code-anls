@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Convert.h`
 
-```
+```py
 /**
  * pragma once 指令：确保当前头文件只被编译一次，防止重复包含。
  */

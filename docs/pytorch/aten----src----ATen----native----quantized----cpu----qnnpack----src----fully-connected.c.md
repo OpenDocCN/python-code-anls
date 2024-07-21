@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\fully-connected.c`
 
-```
+```py
 /*
  * 本函数用于创建一个基于QNNPACK的量化全连接神经网络运算符。
  * 其中，输入参数如下：

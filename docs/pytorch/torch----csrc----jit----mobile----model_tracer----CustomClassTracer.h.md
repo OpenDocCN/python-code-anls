@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\model_tracer\CustomClassTracer.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/record_function.h>

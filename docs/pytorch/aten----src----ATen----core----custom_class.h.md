@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\custom_class.h`
 
-```
+```py
 #pragma once
 
 #include <typeindex>  // 引入类型索引的标准头文件

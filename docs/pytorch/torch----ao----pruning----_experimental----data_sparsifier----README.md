@@ -21,14 +21,14 @@ To not the old mask, set `reuse_mask=False`. If the `config` is explicitly passe
 
 **Note**: name containing '.' is not a valid name for the data sparsifier
 
-```
+```py
 data_sparsifier = ImplementedDataSparsifier()
 data_sparsifier.add_data(name=name, data=data, **some_config)
 ```
 
 `step`: applies the update_mask() logic to all the data.
 
-```
+```py
 data_sparsifier.step()
 ```
 
@@ -37,13 +37,13 @@ data_sparsifier.step()
 `get_data`: retrieves the data given the `name` argument. Accepts additional argument `return_original` which when set to `True` does not apply the mask while returning
 the data tensor. Example:
 
-```
+```py
 original_data = data_sparsifier.get_data(name=name, return_original=True)  # returns data with no mask applied
 sparsified_data = data_sparsifier.get_data(name=name, return_original=False)  # returns data * mask
 ```
 
 `squash_mask`: removes the parametrizations on the data and applies mask to the data when `leave_parametrized=True`.Also, accepts list of strings to squash mask for. If none, squashes mask for all the keys.
-```
+```py
 data_sparsifier.squash_mask()
 ```
 
@@ -52,7 +52,7 @@ data_sparsifier.squash_mask()
 ## Write your own data sparsifier.
 The custom data sparsifier should be inherited from the BaseDataSparsifier class and the `update_mask()` should be implemented. For example, the following data sparsifier zeros out all entries of the tensor smaller than some threshold value.
 
-```
+```py
 class ImplementedDataSparsifier(BaseDataSparsifier):
     def __init__(self, threshold):
         super().__init__(threshold=threshold)
@@ -65,7 +65,7 @@ class ImplementedDataSparsifier(BaseDataSparsifier):
 ## Using Data Sparsifier
 ### Simple example
 
-```
+```py
 tensor1 = torch.randn(100, 100)
 param1 = nn.Parameter(torch.randn(200, 32))
 
@@ -80,7 +80,7 @@ my_sparsifier.squash_mask()  # applies and removes mask
 
 ### Sparsifying model embeddings
 
-```
+```py
 class Model(nn.Module):
     def __init__(self, feature_dim, emb_dim, num_classes):
         self.emb = nn.EmbeddingBag(feature_dim, emb_dim)
@@ -112,7 +112,7 @@ Sometimes if the input data can be sparsified before sending it to the model, th
 
 The batched input data needs to be attached to the data sparsified before sending it to the model.
 
-```
+```py
 model = SomeModel()
 
 data_sparsifier = ImplementedDataSparsifier(threshold=0.2)

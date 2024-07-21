@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_micro_pipeline_tp.py`
 
-```
+```py
 # 导入必要的库和模块
 import unittest
 

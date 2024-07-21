@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_ops_to_mkldnn.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 预处理指令确保头文件只被编译一次，防止多重包含问题

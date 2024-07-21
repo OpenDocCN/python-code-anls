@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDADeviceAssertionHost.h`
 
-```
+```py
 #pragma once
 
 #include <c10/cuda/CUDAMacros.h> // 引入 CUDA 宏定义头文件

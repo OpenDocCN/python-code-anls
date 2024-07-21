@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\operator_upgraders\utils.cpp`
 
-```
+```py
 namespace torch::jit {
 ```  
 

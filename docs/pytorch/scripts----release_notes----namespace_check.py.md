@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\release_notes\namespace_check.py`
 
-```
+```py
 # 导入 argparse 模块，用于处理命令行参数
 import argparse
 # 导入 json 模块，用于 JSON 数据的读写操作

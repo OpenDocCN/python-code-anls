@@ -1,6 +1,6 @@
 # `.\pytorch\android\test_app\app\src\main\java\org\pytorch\testapp\Result.java`
 
-```
+```py
 # 定义名为 Result 的类，位于 org.pytorch.testapp 包中
 class Result:
 

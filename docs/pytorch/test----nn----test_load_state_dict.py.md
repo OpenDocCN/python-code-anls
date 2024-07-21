@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_load_state_dict.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入单元测试模块

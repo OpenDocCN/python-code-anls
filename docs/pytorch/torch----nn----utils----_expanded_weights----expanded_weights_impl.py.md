@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\expanded_weights_impl.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools 模块，用于高阶函数的支持
 import functools

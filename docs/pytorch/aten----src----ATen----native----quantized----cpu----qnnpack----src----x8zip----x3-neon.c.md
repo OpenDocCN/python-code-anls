@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\x8zip\x3-neon.c`
 
-```
+```py
 /*
  * 使用 ARM NEON 指令集进行优化的函数，用于将输入数据按照 x, y, z 三个通道进行打包。
  * 如果输入数据量大于等于 8 个字节，则使用向量化处理；否则，使用标量处理。

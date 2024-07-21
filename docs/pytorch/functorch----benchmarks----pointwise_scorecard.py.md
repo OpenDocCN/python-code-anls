@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\benchmarks\pointwise_scorecard.py`
 
-```
+```py
 import inspect  # 导入inspect模块，用于获取和检查活动对象的信息
 import itertools  # 导入itertools模块，用于创建和操作迭代器的函数
 import sys  # 导入sys模块，提供与解释器交互的函数

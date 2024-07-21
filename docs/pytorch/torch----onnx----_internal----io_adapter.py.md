@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\io_adapter.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入未定义类型检查的函数和类
 

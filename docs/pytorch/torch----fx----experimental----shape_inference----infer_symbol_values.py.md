@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\shape_inference\infer_symbol_values.py`
 
-```
+```py
 import re  # 导入正则表达式模块
 from typing import Any, DefaultDict, Dict, List, Tuple, Union  # 导入类型提示相关模块
 

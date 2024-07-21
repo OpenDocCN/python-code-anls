@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\ReduceOps.h`
 
-```
+```py
 # 声明命名空间 at 下的 TensorIterator 结构体
 namespace at {
     struct TensorIterator;

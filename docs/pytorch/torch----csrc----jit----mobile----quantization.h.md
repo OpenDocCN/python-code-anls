@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\quantization.h`
 
-```
+```py
 #pragma once
 
 #pragma once 指令：确保头文件只被编译一次，避免重复包含。

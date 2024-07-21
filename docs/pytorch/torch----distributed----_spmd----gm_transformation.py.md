@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\gm_transformation.py`
 
-```
+```py
 from typing import Callable
 
 from torch import fx

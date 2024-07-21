@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\pipelining\_IR.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 # 导入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\flags_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <iostream>  // 包含标准输入输出流的头文件

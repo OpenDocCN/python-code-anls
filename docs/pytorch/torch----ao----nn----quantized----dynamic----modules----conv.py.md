@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\dynamic\modules\conv.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Dynamically quantized convolution modules."""
 

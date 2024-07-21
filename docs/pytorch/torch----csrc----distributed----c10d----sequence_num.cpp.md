@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\sequence_num.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <ATen/ThreadLocalState.h>
 #include <torch/csrc/distributed/c10d/sequence_num.hpp>

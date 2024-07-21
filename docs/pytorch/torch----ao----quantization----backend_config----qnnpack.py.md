@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\qnnpack.py`
 
-```
+```py
 # 引入 torch 库，用于深度学习任务
 import torch
 # 从内部模块导入多个函数，用于获取不同操作的配置信息

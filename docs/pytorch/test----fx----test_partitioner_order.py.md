@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_partitioner_order.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 引入单元测试框架

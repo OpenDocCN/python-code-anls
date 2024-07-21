@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_bindings.py`
 
-```
+```py
 # 导入 torch 库中的 metrics 模块
 import torch._lazy.metrics
 

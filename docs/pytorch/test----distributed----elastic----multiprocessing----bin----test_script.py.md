@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\multiprocessing\bin\test_script.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: r2p"]
 # Python 脚本的开头声明，指定了解释器路径和所有者信息

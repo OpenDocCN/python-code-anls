@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\transformercoder.h`
 
-```
+```py
 #pragma once
 // 一次性引用 torch 库中所需的头文件
 #include <torch/arg.h>
@@ -23,7 +23,7 @@ namespace nn {
 /// TransformerEncoderLayer encoderLayer(TransformerEncoderLayerOptions(512,
 /// 8).dropout(0.1)); auto options = TransformerEncoderOptions(encoderLayer,
 /// 6).norm(LayerNorm(LayerNormOptions({2})));
-/// ```
+/// ```py
 struct TORCH_API TransformerEncoderOptions {
   // 构造函数，浅复制 encoder_layer，保留其中所有数据
   TransformerEncoderOptions(
@@ -52,7 +52,7 @@ struct TORCH_API TransformerEncoderOptions {
 /// 8).dropout(0.1)); auto options = TransformerDecoderOptions(decoder_layer,
 /// 6)norm(LayerNorm(LayerNormOptions({2}))); TransformerDecoder
 /// transformer_decoder(options);
-/// ```
+/// ```py
 struct TORCH_API TransformerDecoderOptions {
   // 构造函数，保留传入的 decoder_layer 的引用，保留其中所有数据
   TransformerDecoderOptions(

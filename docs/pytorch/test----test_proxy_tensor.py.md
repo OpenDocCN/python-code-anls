@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_proxy_tensor.py`
 
-```
+```py
 # Owner(s): ["module: ProxyTensor"]
 
 # 从 torch.testing._internal.common_utils 导入 TestCase 和 run_tests 模块

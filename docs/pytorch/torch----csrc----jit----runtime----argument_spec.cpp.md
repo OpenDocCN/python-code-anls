@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\argument_spec.cpp`
 
-```
+```py
 // 引入头文件，包括C++标准库和Torch相关头文件
 #include <c10/util/irange.h>
 #include <torch/csrc/jit/runtime/argument_spec.h>

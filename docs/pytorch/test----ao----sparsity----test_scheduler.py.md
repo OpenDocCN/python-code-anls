@@ -1,6 +1,6 @@
 # `.\pytorch\test\ao\sparsity\test_scheduler.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入警告模块

@@ -10,19 +10,19 @@ Follow these steps if you want to run the test locally.
 1. Checkout PyTorch repo including all submodules
 
 2. Build PyTorch for ios
-```
+```py
 USE_COREML_DELEGATE=1 IOS_PLATFORM=SIMULATOR ./scripts/build_ios.sh
 ```
 
 3. Generate on-the-fly test models
-```
+```py
 python test/mobile/model_test/gen_test_model.py ios-test
 ```
 You need to install regular PyTorch on your local machine to run this script.
 Check https://github.com/pytorch/pytorch/tree/master/test/mobile/model_test#diagnose-failed-test to learn more.
 
 4. Create XCode project (for lite interpreter)
-```
+```py
 cd ios/TestApp/benchmark
 ruby setup.rb --lite 1
 ```
@@ -34,13 +34,13 @@ ruby setup.rb --lite 1
 See https://pytorch.org/get-started/locally/
 
 2. Re-generate models for operator test
-```
+```py
 python test/mobile/model_test/gen_test_model.py ios
 python test/mobile/model_test/gen_test_model.py ios-test
 ```
 
 3. Re-generate Core ML model
-```
+```py
 cd ios/TestApp/benchmark; python coreml_backend.py
 ```
 
@@ -54,7 +54,7 @@ AWS Device Farm.
 2. Checkout PyTorch repo including all submodules
 
 3. Build PyTorch for iOS devices, not for simulator
-```
+```py
 export BUILD_LITE_INTERPRETER=1
 export USE_PYTORCH_METAL=1
 export USE_COREML_DELEGATE=1
@@ -65,7 +65,7 @@ export IOS_ARCH=arm64
 ```
 
 4. Build the test app locally
-```
+```py
 # Use the pytorch nightly build to generate models
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu
 
@@ -90,7 +90,7 @@ ruby scripts/xcode_build.rb -i build_ios/install -x ios/TestApp/TestApp.xcodepro
 5. Prepare the artifacts
 https://docs.aws.amazon.com/devicefarm/latest/developerguide/test-types-ios-xctest.html
 
-```
+```py
 export DEST_DIR="Payload"
 
 pushd ios/TestApp/build/Release-iphoneos
@@ -110,7 +110,7 @@ popd
 ```
 
 6. Upload the artifacts to AWS Device Farm and run the tests
-```
+```py
 export PYTORCH_ARN="arn:aws:devicefarm:us-west-2:308535385114:project:b531574a-fb82-40ae-b687-8f0b81341ae0"
 
 pushd ios/TestApp

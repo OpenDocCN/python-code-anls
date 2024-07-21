@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\api\unboxing.py`
 
-```
+```py
 # 从未来导入 annotations 模块，确保代码在 Python 3.7 及以上版本中兼容类型注解
 from __future__ import annotations
 

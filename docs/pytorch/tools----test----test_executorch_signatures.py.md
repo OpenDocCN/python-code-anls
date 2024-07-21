@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_executorch_signatures.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 

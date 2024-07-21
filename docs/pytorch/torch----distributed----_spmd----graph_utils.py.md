@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\graph_utils.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入操作系统相关功能模块

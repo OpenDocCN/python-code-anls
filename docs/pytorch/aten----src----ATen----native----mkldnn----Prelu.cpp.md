@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\Prelu.cpp`
 
-```
+```py
 #if !AT_MKLDNN_ENABLED()
 
 namespace at { namespace native {

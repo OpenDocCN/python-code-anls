@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\CPUBlas.cpp`
 
-```
+```py
 void normalize_last_dims(
     // 标准化矩阵乘法的最后维度，根据转置类型和维度大小调整矩阵的维度
     TransposeType transa, TransposeType transb,

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroup.cpp`
 
-```
+```py
 #include <ATen/ThreadLocalState.h>
 #include <torch/csrc/distributed/c10d/ProcessGroup.hpp>
 

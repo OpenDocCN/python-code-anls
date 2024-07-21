@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_perf.py`
 
-```
+```py
 # 引入上下文管理工具
 import contextlib
 # 从 unittest.mock 模块中引入 patch 函数

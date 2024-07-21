@@ -64,7 +64,7 @@ Caffe2 backend of PyTorch 1.0 natively integrates QNNPACK, and provides a [pre-t
 
 ### Raspberry Pi 2 or 3
 
-```bash
+```py
 # Clone PyTorch 1.0 repo
 git clone --recursive https://github.com/pytorch/pytorch.git
 cd pytorch
@@ -91,7 +91,7 @@ build/bin/speed_benchmark --net predict_net.pb --init_net init_net.pb \
 
 ### ARMv7 (32-bit) Android
 
-```bash
+```py
 # Clone PyTorch 1.0 repo
 git clone --recursive https://github.com/pytorch/pytorch.git
 cd pytorch
@@ -121,7 +121,7 @@ adb shell /data/local/tmp/speed_benchmark \
 
 ### ARM64 (64-bit) Android
 
-```bash
+```py
 # Clone PyTorch 1.0 repo
 git clone --recursive https://github.com/pytorch/pytorch.git
 cd pytorch
@@ -157,7 +157,7 @@ We use PEP to produce the results we have in our [blog](https://code.fb.com/ml-a
 
 With an ARMv7 device connected:
 
-```bash
+```py
 # Clone PyTorch 1.0 repo
 mkdir ~/Code && cd ~/Code
 git clone --recursive https://github.com/pytorch/pytorch.git

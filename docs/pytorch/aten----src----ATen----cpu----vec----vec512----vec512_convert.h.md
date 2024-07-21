@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec512\vec512_convert.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once确保头文件只被包含一次，避免重复定义问题
 

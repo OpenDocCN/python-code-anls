@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\interpolate_test.py`
 
-```
+```py
 # 导入名为 operator_benchmark 的别名 op_bench 的模块
 import operator_benchmark as op_bench
 # 导入 torch 模块

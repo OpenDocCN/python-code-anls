@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\activation.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -16,7 +16,7 @@ namespace nn {
 /// Example:
 /// ```
 /// ELU model(ELUOptions().alpha(42.42).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API ELUOptions {
   /// The `alpha` value for the ELU formulation. Default: 1.0
   TORCH_ARG(double, alpha) = 1.0;
@@ -35,7 +35,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::elu(x, F::ELUFuncOptions().alpha(0.42).inplace(true));
-/// ```
+/// ```py
 using ELUFuncOptions = ELUOptions;
 } // namespace functional
 
@@ -46,7 +46,7 @@ using ELUFuncOptions = ELUOptions;
 /// Example:
 /// ```
 /// SELU model(SELUOptions().inplace(true));
-/// ```
+/// ```py
 struct TORCH_API SELUOptions {
   /* implicit */ SELUOptions(bool inplace = false);
 
@@ -64,7 +64,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::selu(input, F::SELUFuncOptions(false));
-/// ```
+/// ```py
 using SELUFuncOptions = SELUOptions;
 } // namespace functional
 
@@ -75,7 +75,7 @@ using SELUFuncOptions = SELUOptions;
 /// Example:
 /// ```
 /// GLU model(GLUOptions(1));
-/// ```
+/// ```py
 struct TORCH_API GLUOptions {
   /* implicit */ GLUOptions(int64_t dim = -1);
 
@@ -93,7 +93,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::glu(input, GLUFuncOptions(1));
-/// ```
+/// ```py
 using GLUFuncOptions = GLUOptions;
 } // namespace functional
 
@@ -104,7 +104,7 @@ using GLUFuncOptions = GLUOptions;
 /// Example:
 /// ```
 /// GELU model(GELUOptions().approximate("none"));
-/// ```
+/// ```py
 struct TORCH_API GELUOptions {
   /// Specifies the approximation to apply to the output.
   TORCH_ARG(std::string, approximate) = "none";
@@ -120,7 +120,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::gelu(input, F::GELUFuncOptions().approximate("none"));
-/// ```
+/// ```py
 using GELUFuncOptions = GELUOptions;
 } // namespace functional
 /// Options for the `Hardshrink` module.
@@ -128,7 +128,7 @@ using GELUFuncOptions = GELUOptions;
 /// Example:
 /// ```
 /// Hardshrink model(HardshrinkOptions().lambda(42.42));
-/// ```
+/// ```py
 struct TORCH_API HardshrinkOptions {
   /* implicit */ HardshrinkOptions(double lambda = 0.5);
 
@@ -146,7 +146,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::hardshrink(x, F::HardshrinkFuncOptions().lambda(0.42));
-/// ```
+/// ```py
 using HardshrinkFuncOptions = HardshrinkOptions;
 } // namespace functional
 
@@ -158,7 +158,7 @@ using HardshrinkFuncOptions = HardshrinkOptions;
 /// ```
 /// Hardtanh
 /// model(HardtanhOptions().min_val(-42.42).max_val(0.42).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API HardtanhOptions {
   /// minimum value of the linear region range. Default: -1
   TORCH_ARG(double, min_val) = -1.0;
@@ -181,7 +181,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::hardtanh(x,
 /// F::HardtanhFuncOptions().min_val(-1.0).max_val(1.0).inplace(true));
-/// ```
+/// ```py
 using HardtanhFuncOptions = HardtanhOptions;
 } // namespace functional
 
@@ -192,7 +192,7 @@ using HardtanhFuncOptions = HardtanhOptions;
 /// Example:
 /// ```
 /// LeakyReLU model(LeakyReLUOptions().negative_slope(0.42).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API LeakyReLUOptions {
   /// Controls the angle of the negative slope. Default: 1e-2
   TORCH_ARG(double, negative_slope) = 1e-2;
@@ -212,7 +212,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::leaky_relu(x,
 /// F::LeakyReLUFuncOptions().negative_slope(0.42).inplace(true));
-/// ```
+/// ```py
 using LeakyReLUFuncOptions = LeakyReLUOptions;
 } // namespace functional
 
@@ -222,7 +222,7 @@ using LeakyReLUFuncOptions = LeakyReLUOptions;
 /// Example:
 /// ```
 /// Softmax model(SoftmaxOptions(1));
-/// ```
+/// ```py
 struct TORCH_API SoftmaxOptions {
   // 构造函数，初始化 Softmax 的计算维度 dim
   SoftmaxOptions(int64_t dim);
@@ -241,7 +241,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::softmax(input, F::SoftmaxFuncOptions(1));
-/// ```
+/// ```py
 struct TORCH_API SoftmaxFuncOptions {
   // 构造函数，初始化 Softmax 函数的计算维度 dim
   SoftmaxFuncOptions(int64_t dim);
@@ -265,7 +265,7 @@ struct TORCH_API SoftmaxFuncOptions {
 /// Example:
 /// ```
 /// Softmin model(SoftminOptions(1));
-/// ```
+/// ```py
 struct TORCH_API SoftminOptions {
   // 构造函数，初始化 Softmin 的计算维度 dim
   SoftminOptions(int64_t dim);
@@ -284,7 +284,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::softmin(input, F::SoftminFuncOptions(1));
-/// ```
+/// ```py
 struct TORCH_API SoftminFuncOptions {
   // 构造函数，初始化 Softmin 函数的计算维度 dim
   SoftminFuncOptions(int64_t dim);
@@ -308,7 +308,7 @@ struct TORCH_API SoftminFuncOptions {
 /// Example:
 /// ```
 /// LogSoftmax model(LogSoftmaxOptions(1));
-/// ```
+/// ```py
 struct TORCH_API LogSoftmaxOptions {
   // 构造函数，初始化 LogSoftmax 的计算维度 dim
   LogSoftmaxOptions(int64_t dim);
@@ -327,7 +327,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::log_softmax(input, LogSoftmaxFuncOptions(1));
-/// ```
+/// ```py
 // 定义了 LogSoftmaxFuncOptions 结构体，用于配置 LogSoftmax 操作的选项
 struct TORCH_API LogSoftmaxFuncOptions {
   // 构造函数，接受一个整数参数 dim，表示 LogSoftmax 操作的维度
@@ -355,7 +355,7 @@ struct TORCH_API LogSoftmaxFuncOptions {
 /// Example:
 /// ```
 /// PReLU model(PReLUOptions().num_parameters(42));
-/// ```
+/// ```py
 // 定义了 PReLUOptions 结构体，用于配置 PReLU 模块的选项
 struct TORCH_API PReLUOptions {
   /// number of `a` to learn. Although it takes an int as input, there is only
@@ -377,7 +377,7 @@ struct TORCH_API PReLUOptions {
 /// Example:
 /// ```
 /// ReLU model(ReLUOptions().inplace(true));
-/// ```
+/// ```py
 // 定义了 ReLUOptions 结构体，用于配置 ReLU 模块的选项
 struct TORCH_API ReLUOptions {
   /* implicit */ ReLUOptions(bool inplace = false);
@@ -397,7 +397,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::relu(x, F::ReLUFuncOptions().inplace(true));
-/// ```
+/// ```py
 // 使用 ReLUOptions 的别名 ReLUFuncOptions，用于配置 torch::nn::functional::relu 的选项
 using ReLUFuncOptions = ReLUOptions;
 } // namespace functional
@@ -409,7 +409,7 @@ using ReLUFuncOptions = ReLUOptions;
 /// Example:
 /// ```
 /// ReLU6 model(ReLU6Options().inplace(true));
-/// ```
+/// ```py
 // 定义了 ReLU6Options 结构体，用于配置 ReLU6 模块的选项
 struct TORCH_API ReLU6Options {
   /* implicit */ ReLU6Options(bool inplace = false);
@@ -429,7 +429,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::relu6(x, F::ReLU6FuncOptions().inplace(true));
-/// ```
+/// ```py
 // 使用 ReLU6Options 的别名 ReLU6FuncOptions，用于配置 torch::nn::functional::relu6 的选项
 using ReLU6FuncOptions = ReLU6Options;
 } // namespace functional
@@ -441,7 +441,7 @@ using ReLU6FuncOptions = ReLU6Options;
 /// Example:
 /// ```
 /// RReLU model(RReLUOptions().lower(0.24).upper(0.42).inplace(true));
-/// ```
+/// ```py
 // 定义了 RReLUOptions 结构体，用于配置 RReLU 激活函数的选项
 struct TORCH_API RReLUOptions {
   /// uniform 分布的下界，默认为 1/8
@@ -466,7 +466,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::rrelu(x, F::RReLUFuncOptions().lower(0.1).upper(0.4).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API RReLUFuncOptions {
   /// uniform 分布的下界，默认为 1/8
   TORCH_ARG(double, lower) = 1.0 / 8.0;
@@ -490,7 +490,7 @@ struct TORCH_API RReLUFuncOptions {
 /// Example:
 /// ```
 /// CELU model(CELUOptions().alpha(42.42).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API CELUOptions {
   /// CELU 函数的 alpha 参数值，默认为 1.0
   TORCH_ARG(double, alpha) = 1.0;
@@ -509,7 +509,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::celu(x, F::CELUFuncOptions().alpha(0.42).inplace(true));
-/// ```
+/// ```py
 using CELUFuncOptions = CELUOptions;
 } // namespace functional
 
@@ -520,7 +520,7 @@ using CELUFuncOptions = CELUOptions;
 /// Example:
 /// ```
 /// Softplus model(SoftplusOptions().beta(0.24).threshold(42.42));
-/// ```
+/// ```py
 struct TORCH_API SoftplusOptions {
   /// Softplus 函数的 beta 参数值，默认为 1
   TORCH_ARG(double, beta) = 1.0;
@@ -539,7 +539,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::softplus(x, F::SoftplusFuncOptions().beta(0.5).threshold(3.0));
-/// ```
+/// ```py
 using SoftplusFuncOptions = SoftplusOptions;
 } // namespace functional
 
@@ -550,7 +550,7 @@ using SoftplusFuncOptions = SoftplusOptions;
 /// Example:
 /// ```
 /// Softshrink model(SoftshrinkOptions(42.42));
-/// ```
+/// ```py
 /// Options for configuring parameters of the Softshrink function.
 struct TORCH_API SoftshrinkOptions {
   /* implicit */ SoftshrinkOptions(double lambda = 0.5);
@@ -568,7 +568,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::softshrink(x, F::SoftshrinkFuncOptions(0.42));
-/// ```
+/// ```py
 using SoftshrinkFuncOptions = SoftshrinkOptions;
 } // namespace functional
 
@@ -579,7 +579,7 @@ using SoftshrinkFuncOptions = SoftshrinkOptions;
 /// Example:
 /// ```
 /// Threshold model(ThresholdOptions(42.42, 24.24).inplace(true));
-/// ```
+/// ```py
 struct TORCH_API ThresholdOptions {
   ThresholdOptions(double threshold, double value)
       : threshold_(threshold), value_(value) {}
@@ -603,7 +603,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::threshold(x, F::ThresholdFuncOptions(0.5, 0.5).inplace(true));
-/// ```
+/// ```py
 using ThresholdFuncOptions = ThresholdOptions;
 } // namespace functional
 
@@ -616,7 +616,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::gumbel_softmax(logits, F::GumbelSoftmaxFuncOptions().hard(true).dim(-1));
-/// ```
+/// ```py
 struct TORCH_API GumbelSoftmaxFuncOptions {
   /// Specifies the non-negative scalar temperature (`tau`).
   TORCH_ARG(double, tau) = 1.0;
@@ -637,7 +637,7 @@ struct TORCH_API GumbelSoftmaxFuncOptions {
 /// Example:
 /// ```
 /// MultiheadAttention model(MultiheadAttentionOptions(20, 10).bias(false));
-/// ```
+/// ```py
 // 定义了 MultiheadAttentionOptions 结构体，用于存储多头注意力机制的参数选项
 struct TORCH_API MultiheadAttentionOptions {
   // 构造函数，初始化 embed_dim 和 num_heads

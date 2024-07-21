@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\fileopener.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和类
 from io import IOBase  # IOBase类用于处理IO操作

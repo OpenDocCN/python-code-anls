@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\itt.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 contextmanager 模块，支持上下文管理器
 from contextlib import contextmanager

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\cond_branch_nested_function.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import torch  # 导入PyTorch库
 

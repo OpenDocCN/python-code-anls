@@ -1,6 +1,6 @@
 # `.\pytorch\docs\source\scripts\onnx\build_onnx_dynamo_diagnostics_rules_md.py`
 
-```
+```py
 # 导入 argparse 模块，用于命令行参数解析
 import argparse
 # 导入 os 模块，用于操作文件系统路径

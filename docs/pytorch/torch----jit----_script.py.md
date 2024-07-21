@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_script.py`
 
-```
+```py
 """TorchScript.
 
 This module contains functionality to support the JIT's scripting frontend, notably:

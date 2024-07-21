@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_rearrange.py`
 
-```
+```py
 class TestRearrange(TestCase):
     # 定义测试类 TestRearrange，继承自 TestCase
 

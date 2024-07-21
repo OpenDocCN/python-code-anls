@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\transform\tile_smem_loader.h`
 
-```
+```py
 /*
  * 版权所有 (c) Meta Platforms, Inc. 和其附属公司。
  * 保留所有权利。

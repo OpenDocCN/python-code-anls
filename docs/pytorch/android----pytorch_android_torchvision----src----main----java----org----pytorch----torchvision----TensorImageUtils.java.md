@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android_torchvision\src\main\java\org\pytorch\torchvision\TensorImageUtils.java`
 
-```
+```py
 /**
  * Contains utility functions for creating {@link org.pytorch.Tensor} instances from
  * {@link android.graphics.Bitmap} or {@link android.media.Image} sources.

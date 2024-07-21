@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\core\test_scalar_ctors.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """

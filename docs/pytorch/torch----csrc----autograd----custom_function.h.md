@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\custom_function.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被包含一次
 
@@ -116,7 +116,7 @@ using forward_t = decltype(X::forward(nullptr, std::declval<Args>()...));
 ///      return {grad_output[0]*n};
 ///   }
 /// };
-/// ```
+/// ```py
 ///
 /// To use `MyFunction`:
 /// ```
@@ -124,7 +124,7 @@ using forward_t = decltype(X::forward(nullptr, std::declval<Args>()...));
 /// auto y = MyFunction::apply(6, x);
 /// // Example backward call
 /// y[0].sum().backward();
-/// ```
+/// ```py
 template <class T>
 struct TORCH_API Function {
   // We need to use a different template parameter than T here because T will

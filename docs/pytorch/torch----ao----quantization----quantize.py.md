@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantize.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的模块和库
 import copy  # 导入 copy 模块，用于复制对象

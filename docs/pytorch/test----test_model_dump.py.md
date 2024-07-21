@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_model_dump.py`
 
-```
+```py
 # 指定 Python 解释器位置，用于运行脚本
 #!/usr/bin/env python3
 

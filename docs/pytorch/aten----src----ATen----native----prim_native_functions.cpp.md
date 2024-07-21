@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\prim_native_functions.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>
 

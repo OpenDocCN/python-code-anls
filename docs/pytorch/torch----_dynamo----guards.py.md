@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\guards.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从未来导入 annotations 模块，以支持在函数签名中使用类型注解
 from __future__ import annotations

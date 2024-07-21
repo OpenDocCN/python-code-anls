@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\perfkernels\common.h`
 
-```
+```py
 // !!!! PLEASE READ !!!!
 // Minimize (transitively) included headers from _avx*.cc because some of the
 // functions defined in the headers compiled with platform dependent compiler

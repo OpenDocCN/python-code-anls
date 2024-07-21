@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\LogAddExp.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/complex.h>  // 包含复数类型的头文件

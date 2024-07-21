@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\reveal\tensor_sampling.py`
 
-```
+```py
 # flake8: noqa
 # 导入 torch 库
 import torch

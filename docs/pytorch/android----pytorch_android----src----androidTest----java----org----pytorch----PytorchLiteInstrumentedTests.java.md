@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\androidTest\java\org\pytorch\PytorchLiteInstrumentedTests.java`
 
-```
+```py
 // 导入必要的包，包括 Android 上下文、测试框架和输入输出相关的类
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

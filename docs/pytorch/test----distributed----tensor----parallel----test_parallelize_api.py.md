@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\tensor\parallel\test_parallelize_api.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict  # 导入有序字典模块
 from copy import deepcopy  # 导入深拷贝模块

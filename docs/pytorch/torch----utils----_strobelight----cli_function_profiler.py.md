@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_strobelight\cli_function_profiler.py`
 
-```
+```py
 # mypy: disallow-untyped-defs
 
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\invalid_arguments.cpp`
 
-```
+```py
 // Torch命名空间开始
 
 namespace torch {

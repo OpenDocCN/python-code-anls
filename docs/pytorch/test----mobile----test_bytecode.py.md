@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\test_bytecode.py`
 
-```
+```py
 # Owner(s): ["oncall: mobile"]
 
 # 导入所需的库和模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Storage.h`
 
-```
+```py
 #ifndef THP_STORAGE_INC
 #define THP_STORAGE_INC
 

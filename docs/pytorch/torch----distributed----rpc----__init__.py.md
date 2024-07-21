@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\rpc\__init__.py`
 
-```
+```py
 # 设置类型检查时允许未标注的函数定义
 # 导入日志模块
 import logging
@@ -111,7 +111,7 @@ if is_available():
         rpc_backend_options=None,
         ```
         初始化 RPC 环境，配置名称、后端、等级、全局大小和选项
-        ```
+        ```py
     # 验证远程过程调用（RPC）的参数是否符合预期类型，抛出异常如果有任何参数类型不匹配
     def _validate_rpc_args(backend, store, name, rank, world_size, rpc_backend_options):
         # 定义参数与其预期类型的映射关系

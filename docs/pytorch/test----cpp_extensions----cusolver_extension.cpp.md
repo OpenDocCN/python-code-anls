@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\cusolver_extension.cpp`
 
-```
+```py
 #include <torch/extension.h>
 #include <ATen/cuda/CUDAContext.h>
 

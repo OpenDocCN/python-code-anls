@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\jit\test_fusion_passes.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入用于测试的 FileCheck 工具

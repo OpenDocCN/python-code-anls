@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\nativefunctions_linter.py`
 
-```
+```py
 """
 Verify that it is possible to round-trip native_functions.yaml via ruamel under some
 configuration.  Keeping native_functions.yaml consistent in this way allows us to

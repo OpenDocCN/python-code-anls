@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\bc\__init__.py`
 
-```
+```py
 # 定义一个名为 read_zip 的函数，接受一个参数 fname，用于读取指定的 ZIP 文件并返回其中的文件名到数据的字典
 def read_zip(fname):
     # 读取指定文件名 fname 的内容，并以二进制形式打开，然后将其封装成一个字节流对象

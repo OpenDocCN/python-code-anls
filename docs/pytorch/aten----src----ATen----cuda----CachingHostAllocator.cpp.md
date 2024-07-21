@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CachingHostAllocator.cpp`
 
-```
+```py
 namespace at::cuda {
 
 // CUDA 主机分配器的缓存实现，继承自 CUDA 流和事件池的缓存主机分配器实现

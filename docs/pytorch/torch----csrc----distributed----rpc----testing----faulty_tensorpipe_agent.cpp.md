@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\testing\faulty_tensorpipe_agent.cpp`
 
-```
+```py
 // 如果定义了预处理器标记 USE_TENSORPIPE，则编译以下代码块
 
 #include <torch/csrc/distributed/rpc/testing/faulty_tensorpipe_agent.h>

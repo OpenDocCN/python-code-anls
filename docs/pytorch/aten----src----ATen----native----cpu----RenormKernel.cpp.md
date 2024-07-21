@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\RenormKernel.cpp`
 
-```
+```py
 #define TORCH_ASSERT_NO_OPERATORS
 #include <ATen/native/Normalization.h>
 #include <ATen/TensorIterator.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\linalg\__init__.py`
 
-```
+```py
 import sys  # 导入sys模块，用于访问系统相关的功能
 
 import torch  # 导入torch模块，PyTorch深度学习库的核心包

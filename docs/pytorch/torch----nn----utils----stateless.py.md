@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\stateless.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入
     # 遍历给定的被绑定张量的名称列表

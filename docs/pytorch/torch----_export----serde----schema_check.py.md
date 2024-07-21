@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\serde\schema_check.py`
 
-```
+```py
 # 使用 mypy 的 allow-untyped-defs 功能，允许不强制类型注解
 mypy: allow-untyped-defs
 # 导入必要的模块

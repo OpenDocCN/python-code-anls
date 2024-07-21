@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\trie.cpp`
 
-```
+```py
 namespace torch {
 namespace lazy {
 namespace {

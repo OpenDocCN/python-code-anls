@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\source_ref.h`
 
-```
+```py
 #pragma once
 
 #include <functional>  // 包含功能函数的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\test_all_leaf_modules_tracer.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 # 导入 torch.fx 中的 Tracer 类
 from torch.fx import Tracer

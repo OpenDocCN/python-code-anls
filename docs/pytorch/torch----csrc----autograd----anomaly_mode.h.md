@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\anomaly_mode.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 

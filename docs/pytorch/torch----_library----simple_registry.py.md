@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\simple_registry.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入自定义模块.fake_impl中的FakeImplHolder类
 from .fake_impl import FakeImplHolder

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\glob_group.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 re 模块，用于正则表达式操作
 import re

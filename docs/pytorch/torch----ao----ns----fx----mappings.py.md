@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\mappings.py`
 
-```
+```py
 # 导入运算符模块，提供标准的运算符函数实现
 import operator
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\forward_ad.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入标准库和第三方库
 import os

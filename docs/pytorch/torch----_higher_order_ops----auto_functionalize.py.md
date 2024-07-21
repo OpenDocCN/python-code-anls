@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\auto_functionalize.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型引用
 from typing import Any, Dict, List, Optional, Tuple, Union

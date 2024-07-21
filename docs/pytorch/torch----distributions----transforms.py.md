@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\transforms.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import functools  # 提供高阶函数操作
@@ -716,7 +716,7 @@ class TanhTransform(Transform):
     It is equivalent to
     ```
     ComposeTransform([AffineTransform(0., 2.), SigmoidTransform(), AffineTransform(-1., 2.)])
-    ```
+    ```py
     However this might not be numerically stable, thus it is recommended to use `TanhTransform`
     instead.
 

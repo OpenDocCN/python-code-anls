@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_serdes.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 
 # 导入必要的模块

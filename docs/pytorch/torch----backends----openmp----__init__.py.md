@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\openmp\__init__.py`
 
-```
+```py
 # 引入名为 `torch` 的模块，用于与 PyTorch 进行交互
 import torch
 

@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\threadpool\pthreadpool-cpp.h`
 
-```
+```py
 #pragma once
 
 #pragma once 表示这是一个预处理器编译指令，用于确保头文件只被编译一次。

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\CopyKernel.cpp`
 
-```
+```py
 // 定义宏 TORCH_ASSERT_NO_OPERATORS
 
 // 包含 ATen 库的分发头文件

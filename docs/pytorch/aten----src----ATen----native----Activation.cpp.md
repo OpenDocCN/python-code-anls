@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Activation.cpp`
 
-```
+```py
 // 定义宏，指定仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\xnnpack\serialization\serializer.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <caffe2/torch/csrc/jit/backends/xnnpack/serialization/serializer.h>
 #include <torch/csrc/jit/backends/xnnpack/serialization/schema_generated.h>

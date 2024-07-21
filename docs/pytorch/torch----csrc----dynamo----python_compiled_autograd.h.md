@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\dynamo\python_compiled_autograd.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once确保头文件只被编译一次，避免重复包含
 #include <torch/csrc/utils/python_stub.h>

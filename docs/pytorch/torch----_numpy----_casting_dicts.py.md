@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_casting_dicts.py`
 
-```
+```py
 # mypy: ignore-errors
 
 import torch

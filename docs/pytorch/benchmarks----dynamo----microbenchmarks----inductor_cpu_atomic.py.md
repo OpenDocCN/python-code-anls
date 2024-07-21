@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\microbenchmarks\inductor_cpu_atomic.py`
 
-```
+```py
 import itertools  # 导入 itertools 模块，用于生成迭代器的工具函数
 
 from benchmark_helper import time_with_torch_timer  # 从 benchmark_helper 模块中导入 time_with_torch_timer 函数

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\sample_functional.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch.testing._internal.common_nn import wrap_functional

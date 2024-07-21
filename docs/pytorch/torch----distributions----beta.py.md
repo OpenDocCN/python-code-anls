@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\beta.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类
 from numbers import Number, Real

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_dataclasses.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 # flake8: noqa
 

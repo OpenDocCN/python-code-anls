@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\irange.h`
 
-```
+```py
 // Copyright 2004-present Facebook. All Rights Reserved.
 
 #pragma once

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\peephole.h`
 
-```
+```py
 #pragma once
 // 预处理指令，表示只包含一次此头文件
 

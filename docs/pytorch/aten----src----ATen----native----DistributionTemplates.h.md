@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\DistributionTemplates.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>  // 引入 ATen 核心张量库头文件

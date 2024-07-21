@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_eager\kernel_meta_info.h`
 
-```
+```py
 #if !defined(C10_MOBILE) && !defined(ANDROID)
 #pragma once
 // 包含 ATen 库的头文件

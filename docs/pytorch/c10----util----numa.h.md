@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\numa.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，确保当前头文件只被编译一次

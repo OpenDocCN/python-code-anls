@@ -15,7 +15,7 @@ C-style library for logging errors, warnings, information notes, and debug infor
 
 ## Example
 
-```c
+```py
 #include <clog.h>
 
 #ifndef MYMODULE_LOG_LEVEL

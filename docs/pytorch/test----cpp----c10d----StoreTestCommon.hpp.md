@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\StoreTestCommon.hpp`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/c10d/Store.hpp> // 包含分布式存储的头文件

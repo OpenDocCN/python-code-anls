@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupUCC.cpp`
 
-```
+```py
 #ifdef USE_C10D_UCC
 // 包含必要的头文件，实现对应的功能模块
 #include <ATen/cuda/nvrtc_stub/ATenNVRTC.h>

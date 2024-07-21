@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\collect_tracepoints_pass.py`
 
-```
+```py
 # 引入一个允许未类型化函数定义的标志，可能是用于类型检查工具
 # 导入操作符模块，用于支持操作符相关的功能
 import operator

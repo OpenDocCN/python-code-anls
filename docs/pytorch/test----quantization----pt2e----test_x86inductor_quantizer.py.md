@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\pt2e\test_x86inductor_quantizer.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入必要的模块和库

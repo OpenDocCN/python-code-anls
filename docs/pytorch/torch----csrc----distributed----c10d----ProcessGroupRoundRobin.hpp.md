@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\ProcessGroupRoundRobin.hpp`
 
-```
+```py
 #pragma once
 
 #include <vector>  // 包含向量容器的头文件

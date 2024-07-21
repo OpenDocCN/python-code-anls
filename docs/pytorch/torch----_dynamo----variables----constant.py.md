@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\constant.py`
 
-```
+```py
 # mypy: ignore-errors  # 忽略类型检查错误
 
 import operator  # 导入操作符模块

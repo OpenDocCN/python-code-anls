@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\optimizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging

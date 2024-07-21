@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_pruning.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 import pickle
 import unittest

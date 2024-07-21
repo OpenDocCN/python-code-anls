@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_exposed_in.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 允许未经类型定义的函数声明
 # 

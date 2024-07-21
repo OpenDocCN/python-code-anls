@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fuser\plot_speedups.py`
 
-```
+```py
 # 导入 pandas 库，用于数据处理和分析
 import pandas
 

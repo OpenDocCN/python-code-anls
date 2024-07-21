@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\SymbolicShapeMeta.h`
 
-```
+```py
 #pragma once
 // 包含必要的头文件以及声明 C10_API 宏
 

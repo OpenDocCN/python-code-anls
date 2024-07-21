@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\api\module.cpp`
 
-```
+```py
 // 引入 ATen 库的符号定义
 #include <ATen/core/symbol.h>
 // 引入 ATen 库中的记录函数

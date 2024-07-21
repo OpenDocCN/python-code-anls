@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\train\export_data.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/mobile/module.h>

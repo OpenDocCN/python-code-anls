@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\fx\test_quantize_fx.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 # 导入所需的模块和类

@@ -1,6 +1,6 @@
 # `.\pytorch\setup.py`
 
-```
+```py
 # 欢迎来到 PyTorch 的 setup.py。
 # 以下是可能对你感兴趣的环境变量说明：
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\padding.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -34,7 +34,7 @@ struct TORCH_API ReflectionPadOptions {
 /// Example:
 /// ```
 /// ReflectionPad1d model(ReflectionPad1dOptions({3, 1}));
-/// ```
+/// ```py
 using ReflectionPad1dOptions = ReflectionPadOptions<1>;
 
 /// `ReflectionPadOptions` specialized for the `ReflectionPad2d` module.
@@ -42,7 +42,7 @@ using ReflectionPad1dOptions = ReflectionPadOptions<1>;
 /// Example:
 /// ```
 /// ReflectionPad2d model(ReflectionPad2dOptions({1, 1, 2, 0}));
-/// ```
+/// ```py
 using ReflectionPad2dOptions = ReflectionPadOptions<2>;
 
 /// `ReflectionPadOptions` specialized for the `ReflectionPad3d` module.
@@ -50,7 +50,7 @@ using ReflectionPad2dOptions = ReflectionPadOptions<2>;
 /// Example:
 /// ```
 /// ReflectionPad3d model(ReflectionPad3dOptions({1, 1, 2, 0, 1, 1}));
-/// ```
+/// ```py
 using ReflectionPad3dOptions = ReflectionPadOptions<3>;
 
 // ============================================================================
@@ -78,7 +78,7 @@ struct TORCH_API ReplicationPadOptions {
 /// Example:
 /// ```
 /// ReplicationPad1d model(ReplicationPad1dOptions({3, 1}));
-/// ```
+/// ```py
 using ReplicationPad1dOptions = ReplicationPadOptions<1>;
 
 /// `ReplicationPadOptions` specialized for the `ReplicationPad2d` module.
@@ -86,7 +86,7 @@ using ReplicationPad1dOptions = ReplicationPadOptions<1>;
 /// Example:
 /// ```
 /// ReplicationPad2d model(ReplicationPad2dOptions({1, 1, 2, 0}));
-/// ```
+/// ```py
 using ReplicationPad2dOptions = ReplicationPadOptions<2>;
 
 /// `ReplicationPadOptions` specialized for the `ReplicationPad3d` module.
@@ -94,7 +94,7 @@ using ReplicationPad2dOptions = ReplicationPadOptions<2>;
 /// Example:
 /// ```
 /// ReplicationPad3d model(ReplicationPad3dOptions({1, 1, 2, 0, 1, 1}));
-/// ```
+/// ```py
 using ReplicationPad3dOptions = ReplicationPadOptions<3>;
 
 } // namespace nn
@@ -124,7 +124,7 @@ struct TORCH_API ZeroPadOptions {
 /// `ZeroPadOptions` 的特化版本，适用于 `ZeroPad1d` 模块。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// ConstantPad1d model(ConstantPad1dOptions({3, 1});
 /// ```
 using ZeroPad1dOptions = ZeroPadOptions<1>;
@@ -132,7 +132,7 @@ using ZeroPad1dOptions = ZeroPadOptions<1>;
 /// `ZeroPadOptions` 的特化版本，适用于 `ZeroPad2d` 模块。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// ConstantPad2d model(ConstantPad2dOptions({1, 1, 2, 0});
 /// ```
 using ZeroPad2dOptions = ZeroPadOptions<2>;
@@ -140,7 +140,7 @@ using ZeroPad2dOptions = ZeroPadOptions<2>;
 /// `ZeroPadOptions` 的特化版本，适用于 `ZeroPad3d` 模块。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// ConstantPad3d model(ConstantPad3dOptions({1, 2, 1, 2, 1, 2});
 /// ```
 using ZeroPad3dOptions = ZeroPadOptions<3>;
@@ -169,7 +169,7 @@ struct TORCH_API ConstantPadOptions {
 /// `ConstantPadOptions` 的特化版本，适用于 `ConstantPad1d` 模块。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// ConstantPad1d model(ConstantPad1dOptions({3, 1}, 3.5));
 /// ```
 using ConstantPad1dOptions = ConstantPadOptions<1>;
@@ -177,7 +177,7 @@ using ConstantPad1dOptions = ConstantPadOptions<1>;
 /// `ConstantPadOptions` 的特化版本，适用于 `ConstantPad2d` 模块。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// ConstantPad2d model(ConstantPad2dOptions({3, 0, 2, 1}, 3.5));
 /// ```
 using ConstantPad2dOptions = ConstantPadOptions<2>;
@@ -185,7 +185,7 @@ using ConstantPad2dOptions = ConstantPadOptions<2>;
 /// `ConstantPadOptions` 的特化版本，适用于 `ConstantPad3d` 模块。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// ConstantPad3d model(ConstantPad3dOptions({1, 2, 1, 2, 1, 2}, 3.5));
 /// ```
 // 定义一个别名 ConstantPad3dOptions，代表 ConstantPadOptions 模板类的 3 维版本
@@ -202,7 +202,7 @@ namespace functional {
 
 /// Example:
 /// 示例:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::pad(input, F::PadFuncOptions({1, 2, 2, 1, 1, 2}).mode(torch::kReplicate));
 /// ```

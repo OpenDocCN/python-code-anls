@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_pdt.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入必要的库和模块

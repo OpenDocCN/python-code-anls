@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_future.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入未来的注解特性，用于支持类型定义时的前向引用

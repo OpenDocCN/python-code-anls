@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\tvm.py`
 
-```
+```py
 # 忽略类型检查中的错误，这可能是因为某些类型在类型检查时无法识别
 import functools  # 导入 functools 模块，用于高阶函数和操作函数对象的工具
 import importlib  # 导入 importlib 模块，用于动态加载模块

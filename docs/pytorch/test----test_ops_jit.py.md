@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_ops_jit.py`
 
-```
+```py
 # 导入所需模块和函数
 from functools import partial  # 导入 partial 函数，用于创建偏函数
 from textwrap import dedent  # 导入 dedent 函数，用于去除多行字符串的缩进

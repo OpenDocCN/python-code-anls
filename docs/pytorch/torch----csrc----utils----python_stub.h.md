@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_stub.h`
 
-```
+```py
 #pragma once
 
 #pragma once 是一个预处理指令，用于在编译时确保头文件只包含一次，防止多次包含同一头文件导致的重定义错误。

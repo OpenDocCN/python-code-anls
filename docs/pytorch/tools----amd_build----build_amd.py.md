@@ -1,6 +1,6 @@
 # `.\pytorch\tools\amd_build\build_amd.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定脚本的解释器为 Python 3
 

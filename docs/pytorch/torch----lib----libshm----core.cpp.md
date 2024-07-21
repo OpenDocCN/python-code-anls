@@ -1,6 +1,6 @@
 # `.\pytorch\torch\lib\libshm\core.cpp`
 
-```
+```py
 // 引入必要的头文件：数组，字符串处理，字符串，无序映射
 #include <array>
 #include <cstring>

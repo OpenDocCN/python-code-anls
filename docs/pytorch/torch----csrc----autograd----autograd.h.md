@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\autograd.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/autograd/variable.h>

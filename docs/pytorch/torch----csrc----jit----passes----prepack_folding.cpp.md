@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\prepack_folding.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <stack>  // 使用堆栈数据结构
 

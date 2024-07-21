@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\check_alias_annotation.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 

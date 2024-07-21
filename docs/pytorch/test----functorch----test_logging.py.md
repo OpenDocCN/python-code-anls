@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_logging.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入日志模块
 import logging

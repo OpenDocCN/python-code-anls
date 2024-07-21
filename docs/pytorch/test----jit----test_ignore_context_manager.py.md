@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_ignore_context_manager.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 引入必要的库和模块

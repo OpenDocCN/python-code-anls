@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\graph_rewrite_helper.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>

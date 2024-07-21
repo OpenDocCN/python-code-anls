@@ -1,6 +1,6 @@
 # `.\pytorch\torch\sparse\_triton_ops_meta.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Provides optimal triton kernel parameters.
 

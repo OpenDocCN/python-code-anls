@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TensorCompare.cpp`
 
-```
+```py
 // 定义宏，用于限制仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

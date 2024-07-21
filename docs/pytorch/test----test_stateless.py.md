@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_stateless.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 # 引入上下文管理模块，用于创建上下文管理器

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\overrides.py`
 
-```
+```py
 # 装饰器，用于临时禁用给定模块中特定消息模式的 UserWarning 警告
 def _disable_user_warnings(
     func: Callable,

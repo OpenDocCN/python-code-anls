@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\Tensor.h`
 
-```
+```py
 #pragma`
 #pragma once
 // 防止头文件被多次包含

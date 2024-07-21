@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\grad_mode.py`
 
-```
+```py
 # 指定允许未标记的函数定义，用于类型检查
 # 导入必要的类型
 from typing import Any

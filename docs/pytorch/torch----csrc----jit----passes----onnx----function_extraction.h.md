@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\function_extraction.h`
 
-```
+```py
 // 预处理指令，表示此头文件只需包含一次
 #pragma once
 

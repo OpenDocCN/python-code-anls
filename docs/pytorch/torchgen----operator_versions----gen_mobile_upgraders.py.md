@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\operator_versions\gen_mobile_upgraders.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 from __future__ import annotations  # 允许使用后续版本的类型注释

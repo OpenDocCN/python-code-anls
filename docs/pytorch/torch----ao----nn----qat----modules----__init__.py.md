@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\qat\modules\__init__.py`
 
-```
+```py
 # 导入模块中的特定类和函数：从linear模块导入Linear类，从conv模块分别导入Conv1d、Conv2d和Conv3d类，
 # 从embedding_ops模块导入EmbeddingBag和Embedding类。
 from .linear import Linear

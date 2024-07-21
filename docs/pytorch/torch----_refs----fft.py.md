@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_refs\fft.py`
 
-```
+```py
 # 导入 math 模块，用于数学计算
 import math
 

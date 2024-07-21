@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\graph_transform_observer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块和类
 import os  # 导入操作系统模块

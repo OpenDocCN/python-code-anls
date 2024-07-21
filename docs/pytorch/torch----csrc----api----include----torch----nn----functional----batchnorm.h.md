@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\functional\batchnorm.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保头文件只被编译一次
 
@@ -74,7 +74,7 @@ inline Tensor batch_norm(
 /// namespace F = torch::nn::functional;
 /// F::batch_norm(input, mean, variance,
 /// F::BatchNormFuncOptions().weight(weight).bias(bias).momentum(0.1).eps(1e-05).training(false));
-/// ```
+/// ```py
 inline Tensor batch_norm(
     const Tensor& input,
     const Tensor& running_mean,

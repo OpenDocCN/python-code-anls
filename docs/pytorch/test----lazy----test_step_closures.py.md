@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_step_closures.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入所需模块和类

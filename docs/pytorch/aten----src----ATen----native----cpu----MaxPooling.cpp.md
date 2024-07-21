@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\MaxPooling.cpp`
 
-```
+```py
 // 定义编译选项，仅使用 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

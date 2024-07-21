@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_module_interface.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的库和模块

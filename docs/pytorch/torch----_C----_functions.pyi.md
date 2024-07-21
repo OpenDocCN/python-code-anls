@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_functions.pyi`
 
-```
+```py
 from typing import AnyStr
 
 from torch import Tensor

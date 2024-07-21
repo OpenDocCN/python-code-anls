@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\distance.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>  // 引入克隆相关的头文件
@@ -22,7 +22,7 @@ namespace nn {
 /// 示例：
 /// ```
 /// CosineSimilarity model(CosineSimilarityOptions().dim(0).eps(0.5));
-/// ```
+/// ```py
 class TORCH_API CosineSimilarityImpl : public Cloneable<CosineSimilarityImpl> {
  public:
   explicit CosineSimilarityImpl(const CosineSimilarityOptions& options_ = {});  // 显式构造函数
@@ -53,7 +53,7 @@ TORCH_MODULE(CosineSimilarity);  // Torch 模块
 /// 示例：
 /// ```
 /// PairwiseDistance model(PairwiseDistanceOptions().p(3).eps(0.5).keepdim(true));
-/// ```
+/// ```py
 class TORCH_API PairwiseDistanceImpl : public Cloneable<PairwiseDistanceImpl> {
  public:
   explicit PairwiseDistanceImpl(const PairwiseDistanceOptions& options_ = {});  // 显式构造函数

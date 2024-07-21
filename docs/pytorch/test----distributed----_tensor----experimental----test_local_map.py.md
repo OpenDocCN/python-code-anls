@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\experimental\test_local_map.py`
 
-```
+```py
 # 导入PyTorch相关库和模块
 import torch
 import torch.distributed._functional_collectives as funcol

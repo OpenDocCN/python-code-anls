@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_functionalized_assertions.py`
 
-```
+```py
 # Owner(s): ["oncall: export"]
 # 导入 PyTorch 库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\test\lazy\test_ts_opinfo.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的模块和库

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_script_profile.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\parser\llvm_coverage_segment.py`
 
-```
+```py
 from __future__ import annotations
 # 导入未来版本的类型注解支持
 

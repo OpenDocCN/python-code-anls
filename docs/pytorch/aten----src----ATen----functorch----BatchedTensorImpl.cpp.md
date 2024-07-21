@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchedTensorImpl.cpp`
 
-```
+```py
 // 定义命名空间 at::functorch，包含了批量张量的实现细节
 namespace at::functorch {
 

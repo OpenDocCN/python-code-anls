@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\testing\utils.py`
 
-```
+```py
 """
 Utility function to facilitate testing.
 

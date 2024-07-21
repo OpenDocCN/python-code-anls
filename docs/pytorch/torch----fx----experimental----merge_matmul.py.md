@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\merge_matmul.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 torch 库
 import torch

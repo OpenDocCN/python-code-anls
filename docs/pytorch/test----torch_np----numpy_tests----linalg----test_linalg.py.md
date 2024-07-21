@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\linalg\test_linalg.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 """ Test functions for linalg module

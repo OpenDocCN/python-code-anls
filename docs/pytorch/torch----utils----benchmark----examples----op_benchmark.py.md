@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\examples\op_benchmark.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Example use of Timer and op fuzzers to measure kernel performance.
 

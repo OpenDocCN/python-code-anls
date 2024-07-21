@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_cloner.cpp`
 
-```
+```py
 // 包含 Torch 库中的头文件，用于张量表达式的 IR 克隆
 #include <torch/csrc/jit/tensorexpr/ir_cloner.h>
 

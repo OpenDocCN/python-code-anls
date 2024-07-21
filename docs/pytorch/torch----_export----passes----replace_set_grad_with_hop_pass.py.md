@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\replace_set_grad_with_hop_pass.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import contextlib  # 上下文管理模块

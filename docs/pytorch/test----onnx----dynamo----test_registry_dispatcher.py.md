@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\dynamo\test_registry_dispatcher.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 """Unit tests for the internal registration wrapper module."""
 # 引入未来版本兼容模块

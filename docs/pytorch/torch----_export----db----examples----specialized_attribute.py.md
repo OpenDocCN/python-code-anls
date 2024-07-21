@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\specialized_attribute.py`
 
-```
+```py
 # 引入枚举类型 `Enum` 用于定义常量
 from enum import Enum
 

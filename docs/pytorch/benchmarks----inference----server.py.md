@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\inference\server.py`
 
-```
+```py
 import argparse
 import asyncio
 import os.path

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesScatterOps.cpp`
 
-```
+```py
 // 包含头文件，这些头文件提供了所需的函数和数据结构声明
 #include <ATen/functorch/BatchRulesHelper.h>
 #include <ATen/Operators.h>

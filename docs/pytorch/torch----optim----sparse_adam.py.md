@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\sparse_adam.py`
 
-```
+```py
 # 设置类型提示允许未定义函数
 mypy: allow-untyped-defs
 # 导入需要的模块和类型

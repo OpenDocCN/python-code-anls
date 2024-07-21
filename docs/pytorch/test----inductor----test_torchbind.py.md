@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_torchbind.py`
 
-```
+```py
 # Owner(s): ["module: functorch"]
 
 # 导入 PyTorch 库

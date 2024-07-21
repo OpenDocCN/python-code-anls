@@ -1,6 +1,6 @@
 # `.\pytorch\scripts\release_notes\classifier.py`
 
-```
+```py
 import argparse
 import math
 import pickle

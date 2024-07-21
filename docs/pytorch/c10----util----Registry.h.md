@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Registry.h`
 
-```
+```py
 // 防止头文件重复包含的宏定义
 #ifndef C10_UTIL_REGISTRY_H_
 #define C10_UTIL_REGISTRY_H_

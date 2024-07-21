@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\core\utils.py`
 
-```
+```py
 # 导入必要的模块
 import atexit  # 用于注册退出时执行的清理函数
 import re  # 正则表达式模块，用于字符串匹配和操作

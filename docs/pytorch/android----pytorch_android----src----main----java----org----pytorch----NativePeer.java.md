@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\NativePeer.java`
 
-```
+```py
 // 导入所需的类和接口
 import com.facebook.jni.HybridData;
 import com.facebook.jni.annotations.DoNotStrip;

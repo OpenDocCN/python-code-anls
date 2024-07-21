@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\ops\utils.cpp`
 
-```
+```py
 namespace torch {
 namespace lazy {
 

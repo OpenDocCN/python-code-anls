@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_function_schema.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入PyTorch库

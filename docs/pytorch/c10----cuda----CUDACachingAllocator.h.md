@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDACachingAllocator.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Allocator.h>  // 引入内存分配器的核心功能

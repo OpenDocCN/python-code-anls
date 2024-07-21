@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ReduceOps.h`
 
-```
+```py
 #pragma once
 
 

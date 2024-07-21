@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\TypeIndex_test.cpp`
 
-```
+```py
 // 包含必要的头文件：c10/util/Metaprogramming.h，用于元编程；c10/util/TypeIndex.h，用于类型索引；gtest/gtest.h，用于 Google 测试框架
 #include <c10/util/Metaprogramming.h>
 #include <c10/util/TypeIndex.h>

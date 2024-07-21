@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Factory.cpp`
 
-```
+```py
 #include <ATen/native/vulkan/ops/Factory.h>
 #include <torch/library.h>
 

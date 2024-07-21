@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """
 Utils shared by different modes of quantization (eager/graph)

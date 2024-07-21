@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\debug.h`
 
-```
+```py
 // Copyright (c) Meta Platforms, Inc. and its affiliates.
 // All rights reserved.
 //

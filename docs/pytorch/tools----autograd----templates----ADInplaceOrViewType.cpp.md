@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\ADInplaceOrViewType.cpp`
 
-```
+```py
 // 定义宏，用于指示仅包含方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

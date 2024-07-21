@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\codegen_device_driver.py`
 
-```
+```py
 # 导入 torch 库，用于与 CUDA 相关的操作
 import torch
 

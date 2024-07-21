@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_matmul_cuda.py`
 
-```
+```py
 # Owner(s): ["module: linear algebra"]
 
 # 导入单元测试模块

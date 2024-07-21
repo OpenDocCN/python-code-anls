@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\jit_log.cpp`
 
-```
+```py
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>

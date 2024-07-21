@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\fsdp\test_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_optim_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的库和模块
 import copy  # 导入 copy 模块，用于对象的浅拷贝和深拷贝操作

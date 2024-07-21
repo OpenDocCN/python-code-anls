@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\NamedTensor.cpp`
 
-```
+```py
 // 定义宏 `TORCH_ASSERT_ONLY_METHOD_OPERATORS`，用于指定仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

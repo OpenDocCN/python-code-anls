@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codecache.py`
 
-```
+```py
 # 引入类型检查声明，允许未标记类型的定义
 mypy: allow-untyped-defs
 

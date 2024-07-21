@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\api\et_cpp.py`
 
-```
+```py
 # 从未来导入特定注释，确保向后兼容性
 from __future__ import annotations
 

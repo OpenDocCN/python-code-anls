@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorAccessor.h`
 
-```
+```py
 #pragma once
 #include <ATen/core/TensorAccessor.h>
 

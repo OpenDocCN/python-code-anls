@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\agent\__init__.py`
 
-```
+```py
 # 导入所需模块
 import requests
 from bs4 import BeautifulSoup

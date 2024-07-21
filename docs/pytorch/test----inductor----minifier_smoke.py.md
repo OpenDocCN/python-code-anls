@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\minifier_smoke.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 #
 # 引入标准库 os，用于操作操作系统相关功能

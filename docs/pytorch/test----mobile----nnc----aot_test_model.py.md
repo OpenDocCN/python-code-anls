@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\nnc\aot_test_model.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 从 torch 库中导入 nn 模块

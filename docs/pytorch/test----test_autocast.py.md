@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_autocast.py`
 
-```
+```py
 # 导入所需模块和库
 import collections
 import unittest

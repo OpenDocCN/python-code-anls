@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_traversal_utils.py`
 
-```
+```py
 """
 NOTE: This file must be imported like
 ``import torch.distributed.fsdp._traversal_utils`` and not like

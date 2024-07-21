@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_fx_passes.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 import pytorch_test_common  # 导入测试公共模块
 

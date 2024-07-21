@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\data_scheduler\__init__.py`
 
-```
+```py
 # 导入基础数据调度器模块中的 BaseDataScheduler 类
 from .base_data_scheduler import BaseDataScheduler
 

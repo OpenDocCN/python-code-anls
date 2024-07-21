@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_graph_transform_observer.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入所需的库

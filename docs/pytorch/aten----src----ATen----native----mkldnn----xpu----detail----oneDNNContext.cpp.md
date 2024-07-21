@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\xpu\detail\oneDNNContext.cpp`
 
-```
+```py
 /* *
  * Do NOT put any kernels or call any device binaries here!
  * Only maintain oneDNN runtime states in this file.

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ScatterGatherChecks.h`
 
-```
+```py
 #pragma once
 
 #include <vector>

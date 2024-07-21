@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\_op_schema.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的模块和类型定义
 from dataclasses import dataclass

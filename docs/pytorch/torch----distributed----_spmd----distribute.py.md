@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\distribute.py`
 
-```
+```py
 # 引入日志模块
 import logging
 # 引入操作符模块

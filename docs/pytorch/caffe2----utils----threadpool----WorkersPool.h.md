@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\threadpool\WorkersPool.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 确保头文件只被编译一次
 

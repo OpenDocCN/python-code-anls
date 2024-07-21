@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\decompose_ops.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/decompose_ops.h>
 
 #include <torch/csrc/jit/frontend/ir_emitter.h>

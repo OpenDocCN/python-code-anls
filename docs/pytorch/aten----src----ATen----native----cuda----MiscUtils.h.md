@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\MiscUtils.h`
 
-```
+```py
 #pragma once
 // 引入CUDA异常处理、上下文、配置和固定内存分配器的头文件
 #include <ATen/cuda/Exceptions.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\pass\disabled_jit.py`
 
-```
+```py
 # 引入必要的枚举(Enum)类
 from enum import Enum
 # 引入类型相关的模块

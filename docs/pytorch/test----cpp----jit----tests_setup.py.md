@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\tests_setup.py`
 
-```
+```py
 # 导入必要的模块
 import os  # 导入操作系统相关的功能模块
 import sys  # 导入系统相关的功能模块

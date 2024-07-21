@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_snode_runtime.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 从 unittest 模块中导入 skipIf 函数

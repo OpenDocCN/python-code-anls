@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\autocast_mode.h`
 
-```
+```py
 #pragma once
 // 只允许本头文件在编译单元中包含一次，避免重复定义错误
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\unification\match.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入相关函数和类，从自定义模块中引入，忽略类型定义检查
 from .core import unify, reify  # type: ignore[attr-defined]

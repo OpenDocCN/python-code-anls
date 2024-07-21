@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\backend_registration.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库
 import torch

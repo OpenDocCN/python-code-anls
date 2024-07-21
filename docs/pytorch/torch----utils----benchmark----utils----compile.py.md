@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\compile.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义，允许未定义的函数
 from typing import Any, Callable, cast, List, Optional, Union

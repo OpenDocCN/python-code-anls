@@ -1,6 +1,6 @@
 # `.\pytorch\test\functorch\test_dims.py`
 
-```
+```py
 # 导入 Python 标准库中的垃圾回收模块
 import gc
 

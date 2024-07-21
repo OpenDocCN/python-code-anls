@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_dist_composable.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # Owner(s): ["oncall: distributed"]

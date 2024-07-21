@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\dedup_module_uses.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/api/module.h>

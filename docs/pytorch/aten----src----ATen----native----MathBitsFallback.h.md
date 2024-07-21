@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\MathBitsFallback.h`
 
-```
+```py
 // 包含 ATen 核心库中的头文件
 #include <ATen/core/Tensor.h>
 // 包含 ATen 核心调度器的头文件

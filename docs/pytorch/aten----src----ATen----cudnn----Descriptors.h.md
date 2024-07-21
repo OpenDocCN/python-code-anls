@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cudnn\Descriptors.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 防止头文件被多次包含，保证头文件只被编译一次。

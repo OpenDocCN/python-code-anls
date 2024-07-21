@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\nn\__init__.py`
 
-```
+```py
 # 定义一个名为 is_prime 的函数，用于判断给定的数字是否为素数
 def is_prime(num):
     # 如果数字小于等于1，则直接返回 False，因为素数定义大于1

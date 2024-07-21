@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\__init__.py`
 
-```
+```py
 # 定义一个名为 is_prime 的函数，接收一个整数参数 n
 def is_prime(n):
     # 如果 n 小于等于 1，直接返回 False

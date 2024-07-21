@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_device.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型提示模块 Optional
 from typing import Optional

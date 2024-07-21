@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_torch\tensor_converter.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Tensor.h>

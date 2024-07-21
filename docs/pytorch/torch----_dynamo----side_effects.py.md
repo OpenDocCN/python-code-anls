@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\side_effects.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入用于类型检查的标记
 import inspect

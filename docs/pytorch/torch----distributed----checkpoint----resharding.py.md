@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\resharding.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型 List 和 Tuple
 from typing import List, Tuple

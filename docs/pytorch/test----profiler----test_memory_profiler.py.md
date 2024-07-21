@@ -1,6 +1,6 @@
 # `.\pytorch\test\profiler\test_memory_profiler.py`
 
-```
+```py
 # Owner(s): ["oncall: profiler"]
 # 导入必要的模块和库
 import functools  # 导入 functools 模块

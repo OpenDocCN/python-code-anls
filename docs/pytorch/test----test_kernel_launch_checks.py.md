@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_kernel_launch_checks.py`
 
-```
+```py
 # 导入所需模块和函数
 from torch.testing._internal.common_utils import TestCase, run_tests
 from torch.testing._internal.check_kernel_launches import (

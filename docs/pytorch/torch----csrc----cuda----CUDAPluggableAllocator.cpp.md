@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\CUDAPluggableAllocator.cpp`
 
-```
+```py
 #include <c10/cuda/CUDACachingAllocator.h>
 #include <c10/cuda/CUDAGuard.h>
 #include <mutex>

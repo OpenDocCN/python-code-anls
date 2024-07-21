@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantize_jit.py`
 
-```
+```py
 # 指定允许未类型化定义，适用于类型检查工具如 mypy
 mypy: allow-untyped-defs
 
@@ -291,7 +291,7 @@ def quantize_dynamic_jit(model, qconfig_dict, inplace=False, debug=False):
         Quantized TorchScript 模型.
 
     Example:
-    ```python
+    ```py
     import torch
     from torch.ao.quantization import per_channel_dynamic_qconfig
     from torch.ao.quantization import quantize_dynamic_jit
@@ -352,7 +352,7 @@ def _quantize_ondevice_dynamic_jit(model, qconfig_dict, method_name='forward', i
     # - 使用 quantized_<method_name> 方法运行模型。
     
     # 示例：
-    # ```python
+    # ```py
     # import torch
     # from torch.ao.quantization import per_channel_dynamic_qconfig
     # from torch.ao.quantization.quantize_jit import _quantize_ondevice_dynamic_jit

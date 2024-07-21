@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\library.cpp`
 
-```
+```py
 // 包含 Torch 库的头文件
 #include <torch/library.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\executorch\api\types\signatures.py`
 
-```
+```py
 # 引入未来版本的注解功能
 from __future__ import annotations
 

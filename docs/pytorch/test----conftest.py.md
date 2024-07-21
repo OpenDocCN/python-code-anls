@@ -1,6 +1,6 @@
 # `.\pytorch\test\conftest.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入深拷贝模块
 import functools  # 导入函数工具模块

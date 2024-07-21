@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\frozen_conv_folding.h`
 
-```
+```py
 #pragma once
 
 

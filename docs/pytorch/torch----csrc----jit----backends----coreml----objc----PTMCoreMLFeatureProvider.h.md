@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\coreml\objc\PTMCoreMLFeatureProvider.h`
 
-```
+```py
 #import <ATen/ATen.h>
 #import <CoreML/CoreML.h>
 

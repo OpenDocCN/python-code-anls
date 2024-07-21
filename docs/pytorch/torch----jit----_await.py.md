@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_await.py`
 
-```
+```py
 # 设置允许未类型化的函数定义，用于类型检查
 # 导入PyTorch库
 import torch

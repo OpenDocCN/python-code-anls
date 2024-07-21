@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_clip_grad_norm_.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入所需的库和模块
 import copy  # 导入深拷贝函数

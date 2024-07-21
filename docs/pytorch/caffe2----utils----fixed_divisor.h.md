@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\fixed_divisor.h`
 
-```
+```py
 // 如果未定义 CAFFE2_UTILS_FIXED_DIVISOR_H_，则定义该头文件
 #ifndef CAFFE2_UTILS_FIXED_DIVISOR_H_
 #define CAFFE2_UTILS_FIXED_DIVISOR_H_

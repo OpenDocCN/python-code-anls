@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tools\__init__.py`
 
-```
+```py
 # 导入 FSDPMemTracker 类，该类位于当前包的 fsdp2_mem_tracker 模块中
 from .fsdp2_mem_tracker import FSDPMemTracker
 # 导入 MemTracker 类，该类位于当前包的 mem_tracker 模块中

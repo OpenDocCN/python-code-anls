@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\LiteNativePeer.java`
 
-```
+```py
 package org.pytorch;
 
 import com.facebook.jni.HybridData;

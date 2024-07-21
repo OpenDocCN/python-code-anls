@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\graph_optimization.py`
 
-```
+```py
 # 设置类型提示允许未声明的函数
 # 所有权：["oncall: distributed"]
 import collections  # 导入collections模块，用于创建默认字典等高级数据结构

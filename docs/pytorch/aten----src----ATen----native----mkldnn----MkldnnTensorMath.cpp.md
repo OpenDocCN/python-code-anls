@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\mkldnn\MkldnnTensorMath.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>
 #include <ATen/Config.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\timer.py`
 
-```
+```py
 """Timer class based on the timeit.Timer class, but torch aware."""
 # 导入所需的模块和库
 import enum

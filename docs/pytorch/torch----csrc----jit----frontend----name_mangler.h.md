@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\name_mangler.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/qualified_name.h>

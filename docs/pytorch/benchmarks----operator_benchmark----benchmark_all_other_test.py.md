@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_all_other_test.py`
 
-```
+```py
 # 导入 `add_test` 到 `tensor_to_test` 的测试模块，用于基准测试
 from pt import (
     add_test,                    # 导入加法操作的测试模块

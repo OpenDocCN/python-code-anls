@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\QuantizedOps.h`
 
-```
+```py
 #pragma once
 // 在 C++ 中，#pragma once 指令确保头文件只被编译一次
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\utils\_expanded_weights\embedding_expanded_weights.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型声明所需的设置，允许未经类型注释的函数定义
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\insert_quant_dequant.cpp`
 
-```
+```py
 // 引入Torch的量化插入相关头文件
 #include <torch/csrc/jit/passes/quantization/insert_quant_dequant.h>
 

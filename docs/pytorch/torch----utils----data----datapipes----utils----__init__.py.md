@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\utils\__init__.py`
 
-```
+```py
 # 定义一个名为 process_data 的函数，接收一个参数 data
 def process_data(data):
     # 创建一个名为 result 的空列表，用于存储处理后的数据

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入pdb模块，用于调试和分析程序执行过程中的问题
 import pdb

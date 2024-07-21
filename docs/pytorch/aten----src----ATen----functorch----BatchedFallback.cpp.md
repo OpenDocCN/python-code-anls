@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchedFallback.cpp`
 
-```
+```py
 // 版权声明和许可信息
 
 #include <ATen/functorch/BatchedFallback.h>  // 引入 BatchedFallback 功能库头文件

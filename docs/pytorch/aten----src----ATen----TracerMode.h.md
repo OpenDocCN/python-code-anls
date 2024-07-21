@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TracerMode.h`
 
-```
+```py
 #pragma once
 // 一次性指令，确保头文件只被包含一次
 

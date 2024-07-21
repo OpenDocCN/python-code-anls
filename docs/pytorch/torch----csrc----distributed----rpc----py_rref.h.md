@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\py_rref.h`
 
-```
+```py
 #pragma once
 // 防止头文件被多次包含的预处理指令
 

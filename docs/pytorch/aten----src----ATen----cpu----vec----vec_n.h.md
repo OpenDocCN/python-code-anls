@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec_n.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/cpu/vec/vec_base.h>  // 包含向量化类型的基本定义

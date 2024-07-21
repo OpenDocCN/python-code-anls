@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android_torchvision\src\androidTest\java\org\pytorch\torchvision\TorchVisionInstrumentedTests.java`
 
-```
+```py
 package org.pytorch.torchvision;
 
 import static org.junit.Assert.assertArrayEquals;

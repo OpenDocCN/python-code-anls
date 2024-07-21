@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_class_import.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 
 #include <ATen/core/qualified_name.h>  // 导入 ATen 库中的 qualified_name.h 文件

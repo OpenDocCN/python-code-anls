@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\gpt_fast\mixtral_moe_quantize.py`
 
-```
+```py
 # flake8: noqa: E266, C417, B950
 # 从 mixtral_moe_model 导入 ConditionalFeedForward 类
 from mixtral_moe_model import ConditionalFeedForward

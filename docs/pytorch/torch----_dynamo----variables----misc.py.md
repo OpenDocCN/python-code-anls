@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\misc.py`
 
-```
+```py
 # 忽略类型检查错误
 # 导入必要的模块和函数
 import collections  # 导入 collections 模块

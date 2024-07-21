@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp`
 
-```
+```py
 /**
  * Note [SDPA Runtime Dispatch]
  * SDPA relies on a runtime dispatch mechanism to select the appropriate

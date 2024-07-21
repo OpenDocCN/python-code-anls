@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\external_functions_registry.cpp`
 
-```
+```py
 #include <torch/csrc/jit/tensorexpr/external_functions_registry.h>
 
 namespace torch::jit::tensorexpr {

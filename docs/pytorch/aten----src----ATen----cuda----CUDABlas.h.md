@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDABlas.h`
 
-```
+```py
 #pragma once
 /*
   提供CUDA BLAS功能的模板子集：

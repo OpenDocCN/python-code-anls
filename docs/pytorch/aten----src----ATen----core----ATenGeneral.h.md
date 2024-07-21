@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\ATenGeneral.h`
 
-```
+```py
 // 使用#pragma once预处理指令，确保头文件只被编译一次
 #pragma once
 

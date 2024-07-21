@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\transform_to_z3.py`
 
-```
+```py
 # 引入类型检查器 mypy 的允许未类型化定义选项
 from torch.fx.experimental.migrate_gradual_types.constraint import Conj, Disj, T, F, BinConstraintT, BVar, is_bool_expr
 from torch.fx.experimental.migrate_gradual_types.constraint import BinConstraintD, TVar, DVar

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\dist_autograd\test_dist_autograd.cpp`
 
-```
+```py
 // 包含必要的头文件：内存管理、单元测试框架、ATen库、分布式自动求导引擎相关头文件等
 #include <memory>
 #include <gtest/gtest.h>

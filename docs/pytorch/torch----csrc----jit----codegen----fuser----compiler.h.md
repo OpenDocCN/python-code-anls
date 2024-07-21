@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\compiler.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/stack.h>  // 引入 ATen 库中的 stack 头文件

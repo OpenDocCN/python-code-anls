@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\quantization.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 import copy  # 导入 copy 模块，用于复制对象
 import functools  # 导入 functools 模块，用于高阶函数操作

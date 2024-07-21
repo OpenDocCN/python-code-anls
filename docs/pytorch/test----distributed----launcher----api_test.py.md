@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\launcher\api_test.py`
 
-```
+```py
 # 指定 Python 解释器路径，用于环境变量中的 shebang
 #!/usr/bin/env python3
 

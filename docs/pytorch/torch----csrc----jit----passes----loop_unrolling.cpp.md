@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\loop_unrolling.cpp`
 
-```
+```py
 // 引入 Torch JIT passes 中的循环展开头文件
 #include <torch/csrc/jit/passes/loop_unrolling.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\train\random.cpp`
 
-```
+```py
 // 包含 Torch 的头文件，用于移动端训练中的随机采样器
 #include <torch/csrc/jit/mobile/train/random.h>
 // 包含 Torch 的基本类型定义

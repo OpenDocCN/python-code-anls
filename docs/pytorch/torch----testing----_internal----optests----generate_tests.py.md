@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\optests\generate_tests.py`
 
-```
+```py
 # 忽略类型检查错误，这里可能是为了兼容性或其他原因
 # 在此处导入必要的库和模块
 import datetime  # 导入处理日期和时间的模块

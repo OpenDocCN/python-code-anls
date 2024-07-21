@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\detail\CUDAHooks.cpp`
 
-```
+```py
 // 包含 ATen CUDA 相关的头文件
 
 #include <ATen/cuda/detail/CUDAHooks.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\mkldnn_fusion.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 functools 模块
 import functools

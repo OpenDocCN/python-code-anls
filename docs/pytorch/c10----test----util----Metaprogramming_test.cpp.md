@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\Metaprogramming_test.cpp`
 
-```
+```py
 // 包含必要的头文件来使用所需的库和工具
 #include <c10/test/util/Macros.h>
 #include <c10/util/Metaprogramming.h>

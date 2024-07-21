@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\fx_minifier.py`
 
-```
+```py
 # 忽略类型检查错误，这通常用于标记代码中的类型系统问题，让类型检查工具跳过这些错误
 # 导入必要的库和模块
 import copy  # 导入 copy 模块，用于对象的深拷贝和浅拷贝操作

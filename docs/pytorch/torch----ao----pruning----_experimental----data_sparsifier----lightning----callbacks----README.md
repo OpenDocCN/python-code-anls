@@ -18,7 +18,7 @@ There are 2 types of data sparsity callbacks
     2. `data_sparsifier_args`: the arguments/config for the data sparsifier constructor that will be used while creating the object.
 
     Example:
-    ```
+    ```py
     from data_sparsity import PostTrainingDataSparsity
     sparsifier_args = {
         'sparsity_level': 0.5,
@@ -36,7 +36,7 @@ There are 2 types of data sparsity callbacks
 
     Example:
 
-    ```
+    ```py
     from data_sparsity import TrainingAwareDataSparsity
     sparsifier_args = {
         'sparsity_level': 0.5,
@@ -62,7 +62,7 @@ There are 2 types of data sparsity callbacks
 3. The data sparsifier/scheduler object will be created internally and will be attached to the model by the callback whenever necessary.
 
 ## Usage
-```
+```py
 pl_module = SomePLModule()  # pl_module.model should specify the pytorch model
 
 ds_callback = SomeDataSparsifierCallback(data_sparsifier_class=..., data_sparsifier_args=..., ...)  # add scheduler if TrainingAwareDataSparsifier

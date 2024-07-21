@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\ssize_test.cpp`
 
-```
+```py
 // 包含 ssize.h 文件，该文件提供了 ssize 函数的定义
 #include <c10/util/ssize.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_decomp.py`
 
-```
+```py
 # Owner(s): ["module: decompositions"]
 
 import functools  # 导入 functools 库，用于高阶函数和操作函数对象的工具

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchingMetaprogramming.h`
 
-```
+```py
 // Copyright (c) Facebook, Inc. and its affiliates.
 // All rights reserved.
 //

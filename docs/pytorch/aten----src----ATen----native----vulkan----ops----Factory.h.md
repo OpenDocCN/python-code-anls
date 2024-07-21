@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Factory.h`
 
-```
+```py
 #include <ATen/native/vulkan/ops/Common.h>
 
 namespace at {

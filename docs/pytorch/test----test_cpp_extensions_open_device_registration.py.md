@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_cpp_extensions_open_device_registration.py`
 
-```
+```py
 # Owner(s): ["module: cpp-extensions"]
 
 # 导入必要的标准库和第三方库

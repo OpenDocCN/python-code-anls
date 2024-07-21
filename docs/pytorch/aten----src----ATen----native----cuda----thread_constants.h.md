@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\thread_constants.h`
 
-```
+```py
 #pragma once
 // 声明标记一个 lambda 函数在主机和设备上都可执行。__host__ 属性非常重要，以便我们可以从主机访问静态类型信息，
 // 即使该函数通常只在设备上执行。

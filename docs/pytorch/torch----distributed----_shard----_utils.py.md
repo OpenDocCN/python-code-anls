@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\_utils.py`
 
-```
+```py
 # 导入必要的库和模块
 from typing import Sequence  # 引入Sequence类型用于类型提示
 

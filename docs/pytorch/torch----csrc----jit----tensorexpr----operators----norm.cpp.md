@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\norm.cpp`
 
-```
+```py
 // 引入 Torch 的 TensorExpr 库中定义的运算符和函数
 #include <torch/csrc/jit/tensorexpr/operators/misc.h>
 #include <torch/csrc/jit/tensorexpr/operators/norm.h>

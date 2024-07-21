@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\composite_compliance.py`
 
-```
+```py
 # 忽略 mypy 错误检查
 # mypy: ignore-errors
 

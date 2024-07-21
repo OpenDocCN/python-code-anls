@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\operator_upgraders\utils.h`
 
-```
+```py
 // 预处理指令，用于确保头文件只被包含一次
 #pragma once
 

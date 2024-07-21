@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\cuda\SparseBlasLegacy.cpp`
 
-```
+```py
 /*
 Functions here use deprecated cuSPARSE API that was removed in CUDA 11.
 This file will be removed eventually.

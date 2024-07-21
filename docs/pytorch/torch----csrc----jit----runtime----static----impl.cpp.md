@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\impl.cpp`
 
-```
+```py
 // 引入头文件实现静态运行时的相关功能
 #include <torch/csrc/jit/runtime/static/impl.h>
 

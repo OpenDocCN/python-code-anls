@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\annotations.py`
 
-```
+```py
 # 引入必要的模块和类型定义
 # mypy: allow-untyped-defs 允许未类型化的函数定义
 import ast  # AST 抽象语法树模块，用于解析 Python 代码

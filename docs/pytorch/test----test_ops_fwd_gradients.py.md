@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_ops_fwd_gradients.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入平台信息模块

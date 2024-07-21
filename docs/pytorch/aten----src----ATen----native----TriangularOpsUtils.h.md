@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TriangularOpsUtils.h`
 
-```
+```py
 /*
  * 给定批次的具有任意批次维度的矩阵，
  * 计算 Triu 和 Tril 的批次数。这忽略了步幅为 0 的维度。

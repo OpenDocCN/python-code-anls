@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\pass\cuda_steam.py`
 
-```
+```py
 # 导入PyTorch库
 import torch
 

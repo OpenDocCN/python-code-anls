@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\timer\file_based_local_timer.py`
 
-```
+```py
 import io  # 导入 io 模块，用于处理文件流
 import json  # 导入 json 模块，用于 JSON 数据的编码和解码
 import os  # 导入 os 模块，提供了访问操作系统服务的功能

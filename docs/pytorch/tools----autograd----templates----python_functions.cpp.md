@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_functions.cpp`
 
-```
+```py
 // 包含 Torch 自动生成的 Python 函数声明头文件
 #include <torch/csrc/autograd/generated/python_functions.h>
 

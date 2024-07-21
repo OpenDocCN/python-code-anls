@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\ops\MetalConvolution.h`
 
-```
+```py
 #import <ATen/native/metal/MetalConvParams.h>
 #import <ATen/native/metal/MetalPrepackOpContext.h>
 #include <c10/util/ArrayRef.h>

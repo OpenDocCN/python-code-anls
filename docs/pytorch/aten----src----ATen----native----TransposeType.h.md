@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TransposeType.h`
 
-```
+```py
 #pragma once
 // 包含 C10 库中的异常处理工具
 #include <c10/util/Exception.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\DispatchKeySet.cpp`
 
-```
+```py
 // 引入C++头文件，包括DispatchKeySet和irange
 #include <c10/core/DispatchKeySet.h>
 #include <c10/util/irange.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\__init__.py`
 
-```
+```py
 # 导入动态稀疏量化映射函数
 from ._mappings import get_dynamic_sparse_quantized_mapping
 # 导入静态稀疏量化映射函数

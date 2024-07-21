@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\BinaryOps.h`
 
-```
+```py
 #include <ATen/core/Tensor.h>
 
 # 包含 ATen 核心库中的 Tensor 类的头文件

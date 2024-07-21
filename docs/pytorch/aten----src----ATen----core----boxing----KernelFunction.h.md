@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\KernelFunction.h`
 
-```
+```py
 #pragma once
 // 声明本头文件只能包含一次
 

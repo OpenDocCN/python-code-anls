@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\OperatorEntry.h`
 
-```
+```py
 // 预处理指令：只包含一次的头文件，确保头文件只被包含一次
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\parallel\distributed.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import copy  # 复制对象的模块

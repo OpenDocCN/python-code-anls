@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\static\impl.h`
 
-```
+```py
 #pragma once
 // 预处理指令：指定头文件只被包含一次
 

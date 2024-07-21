@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\utils.py`
 
-```
+```py
 # 导入 subprocess 模块，用于执行外部命令
 import subprocess
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\_imported_class_test\__init__.py`
 
-```
+```py
 # 定义一个名为 read_csv 的函数，接受一个参数 filename
 def read_csv(filename):
     # 打开文件 filename 作为 f，模式为只读模式（'r'）

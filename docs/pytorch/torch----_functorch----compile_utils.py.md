@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\compile_utils.py`
 
-```
+```py
 # mypy: ignore-errors
 
 # 导入所需模块和类

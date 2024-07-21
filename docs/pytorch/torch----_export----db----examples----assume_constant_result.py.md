@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\assume_constant_result.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 # 引入 torch._dynamo 库，用于假定常量结果

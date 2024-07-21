@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\model_test\math_ops.py`
 
-```
+```py
 # 引入 math 和 torch 库，用于数学操作和张量计算
 import math
 import torch

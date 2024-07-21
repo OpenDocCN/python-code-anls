@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\streamreader.py`
 
-```
+```py
 # 引入允许未类型化的定义，用于类型检查
 # mypy: allow-untyped-defs
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_tensor_ops.py`
 
-```
+```py
 # 导入 PyTorch 库及相关模块和函数
 import torch
 from torch.distributed._tensor import DeviceMesh, distribute_tensor, DTensor

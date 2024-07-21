@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_init.h`
 
-```
+```py
 #pragma once
 
 这行指令告诉编译器只包含此文件一次，以防止多次包含同一文件而引起的重定义错误。

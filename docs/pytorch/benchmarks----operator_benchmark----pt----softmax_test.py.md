@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\softmax_test.py`
 
-```
+```py
 # 引入 operator_benchmark 模块，命名为 op_bench
 import operator_benchmark as op_bench
 # 引入 PyTorch 模块

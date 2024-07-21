@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\utils\python_arg_parsing.h`
 
-```
+```py
 // 预处理指令，确保头文件只包含一次
 #pragma once
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\mobile_bytecode_generated.h`
 
-```
+```py
 // 自动由FlatBuffers编译器生成，不要修改
 
 // 防止包含的flatbuffers.h与生成此文件时的版本不兼容

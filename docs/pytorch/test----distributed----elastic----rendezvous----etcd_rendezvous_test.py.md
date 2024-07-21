@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\rendezvous\etcd_rendezvous_test.py`
 
-```
+```py
 `
 # Owner(s): ["oncall: r2p"]
 

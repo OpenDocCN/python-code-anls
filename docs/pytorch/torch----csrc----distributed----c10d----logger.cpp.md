@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\logger.cpp`
 
-```
+```py
 // 包含字符串处理工具库的头文件
 #include <c10/util/StringUtil.h>
 // 包含格式化输出库的头文件

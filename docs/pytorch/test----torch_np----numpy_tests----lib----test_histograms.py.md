@@ -1,6 +1,6 @@
 # `.\pytorch\test\torch_np\numpy_tests\lib\test_histograms.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 # 导入 functools 模块

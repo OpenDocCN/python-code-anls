@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qrnn_test.py`
 
-```
+```py
 # 导入 operator_benchmark 库作为 op_bench 别名
 import operator_benchmark as op_bench
 # 导入 torch 库

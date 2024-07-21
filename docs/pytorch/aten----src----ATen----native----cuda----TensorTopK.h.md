@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\TensorTopK.h`
 
-```
+```py
 #pragma once
 // 使用 pragma once 指令确保头文件只被包含一次，避免重复定义
 

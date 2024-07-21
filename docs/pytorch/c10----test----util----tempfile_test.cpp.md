@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\tempfile_test.cpp`
 
-```
+```py
 #include <c10/util/tempfile.h>
 #include <gtest/gtest.h>
 #include <sys/stat.h>

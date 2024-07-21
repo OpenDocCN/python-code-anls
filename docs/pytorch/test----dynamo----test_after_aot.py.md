@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_after_aot.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 
 import io  # 导入 io 模块，提供了各种 I/O 操作功能

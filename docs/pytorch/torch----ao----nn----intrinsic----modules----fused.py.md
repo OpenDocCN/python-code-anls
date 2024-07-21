@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\modules\fused.py`
 
-```
+```py
 # 引入 torch 库，包括所需的模块和函数
 import torch
 # 从 torch.nn 模块中导入 Conv1d、Conv2d、Conv3d、ReLU、Linear、BatchNorm1d、BatchNorm2d、BatchNorm3d 等模块

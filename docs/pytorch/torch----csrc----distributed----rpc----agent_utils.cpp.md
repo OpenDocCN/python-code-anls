@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\agent_utils.cpp`
 
-```
+```py
 // 引入 fmt 库中的 format.h 和 Torch 库中的 agent_utils.h 头文件
 #include <fmt/format.h>
 #include <torch/csrc/distributed/rpc/agent_utils.h>

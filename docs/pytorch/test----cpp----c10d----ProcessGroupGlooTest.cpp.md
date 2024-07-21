@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\c10d\ProcessGroupGlooTest.cpp`
 
-```
+```py
 #ifndef _WIN32
 // 如果不是在 Windows 下编译，则包含以下头文件
 #include <signal.h>             // POSIX 信号处理相关函数

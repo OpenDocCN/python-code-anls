@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\c10d_rendezvous_backend.py`
 
-```
+```py
     def __init__(self, store: Store, run_id: str) -> None:
         # 检查运行 ID 是否为空，如果是则抛出数值错误异常
         if not run_id:

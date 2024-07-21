@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\__init__.py`
 
-```
+```py
 # 导入PyTorch的自动求导库的C扩展模块
 import torch._library.autograd
 # 导入PyTorch的伪实现库的C扩展模块

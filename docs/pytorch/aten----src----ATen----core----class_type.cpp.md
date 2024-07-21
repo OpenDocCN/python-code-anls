@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\class_type.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件
 
 #include <ATen/core/class_type.h>

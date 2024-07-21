@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\__init__.py`
 
-```
+```py
 # 引入类型模块
 import types
 # 引入上下文管理器

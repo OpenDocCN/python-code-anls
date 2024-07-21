@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\summarize_jsons.py`
 
-```
+```py
 # 从 __future__ 模块导入 annotations 特性，这是为了支持后续的类型提示功能
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\container\functional.cpp`
 
-```
+```py
 #include <torch/nn/modules/container/functional.h>  // 引入torch库中的functional.h头文件
 
 #include <torch/types.h>  // 引入torch库中的types.h头文件

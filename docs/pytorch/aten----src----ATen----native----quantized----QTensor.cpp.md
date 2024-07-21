@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\QTensor.cpp`
 
-```
+```py
 #include <ATen/ATen.h>
 #include <ATen/NativeFunctions.h>
 #include <ATen/native/TensorIterator.h>

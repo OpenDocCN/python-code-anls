@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Correlation.cpp`
 
-```
+```py
 // 定义宏以限制在编译期间仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量的核心头文件

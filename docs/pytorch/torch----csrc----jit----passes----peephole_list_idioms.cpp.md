@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_list_idioms.cpp`
 
-```
+```py
 // 包含必要的头文件：ATen 库的 JIT 类型、Torch 的 IR 分析、IR 视图、JIT 日志、死代码消除、
 // 窥孔优化、列表惯用语的窥孔优化、值细化工具、图执行器、切片索引调整等
 #include <ATen/core/jit_type.h>

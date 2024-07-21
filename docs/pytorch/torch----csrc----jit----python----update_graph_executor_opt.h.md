@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\update_graph_executor_opt.h`
 
-```
+```py
 #pragma once
 // 包含 Torch C++ API 中的 Export.h 文件，用于导出符号
 #include <torch/csrc/Export.h>

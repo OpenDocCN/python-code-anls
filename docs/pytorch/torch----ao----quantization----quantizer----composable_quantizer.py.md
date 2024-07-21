@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\composable_quantizer.py`
 
-```
+```py
 # 从未来模块中导入注解支持
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ class ComposableQuantizer(Quantizer):
     xnnpack_quantizer = XNNPackQuantizer() # to handle ops not quantized by previous two quantizers
     composed_quantizer = ComposableQuantizer([embedding_quantizer, linear_quantizer, xnnpack_quantizer])
     prepared_m = prepare_pt2e(model, composed_quantizer)
-    ```
+    ```py
     """
 
     def __init__(self, quantizers: List[Quantizer]):

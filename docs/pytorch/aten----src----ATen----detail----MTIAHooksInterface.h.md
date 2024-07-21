@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\MTIAHooksInterface.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Device.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\standalone\nvtx_observer.h`
 
-```
+```py
 #include <torch/csrc/profiler/api.h>
 // 引入 Torch 的性能分析工具头文件
 

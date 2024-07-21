@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\fake_impl.py`
 
-```
+```py
 # 添加类型检查声明，允许未类型化的定义
 # 引入上下文管理器和函数工具
 # 从 typing 模块导入 Callable 和 Optional 类型

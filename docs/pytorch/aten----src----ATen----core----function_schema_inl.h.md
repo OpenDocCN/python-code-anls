@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\function_schema_inl.h`
 
-```
+```py
 #pragma once
 #include <ostream>
 #include <sstream>

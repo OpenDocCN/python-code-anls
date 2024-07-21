@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_fuser_legacy.py`
 
-```
+```py
 # 导入 sys 模块，用于处理系统相关功能
 import sys
 

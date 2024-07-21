@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\inference\process_metrics.py`
 
-```
+```py
 """
 This file will take the csv outputs from server.py, calculate the mean and
 variance of the warmup_latency, average_latency, throughput and gpu_util

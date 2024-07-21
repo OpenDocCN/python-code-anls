@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\SavedTensorHooks.cpp`
 
-```
+```py
 // 引入头文件 SavedTensorHooks.h
 #include <ATen/SavedTensorHooks.h>
 // 引入异常处理工具 Exception.h

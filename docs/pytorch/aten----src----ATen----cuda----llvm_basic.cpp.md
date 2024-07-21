@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\llvm_basic.cpp`
 
-```
+```py
 // This file is modified from LLVM, see the following copyright information
 //
 // -*- C++ -*-

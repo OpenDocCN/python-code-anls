@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\input_reshard.py`
 
-```
+```py
 # Copyright (c) Meta Platforms, Inc. and affiliates
 from functools import partial  # 导入 functools 模块的 partial 函数，用于创建函数的偏函数
 from typing import Any, Optional, Tuple  # 导入类型提示模块，用于类型注解

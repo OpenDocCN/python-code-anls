@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_scatter_optimization.py`
 
-```
+```py
 #`
 # Owner(s): ["module: inductor"]
 

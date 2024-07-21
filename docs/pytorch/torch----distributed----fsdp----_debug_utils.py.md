@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_debug_utils.py`
 
-```
+```py
     """
     用于可组合的 fully_shard() 代码路径，返回以下两个元素的元组：
       1. sharded module tree info: 每一行表示一个子模块名称，包含子模块的全限定名（FQN）和子模块类名。

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\update_masked_docs.py`
 
-```
+```py
 """
 This script updates the file torch/masked/_docs.py that contains
 the generated doc-strings for various masked operations. The update

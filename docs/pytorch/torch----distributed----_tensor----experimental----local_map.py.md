@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\experimental\local_map.py`
 
-```
+```py
 # 设置类型提示允许未标注的定义
 # 版权声明: Meta Platforms, Inc. 及其关联公司
 from typing import Callable, Optional, Sequence, Tuple, Union  # 导入需要的类型提示模块

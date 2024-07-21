@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\function_schema_parser.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/function_schema.h>

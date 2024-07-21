@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\ao_migration\test_ao_migration.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 from .common import AOMigrationTestCase  # 导入AOMigrationTestCase类，来自common模块

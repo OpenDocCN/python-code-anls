@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\test_nn_module.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 import torch

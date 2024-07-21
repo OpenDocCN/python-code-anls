@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\metrics\CPUMetric.py`
 
-```
+```py
 import time  # 导入时间模块
 
 from .MetricBase import MetricBase  # 导入自定义的MetricBase类

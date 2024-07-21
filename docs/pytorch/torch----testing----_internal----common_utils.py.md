@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\common_utils.py`
 
-```
+```py
 # 忽略类型检查错误，这通常用于告知类型检查工具在此文件中忽略特定的类型错误
 mypy: ignore-errors
 
@@ -545,7 +545,7 @@ def instantiate_parametrized_tests(generic_cls):
     @instantiate_parametrized_tests
     class TestFoo(TestCase):
         ...
-    ```
+    ```py
     """
 
     # 这里是一个占位函数，没有添加具体的代码内容

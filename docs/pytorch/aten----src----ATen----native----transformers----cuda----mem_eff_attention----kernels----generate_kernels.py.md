@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\transformers\cuda\mem_eff_attention\kernels\generate_kernels.py`
 
-```
+```py
 # 版权声明及许可信息
 #
 # 此源代码使用 BSD 许可证授权，详见源代码根目录中的 LICENSE 文件。

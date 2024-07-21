@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\miopen\BatchNorm_miopen.cpp`
 
-```
+```py
 // 定义预处理器宏，仅限于 Torch 断言和方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入 ATen 库中的 Tensor 类

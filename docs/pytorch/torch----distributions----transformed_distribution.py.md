@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\transformed_distribution.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型定义
 from typing import Dict

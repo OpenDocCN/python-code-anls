@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_tensor\test_convolution_ops.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入copy模块，用于深拷贝操作
 

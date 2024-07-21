@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\utils.py`
 
-```
+```py
 # 引入默认字典集合模块
 from collections import defaultdict
 # 引入类型提示模块中的 Callable, Dict, List, Tuple, Union 类

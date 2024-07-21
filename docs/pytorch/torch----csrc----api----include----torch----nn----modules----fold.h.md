@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\fold.h`
 
-```
+```py
 #pragma once
 
 #include <torch/expanding_array.h>  // 引入扩展数组的头文件
@@ -23,7 +23,7 @@ namespace nn {
 /// Example:
 /// ```
 /// Fold model(FoldOptions({8, 8}, {3, 3}).dilation(2).padding({2, 1}).stride(2));
-/// ```
+/// ```py
 class TORCH_API FoldImpl : public torch::nn::Cloneable<FoldImpl> {
  public:
   // 构造函数，接受两个扩展数组参数来创建FoldImpl对象
@@ -67,7 +67,7 @@ TORCH_MODULE(Fold);
 /// Example:
 /// ```
 /// Unfold model(UnfoldOptions({2, 4}).dilation(2).padding({2, 1}).stride(2));
-/// ```
+/// ```py
 class TORCH_API UnfoldImpl : public Cloneable<UnfoldImpl> {
  public:
   // 构造函数，接受一个扩展数组参数来创建UnfoldImpl对象

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\InferSize.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/DimVector.h>

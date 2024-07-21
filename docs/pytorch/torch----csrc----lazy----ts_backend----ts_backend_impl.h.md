@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_backend_impl.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/lazy/backend/backend_interface.h>

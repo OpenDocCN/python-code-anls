@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\dist_util.py`
 
-```
+```py
 `
 # 导入必要的库和模块
 import argparse   # 用于解析命令行参数的库

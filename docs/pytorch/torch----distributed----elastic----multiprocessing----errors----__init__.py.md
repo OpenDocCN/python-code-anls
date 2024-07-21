@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\multiprocessing\errors\__init__.py`
 
-```
+```py
 """
 Each host in a distributed PyTorch job runs with a single TorchElastic agent,
 and multiple workers (as children processes of the TorchElastic agent).

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\BatchLinearAlgebra.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/Optional.h>         // 包含 c10 库中的 Optional 类型定义

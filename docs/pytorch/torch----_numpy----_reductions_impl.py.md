@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_reductions_impl.py`
 
-```
+```py
 # 忽略 mypy 类型检查错误
 # 实现降维操作，可以被数组、数据类型等在“公共”层面包装。
 

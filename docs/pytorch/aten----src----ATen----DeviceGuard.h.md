@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\DeviceGuard.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/IListRef.h>

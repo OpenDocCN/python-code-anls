@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\quantization_torch_package_models.py`
 
-```
+```py
 # 忽略类型检查错误，用于类型检查工具 mypy
 # 导入 math 库，用于数学计算
 import math

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\adapters\newlines_linter.py`
 
-```
+```py
 """
 NEWLINE: Checks files to make sure there are no trailing newlines.
 """

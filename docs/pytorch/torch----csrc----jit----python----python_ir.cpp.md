@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\python\python_ir.cpp`
 
-```
+```py
 `
 // 引入 Torch JIT 库中的 Python IR 头文件
 #include <torch/csrc/jit/python/python_ir.h>

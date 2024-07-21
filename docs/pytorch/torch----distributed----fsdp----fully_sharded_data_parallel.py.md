@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\fully_sharded_data_parallel.py`
 
-```
+```py
 # 忽略 mypy 类型检查错误
 # 导入必要的库和模块
 import contextlib  # 提供上下文管理器的工具函数

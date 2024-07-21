@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\BlasKernel.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_NO_OPERATORS 以避免引入操作符
 #define TORCH_ASSERT_NO_OPERATORS
 // 包含 ATen 库的分发和并行处理相关头文件

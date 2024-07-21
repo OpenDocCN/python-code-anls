@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\triton.py`
 
-```
+```py
 # 在使用 mypy 时允许未标注的函数定义
 # 从 __future__ 模块导入注释作为类型提示的特性
 from __future__ import annotations

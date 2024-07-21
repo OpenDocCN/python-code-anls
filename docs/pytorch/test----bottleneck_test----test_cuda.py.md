@@ -1,6 +1,6 @@
 # `.\pytorch\test\bottleneck_test\test_cuda.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 导入PyTorch库

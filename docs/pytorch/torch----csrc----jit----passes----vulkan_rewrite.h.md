@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\vulkan_rewrite.h`
 
-```
+```py
 #pragma once
 
 

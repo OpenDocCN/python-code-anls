@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\complex_math_test.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 # 包含 Google Test 框架的头文件
 

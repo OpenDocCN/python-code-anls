@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\tensor_engine.py`
 
-```
+```py
 # 定义全局变量 tensor_engine，并初始化为 None
 tensor_engine = None
 

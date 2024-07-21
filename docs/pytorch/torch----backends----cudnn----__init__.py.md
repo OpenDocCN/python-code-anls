@@ -1,6 +1,6 @@
 # `.\pytorch\torch\backends\cudnn\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import os  # 操作系统接口

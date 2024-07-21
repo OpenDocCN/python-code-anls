@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_dispatch.h`
 
-```
+```py
 #include <pybind11/pybind11.h>
 #include <torch/csrc/utils/pybind.h>
 

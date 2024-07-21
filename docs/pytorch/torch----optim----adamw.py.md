@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\adamw.py`
 
-```
+```py
 # 声明不允许使用未类型化的函数定义（用于类型检查）
 # 导入必要的类型和模块
 from typing import cast, List, Optional, Tuple, Union

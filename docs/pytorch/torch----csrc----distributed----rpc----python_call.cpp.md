@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\python_call.cpp`
 
-```
+```py
 // 包含 Torch 分布式 RPC 模块的 Python 调用头文件
 #include <torch/csrc/distributed/rpc/python_call.h>
 

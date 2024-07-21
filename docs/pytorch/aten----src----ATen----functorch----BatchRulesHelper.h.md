@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\BatchRulesHelper.h`
 
-```
+```py
 // 版权声明及许可信息
 // 版权所有，Facebook公司及其关联公司
 // 此源代码根据根目录下的LICENSE文件中的BSD风格许可证授权。

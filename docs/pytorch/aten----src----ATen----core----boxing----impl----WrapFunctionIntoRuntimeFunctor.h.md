@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\boxing\impl\WrapFunctionIntoRuntimeFunctor.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，确保当前头文件只被编译一次，避免重复包含

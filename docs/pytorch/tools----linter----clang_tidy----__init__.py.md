@@ -1,6 +1,6 @@
 # `.\pytorch\tools\linter\clang_tidy\__init__.py`
 
-```
+```py
 # 定义一个类`Node`，表示图的节点
 class Node:
     # 类级别变量`count`，用于记录节点个数

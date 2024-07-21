@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\match_utils.py`
 
-```
+```py
 """
 Contains utility functions to check if a pattern is in the graph and return the matching nodes
 """

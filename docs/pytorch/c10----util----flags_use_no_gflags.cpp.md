@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\flags_use_no_gflags.cpp`
 
-```
+```py
 #ifndef C10_USE_GFLAGS
 // 如果没有定义 C10_USE_GFLAGS，则进入命名空间 c10
 namespace c10 {

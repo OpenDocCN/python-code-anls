@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\simd.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import annotations
 

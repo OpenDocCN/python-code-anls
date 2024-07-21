@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\selective_build\selector.py`
 
-```
+```py
 # 从未来模块导入 annotations，确保代码能在旧版本的 Python 中运行
 from __future__ import annotations
 

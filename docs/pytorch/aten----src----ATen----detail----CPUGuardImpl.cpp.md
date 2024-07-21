@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\CPUGuardImpl.cpp`
 
-```
+```py
 #include <c10/core/impl/DeviceGuardImplInterface.h>
 
 # 包含头文件 `c10/core/impl/DeviceGuardImplInterface.h`，该头文件提供了设备保护实现的接口定义。

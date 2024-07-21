@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\Exceptions.h`
 
-```
+```py
 #pragma once
     # 使用宏定义 TORCH_CHECK 检查 __err 是否等于 CUBLAS_STATUS_SUCCESS，
     # 如果不等于，则抛出带有错误信息的异常

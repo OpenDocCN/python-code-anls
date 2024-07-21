@@ -1,6 +1,6 @@
 # `.\pytorch\torch\autograd\_functions\tensor.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入operator模块中的函数reduce和模块functools中的函数reduce
 import operator

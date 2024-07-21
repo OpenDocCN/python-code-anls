@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_activation_checkpointing.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入标准库模块和第三方库模块
 import copy  # 导入深拷贝函数

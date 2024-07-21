@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\PinnedMemoryAllocator.cpp`
 
-```
+```py
 // 包含必要的头文件，用于 CUDA 异步操作和内存分配
 #include <ATen/cuda/PinnedMemoryAllocator.h>
 #include <ATen/Context.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\MetaTensor.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/EmptyTensor.h>
 #include <ATen/core/Tensor.h>

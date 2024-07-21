@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\serialization\callstack_debug_info_serialization.cpp`
 
-```
+```py
 namespace torch::jit {
 
 namespace {

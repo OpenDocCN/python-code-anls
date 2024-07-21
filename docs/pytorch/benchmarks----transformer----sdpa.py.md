@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\transformer\sdpa.py`
 
-```
+```py
 ```python`
 import itertools
 from collections import defaultdict

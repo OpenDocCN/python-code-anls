@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\ScopeExit.h`
 
-```
+```py
 #pragma once
 
 #include <type_traits> // 包含类型特性的标准库头文件

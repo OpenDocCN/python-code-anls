@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\UpSampleMoreKernel.cpp`
 
-```
+```py
 // 定义宏以启用仅支持方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

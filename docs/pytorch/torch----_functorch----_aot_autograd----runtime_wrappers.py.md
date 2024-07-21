@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_functorch\_aot_autograd\runtime_wrappers.py`
 
-```
+```py
 """
 # mypy: allow-untyped-defs
 """

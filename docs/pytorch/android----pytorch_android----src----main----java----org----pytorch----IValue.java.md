@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\IValue.java`
 
-```
+```py
 /**
  * Java表示TorchScript值的类，实现为标记联合，可以是支持的多种类型之一：https://pytorch.org/docs/stable/jit.html#types 。
  *

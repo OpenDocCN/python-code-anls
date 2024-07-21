@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\gpt_fast\model.py`
 
-```
+```py
 # 引入必要的库和模块
 from dataclasses import dataclass  # 导入用于定义数据类的装饰器
 from typing import Optional  # 导入类型提示中的可选类型

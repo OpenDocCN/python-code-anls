@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\DeadlockDetection.h`
 
-```
+```py
 // 当前文件只会被包含一次，以避免重复定义
 #pragma once
 

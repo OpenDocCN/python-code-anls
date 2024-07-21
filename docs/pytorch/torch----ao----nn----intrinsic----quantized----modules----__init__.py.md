@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\intrinsic\quantized\modules\__init__.py`
 
-```
+```py
 # 从不同模块中导入不同的类
 from .linear_relu import LinearReLU, LinearLeakyReLU, LinearTanh
 from .conv_relu import ConvReLU1d, ConvReLU2d, ConvReLU3d

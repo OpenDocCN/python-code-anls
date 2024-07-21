@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fsdp\test_fully_shard_overlap.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入 functools 模块，用于高阶函数操作
 import functools

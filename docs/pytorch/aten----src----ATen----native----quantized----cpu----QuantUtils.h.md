@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\QuantUtils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Tensor.h>

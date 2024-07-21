@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\xpu\Module.cpp`
 
-```
+```py
 // 包含 ATen 库的头文件，用于张量操作和设备管理
 #include <ATen/ATen.h>
 // 包含 XPU 上下文管理相关的头文件

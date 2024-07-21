@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\proxy_tensor.py`
 
-```
+```py
 # 忽略 mypy 类型检查错误
 
 # 引入上下文管理器模块

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\mobile\CPUCachingAllocator.cpp`
 
-```
+```py
 // 包含 C10 库中的头文件，用于 CPU 内存分配和异常处理
 #include <c10/core/impl/alloc_cpu.h>
 #include <c10/mobile/CPUCachingAllocator.h>

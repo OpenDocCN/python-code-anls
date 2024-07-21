@@ -1,6 +1,6 @@
 # `.\pytorch\test\quantization\eager\test_model_numerics.py`
 
-```
+```py
 # Owner(s): ["oncall: quantization"]
 
 import torch  # 导入PyTorch库

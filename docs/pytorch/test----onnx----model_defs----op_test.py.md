@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\model_defs\op_test.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 导入 PyTorch 库

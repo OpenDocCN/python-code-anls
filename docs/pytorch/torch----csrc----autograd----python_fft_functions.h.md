@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\python_fft_functions.h`
 
-```
+```py
 #pragma once
 
 

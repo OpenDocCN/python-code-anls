@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Half.cpp`
 
-```
+```py
 #include <c10/util/Half.h>  // 包含 c10 库中 Half 类的头文件
 
 #include <type_traits>  // 包含类型特性的头文件，用于检查类型特性

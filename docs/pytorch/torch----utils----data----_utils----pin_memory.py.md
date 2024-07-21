@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\_utils\pin_memory.py`
 
-```
+```py
 # 设置 mypy 工具允许未类型化的定义
 r"""Contains definitions of the methods used by the _BaseDataLoaderIter to put fetched tensors into pinned memory.
 

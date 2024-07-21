@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\Macros.h`
 
-```
+```py
 #pragma once
 
 #define SINGLE_ARG(...) __VA_ARGS__

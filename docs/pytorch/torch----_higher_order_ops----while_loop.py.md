@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\while_loop.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入类型相关模块和函数
 from typing import Callable, Tuple, Union

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Convolution.h`
 
-```
+```py
 // 针对头文件的条件编译，仅在使用 Vulkan API 时包含本文件
 #pragma once
 

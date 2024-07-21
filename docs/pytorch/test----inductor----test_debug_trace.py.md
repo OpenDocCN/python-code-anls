@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_debug_trace.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入必要的库和模块
 import logging  # 导入日志模块

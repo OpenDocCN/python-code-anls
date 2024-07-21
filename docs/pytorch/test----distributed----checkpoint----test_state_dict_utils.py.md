@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\checkpoint\test_state_dict_utils.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 # 导入必要的库和模块
 import copy  # 导入深拷贝模块

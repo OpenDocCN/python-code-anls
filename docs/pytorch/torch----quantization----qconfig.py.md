@@ -1,6 +1,6 @@
 # `.\pytorch\torch\quantization\qconfig.py`
 
-```
+```py
 # flake8: noqa: F401
 """
 This directive tells flake8 to ignore F401 errors (unused import), allowing

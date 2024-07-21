@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\modules\transformercoder.h`
 
-```
+```py
 #pragma once
 
 #include <torch/nn/cloneable.h>
@@ -35,7 +35,7 @@ namespace nn {
 /// 8).dropout(0.1)); TransformerEncoder
 /// encoder(TransformerEncoderOptions(encoderLayer,
 /// 6).norm(LayerNorm(LayerNormOptions({2}))));
-/// ```
+/// ```py
 class TORCH_API TransformerEncoderImpl
     : public Cloneable<TransformerEncoderImpl> {
  public:
@@ -112,7 +112,7 @@ TORCH_MODULE(TransformerEncoder);
 /// 8).dropout(0.1)); TransformerDecoder
 /// transformer_decoder(TransformerDecoderOptions(decoder_layer,
 /// 6).norm(LayerNorm(LayerNormOptions({2}))));
-/// ```
+/// ```py
 class TORCH_API TransformerDecoderImpl
     : public Cloneable<TransformerDecoderImpl> {
  public:

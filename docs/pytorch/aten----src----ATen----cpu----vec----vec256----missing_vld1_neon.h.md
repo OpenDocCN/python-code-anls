@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\missing_vld1_neon.h`
 
-```
+```py
 /* 对于在 gcc-7 中缺失的 vld1_*_x2 和 vst1_*_x2 内联函数的补充实现 */
 
 __extension__ extern __inline uint8x8x2_t

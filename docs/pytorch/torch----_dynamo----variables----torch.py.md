@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\torch.py`
 
-```
+```py
 # 引入必要的模块和函数
 # 设置 mypy 配置允许未标记类型的函数定义
 # functools：提供高阶函数操作

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\tensor.cpp`
 
-```
+```py
 // 引入头文件，声明使用了 Torch 的 tensor expression 相关模块
 #include <torch/csrc/jit/tensorexpr/tensor.h>
 

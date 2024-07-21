@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\compatibility\model_compatibility.cpp`
 
-```
+```py
 // 包含头文件：ATen 库中的 IValue 类定义
 #include <ATen/core/ivalue.h>
 // 包含头文件：Caffe2 序列化库中的文件适配器定义

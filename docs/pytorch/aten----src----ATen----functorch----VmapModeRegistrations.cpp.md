@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\VmapModeRegistrations.cpp`
 
-```
+```py
 // 引入 Torch 库中所需的头文件
 #include <torch/library.h>
 #include <ATen/ATen.h>

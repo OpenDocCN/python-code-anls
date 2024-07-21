@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\nn_module.py`
 
-```
+```py
 # 忽略类型检查错误
 # functools 模块提供的工具函数和装饰器
 import functools

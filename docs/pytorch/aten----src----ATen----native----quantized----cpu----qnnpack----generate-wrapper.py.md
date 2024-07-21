@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\generate-wrapper.py`
 
-```
+```py
 # 导入标准库中的 os 模块，用于访问操作系统功能
 import os
 

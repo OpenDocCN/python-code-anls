@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_fx_xform_observer.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入必要的库和模块

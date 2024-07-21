@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\heuristics\test_heuristics.py`
 
-```
+```py
 # 导入必要的模块和库
 # 用于特定启发式测试
 from __future__ import annotations

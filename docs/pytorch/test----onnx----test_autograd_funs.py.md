@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_autograd_funs.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 
 # 导入测试相关的公共函数和类

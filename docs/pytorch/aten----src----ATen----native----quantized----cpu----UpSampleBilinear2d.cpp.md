@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\UpSampleBilinear2d.cpp`
 
-```
+```py
 // 定义 TORCH_ASSERT_ONLY_METHOD_OPERATORS 宏，用于指定仅使用方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

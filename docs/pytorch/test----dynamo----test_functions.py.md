@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_functions.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # flake8: noqa: E731, C405, F811, C418, C417
 

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\DeviceGuard_test.cpp`
 
-```
+```py
 // 包含 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

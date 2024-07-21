@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\Synchronized_test.cpp`
 
-```
+```py
 // 包含C++的头文件：c10/util/Synchronized.h，用于多线程同步操作
 #include <c10/util/Synchronized.h>
 // 包含 Google Test 的头文件，用于编写和运行测试

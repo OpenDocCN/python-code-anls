@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\optimize_indexing.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入math模块，用于数学运算
 import math

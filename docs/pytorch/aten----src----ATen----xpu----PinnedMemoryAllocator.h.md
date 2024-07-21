@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\xpu\PinnedMemoryAllocator.h`
 
-```
+```py
 #pragma once
 
 // 使用 `#pragma once` 来确保头文件只被编译一次，提高编译效率。

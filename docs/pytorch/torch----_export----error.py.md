@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\error.py`
 
-```
+```py
 # 导入枚举类 Enum
 from enum import Enum
 

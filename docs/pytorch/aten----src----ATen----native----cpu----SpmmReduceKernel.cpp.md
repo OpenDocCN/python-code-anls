@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\SpmmReduceKernel.cpp`
 
-```
+```py
 // 定义宏，仅包含方法运算符的断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 引入张量操作的基本头文件

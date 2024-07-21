@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\clamp.c`
 
-```
+```py
 /*
  * 以下是 C 语言的 QNNPACK 库函数，用于创建和设置 Clamp 操作符，操作的数据类型为 uint8_t。
  * 这些函数用于限制输入张量的数值范围在指定的最小值和最大值之间。

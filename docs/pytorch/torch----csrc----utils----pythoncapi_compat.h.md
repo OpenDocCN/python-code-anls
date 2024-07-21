@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\pythoncapi_compat.h`
 
-```
+```py
 /*
 // Header file providing new C API functions to old Python versions.
 //

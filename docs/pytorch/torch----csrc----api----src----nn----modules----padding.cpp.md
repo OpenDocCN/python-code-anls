@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\padding.cpp`
 
-```
+```py
 // 包含 torch 库中的 padding 头文件
 #include <torch/nn/modules/padding.h>
 

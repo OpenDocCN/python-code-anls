@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\experimental\attention.py`
 
-```
+```py
 import contextlib
 import weakref
 from enum import Enum

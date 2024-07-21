@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\flatten.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型声明
 from typing import Tuple, Union

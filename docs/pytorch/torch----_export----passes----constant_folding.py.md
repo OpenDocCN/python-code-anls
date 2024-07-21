@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\passes\constant_folding.py`
 
-```
+```py
 # 设置 mypy：允许未标注的定义
 import collections  # 导入 collections 模块
 from collections import defaultdict  # 从 collections 模块中导入 defaultdict 类

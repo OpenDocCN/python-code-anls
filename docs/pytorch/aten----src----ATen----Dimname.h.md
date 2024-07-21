@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\Dimname.h`
 
-```
+```py
 #include <ATen/core/Dimname.h>
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\modules\activation.py`
 
-```
+```py
 # flake8: noqa: F401
 r"""Quantized Modules.
 

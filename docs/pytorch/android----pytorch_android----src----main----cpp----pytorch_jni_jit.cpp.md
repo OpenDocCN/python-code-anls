@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\cpp\pytorch_jni_jit.cpp`
 
-```
+```py
 namespace pytorch_jni {
 
 namespace {

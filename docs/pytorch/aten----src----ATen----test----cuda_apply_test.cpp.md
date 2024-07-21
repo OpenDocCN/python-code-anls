@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_apply_test.cpp`
 
-```
+```py
 /*
    包含 Google Test 框架的头文件
 */

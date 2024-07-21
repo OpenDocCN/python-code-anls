@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\viz\MemoryViz.js`
 
-```
+```py
 'use strict';
 
 // 导入 d3 库的相关模块

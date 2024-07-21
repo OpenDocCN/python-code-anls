@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_library\custom_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 inspect 模块，用于获取函数签名信息
 import inspect

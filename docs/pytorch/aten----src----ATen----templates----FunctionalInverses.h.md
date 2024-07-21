@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\FunctionalInverses.h`
 
-```
+```py
 #pragma once
 // 指定此头文件仅被编译一次
 

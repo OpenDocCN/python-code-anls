@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\strtod.cpp`
 
-```
+```py
 // 包含标准库头文件，这些头文件提供了必要的函数和类型声明
 #include <c10/macros/Macros.h>
 #include <clocale>

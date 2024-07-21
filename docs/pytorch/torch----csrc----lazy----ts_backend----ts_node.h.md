@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_node.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ArrayRef.h>  // 引入ArrayRef库，用于处理数组的引用

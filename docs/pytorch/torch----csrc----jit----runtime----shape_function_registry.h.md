@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\shape_function_registry.h`
 
-```
+```py
 #pragma once
 // 使用 #pragma once 防止头文件的多重包含
 

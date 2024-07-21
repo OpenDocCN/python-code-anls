@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_spmd\api.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 abc 模块导入 ABC 和 abstractmethod 装饰器
 from abc import ABC, abstractmethod

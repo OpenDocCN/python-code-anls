@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Clamp.cpp`
 
-```
+```py
 # 包含 Vulkan 操作的常用头文件
 #include <ATen/native/vulkan/ops/Common.h>
 # 包含 Torch 库的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\profiler_python.h`
 
-```
+```py
 #pragma once
 
 这行代码指示预处理器（preprocessor）仅包含一次当前的头文件，以防止头文件被多次包含导致的重定义错误。

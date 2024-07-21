@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\permutation_util.cpp`
 
-```
+```py
 // 定义命名空间 torch::lazy，并实现其中的函数
 namespace torch {
 namespace lazy {

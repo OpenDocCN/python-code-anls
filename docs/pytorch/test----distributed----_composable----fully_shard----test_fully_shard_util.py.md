@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_composable\fully_shard\test_fully_shard_util.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]  # 标识这段代码的所有者，分布式系统中的责任人
 
 import sys  # 导入系统相关的库，用于处理系统相关操作

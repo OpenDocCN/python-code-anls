@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\PyTorchOperatorHacks.cpp`
 
-```
+```py
 // 包含头文件 DynamicLayer.h，声明了 functorch 的动态层功能
 #include <ATen/functorch/DynamicLayer.h>
 // 包含 torch 库的头文件

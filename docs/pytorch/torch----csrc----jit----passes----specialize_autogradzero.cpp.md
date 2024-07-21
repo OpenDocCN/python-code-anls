@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\specialize_autogradzero.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/specialize_autogradzero.h>
 
 #include <c10/util/Exception.h>

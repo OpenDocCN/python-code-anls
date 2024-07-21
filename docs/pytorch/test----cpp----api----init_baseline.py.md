@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\api\init_baseline.py`
 
-```
+```py
 """Script to generate baseline values from PyTorch initialization algorithms"""
 
 # 引入系统相关模块

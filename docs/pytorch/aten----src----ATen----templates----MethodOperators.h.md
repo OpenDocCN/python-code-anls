@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\MethodOperators.h`
 
-```
+```py
 #pragma once
 
 // ${generated_comment}  // 插入生成的注释，可能是自动生成的文件头注释

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Pool.h`
 
-```
+```py
 #pragma once
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Size.h`
 
-```
+```py
 #pragma once
 
 

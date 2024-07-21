@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\profiler\server_process_global_profiler.cpp`
 
-```
+```py
 // 包含头文件 <torch/csrc/distributed/rpc/profiler/server_process_global_profiler.h>
 #include <torch/csrc/distributed/rpc/profiler/server_process_global_profiler.h>
 

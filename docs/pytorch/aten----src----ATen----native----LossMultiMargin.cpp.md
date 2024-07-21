@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\LossMultiMargin.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 定义预处理指令，指定仅包含操作符方法
 

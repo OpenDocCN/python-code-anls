@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\timer\debug_info_logging.py`
 
-```
+```py
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs
 

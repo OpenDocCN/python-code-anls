@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\launcher\bin\test_script_is_torchelastic_launched.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: r2p"]
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\fake_script_class.py`
 
-```
+```py
 # 导入类型提示中的 Any 类型
 from typing import Any
 

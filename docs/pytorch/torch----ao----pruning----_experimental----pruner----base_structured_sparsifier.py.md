@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\_experimental\pruner\base_structured_sparsifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 itertools 库中的 chain 函数，用于迭代集合中的元素
 from itertools import chain

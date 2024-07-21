@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\test_c10d_spawn_ucc.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入 sys 模块

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\TensorMethods.cpp`
 
-```
+```py
 // 包含 C++ 的头文件，用于定义标量和张量的基本操作
 #include <c10/core/Scalar.h>
 #include <ATen/core/TensorBody.h>

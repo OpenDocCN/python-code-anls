@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec256\vsx\vec256_quint8_vsx.h`
 
-```
+```py
 // 防止头文件重复包含
 #pragma once
 

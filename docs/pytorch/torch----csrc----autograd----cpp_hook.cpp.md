@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\cpp_hook.cpp`
 
-```
+```py
 // 包含头文件：包括使用到的 C++ 库的头文件
 #include <c10/util/irange.h>
 #include <torch/csrc/autograd/cpp_hook.h>

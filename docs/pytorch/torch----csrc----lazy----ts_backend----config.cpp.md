@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\config.cpp`
 
-```
+```py
 // 包含 Torch 框架中延迟计算模块的配置头文件
 
 // 定义一个布尔类型的配置选项 torch_lazy_ts_tensor_update_sync，

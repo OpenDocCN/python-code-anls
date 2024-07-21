@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_funcs_impl.py`
 
-```
+```py
 # mypy: ignore-errors
 
 """A thin pytorch / numpy compat layer.

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\inline_loop_condition.h`
 
-```
+```py
 #pragma once
 #include <functional>  // 包含标准库中的 functional 头文件
 #include <memory>       // 包含标准库中的 memory 头文件

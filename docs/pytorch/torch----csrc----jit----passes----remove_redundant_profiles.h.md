@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\remove_redundant_profiles.h`
 
-```
+```py
 #pragma once
 // 使用#pragma once指令确保头文件只被编译一次
 

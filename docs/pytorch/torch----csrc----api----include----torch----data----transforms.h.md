@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\data\transforms.h`
 
-```
+```py
 #pragma once
 
 

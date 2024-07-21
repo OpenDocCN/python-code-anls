@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\FusedAdagradKernel.cpp`
 
-```
+```py
 // 定义宏，用于限制仅声明方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量相关头文件

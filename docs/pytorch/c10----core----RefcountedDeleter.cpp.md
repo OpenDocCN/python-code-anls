@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\RefcountedDeleter.cpp`
 
-```
+```py
 #include <c10/core/RefcountedDeleter.h>
 
 #include <mutex>

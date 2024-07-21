@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\core\impl\InlineStreamGuard_test.cpp`
 
-```
+```py
 // 引入 Google Test 框架的头文件
 #include <gtest/gtest.h>
 

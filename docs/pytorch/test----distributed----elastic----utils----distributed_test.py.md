@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\utils\distributed_test.py`
 
-```
+```py
 #!/usr/bin/env python3
 # Owner(s): ["oncall: r2p"]
 

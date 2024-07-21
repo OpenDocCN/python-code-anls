@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_ops_gradients.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 from functools import partial  # 导入 partial 函数，用于创建带有部分参数的新函数

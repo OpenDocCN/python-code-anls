@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\impl\COWDeleter.h`
 
-```
+```py
 #pragma once
 // 预处理指令，确保此头文件只被包含一次
 

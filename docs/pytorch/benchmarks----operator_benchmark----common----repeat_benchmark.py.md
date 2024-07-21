@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\common\repeat_benchmark.py`
 
-```
+```py
 import time
 # 导入时间模块
 

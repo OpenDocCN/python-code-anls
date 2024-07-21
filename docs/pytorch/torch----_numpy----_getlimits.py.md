@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_getlimits.py`
 
-```
+```py
 # 忽略 mypy 对类型错误的检查
 
 # 导入 PyTorch 库

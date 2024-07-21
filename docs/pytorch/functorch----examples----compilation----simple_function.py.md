@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\examples\compilation\simple_function.py`
 
-```
+```py
 # 导入时间模块，用于性能测试时计时
 import time
 

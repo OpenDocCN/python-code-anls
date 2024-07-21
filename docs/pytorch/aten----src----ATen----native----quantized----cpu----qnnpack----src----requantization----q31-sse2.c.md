@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\requantization\q31-sse2.c`
 
-```
+```py
 /*
  * 该函数用于对一组Q31格式的整数进行重新量化为8位无符号整数，使用SSE2指令集加速计算。
  * 输入参数包括整数数组、缩放因子、零点、输出范围等。

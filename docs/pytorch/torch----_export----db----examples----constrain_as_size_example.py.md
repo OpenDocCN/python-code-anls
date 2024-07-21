@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\constrain_as_size_example.py`
 
-```
+```py
 # 导入torch库，声明允许未类型化的函数定义
 import torch
 

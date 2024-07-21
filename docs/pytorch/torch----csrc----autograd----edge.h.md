@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\edge.h`
 
-```
+```py
 #pragma once
 // 声明了一个预处理指令#pragma once，确保此头文件只被编译一次
 

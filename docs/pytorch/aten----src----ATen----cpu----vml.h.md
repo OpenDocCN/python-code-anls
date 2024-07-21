@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vml.h`
 
-```
+```py
 #pragma once
 // 只包含一次头文件的指令
 

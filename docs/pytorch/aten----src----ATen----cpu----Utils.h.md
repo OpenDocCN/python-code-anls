@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\Utils.h`
 
-```
+```py
 #pragma once
 
 # 预处理指令，表示本头文件在编译时只包含一次

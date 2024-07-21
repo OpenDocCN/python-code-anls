@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\sparsifier\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 允许未类型化的函数定义
 

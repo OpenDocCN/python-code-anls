@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\__init__.py`
 
-```
+```py
 # 定义一个名为 find_duplicates 的函数，接受一个参数 nums，该参数是一个整数列表
 def find_duplicates(nums):
     # 创建一个空集合，用于存储重复出现的元素

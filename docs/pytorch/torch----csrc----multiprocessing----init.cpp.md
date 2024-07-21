@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\multiprocessing\init.cpp`
 
-```
+```py
 // 包含C++头文件，用于线程命名和异常处理
 #include <c10/util/thread_name.h>
 #include <torch/csrc/Exceptions.h>

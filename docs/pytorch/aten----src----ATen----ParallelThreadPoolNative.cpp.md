@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\ParallelThreadPoolNative.cpp`
 
-```
+```py
 // 包含 ATen 库的配置文件
 #include <ATen/Config.h>
 // 如果支持 OpenMP 或本地并行，则包含并行处理相关的头文件

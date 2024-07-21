@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\notebooks\_src\plot_ensembling.py`
 
-```
+```py
 """
 ==========================
 Model ensembling

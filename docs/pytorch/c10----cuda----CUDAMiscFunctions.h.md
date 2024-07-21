@@ -1,6 +1,6 @@
 # `.\pytorch\c10\cuda\CUDAMiscFunctions.h`
 
-```
+```py
 #pragma once
 // 防止 CUDAFunctions.h 和 CUDAExceptions.h 之间的循环依赖
 

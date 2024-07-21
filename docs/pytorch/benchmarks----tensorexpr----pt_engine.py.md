@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\pt_engine.py`
 
-```
+```py
 # 导入 torch 库，用于张量操作和神经网络功能
 import torch
 

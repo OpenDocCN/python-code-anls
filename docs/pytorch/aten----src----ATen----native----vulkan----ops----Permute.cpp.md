@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\ops\Permute.cpp`
 
-```
+```py
 // 引入 Vulkan 相关头文件和 Torch 库头文件
 #include <ATen/native/vulkan/ops/Common.h>
 #include <torch/library.h>

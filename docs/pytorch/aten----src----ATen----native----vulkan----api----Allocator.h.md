@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Allocator.h`
 
-```
+```py
 #pragma once
 // 防止头文件重复包含
 

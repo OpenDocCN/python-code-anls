@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\FuncTorchTLS.cpp`
 
-```
+```py
 // 包含 FuncTorchTLS.h 文件，提供了 ATen 库中的 FuncTorchTLS 相关功能
 #include <ATen/FuncTorchTLS.h>
 

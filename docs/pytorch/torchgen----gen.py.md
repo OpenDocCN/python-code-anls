@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen.py`
 
-```
+```py
 # 导入必要的模块和类
 from __future__ import annotations
 

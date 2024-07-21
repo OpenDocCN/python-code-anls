@@ -1,6 +1,6 @@
 # `.\pytorch\torch\library.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的模块和库
 import contextlib  # 上下文管理模块

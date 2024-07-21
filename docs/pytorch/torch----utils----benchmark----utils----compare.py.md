@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\compare.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Display class to aggregate and print the results of many measurements."""
 # 导入必要的模块和库

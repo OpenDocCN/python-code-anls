@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\dynamo\common.py`
 
-```
+```py
 # 指定当前脚本使用 Python 3 运行
 #!/usr/bin/env python3
 
@@ -3180,7 +3180,7 @@ def parse_args(args=None):
 
             def get_example_inputs(self):
                 return (torch.randn(2, 10),)
-        ```
+        ```py
     """,
     )
 

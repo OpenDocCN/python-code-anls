@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\matmul.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 的 Tensor Expression 库中的 Kernel 头文件
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_pre_dispatch.py`
 
-```
+```py
 # Owner(s): ["module: dynamo"]
 # 导入PyTorch库
 import torch

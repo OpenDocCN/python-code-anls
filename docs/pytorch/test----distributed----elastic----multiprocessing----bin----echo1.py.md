@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\multiprocessing\bin\echo1.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 引入必要的模块和库

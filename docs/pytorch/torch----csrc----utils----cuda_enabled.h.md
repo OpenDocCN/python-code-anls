@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\cuda_enabled.h`
 
-```
+```py
 #pragma once
 
 namespace torch::utils {

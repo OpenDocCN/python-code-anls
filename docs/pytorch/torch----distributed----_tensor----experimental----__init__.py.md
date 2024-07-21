@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\experimental\__init__.py`
 
-```
+```py
 # 声明脚本的类型检查设置，允许未标记类型的函数
 # Copyright (c) Meta Platforms, Inc. and affiliates
 从 contextlib 模块中导入上下文管理器

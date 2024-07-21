@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\utils\threadpool\thread_pool_guard.cpp`
 
-```
+```py
 #include <caffe2/utils/threadpool/thread_pool_guard.h>
 // 包含头文件，引入了线程池相关的工具类
 

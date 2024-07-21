@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quantizer\xnnpack_quantizer_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 itertools 模块，提供迭代器的工具函数
 import itertools

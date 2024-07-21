@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\Event.cpp`
 
-```
+```py
 // 包含 Pybind11 库，用于 Python 和 C++ 之间的接口
 #include <pybind11/pybind11.h>
 // 包含 Torch 库中的设备相关头文件

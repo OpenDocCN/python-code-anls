@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_metrics.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入 PyTorch 库

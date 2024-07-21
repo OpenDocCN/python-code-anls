@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\q8conv\8x8-neon.c`
 
-```
+```py
 /*
  * 从这里开始是一个用 NEON 指令集优化的卷积运算的内核函数
  */

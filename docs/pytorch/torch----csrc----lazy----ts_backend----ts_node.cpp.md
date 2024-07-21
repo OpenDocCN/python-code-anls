@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ts_node.cpp`
 
-```
+```py
 // 包含 Torch 框架的头文件，用于调试工具和节点定义
 #include <torch/csrc/lazy/core/debug_util.h>
 #include <torch/csrc/lazy/ts_backend/ts_node.h>

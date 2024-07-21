@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cpu\LerpKernel.cpp`
 
-```
+```py
 // 定义宏以禁用Torch操作符，包含相关头文件
 #define TORCH_ASSERT_NO_OPERATORS
 #include <ATen/native/Lerp.h>

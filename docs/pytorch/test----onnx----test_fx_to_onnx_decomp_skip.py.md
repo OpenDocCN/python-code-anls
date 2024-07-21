@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\test_fx_to_onnx_decomp_skip.py`
 
-```
+```py
 # Owner(s): ["module: onnx"]
 # 导入从未来导入的特性，支持类型注解
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\functions\init.cpp`
 
-```
+```py
 // 包含 Python C API 头文件
 #include <Python.h>
 // 包含 C10 库中的工具函数和数据结构头文件

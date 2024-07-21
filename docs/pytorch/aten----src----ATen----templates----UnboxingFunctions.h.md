@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\UnboxingFunctions.h`
 
-```
+```py
 // ${generated_comment}
 // 由 tools/jit/gen_unboxing.py 自动生成。这个文件声明了为操作符生成的 C++ 函数的封箱版本，
 // 基于 native_functions.yaml（或具有相同语法的类似 yaml 文件）。这种封箱函数的定义将从堆栈中弹出 IValue，

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\x8zip\x2-sse2.c`
 
-```
+```py
 /*
  * 包含必要的头文件和定义，用于支持 SIMD 加速指令集 SSE2
  */

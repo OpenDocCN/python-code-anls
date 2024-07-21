@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_sharded_tensor\__init__.py`
 
-```
+```py
 # 为了向后兼容而保留旧包，一旦所有内容都迁移到 `torch.distributed._shard` 包中，应删除此文件。
 
 # 导入系统模块

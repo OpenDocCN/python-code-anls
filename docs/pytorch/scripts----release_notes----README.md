@@ -137,16 +137,16 @@ This part is a little tedious but it seems to work. May want to explore using pa
 You will likely have started this process prior to the branch-cut being finalized. This means Cherry Picks.
 This was my process for keeping track. I use a notes app to log my progress as I periodically incorporate the new cherry picks.
 I will have initially ran something like:
-``` Bash
+```py Bash
 python commitlist.py --create_new tags/v1.13.1 <commit-hash>
 ```
 I keep track of that commit-hash. Once there are some cherry-picks that you would like to incorporate I rebase the release branch to upstream
 and run:
-```Bash
+```py
 python commitlist.py --update_to <latest-cherry-pick-hash>
 ```
 I then run
-``` Python
+```py Python
 import pandas as pd
 
 commit_list_df = pd.read_csv("results/commitlist.csv")
@@ -194,7 +194,7 @@ This will get formatted correctly in the github UI and can be checked when creat
 The following markdown code is helpful for creating side-by-side tables of BC breaking/ deprecated code:
 
 
-``` Markdown
+```py Markdown
 <table>
 <tr>
 <th>PRIOR RELEASE NUM</th>
@@ -205,14 +205,14 @@ The following markdown code is helpful for creating side-by-side tables of BC br
 
 ```Python
 # Code Snippet 1
-```
+```py
 
 </td>
 <td>
 
 ```Python
 # Code Snippet 2
-```
+```py
 
 </td>
 </tr>

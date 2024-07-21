@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\parallel\data_parallel.h`
 
-```
+```py
 // 防止头文件被多次包含
 #pragma once
 

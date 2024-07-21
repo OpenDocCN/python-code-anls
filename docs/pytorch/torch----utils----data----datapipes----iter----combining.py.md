@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\iter\combining.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 copy 模块并命名为 copymodule
 import copy as copymodule

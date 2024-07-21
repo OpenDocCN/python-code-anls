@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\onednn\decompose_silu.cpp`
 
-```
+```py
 // 包含 Torch 的相关头文件，用于 OneDNN 的 SILU 函数分解
 #include <torch/csrc/jit/codegen/onednn/decompose_silu.h>
 #include <torch/csrc/jit/codegen/onednn/operator.h>

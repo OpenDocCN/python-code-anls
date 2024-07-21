@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\fastrnns\profile.py`
 
-```
+```py
 import argparse
 import datetime
 import subprocess

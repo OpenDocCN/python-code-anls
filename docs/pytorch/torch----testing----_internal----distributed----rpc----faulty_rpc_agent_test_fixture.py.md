@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\rpc\faulty_rpc_agent_test_fixture.py`
 
-```
+```py
 # 忽略类型检查错误，这通常是由于特定的类型声明方式导致的问题
 mypy: ignore-errors
 

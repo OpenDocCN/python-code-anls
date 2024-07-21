@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\complex_test_common.h`
 
-```
+```py
 #include <c10/macros/Macros.h>
 #include <c10/util/complex.h>
 #include <c10/util/hash.h>

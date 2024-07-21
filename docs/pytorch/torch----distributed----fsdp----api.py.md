@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\api.py`
 
-```
+```py
 """
 This file includes public APIs for FSDP such as the classes used for the
 constructor arguments.

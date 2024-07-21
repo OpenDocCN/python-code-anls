@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\_shard\sharded_tensor\__init__.py`
 
-```
+```py
 # 忽略 mypy 的错误信息
 
 # 导入系统模块 sys

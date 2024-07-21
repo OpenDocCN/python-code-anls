@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\package_exporter.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需的模块
 import collections                       # 导入collections模块，提供额外的数据结构和操作

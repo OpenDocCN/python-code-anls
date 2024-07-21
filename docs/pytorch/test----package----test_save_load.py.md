@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\test_save_load.py`
 
-```
+```py
 # Owner(s): ["oncall: package/deploy"]
 
 # 导入 pickle 模块，用于序列化和反序列化 Python 对象

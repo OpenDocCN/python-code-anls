@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\code.h`
 
-```
+```py
 // 防止头文件被多次包含的预处理指令
 #pragma once
 

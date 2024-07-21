@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\strict_mode.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 torch 库
 import torch

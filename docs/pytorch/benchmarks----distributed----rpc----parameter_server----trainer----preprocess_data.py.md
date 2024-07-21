@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\preprocess_data.py`
 
-```
+```py
 # 定义一个预处理函数，将数据从 CPU 移动到 GPU，供 DummyData 类使用
 def preprocess_dummy_data(rank, data):
     r"""

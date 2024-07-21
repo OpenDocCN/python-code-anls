@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\add_if_then_else.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/add_if_then_else.h>
 #include <torch/csrc/jit/runtime/graph_iterator.h>
 

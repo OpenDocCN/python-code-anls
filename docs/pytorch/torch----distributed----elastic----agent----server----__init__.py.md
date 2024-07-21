@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\agent\server\__init__.py`
 
-```
+```py
 """
 The elastic agent is the control plane of torchelastic.
 

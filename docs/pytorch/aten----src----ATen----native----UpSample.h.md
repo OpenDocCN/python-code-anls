@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UpSample.h`
 
-```
+```py
 #pragma once
 
 #include <math.h>  // 包含数学函数库

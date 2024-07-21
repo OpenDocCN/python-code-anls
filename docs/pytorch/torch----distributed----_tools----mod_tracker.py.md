@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tools\mod_tracker.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于处理警告信息
 import warnings

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\jit\templates\aten_schema_declarations.cpp`
 
-```
+```py
 namespace torch { namespace jit {
 const char * schema_declarations = R"===(
   ${declarations}

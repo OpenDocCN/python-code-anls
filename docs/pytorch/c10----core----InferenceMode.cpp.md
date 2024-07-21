@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\InferenceMode.cpp`
 
-```
+```py
 // 包含 C10 库中的 InferenceMode 头文件
 #include <c10/core/InferenceMode.h>
 

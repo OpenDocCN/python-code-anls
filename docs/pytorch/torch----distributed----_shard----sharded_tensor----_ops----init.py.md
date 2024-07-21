@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\_ops\init.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 PyTorch 库
 import torch

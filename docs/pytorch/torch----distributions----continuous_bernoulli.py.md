@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributions\continuous_bernoulli.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入数学库和数字模块
 import math

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\masked\maskedtensor\core.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

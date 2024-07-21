@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\impl\XPUGuardImpl.cpp`
 
-```
+```py
 #include <c10/xpu/impl/XPUGuardImpl.h>
 // 包含 XPUGuardImpl.h 头文件，该文件声明了 XPUGuardImpl 类的实现
 

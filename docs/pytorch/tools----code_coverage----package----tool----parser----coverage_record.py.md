@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\parser\coverage_record.py`
 
-```
+```py
 from __future__ import annotations
 # 引入了 `annotations` 特性，使得类型提示中可以使用字符串形式的类型名称
 

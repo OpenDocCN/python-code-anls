@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\bottleneck\__main__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的库和模块
 import argparse  # 解析命令行参数的库

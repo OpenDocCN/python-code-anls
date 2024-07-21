@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\functorch\ADInterpreters.h`
 
-```
+```py
 #pragma once
 #include <ATen/functorch/Interpreter.h>
 

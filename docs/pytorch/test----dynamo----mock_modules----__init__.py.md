@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\mock_modules\__init__.py`
 
-```
+```py
 # 导入必要的模块：os（操作系统接口）、shutil（高级文件操作工具）、glob（Unix风格路径名模式扩展）。
 import os
 import shutil

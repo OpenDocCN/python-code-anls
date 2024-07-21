@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\UpSampleTrilinear3d.cpp`
 
-```
+```py
 // Adapted from interp.cpp from Caffe util by Pauline Luc
 // Originally developed by George Papandreou
 // 定义仅供方法操作符使用的宏

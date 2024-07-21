@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\VariableTypeManual.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件和声明的函数
 
 #include <ATen/RedispatchFunctions.h>

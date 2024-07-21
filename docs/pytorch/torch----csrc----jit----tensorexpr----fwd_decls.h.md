@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\fwd_decls.h`
 
-```
+```py
 /*
 #pragma once  // 只包含一次该头文件的保护预处理指令
 

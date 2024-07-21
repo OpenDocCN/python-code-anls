@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\experimental\tp_transform.py`
 
-```
+```py
 # 设置 mypy 选项，允许未标记类型的函数定义
 mypy: allow-untyped-defs
 

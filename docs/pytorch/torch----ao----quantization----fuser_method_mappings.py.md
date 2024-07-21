@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fuser_method_mappings.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入PyTorch的神经网络模块和AO量化的内置模块
 import torch.nn as nn

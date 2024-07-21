@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_jit_profiling.py`
 
-```
+```py
 # 引入 sys 模块，用于访问系统相关功能
 import sys
 

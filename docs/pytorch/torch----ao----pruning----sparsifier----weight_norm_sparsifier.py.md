@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\sparsifier\weight_norm_sparsifier.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入reduce函数和Callable、Optional、Tuple、Union类型提示
 from functools import reduce

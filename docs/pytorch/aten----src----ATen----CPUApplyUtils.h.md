@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\CPUApplyUtils.h`
 
-```
+```py
 #pragma once
 // 包含必要的头文件
 

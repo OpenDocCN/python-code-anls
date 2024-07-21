@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_extensions\doubler.h`
 
-```
+```py
 #include <torch/extension.h>
 
 // 定义一个结构体 Doubler

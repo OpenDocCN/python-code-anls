@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_test_generator.py`
 
-```
+```py
 # 从 benchmark_core 模块导入 _register_test 函数
 from benchmark_core import _register_test
 # 从 benchmark_pytorch 模块导入 create_pytorch_op_test_case 函数

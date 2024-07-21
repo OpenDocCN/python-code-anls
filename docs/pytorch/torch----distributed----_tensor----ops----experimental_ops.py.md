@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\experimental_ops.py`
 
-```
+```py
 # 实现矩阵相关的操作用于分布式张量
 from typing import List
 

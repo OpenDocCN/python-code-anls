@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\data\datasets\mnist.cpp`
 
-```
+```py
 // 包含 MNIST 数据集相关的头文件
 #include <torch/data/datasets/mnist.h>
 

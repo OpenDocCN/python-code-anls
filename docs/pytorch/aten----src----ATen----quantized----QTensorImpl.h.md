@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\quantized\QTensorImpl.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保头文件只被包含一次
 

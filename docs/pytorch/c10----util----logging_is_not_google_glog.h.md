@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\logging_is_not_google_glog.h`
 
-```
+```py
 #ifndef C10_UTIL_LOGGING_IS_NOT_GOOGLE_GLOG_H_
 #define C10_UTIL_LOGGING_IS_NOT_GOOGLE_GLOG_H_
 

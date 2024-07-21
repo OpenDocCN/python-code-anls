@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\FlushDenormal.h`
 
-```
+```py
 /// Flush-To-Zero and Denormals-Are-Zero mode
 ///
 /// Flush-To-Zero (FTZ) and Denormals-Are-Zero (DAZ) are modes that bypass

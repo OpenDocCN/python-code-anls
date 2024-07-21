@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_kernel_benchmark.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 # 导入必要的模块和类
 import contextlib  # 提供上下文管理工具的模块

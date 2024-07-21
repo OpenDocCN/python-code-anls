@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\backends\backend_detail.cpp`
 
-```
+```py
 // 返回一个对应于节点图的下一个调试句柄的API，用于预处理函数从模块的降级方法中获取节点的调试句柄。
 // 实现：给定图形
 // 对于图的每个节点，通过debug_info_recorder请求调试句柄。

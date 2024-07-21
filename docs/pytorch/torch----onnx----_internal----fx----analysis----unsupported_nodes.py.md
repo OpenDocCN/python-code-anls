@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\analysis\unsupported_nodes.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入未类型定义函数的兼容性声明
 from __future__ import annotations

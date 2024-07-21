@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\ft_gemm_configs.h`
 
-```
+```py
 /*
  * Copyright (c) 2020-2023, NVIDIA CORPORATION.  All rights reserved.
  *

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\python_return_types.cpp`
 
-```
+```py
 #include <Python.h>
 
 #include <vector>

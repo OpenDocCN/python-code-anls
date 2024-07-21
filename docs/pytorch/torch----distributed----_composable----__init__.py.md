@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\__init__.py`
 
-```
+```py
 # 从当前目录导入 checkpoint_activation 模块中的 checkpoint 函数
 from .checkpoint_activation import checkpoint
 # 从当前目录导入 contract 模块中的 _get_registry 和 contract 函数

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\backend\lowering_context.cpp`
 
-```
+```py
 // 引入 Torch 库中的 LoweringContext 头文件
 #include <torch/csrc/lazy/backend/lowering_context.h>
 

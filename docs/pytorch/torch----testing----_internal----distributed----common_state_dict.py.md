@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\distributed\common_state_dict.py`
 
-```
+```py
 # mypy: ignore-errors
 # 忽略类型检查错误，mypy 是一个类型检查工具
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_b\__init__.py`
 
-```
+```py
 # 动态导入 subpackage_1 中的 PackageBSubpackage1Object_0 对象
 __import__("subpackage_1", globals(), fromlist=["PackageBSubpackage1Object_0"], level=1)
 

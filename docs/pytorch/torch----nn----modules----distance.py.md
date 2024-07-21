@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\distance.py`
 
-```
+```py
 # 导入 torch.nn.functional 中的 F 模块，用于函数操作
 # 导入 Tensor 类型，用于处理张量数据
 import torch.nn.functional as F

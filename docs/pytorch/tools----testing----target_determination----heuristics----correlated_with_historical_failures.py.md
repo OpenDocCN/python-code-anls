@@ -1,6 +1,6 @@
 # `.\pytorch\tools\testing\target_determination\heuristics\correlated_with_historical_failures.py`
 
-```
+```py
 from __future__ import annotations
 
 # 引入将来版本的注解支持，使得可以在类定义中使用字符串类型的注解

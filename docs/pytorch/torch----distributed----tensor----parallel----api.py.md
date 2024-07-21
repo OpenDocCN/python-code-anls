@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\tensor\parallel\api.py`
 
-```
+```py
 # 导入必要的模块和类
 from fnmatch import fnmatch  # 导入 fnmatch 模块，用于文件名匹配
 from typing import Dict, Union  # 导入类型提示模块中的 Dict 和 Union 类型

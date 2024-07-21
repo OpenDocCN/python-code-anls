@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\Scalar.cpp`
 
-```
+```py
 // 定义宏，仅包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含 ATen 库中的 Tensor 类和分发机制头文件

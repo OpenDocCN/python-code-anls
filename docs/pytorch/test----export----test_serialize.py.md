@@ -1,6 +1,6 @@
 # `.\pytorch\test\export\test_serialize.py`
 
-```
+```py
 """
 PYTEST_DONT_REWRITE (prevents pytest from rewriting assertions, which interferes
 with test_sym_bool)

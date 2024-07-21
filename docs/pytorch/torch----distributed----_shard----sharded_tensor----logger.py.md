@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_shard\sharded_tensor\logger.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 引入日志模块

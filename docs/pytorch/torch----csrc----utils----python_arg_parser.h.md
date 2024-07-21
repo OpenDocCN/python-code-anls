@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\python_arg_parser.h`
 
-```
+```py
 #pragma once
 
 // 解析用于在C++中实现的Python函数的参数

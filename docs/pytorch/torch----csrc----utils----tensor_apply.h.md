@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_apply.h`
 
-```
+```py
 #pragma once
 
 

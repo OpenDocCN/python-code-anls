@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\functional_adadelta.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入需要的类型声明
 from typing import Dict, List, Optional

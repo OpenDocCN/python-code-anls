@@ -1,6 +1,6 @@
 # `.\pytorch\tools\test\test_utils.py`
 
-```
+```py
 import unittest  # 导入单元测试模块
 
 from torchgen.utils import NamespaceHelper  # 从torchgen.utils模块导入NamespaceHelper类

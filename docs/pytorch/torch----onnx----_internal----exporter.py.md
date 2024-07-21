@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\exporter.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 from __future__ import (  # 允许未标注的函数定义（用于 onnx.ModelProto（ONNX 程序）和 onnxruntime（ONNXRuntimeOptions））
     annotations,
@@ -411,7 +411,7 @@ def enable_fake_mode():
     ```
     这里的注释解释了为什么需要确保 `torch.onnx.dynamo_export` 不在 `FakeTensorMode` 中调用，
     以及如何维护 `FakeTensorMode` 的实例和行为的同步。
-    ```
+    ```py
     # 创建 FakeTensorMode 对象，用于控制虚拟张量的行为
     fake_mode = fake_tensor.FakeTensorMode(
         allow_non_fake_inputs=not torch._guards.detect_fake_mode(),

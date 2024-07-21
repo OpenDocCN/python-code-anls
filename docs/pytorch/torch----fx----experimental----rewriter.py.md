@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\rewriter.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 AST 模块，用于处理抽象语法树
 import ast

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\cpp\pytorch_jni_lite.cpp`
 
-```
+```py
 // C++头文件包含
 #include <cassert>
 #include <iostream>

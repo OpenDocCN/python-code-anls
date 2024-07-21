@@ -1,6 +1,6 @@
 # `.\pytorch\torch\profiler\python_tracer.py`
 
-```
+```py
 # 导入标准库和第三方模块
 import os          # 导入操作系统功能模块
 import site        # 导入 site 模块，用于获取 Python 环境相关信息

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_non_tensor.cpp`
 
-```
+```py
 /**
  * Include headers for specific Torch JIT passes and utility libraries.
  */

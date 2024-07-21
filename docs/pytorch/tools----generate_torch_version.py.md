@@ -1,6 +1,6 @@
 # `.\pytorch\tools\generate_torch_version.py`
 
-```
+```py
 # 从未来版本导入 annotations，支持类型提示
 from __future__ import annotations
 

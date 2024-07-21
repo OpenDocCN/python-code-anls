@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\LeftRight.cpp`
 
-```
+```py
 #include <c10/util/LeftRight.h>
 
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\fixtures_srcs\__init__.py`
 
-```
+```py
 # 导入所需模块：`BytesIO` 用于创建二进制数据的内存缓冲区，`zipfile` 用于处理 ZIP 文件
 from io import BytesIO
 import zipfile

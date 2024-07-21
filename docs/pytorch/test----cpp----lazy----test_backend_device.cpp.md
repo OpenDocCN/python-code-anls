@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lazy\test_backend_device.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <sstream>  // 包含用于字符串流操作的头文件

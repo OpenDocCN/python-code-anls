@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\profiler_legacy.cpp`
 
-```
+```py
 // 包含 Torch 的自动微分模块中的性能分析器的传统版本头文件
 
 #include <torch/csrc/autograd/profiler_legacy.h>

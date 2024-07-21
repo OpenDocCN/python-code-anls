@@ -1,6 +1,6 @@
 # `.\pytorch\test\mobile\custom_build\prepare_model.py`
 
-```
+```py
 """
 This is a script for end-to-end mobile custom build test purpose. It prepares
 MobileNetV2 TorchScript model, and dumps root ops used by the model for custom

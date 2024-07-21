@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\_common_operator_config_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import copy  # 导入 copy 模块，用于对象的复制操作

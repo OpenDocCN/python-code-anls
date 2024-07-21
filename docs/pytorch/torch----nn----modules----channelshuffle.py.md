@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\channelshuffle.py`
 
-```
+```py
 import torch.nn.functional as F
 from torch import Tensor
 

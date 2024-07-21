@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseFactories.cpp`
 
-```
+```py
 // 包含 ATen 库中的调度和迭代器功能
 #include <ATen/Dispatch.h>
 #include <ATen/TensorIterator.h>

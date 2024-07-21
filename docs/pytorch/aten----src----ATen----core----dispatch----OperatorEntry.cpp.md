@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\dispatch\OperatorEntry.cpp`
 
-```
+```py
 // 包含 ATen 库中的头文件，用于操作符注册和调度
 #include <ATen/core/dispatch/OperatorEntry.h>
 #include <ATen/core/op_registration/infer_schema.h>

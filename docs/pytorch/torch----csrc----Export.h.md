@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Export.h`
 
-```
+```py
 #pragma once
 // 如果 THP_BUILD_MAIN_LIB 宏被定义，则将 TORCH_PYTHON_API 宏设置为 C10_EXPORT
 // 否则，将 TORCH_PYTHON_API 宏设置为 C10_IMPORT

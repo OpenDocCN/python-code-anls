@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_module_tracker.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 from copy import copy  # 导入copy模块，用于对象的浅拷贝操作

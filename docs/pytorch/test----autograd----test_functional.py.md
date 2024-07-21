@@ -1,6 +1,6 @@
 # `.\pytorch\test\autograd\test_functional.py`
 
-```
+```py
 # Owner(s): ["module: autograd"]
 
 # 引入所需的模块和类

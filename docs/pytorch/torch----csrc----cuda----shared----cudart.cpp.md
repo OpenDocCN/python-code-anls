@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\shared\cudart.cpp`
 
-```
+```py
 // 包含 CUDA 相关的头文件
 #include <cuda.h>
 #include <cuda_runtime.h>

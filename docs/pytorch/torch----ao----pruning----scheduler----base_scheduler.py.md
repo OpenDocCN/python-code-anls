@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\scheduler\base_scheduler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 从 torch.ao.pruning 模块导入 BaseSparsifier 类

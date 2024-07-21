@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\PackedSequence.cpp`
 
-```
+```py
 // 定义宏，仅启用方法运算符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 // 包含张量操作的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\autograd\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 
 # 导入 torch 库

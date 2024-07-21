@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\c10d\TCPStoreBackend.cpp`
 
-```
+```py
 #include <c10/util/irange.h>
 #include <fcntl.h>
 #include <algorithm>

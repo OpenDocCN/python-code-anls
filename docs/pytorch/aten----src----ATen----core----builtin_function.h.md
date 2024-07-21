@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\builtin_function.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/function.h>

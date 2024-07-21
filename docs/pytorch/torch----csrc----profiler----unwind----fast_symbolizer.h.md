@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\profiler\unwind\fast_symbolizer.h`
 
-```
+```py
 #pragma once
 
 #include <fmt/format.h> // 包含格式化库的头文件

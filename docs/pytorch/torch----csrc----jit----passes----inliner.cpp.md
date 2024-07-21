@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\inliner.cpp`
 
-```
+```py
 // 包含 Torch JIT 中的内联器头文件
 #include <torch/csrc/jit/passes/inliner.h>
 

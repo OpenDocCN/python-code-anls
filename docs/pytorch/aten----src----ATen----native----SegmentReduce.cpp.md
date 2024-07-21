@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\SegmentReduce.cpp`
 
-```
+```py
 // 定义宏以限制只包含方法操作符
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 
@@ -102,7 +102,7 @@ Tensor _segment_reduce_offsets_cpu_kernel(
 
   // data and lengths should be contiguous from the call to .contiguous in segment_reduce_kernel
   TORCH_CHECK(data.is_contiguous(), "Expected data to be contiguous.");
-```  
+```py  
 // 检查 `data` 张量是否是连续存储的，否则抛出错误信息 "Expected data to be contiguous."
 
   TORCH_CHECK(offsets.is_contiguous(), "Expected offsets to be contiguous.");
@@ -111,7 +111,7 @@ Tensor _segment_reduce_offsets_cpu_kernel(
 
   // reduction axis should always be the last dimension of lengths
   axis = offsets.dim() - 1;
-```  
+```py  
 // 确定减少操作的轴是 `offsets` 张量的最后一个维度
 
   int64_t segment_count = offsets.size(axis) - 1;
@@ -119,7 +119,7 @@ Tensor _segment_reduce_offsets_cpu_kernel(
 // 计算分段的数量，通过 `offsets` 张量在轴 `axis` 上的大小减去 1
 
   int64_t offsets_stride_axis = offsets.stride(axis);
-```  
+```py  
 // 计算 `offsets` 张量在轴 `axis` 上的步长（stride）
 
   auto output_shape = data.sizes().vec();
@@ -128,7 +128,7 @@ Tensor _segment_reduce_offsets_cpu_kernel(
 // 创建输出张量的形状，保持与 `data` 张量相同，但将其在轴 `axis` 上的尺寸设置为 `segment_count`
 
   auto output = at::empty(output_shape, data.options());
-```  
+```py  
 // 使用 `data` 张量的选项创建一个空的输出张量，形状为 `output_shape`
 
   AT_DISPATCH_INDEX_TYPES(offsets.scalar_type(), "_segment_reduce_offsets_cpu_kernel1", [&]() {
@@ -136,7 +136,7 @@ Tensor _segment_reduce_offsets_cpu_kernel(
 // 使用 `offsets` 张量的索引类型分发到不同的内核函数，此处命名为 "_segment_reduce_offsets_cpu_kernel1"
 
     const auto* offsets_data = offsets.const_data_ptr<index_t>();
-```  
+```py  
 // 获取 `offsets` 张量的常量数据指针，类型为 `index_t`
 
     _segment_reduce_lengths_cpu_kernel1<index_t, /*is_offsets_like=*/true>(
@@ -147,7 +147,7 @@ Tensor _segment_reduce_offsets_cpu_kernel(
   });
 
   return output;
-```  
+```py  
 // 返回计算后的输出张量 `output`
 }
 

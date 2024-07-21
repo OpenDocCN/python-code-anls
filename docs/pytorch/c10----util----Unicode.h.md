@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Unicode.h`
 
-```
+```py
 #pragma once
 
 #pragma once 是预处理器指令，确保当前头文件只被编译一次，防止多重包含。

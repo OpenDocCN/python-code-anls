@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\Storage.cpp`
 
-```
+```py
 // 包含 Torch 的 Python 头文件
 #include <torch/csrc/python_headers.h>
 #ifdef _MSC_VER

@@ -1,6 +1,6 @@
 # `.\pytorch\android\pytorch_android\src\main\java\org\pytorch\Device.java`
 
-```
+```py
 package org.pytorch;
 
 public enum Device {

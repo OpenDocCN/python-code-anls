@@ -28,7 +28,7 @@ A serialized model (call it `model.pt`) is a ZIP archive containing many
 files. If you want to manually crack it open, you can call `unzip` on it to
 inspect the file structure directly:
 
-```
+```py
 $ unzip model.pt
 Archive:  model.pt
   extracting ...
@@ -83,7 +83,7 @@ helps with debugging the serialized code.
 
 **No jitter**. If we do:
 
-```
+```py
 m = MyModule()
 m.save("foo.pt")
 m_loaded = torch.load("foo.pt")
@@ -153,7 +153,7 @@ documentation](https://pytorch.org/docs/stable/nn.html#parameters) for exact
 details). We track which attributes are parameters by emitting a special
 assignment in the class body, like:
 
-```
+```py
 class MyModule(Module):
     __parameters__ = ["foo", "bar", ]
     foo : Tensor
@@ -170,7 +170,7 @@ infer the attributes.
 A final special thing is that some modules (like `nn.Sequential`) have
 attributes that are not valid Python identifiers. We can't write
 
-```
+```py
 # wrong!
 class MyModule(Module):
     0 : ASubmodule
@@ -181,7 +181,7 @@ because this is not valid Python syntax (even though it is legal in Python to
 have attributes with those names!). So we use a trick where we write directly
 to the `__annotations__` dict:
 
-```
+```py
 class MyModule(Module):
     __annotations__ = []
     __annotations__["0"] = ASubmodule
@@ -326,7 +326,7 @@ return type of `__getstate__` and uses that as its input type.
 
 For example:
 
-```
+```py
 class M(torch.nn.Module):
     def __init__(self):
         self.a = torch.rand(2, 3)
@@ -413,7 +413,7 @@ objects before they are placed in the global Python `CompilationUnit`.
 
 The rules for mangling are simple. Say we have a qualified name `__torch__.foo.Bar`:
 
-```
+```py
 __torch__.foo.Bar                    # first time, unchanged
 __torch__.foo.__torch_mangle_0.Bar   # second time, when we request a mangle
 __torch__.foo.__torch_mangle_1.Bar   # and so on

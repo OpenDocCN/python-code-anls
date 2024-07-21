@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_higher_order_ops\cond.py`
 
-```
+```py
 # 导入模块 'contextlib'，用于上下文管理器和资源管理相关的功能
 import contextlib
 

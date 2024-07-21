@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\test_thread_pool_guard.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <caffe2/utils/threadpool/thread_pool_guard.h>  // 包含线程池的守卫类头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\register_special_ops.cpp`
 
-```
+```py
 // 包含 ATen 和 Torch 的必要头文件
 #include <ATen/Context.h>
 #include <torch/library.h>

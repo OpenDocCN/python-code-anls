@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\onnx\unpack_quantized_weights.cpp`
 
-```
+```py
 // 引入 Torch 库中的头文件，用于处理量化权重的解包操作
 #include <torch/csrc/jit/passes/onnx/unpack_quantized_weights.h>
 

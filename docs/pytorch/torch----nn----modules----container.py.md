@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\modules\container.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入运算符模块，用于操作符相关功能
 import operator

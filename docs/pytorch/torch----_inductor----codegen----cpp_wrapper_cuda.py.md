@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cpp_wrapper_cuda.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 functools、os 模块，从 itertools 中导入 chain 和 count 函数
 import functools

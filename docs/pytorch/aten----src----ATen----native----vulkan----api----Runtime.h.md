@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Runtime.h`
 
-```
+```py
 #pragma once
 // 一旦这个头文件被包含，禁止重复包含
 

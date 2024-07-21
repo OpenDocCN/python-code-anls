@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_numpy\_unary_ufuncs_impl.py`
 
-```
+```py
 # 忽略类型检查错误，这是为了告知静态类型检查工具不要报告这些代码中的错误
 """Export torch work functions for unary ufuncs, rename/tweak to match numpy.
 This listing is further exported to public symbols in the `_numpy/_ufuncs.py` module.

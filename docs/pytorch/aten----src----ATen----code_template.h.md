@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\code_template.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/irange.h>  // 引入 c10 库中的 irange.h 头文件

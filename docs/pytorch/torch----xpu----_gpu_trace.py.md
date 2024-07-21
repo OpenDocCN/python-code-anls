@@ -1,6 +1,6 @@
 # `.\pytorch\torch\xpu\_gpu_trace.py`
 
-```
+```py
 # 导入必要的模块和类型定义
 from typing import Callable
 from torch._utils import CallbackRegistry

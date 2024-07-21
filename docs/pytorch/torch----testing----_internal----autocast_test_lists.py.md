@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\autocast_test_lists.py`
 
-```
+```py
 # 忽略类型检查错误，这里声明了忽略类型检查的注释
 # 导入 PyTorch 库
 import torch

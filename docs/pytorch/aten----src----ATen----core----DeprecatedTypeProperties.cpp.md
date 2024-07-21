@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\DeprecatedTypeProperties.cpp`
 
-```
+```py
 #include <ATen/core/DeprecatedTypeProperties.h>  // 包含 DeprecatedTypeProperties 类的头文件
 
 #include <ATen/core/LegacyTypeDispatch.h>  // 包含 LegacyTypeDispatch 类的头文件

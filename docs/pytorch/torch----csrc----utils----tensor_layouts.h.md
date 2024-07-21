@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\utils\tensor_layouts.h`
 
-```
+```py
 #pragma once
 
 

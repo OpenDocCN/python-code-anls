@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\utils\api.py`
 
-```
+```py
 # 指定 Python 解释器路径
 #!/usr/bin/env python3
 

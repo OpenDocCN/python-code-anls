@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\functional_autograd_benchmark\torchvision_models.py`
 
-```
+```py
 # 从 https://github.com/pytorch/vision 中引入代码
 # 以便不需要安装 torchvision
 from collections import OrderedDict

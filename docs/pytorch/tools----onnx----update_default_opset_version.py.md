@@ -1,6 +1,6 @@
 # `.\pytorch\tools\onnx\update_default_opset_version.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 设置脚本的解释器为 Python 3，以便在不同环境中执行
 

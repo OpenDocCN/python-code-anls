@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\pattern_utils.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 import torch.nn as nn  # 导入 PyTorch 神经网络模块
 import torch.nn.functional as F  # 导入 PyTorch 的函数式接口模块

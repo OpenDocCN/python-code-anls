@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\FractionalMaxPool3d.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/core/Tensor.h>
 #include <ATen/Dispatch.h>

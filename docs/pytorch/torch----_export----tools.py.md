@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\tools.py`
 
-```
+```py
 # 导入必要的库和模块
 # mypy: allow-untyped-defs
 import logging

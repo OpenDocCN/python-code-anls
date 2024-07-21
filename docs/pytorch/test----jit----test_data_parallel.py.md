@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_data_parallel.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入必要的库

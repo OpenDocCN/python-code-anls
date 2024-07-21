@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\nn\options\loss.h`
 
-```
+```py
 #pragma once
 
 #include <torch/arg.h>
@@ -16,7 +16,7 @@ namespace nn {
 /// Example:
 /// ```
 /// L1Loss model(L1LossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API L1LossOptions {
   typedef std::variant<enumtype::kNone, enumtype::kMean, enumtype::kSum>
       reduction_t;
@@ -37,7 +37,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::l1_loss(input, target, F::L1LossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 using L1LossFuncOptions = L1LossOptions;
 } // namespace functional
 
@@ -49,7 +49,7 @@ using L1LossFuncOptions = L1LossOptions;
 /// ```
 /// KLDivLoss
 /// model(KLDivLossOptions().reduction(torch::kNone).log_target(false));
-/// ```
+/// ```py
 struct TORCH_API KLDivLossOptions {
   typedef std::variant<
       enumtype::kNone,
@@ -85,7 +85,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::kl_div(input, target,
 /// F::KLDivFuncOptions().reduction(torch::kNone).log_target(false));
-/// ```
+/// ```py
 using KLDivFuncOptions = KLDivLossOptions;
 } // namespace functional
 
@@ -96,7 +96,7 @@ using KLDivFuncOptions = KLDivLossOptions;
 /// Example:
 /// ```
 /// MSELoss model(MSELossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API MSELossOptions {
   typedef std::variant<enumtype::kNone, enumtype::kMean, enumtype::kSum>
       reduction_t;
@@ -118,7 +118,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::mse_loss(input, target, F::MSELossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 using MSELossFuncOptions = MSELossOptions;
 } // namespace functional
 /// Options for the `MSELoss` module.
@@ -126,7 +126,7 @@ using MSELossFuncOptions = MSELossOptions;
 /// Example:
 /// ```
 /// MSELoss model(MSELossOptions().reduction(torch::kNone).weight(weight));
-/// ```
+/// ```py
 struct TORCH_API MSELossOptions {
   typedef std::variant<enumtype::kNone, enumtype::kMean, enumtype::kSum>
       reduction_t;
@@ -148,7 +148,7 @@ namespace functional {
 /// ```
 /// namespace F = torch::nn::functional;
 /// F::mse_loss(input, target, F::MSELossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 using MSELossFuncOptions = MSELossOptions;
 } // namespace functional
 // 定义了 `MultiMarginLossOptions` 结构体，用于配置 `MultiMarginLoss` 损失函数的选项
@@ -189,7 +189,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::multi_margin_loss(input, target,
 /// F::MultiMarginLossFuncOptions().margin(2).weight(weight));
-/// ```
+/// ```py
 // `torch::nn::functional` 命名空间中的 `MultiMarginLossFuncOptions` 结构体，用于配置 `multi_margin_loss` 函数的选项
 using MultiMarginLossFuncOptions = MultiMarginLossOptions;
 } // namespace functional
@@ -201,7 +201,7 @@ using MultiMarginLossFuncOptions = MultiMarginLossOptions;
 /// Example:
 /// ```
 /// CosineEmbeddingLoss model(CosineEmbeddingLossOptions().margin(0.5));
-/// ```
+/// ```py
 // `CosineEmbeddingLoss` 模块的选项结构体 `CosineEmbeddingLossOptions`
 struct TORCH_API CosineEmbeddingLossOptions {
   // 定义了一个变量 `reduction_t`，是一个枚举类型的变体，可以是 `kNone`、`kMean` 或 `kSum`
@@ -228,7 +228,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::cosine_embedding_loss(input1, input2, target,
 /// F::CosineEmbeddingLossFuncOptions().margin(0.5));
-/// ```
+/// ```py
 // `torch::nn::functional` 命名空间中的 `CosineEmbeddingLossFuncOptions` 结构体，用于配置 `cosine_embedding_loss` 函数的选项
 using CosineEmbeddingLossFuncOptions = CosineEmbeddingLossOptions;
 } // namespace functional
@@ -240,7 +240,7 @@ using CosineEmbeddingLossFuncOptions = CosineEmbeddingLossOptions;
 /// Example:
 /// ```
 /// MultiLabelMarginLoss model(MultiLabelMarginLossOptions(torch::kNone));
-/// ```
+/// ```py
 // `MultiLabelMarginLoss` 模块的选项结构体 `MultiLabelMarginLossOptions`
 // 定义了一个结构体 MultiLabelMarginLossOptions，用于配置 MultiLabelMarginLoss 损失函数的选项
 struct TORCH_API MultiLabelMarginLossOptions {
@@ -270,7 +270,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::multilabel_margin_loss(input, target,
 /// F::MultilabelMarginLossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 using MultilabelMarginLossFuncOptions = MultiLabelMarginLossOptions;
 } // namespace functional
 
@@ -281,7 +281,7 @@ using MultilabelMarginLossFuncOptions = MultiLabelMarginLossOptions;
 /// 示例:
 /// ```
 /// SoftMarginLoss model(SoftMarginLossOptions(torch::kNone));
-/// ```
+/// ```py
 struct TORCH_API SoftMarginLossOptions {
   // 定义了一个枚举类型 reduction_t，可以是 kNone、kMean、kSum 中的一种
   typedef std::variant<enumtype::kNone, enumtype::kMean, enumtype::kSum> reduction_t;
@@ -309,7 +309,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::soft_margin_loss(input, target,
 /// F::SoftMarginLossFuncOptions(torch::kNone));
-/// ```
+/// ```py
 using SoftMarginLossFuncOptions = SoftMarginLossOptions;
 } // namespace functional
 
@@ -321,7 +321,7 @@ using SoftMarginLossFuncOptions = SoftMarginLossOptions;
 /// ```
 /// MultiLabelSoftMarginLoss
 /// model(MultiLabelSoftMarginLossOptions().reduction(torch::kNone).weight(weight));
-/// ```
+/// ```py
 /// Options for the `MultiLabelSoftMarginLoss` module.
 ///
 /// Defines the configuration options available for the `torch::nn::MultiLabelSoftMarginLoss` module.
@@ -352,7 +352,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::multilabel_soft_margin_loss(input, target,
 /// F::MultilabelSoftMarginLossFuncOptions().reduction(torch::kNone).weight(weight));
-/// ```
+/// ```py
 using MultilabelSoftMarginLossFuncOptions = MultiLabelSoftMarginLossOptions;
 } // namespace functional
 
@@ -364,7 +364,7 @@ using MultilabelSoftMarginLossFuncOptions = MultiLabelSoftMarginLossOptions;
 /// ```
 /// TripletMarginLoss
 /// model(TripletMarginLossOptions().margin(3).p(2).eps(1e-06).swap(false));
-/// ```
+/// ```py
 struct TORCH_API TripletMarginLossOptions {
   // 定义 reduction_t 类型为 std::variant，可以是 enumtype::kNone、enumtype::kMean、enumtype::kSum 之一
   typedef std::variant<enumtype::kNone, enumtype::kMean, enumtype::kSum> reduction_t;
@@ -398,7 +398,7 @@ namespace functional {
 /// namespace F = torch::nn::functional;
 /// F::triplet_margin_loss(anchor, positive, negative,
 /// F::TripletMarginLossFuncOptions().margin(1.0));
-/// ```
+/// ```py
 using TripletMarginLossFuncOptions = TripletMarginLossOptions;
 } // namespace functional
 
@@ -410,7 +410,7 @@ using TripletMarginLossFuncOptions = TripletMarginLossOptions;
 /// ```
 /// TripletMarginWithDistanceLoss
 /// model(TripletMarginWithDistanceLossOptions().margin(3).swap(false));
-/// ```
+/// ```py
 /// ```
 /// 结构体 `TripletMarginWithDistanceLossOptions`，用于定义三元组损失函数的选项。
 struct TORCH_API TripletMarginWithDistanceLossOptions {
@@ -442,7 +442,7 @@ struct TORCH_API TripletMarginWithDistanceLossOptions {
 /// 参见 `torch::nn::TripletMarginWithDistanceLossOptions` 类的文档以了解支持的参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::triplet_margin_with_distance_loss(anchor, positive, negative,
 ///   F::TripletMarginWithDistanceLossFuncOptions().margin(1.0));
@@ -455,7 +455,7 @@ using TripletMarginWithDistanceLossFuncOptions = TripletMarginWithDistanceLossOp
 /// `CTCLoss` 模块的选项。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// CTCLoss
 /// model(CTCLossOptions().blank(42).zero_infinity(false).reduction(torch::kSum));
 /// ```
@@ -480,13 +480,13 @@ namespace functional {
 /// 参见 `torch::nn::CTCLossOptions` 类的文档以了解支持的参数。
 ///
 /// 示例：
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// ```
 /// Options for the `SmoothL1Loss` module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// SmoothL1Loss model(SmoothL1LossOptions().reduction(torch::kNone).beta(0.5));
 /// ```
 struct TORCH_API SmoothL1LossOptions {
@@ -519,7 +519,7 @@ namespace functional {
 /// what arguments are supported.
 ///
 /// Example:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::smooth_l1_loss(input, target, F::SmoothL1LossFuncOptions(torch::kNone));
 /// ```
@@ -531,7 +531,7 @@ using SmoothL1LossFuncOptions = SmoothL1LossOptions;
 /// Options for the `HuberLoss` module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// HuberLoss model(HuberLossOptions().reduction(torch::kNone).delta(0.5));
 /// ```
 struct TORCH_API HuberLossOptions {
@@ -563,7 +563,7 @@ namespace functional {
 /// arguments are supported.
 ///
 /// Example:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::huber_loss(input, target, F::HuberLossFuncOptions(torch::kNone));
 /// ```
@@ -574,7 +574,7 @@ using HuberLossFuncOptions = HuberLossOptions;
 /// Options for the `PoissonNLLLoss` module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// PoissonNLLLoss
 /// model(PoissonNLLLossOptions().log_input(false).full(true).eps(0.42).reduction(torch::kSum));
 /// ```
@@ -599,7 +599,7 @@ namespace functional {
 /// what arguments are supported.
 ///
 /// Example:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::poisson_nll_loss(input, target,
 /// F::PoissonNLLLossFuncOptions().reduction(torch::kNone));
@@ -612,7 +612,7 @@ using PoissonNLLLossFuncOptions = PoissonNLLLossOptions;
 /// Options for the `MarginRankingLoss` module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// MarginRankingLoss
 /// model(MarginRankingLossOptions().margin(0.5).reduction(torch::kSum));
 /// ```
@@ -633,7 +633,7 @@ namespace functional {
 /// learn what arguments are supported.
 ///
 /// Example:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::margin_ranking_loss(input1, input2, target,
 /// F::MarginRankingLossFuncOptions().margin(0.5).reduction(torch::kSum));
@@ -646,7 +646,7 @@ using MarginRankingLossFuncOptions = MarginRankingLossOptions;
 /// Options for the `NLLLoss` module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// NLLLoss model(NLLLossOptions().ignore_index(-100).reduction(torch::kMean));
 /// ```
 /// Structure defining options for the NLLLoss module.
@@ -674,7 +674,7 @@ namespace functional {
 /// See torch::nn::NLLLossOptions documentation for supported arguments.
 ///
 /// Example usage:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::nll_loss(input, target, F::NLLLossFuncOptions().ignore_index(-100).reduction(torch::kMean));
 /// ```
@@ -712,7 +712,7 @@ namespace functional {
 /// See torch::nn::CrossEntropyLossOptions documentation for supported arguments.
 ///
 /// Example usage:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::cross_entropy(input, target, F::CrossEntropyFuncOptions().ignore_index(-100).reduction(torch::kMean));
 /// ```
@@ -724,7 +724,7 @@ using CrossEntropyFuncOptions = CrossEntropyLossOptions;
 /// Structure defining options for the BCEWithLogitsLoss module.
 ///
 /// Example:
-/// ```
+/// ```py
 /// BCEWithLogitsLoss
 /// model(BCEWithLogitsLossOptions().reduction(torch::kNone).weight(weight));
 /// ```
@@ -747,7 +747,7 @@ struct TORCH_API BCEWithLogitsLossOptions {
 /// 查看 `torch::nn::BCEWithLogitsLossOptions` 类的文档，了解支持的参数。
 ///
 /// 示例:
-/// ```
+/// ```py
 /// namespace F = torch::nn::functional;
 /// F::binary_cross_entropy_with_logits(input, target,
 /// F::BinaryCrossEntropyWithLogitsFuncOptions().pos_weight(pos_weight).reduction(torch::kSum));

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\optim\adagrad.cpp`
 
-```
+```py
 /// 包含 torch 库中 Adagrad 优化器的头文件
 #include <torch/optim/adagrad.h>
 

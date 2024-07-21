@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\distributed\rpc\parameter_server\trainer\iteration_steps.py`
 
-```
+```py
 # 执行训练的一个迭代步骤的函数
 def basic_iteration_step(
     self, ddp_model, criterion, optimizer, hook_state, epoch, index, batch

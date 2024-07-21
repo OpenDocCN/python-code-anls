@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\benchmark_core.py`
 
-```
+```py
 # 导入必要的模块和库
 import ast  # 用于处理抽象语法树的模块
 import copy  # 用于复制对象的模块

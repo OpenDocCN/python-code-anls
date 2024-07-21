@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\config.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import getpass         # 导入用于获取当前用户的模块

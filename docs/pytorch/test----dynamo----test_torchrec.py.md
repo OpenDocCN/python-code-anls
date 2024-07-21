@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_torchrec.py`
 
-```
+```py
 # 导入系统、单元测试和类型提示相关模块
 import sys
 import unittest

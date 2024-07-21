@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_custom_class_registrations.h`
 
-```
+```py
 #include <torch/custom_class.h>  // 包含 Torch 自定义类的头文件
 #include <torch/script.h>        // 包含 Torch 脚本的头文件
 

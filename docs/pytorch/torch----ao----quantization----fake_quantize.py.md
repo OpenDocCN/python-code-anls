@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fake_quantize.py`
 
-```
+```py
 # 引入 torch 库，实现了张量和模块的操作
 # 引入 Module 类，用于定义神经网络模块的基类
 import torch

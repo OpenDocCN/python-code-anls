@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\fx_passes\dedupe_symint_uses.py`
 
-```
+```py
 # 设置类型检查时允许未标记的函数定义
 # 导入必要的模块和类型
 from dataclasses import dataclass

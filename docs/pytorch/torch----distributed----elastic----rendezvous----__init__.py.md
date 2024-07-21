@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\__init__.py`
 
-```
+```py
 # 导入必要的库：torch 和 multiprocessing
 import torch
 import multiprocessing as mp

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\torch_function.py`
 
-```
+```py
 # 忽略 mypy 错误，不进行类型检查
 # 导入 inspect 模块，用于获取对象信息
 import inspect

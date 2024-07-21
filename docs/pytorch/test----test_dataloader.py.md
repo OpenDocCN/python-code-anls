@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_dataloader.py`
 
-```
+```py
 # Owner(s): ["module: dataloader"]
 
 import ctypes  # 提供对 C 语言数据类型的支持

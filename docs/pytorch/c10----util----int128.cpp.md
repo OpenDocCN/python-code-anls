@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\int128.cpp`
 
-```
+```py
 // 包含日志记录和整数128位操作的必要头文件
 #include <c10/util/Logging.h>
 #include <c10/util/int128.h>

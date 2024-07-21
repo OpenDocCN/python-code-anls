@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\QScheme.cpp`
 
-```
+```py
 #include <torch/csrc/QScheme.h>  // 包含 Torch 框架中的 QScheme 头文件
 
 #include <torch/csrc/Exceptions.h>  // 包含 Torch 框架中的异常处理头文件

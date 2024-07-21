@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\benchmark\utils\common.py`
 
-```
+```py
 # 导入必要的模块和库
 import collections  # 提供了额外的数据容器
 import contextlib  # 上下文管理工具

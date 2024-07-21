@@ -10,7 +10,7 @@ The default arguments of `functional_autograd_benchmark.py` should be used in ge
 
 ### Sample usage
 
-```bash
+```py
 # Make sure you compile pytorch in release mode and with the same flags before/after
 export DEBUG=0
 # When running on CPU, it might be required to limit the number of cores to avoid oversubscription
@@ -54,7 +54,7 @@ popd
 
 ### Benchmarking against `functorch`
 
-```bash
+```py
 # Install stable functorch:
 pip install functorch
 # or install from source:

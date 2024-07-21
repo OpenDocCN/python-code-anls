@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_torch.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Owner(s): ["module: tests"]
 
@@ -4954,7 +4954,7 @@ def test_nondeterministic_resize_quantized(self, device, dtype):
             ind.index_put_((ind.clone(),), ind)
 
 
-```    
+```py    
     # FIXME: convert to ErrorInputs
     # (but have to extend ErrorInputs to handle inplace-only errors!)
     @expectedFailureMeta  # UserWarning not triggered

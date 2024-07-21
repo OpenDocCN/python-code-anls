@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\_shard\sharded_tensor\ops\test_embedding.py`
 
-```
+```py
 # Owner(s): ["oncall: distributed"]
 
 # 导入系统模块

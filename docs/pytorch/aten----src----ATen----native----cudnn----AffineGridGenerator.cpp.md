@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cudnn\AffineGridGenerator.cpp`
 
-```
+```py
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 #include <ATen/Config.h>
 #include <ATen/core/Tensor.h>

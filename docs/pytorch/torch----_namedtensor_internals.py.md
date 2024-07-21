@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_namedtensor_internals.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入有序字典类型，用于维护命名张量的维度顺序
 from collections import OrderedDict
@@ -144,7 +144,7 @@ def update_names(tensor, names, rename_map, inplace):
     >>> x.rename('batch', '...', 'width').names
     ('batch', 'C', 'H', 'width')
 
-    ```
+    ```py
 
     tensor.rename(**rename_map) returns a view on tensor that has rename dims
         as specified in the mapping `rename_map`.
@@ -156,7 +156,7 @@ def update_names(tensor, names, rename_map, inplace):
     >>> x.rename(W='width', H='height').names
     ('N', 'C', 'height', 'width')
 
-    ```
+    ```py
 
     Finally, tensor.rename has an in-place version called tensor.rename_.
     """

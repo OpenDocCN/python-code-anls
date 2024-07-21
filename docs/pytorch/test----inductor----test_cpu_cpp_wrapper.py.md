@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_cpu_cpp_wrapper.py`
 
-```
+```py
 # Owner(s): ["oncall: cpu inductor"]
 
 # 导入系统相关模块

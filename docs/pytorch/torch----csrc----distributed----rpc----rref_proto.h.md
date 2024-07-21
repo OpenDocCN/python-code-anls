@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rref_proto.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/distributed/rpc/message.h>

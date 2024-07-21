@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_torchinductor_codegen_dynamic_shapes.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入必要的模块和库

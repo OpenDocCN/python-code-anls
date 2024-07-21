@@ -1,6 +1,6 @@
 # `.\pytorch\test\higher_order_ops\test_with_effects.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 # 导入双向队列数据结构

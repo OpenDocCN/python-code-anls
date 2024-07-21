@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\Macros.h`
 
-```
+```py
 #ifndef C10_TEST_CORE_MACROS_MACROS_H_
 // 如果未定义 C10_TEST_CORE_MACROS_MACROS_H_，则执行以下内容
 

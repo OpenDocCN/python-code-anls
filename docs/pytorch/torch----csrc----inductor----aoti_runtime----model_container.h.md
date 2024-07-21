@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\inductor\aoti_runtime\model_container.h`
 
-```
+```py
 #pragma once
 
 #include <algorithm>

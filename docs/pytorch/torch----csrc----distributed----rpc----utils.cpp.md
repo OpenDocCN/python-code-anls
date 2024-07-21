@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\utils.cpp`
 
-```
+```py
 // 包含头文件，用于远程过程调用（RPC）的工具函数和类
 #include <torch/csrc/distributed/rpc/utils.h>
 

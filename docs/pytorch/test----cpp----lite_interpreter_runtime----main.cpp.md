@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lite_interpreter_runtime\main.cpp`
 
-```
+```py
 #include <ATen/core/ivalue.h>
 #include <gtest/gtest.h>
 #include <torch/csrc/autograd/generated/variable_factories.h>

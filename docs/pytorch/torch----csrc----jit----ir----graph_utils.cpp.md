@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\graph_utils.cpp`
 
-```
+```py
 namespace torch {
 namespace jit {
 

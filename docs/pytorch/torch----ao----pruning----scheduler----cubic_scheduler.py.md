@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\pruning\scheduler\cubic_scheduler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入警告模块，用于管理警告信息
 import warnings

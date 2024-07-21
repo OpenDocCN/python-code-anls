@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\operator_benchmark\pt\qpool_test.py`
 
-```
+```py
 # 导入operator_benchmark库和torch库
 import operator_benchmark as op_bench
 import torch

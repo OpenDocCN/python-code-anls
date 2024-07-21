@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\optim\functional_adamax.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型声明
 from typing import Dict, List, Optional, Tuple

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\graph_executor.cpp`
 
-```
+```py
 // 引入 Torch JIT 的相关头文件，用于 JIT 编译和执行图的功能
 #include <torch/csrc/jit/runtime/graph_executor.h>
 

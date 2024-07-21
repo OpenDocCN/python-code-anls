@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\vec.h`
 
-```
+```py
 #pragma once
 
 #if defined(CPU_CAPABILITY_AVX512)

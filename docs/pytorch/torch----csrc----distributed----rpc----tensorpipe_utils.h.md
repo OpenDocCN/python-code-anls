@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\tensorpipe_utils.h`
 
-```
+```py
 #pragma once
 // 如果定义了 USE_TENSORPIPE 宏，则编译以下代码
 

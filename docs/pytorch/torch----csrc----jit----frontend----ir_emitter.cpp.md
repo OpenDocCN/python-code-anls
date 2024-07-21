@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\ir_emitter.cpp`
 
-```
+```py
 // 包含 Torch JIT 前端的 IR 生成器头文件
 #include <torch/csrc/jit/frontend/ir_emitter.h>
 // 包含 Torch JIT 前端的树视图头文件

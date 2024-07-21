@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\multi_kernel.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入日志模块
 import logging
@@ -73,7 +73,7 @@ def get_all_call_args(call_args_list, arg_types_list):
             all_call_args.update({arg: None for arg in call_args})
 
         all_call_args = list(all_call_args.keys())
-    ```
+    ```py
     如果任何 kernel 多次传入相同参数，此算法将失败。
     请参见 test_pass_same_arg_multi_times 中的测试用例 test_multi_kernel.py
 
@@ -250,7 +250,7 @@ class MultiKernel:
     The generated definition for the multi-kernel will looks like:
     ```
     multi_kernel_kernel1 = MultiKernelCall([kernel1, kernel2], multi_kernel_definition_code)
-    ```
+    ```py
 
     Here is an concrete example: https://gist.github.com/shunting314/d9f3fb6bc6cee3dbae005825ca196d39
     """

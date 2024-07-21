@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\map\callable.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入所需模块和函数
 from typing import Callable, TypeVar

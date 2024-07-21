@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\cpp_intrinsics.h`
 
-```
+```py
 #pragma once
 // 定义命名空间 torch::jit::tensorexpr，用于组织代码
 namespace torch {

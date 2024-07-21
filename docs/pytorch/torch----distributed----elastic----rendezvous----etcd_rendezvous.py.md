@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\rendezvous\etcd_rendezvous.py`
 
-```
+```py
 # 指定 Python 解释器路径，以及声明允许未类型化的函数定义
 #!/usr/bin/env python3
 # mypy: allow-untyped-defs

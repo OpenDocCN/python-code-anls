@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\lazy_graph_executor.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ArrayRef.h>

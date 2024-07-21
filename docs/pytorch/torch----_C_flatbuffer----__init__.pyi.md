@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C_flatbuffer\__init__.pyi`
 
-```
+```py
 # 引入类型提示允许未定义的函数/方法
 # 从 torch._C 模块导入 LiteScriptModule 和 ScriptModule 类
 from torch._C import LiteScriptModule, ScriptModule

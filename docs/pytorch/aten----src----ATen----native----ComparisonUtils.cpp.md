@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ComparisonUtils.cpp`
 
-```
+```py
 // 引入 ATen 库中的头文件，用于张量操作
 #include <ATen/core/TensorBase.h>
 #include <ATen/core/TensorBody.h>

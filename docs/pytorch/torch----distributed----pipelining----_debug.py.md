@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\pipelining\_debug.py`
 
-```
+```py
 # 添加类型提示允许未定义的函数
 # 版权所有 Meta Platforms, Inc. 及其关联公司
 # 导入 PyTorch 库

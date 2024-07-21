@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\fbgemm_utils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Tensor.h>

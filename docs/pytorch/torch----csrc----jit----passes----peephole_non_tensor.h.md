@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_non_tensor.h`
 
-```
+```py
 #pragma once
 
 

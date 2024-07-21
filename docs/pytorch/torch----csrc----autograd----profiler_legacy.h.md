@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\autograd\profiler_legacy.h`
 
-```
+```py
 #pragma once
 
 #include <cstdint>  // 包含整数类型定义的头文件

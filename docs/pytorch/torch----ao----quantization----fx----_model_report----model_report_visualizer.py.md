@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\fx\_model_report\model_report_visualizer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入 PyTorch 库
 import torch

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\detail\MPSHooksInterface.cpp`
 
-```
+```py
 //  Copyright © 2022 Apple Inc.
 // 包含 ATen 库的 MPSHooksInterface 头文件
 #include <ATen/detail/MPSHooksInterface.h>

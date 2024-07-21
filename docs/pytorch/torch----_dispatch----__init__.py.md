@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dispatch\__init__.py`
 
-```
+```py
 # 定义一个名为 count_vowels 的函数，接收一个字符串参数 s
 def count_vowels(s):
     # 初始化计数器，用于统计元音字母的数量

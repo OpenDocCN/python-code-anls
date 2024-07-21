@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\core\metrics.cpp`
 
-```
+```py
 // 引入Torch Lazy模块中的度量相关头文件
 #include <torch/csrc/lazy/core/metrics.h>
 

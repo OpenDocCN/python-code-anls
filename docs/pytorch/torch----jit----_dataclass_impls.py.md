@@ -1,6 +1,6 @@
 # `.\pytorch\torch\jit\_dataclass_impls.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import ast  # 导入抽象语法树模块

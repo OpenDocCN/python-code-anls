@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_mkldnn_verbose.py`
 
-```
+```py
 # Owner(s): ["module: unknown"]
 
 # 从 torch.testing._internal.common_utils 导入 TestCase 和 run_tests

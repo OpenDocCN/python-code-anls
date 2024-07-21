@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\operators\softmax.cpp`
 
-```
+```py
 // 引入 Torch 的头文件 softmax.h，其中包含了对 softmax 操作符的定义和实现
 #include <torch/csrc/jit/tensorexpr/operators/softmax.h>
 

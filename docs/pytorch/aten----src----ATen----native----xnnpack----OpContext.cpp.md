@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\xnnpack\OpContext.cpp`
 
-```
+```py
 #ifdef USE_XNNPACK
 #include <ATen/native/xnnpack/Convolution.h>  // 导入 XNNPACK 卷积操作的头文件
 #include <ATen/native/xnnpack/Linear.h>       // 导入 XNNPACK 线性操作的头文件

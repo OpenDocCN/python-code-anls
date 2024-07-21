@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\types.cpp`
 
-```
+```py
 // 包含了来自torch库的TensorExpr模块的类型定义头文件
 #include <torch/csrc/jit/tensorexpr/types.h>
 

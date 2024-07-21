@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\intrusive_ptr_test.cpp`
 
-```
+```py
 #include <c10/util/intrusive_ptr.h>  // 引入 c10 库中的 intrusive_ptr 头文件
 
 #include <gtest/gtest.h>  // 引入 Google 测试框架的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\checkpoint_activation.py`
 
-```
+```py
 # 设置 mypy 选项，允许未经类型定义的函数
 # 从 contextlib 中导入 contextmanager 和 nullcontext
 # 从 typing 中导入 Any、ContextManager、Dict、Optional、Tuple

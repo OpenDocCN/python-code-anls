@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\lazy\ts_backend\ops\generic.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 框架的节点类头文件
 #include <torch/csrc/lazy/ts_backend/ts_node.h>

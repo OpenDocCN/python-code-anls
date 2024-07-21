@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_utils.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入符号运算库中的符号对象

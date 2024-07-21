@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\cuda\cutlass_extensions\gemm\threadblock\dq_mma_base.h`
 
-```
+```py
 ////////////////////////////////////////////////////////////////////////////////
 // Copyright and license information for the CUDA GEMM template.
 // SPDX-License-Identifier: BSD-3-Clause

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\lib\libshm\socket.h`
 
-```
+```py
 #pragma once
 // 引入必要的头文件
 #include <poll.h>

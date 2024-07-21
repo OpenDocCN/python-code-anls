@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\qnnpack\math.h`
 
-```
+```py
 /*
  * 版权声明
  * Facebook, Inc.及其关联公司版权所有。

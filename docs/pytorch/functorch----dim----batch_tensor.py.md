@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\dim\batch_tensor.py`
 
-```
+```py
 # 导入需要的模块：contextlib 中的 contextmanager，用于创建上下文管理器
 # 从 torch._C._functorch 中导入 _vmap_add_layers 和 _vmap_remove_layers 函数
 # _enabled 变量用于表示是否启用了层次映射功能，初始设为 False

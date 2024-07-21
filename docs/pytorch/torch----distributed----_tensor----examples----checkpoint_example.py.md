@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\examples\checkpoint_example.py`
 
-```
+```py
 """
 The following example contains a simple MLP model that uses
 different DTensor layouts, and use the checkpointing API to

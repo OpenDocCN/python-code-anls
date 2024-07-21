@@ -1,6 +1,6 @@
 # `.\pytorch\tools\autograd\templates\Functions.cpp`
 
-```
+```py
 // 包含自动生成的注释
 #include "torch/csrc/autograd/FunctionsManual.h"
 #include "torch/csrc/dynamo/compiled_autograd.h"

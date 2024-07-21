@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\small_vector_test.cpp`
 
-```
+```py
 // 包含标准头文件 <c10/util/ArrayRef.h>，提供数组引用的支持
 #include <c10/util/ArrayRef.h>
 // 包含小型向量模板类 SmallVector 的头文件

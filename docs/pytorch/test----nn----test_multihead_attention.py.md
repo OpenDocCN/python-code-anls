@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_multihead_attention.py`
 
-```
+```py
 # 导入所需模块和库
 import contextlib  # 上下文管理模块，用于管理上下文中的资源
 import random  # 随机数生成模块

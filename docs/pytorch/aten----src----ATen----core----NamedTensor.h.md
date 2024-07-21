@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\NamedTensor.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/Dimname.h>

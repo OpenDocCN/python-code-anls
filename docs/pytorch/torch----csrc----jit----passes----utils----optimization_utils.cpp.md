@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\utils\optimization_utils.cpp`
 
-```
+```py
 #include <torch/csrc/jit/passes/utils/optimization_utils.h>
 
 namespace torch {

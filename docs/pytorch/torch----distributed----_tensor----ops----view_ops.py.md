@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_tensor\ops\view_ops.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

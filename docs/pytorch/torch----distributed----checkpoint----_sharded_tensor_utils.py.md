@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_sharded_tensor_utils.py`
 
-```
+```py
 # 版权声明和导入模块
 # Copyright (c) Meta Platforms, Inc. and affiliates
 

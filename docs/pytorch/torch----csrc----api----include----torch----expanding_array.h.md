@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\expanding_array.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/ArrayRef.h>

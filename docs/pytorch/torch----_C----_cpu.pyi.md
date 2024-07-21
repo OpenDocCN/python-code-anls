@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_C\_cpu.pyi`
 
-```
+```py
 # 导入 torch 库中的 _bool 类型，该类型可能是用于定义布尔值的特定类型
 
 # 在 torch/csrc/cpu/Module.cpp 文件中定义以下几个函数：

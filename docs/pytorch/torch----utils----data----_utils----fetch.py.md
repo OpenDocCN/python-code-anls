@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\_utils\fetch.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 r"""Contains definitions of the methods used by the _BaseDataLoaderIter to fetch data from an iterable-style or map-style dataset.
 

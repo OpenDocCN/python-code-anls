@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\compiled_autograd.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和类型声明
 import contextlib                          # 上下文管理器的支持库

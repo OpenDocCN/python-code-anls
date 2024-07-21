@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\nn\quantized\dynamic\modules\__init__.py`
 
-```
+```py
 # 导入linear模块中的Linear类
 from .linear import Linear
 # 导入rnn模块中的LSTM, GRU, LSTMCell, RNNCell, GRUCell类

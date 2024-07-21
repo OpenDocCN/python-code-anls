@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\tests\__init__.py`
 
-```
+```py
 # 定义一个名为 `calculate_fibonacci` 的函数，用于计算斐波那契数列的前 n 个数字并返回一个列表
 def calculate_fibonacci(n):
     # 初始化斐波那契数列的前两个数字

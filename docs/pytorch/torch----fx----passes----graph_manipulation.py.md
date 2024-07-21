@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\graph_manipulation.py`
 
-```
+```py
 # 指定允许未标记类型的函数和方法
 # 导入必要的类型
 from typing import Any, Dict, List, NamedTuple, Optional

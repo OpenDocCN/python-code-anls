@@ -1,6 +1,6 @@
 # `.\pytorch\test\package\package_a\subpackage.py`
 
-```
+```py
 # 定义一个字符串变量，表示包名和子包名的组合
 result = "package_a.subpackage"
 

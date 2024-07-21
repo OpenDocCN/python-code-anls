@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\_compatibility.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和类型
 from typing import Any, Dict

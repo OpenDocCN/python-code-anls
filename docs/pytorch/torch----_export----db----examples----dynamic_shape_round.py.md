@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_export\db\examples\dynamic_shape_round.py`
 
-```
+```py
 # 导入 torch 库，这是一个用于深度学习的主要库
 # mypy: allow-untyped-defs 用于指示 mypy 在检查时允许未类型化的定义
 import torch

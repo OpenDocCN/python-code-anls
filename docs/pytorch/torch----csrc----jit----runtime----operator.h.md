@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\operator.h`
 
-```
+```py
 // 在内存中描述所有类似于 Caffe2 schema 的 ATen 操作
 // 一旦 C10 存在，这段代码可以被移除或者替换，但现在我们需要它来实现脚本的正确语义检查
 #pragma once

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\CollapseDims.h`
 
-```
+```py
 /*
 [collapse dims] Updates sizes, and strides to reflect a "collapse" of
 the info, possibly excluding the optional excludeDim. A "collapsed" version

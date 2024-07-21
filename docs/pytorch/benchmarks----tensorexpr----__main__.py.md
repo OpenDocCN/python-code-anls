@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\tensorexpr\__main__.py`
 
-```
+```py
 import argparse  # 导入 argparse 模块，用于解析命令行参数
 import itertools  # 导入 itertools 模块，用于创建迭代器的函数
 import os  # 导入 os 模块，提供了许多与操作系统交互的功能

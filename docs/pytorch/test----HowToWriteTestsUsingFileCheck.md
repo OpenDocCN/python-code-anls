@@ -14,7 +14,7 @@ Let's look at a test written with FileCheck. The following test verifies that
 CSE pass removes one out of two similar `aten::mul` nodes. Here is how the test
 looks like:
 
-```python
+```py
 def test_cse():
     input_str = """graph(%a : Tensor, %b : Tensor):
       # CHECK: aten::mul
@@ -34,7 +34,7 @@ Let's look in detail at how it works. First, the input string is parsed by
 `parse_ir`. At that stage all annotations are ignored since they are written in
 comments, so this is what parser essentially sees:
 
-```
+```py
 graph(%a : Tensor, %b : Tensor):
       %x : Tensor = aten::mul(%a, %b)
       %y : Tensor = aten::mul(%a, %b)
@@ -44,7 +44,7 @@ graph(%a : Tensor, %b : Tensor):
 We then run CSE on the parsed IR and expect it to remove the second `aten::mul`,
 which is redundant. After CSE our IR looks like this:
 
-```
+```py
 graph(%a : Tensor, %b : Tensor):
       %x : Tensor = aten::mul(%a, %b)
       return (%x, %x)
@@ -54,7 +54,7 @@ And now we run `FileCheck` passing to it both original input string and the
 optimized IR. From the input string `FileCheck` ignores everything except `#
 CHECK` pragmas and essentially it sees the input string like this:
 
-```
+```py
       # CHECK: aten::mul       (1)
       # CHECK-NOT: aten::mul   (2)
       # CHECK: return          (3)
@@ -68,7 +68,7 @@ match (3), the annotation (2) is also satisfied.
 
 One could also register FileCheck annotations using a builder API. To generate
 annotations from the example above one would write:
-```python
+```py
       FileCheck().check("aten::mul")     \
                  .check_not("aten::mul") \
                  .check("return")        \
@@ -97,14 +97,14 @@ annotations from the example above one would write:
   Works similar to the usual `CHECK` pragma, but also matches if there exists a
   way to reorder the CHECK-DAG pragmas to satisfy all patterns.
   For example the following pattern:
-  ```
+  ```py
   # CHECK: foo
   # CHECK-DAG: bar
   # CHECK-DAG: ham
   # CHECK: end
   ```
   would match the following input (note that `ham` and `bar` are swapped):
-  ```
+  ```py
   foo
   ham
   bar

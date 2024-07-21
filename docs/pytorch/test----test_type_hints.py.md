@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_type_hints.py`
 
-```
+```py
 # 指定允许未类型化的函数（由于 mypy: allow-untyped-defs 注释）
 # 定义所有者信息，指定这个模块属于 typing 模块
 # 导入 doctest 模块，用于解析文档字符串中的示例代码

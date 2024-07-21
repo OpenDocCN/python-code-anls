@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\gen_vmap_plumbing.py`
 
-```
+```py
 # 导入所需模块和类
 from __future__ import annotations
 import textwrap

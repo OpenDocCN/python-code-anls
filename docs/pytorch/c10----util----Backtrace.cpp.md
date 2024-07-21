@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\Backtrace.cpp`
 
-```
+```py
 #ifdef FBCODE_CAFFE2
 // 在 fbcode 中使用更好的堆栈跟踪实现，见 https://github.com/pytorch/pytorch/issues/56399
 // 当可用时，优先使用此实现

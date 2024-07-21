@@ -1,6 +1,6 @@
 # `.\pytorch\test\distributed\elastic\agent\server\test\__init__.py`
 
-```
+```py
 # 指定 Python 解释器路径，用于指示操作系统如何执行该脚本
 
 #!/usr/bin/env python3

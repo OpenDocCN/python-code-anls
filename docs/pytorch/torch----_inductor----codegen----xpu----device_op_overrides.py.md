@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\xpu\device_op_overrides.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 common 模块中导入 DeviceOpOverrides 和 register_device_op_overrides 函数
 from ..common import DeviceOpOverrides, register_device_op_overrides

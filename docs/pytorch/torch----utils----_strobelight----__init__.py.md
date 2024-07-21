@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_strobelight\__init__.py`
 
-```
+```py
 # 导入标准库中的 json 模块，用于处理 JSON 格式的数据
 import json
 

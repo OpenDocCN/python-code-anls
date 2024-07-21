@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_lite_interpreter.cpp`
 
-```
+```py
 #include <test/cpp/jit/test_utils.h>
 
 #include <c10/core/TensorOptions.h>

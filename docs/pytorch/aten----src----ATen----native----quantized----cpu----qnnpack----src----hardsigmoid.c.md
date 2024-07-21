@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\quantized\cpu\qnnpack\src\hardsigmoid.c`
 
-```
+```py
 /*
  * 版权所有（c）Facebook公司及其附属公司。
  * 保留所有权利。

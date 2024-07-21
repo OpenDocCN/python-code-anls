@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_inductor\codegen\cuda\cutlass_epilogue_gen.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的类型注解
 from typing import Dict, List

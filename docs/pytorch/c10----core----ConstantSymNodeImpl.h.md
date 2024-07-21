@@ -1,6 +1,6 @@
 # `.\pytorch\c10\core\ConstantSymNodeImpl.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/SymNodeImpl.h>  // 包含 SymNodeImpl 类的头文件

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cpu\vec\functional_bfloat16.h`
 
-```
+```py
 #pragma once
 
 // DO NOT DEFINE STATIC DATA IN THIS HEADER!

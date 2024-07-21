@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\map\grouping.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的类型引用
 from typing import List, Sized, TypeVar

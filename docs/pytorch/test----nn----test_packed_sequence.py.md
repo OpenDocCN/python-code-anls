@@ -1,6 +1,6 @@
 # `.\pytorch\test\nn\test_packed_sequence.py`
 
-```
+```py
 # Owner(s): ["module: nn"]
 
 import itertools  # 导入 itertools 库，用于迭代操作

@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\ThreadLocal_test.cpp`
 
-```
+```py
 #include <c10/util/ThreadLocal.h>  // 引入c10库中的ThreadLocal工具
 #include <gtest/gtest.h>           // 引入gtest测试框架
 

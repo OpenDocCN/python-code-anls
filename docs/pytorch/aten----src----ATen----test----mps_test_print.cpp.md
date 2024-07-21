@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\mps_test_print.cpp`
 
-```
+```py
 #include <gtest/gtest.h>
 #include <torch/torch.h>
 #include <limits>

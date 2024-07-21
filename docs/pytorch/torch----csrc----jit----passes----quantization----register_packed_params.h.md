@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\quantization\register_packed_params.h`
 
-```
+```py
 #pragma once
 // 使用预处理指令#pragma once确保头文件只被编译一次
 

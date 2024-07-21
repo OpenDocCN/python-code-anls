@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\lite_interpreter_runtime\test_mobile_profiler.cpp`
 
-```
+```py
 // 包含 ATen 库的函数声明
 #include <ATen/Functions.h>
 // 包含 Google Test 的头文件，用于单元测试

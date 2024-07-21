@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\AmpKernels.h`
 
-```
+```py
 #pragma once
 // 预处理命令，确保头文件只被编译一次
 

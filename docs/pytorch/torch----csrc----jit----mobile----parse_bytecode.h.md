@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\parse_bytecode.h`
 
-```
+```py
 #pragma once
 // 包含 Torch 库中移动端功能相关的头文件
 #include <torch/csrc/jit/mobile/function.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\package\_mock.py`
 
-```
+```py
 # 定义一个列表，包含需要在 MockedObject 中添加的魔术方法名称
 _magic_methods = [
     "__subclasscheck__",

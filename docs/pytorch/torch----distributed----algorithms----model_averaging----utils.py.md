@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\algorithms\model_averaging\utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # flake8: noqa C101
 # 引入 itertools 库，用于高效迭代操作

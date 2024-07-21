@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\modules\pooling.cpp`
 
-```
+```py
 #include <torch/nn/modules/pooling.h>  // 引入 Torch 中的池化模块头文件
 
 #include <torch/expanding_array.h>  // 引入 Torch 中的扩展数组头文件

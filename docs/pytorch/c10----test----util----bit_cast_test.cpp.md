@@ -1,6 +1,6 @@
 # `.\pytorch\c10\test\util\bit_cast_test.cpp`
 
-```
+```py
 #include <c10/util/bit_cast.h>
 // 引入 c10 库中的 bit_cast 头文件，用于进行位转换操作
 

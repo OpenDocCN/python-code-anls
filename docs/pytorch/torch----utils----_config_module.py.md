@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\_config_module.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入需要的模块和函数
 import contextlib  # 上下文管理工具

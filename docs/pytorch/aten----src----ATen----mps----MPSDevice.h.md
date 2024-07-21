@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\mps\MPSDevice.h`
 
-```
+```py
 //  Copyright © 2022 Apple Inc.
 // 版权声明，指明此代码的版权归属于苹果公司，年份为2022年
 

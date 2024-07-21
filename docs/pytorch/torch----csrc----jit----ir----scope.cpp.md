@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\ir\scope.cpp`
 
-```
+```py
 // 引入Torch库中的Scope类的头文件
 #include <torch/csrc/jit/ir/scope.h>
 
@@ -153,7 +153,7 @@ InlinedCallStack::InlinedCallStack(Function* fn, SourceRange source_range)
     : fn_(fn),
       fn_name_(fn_ ? fn_->name() : ""),
       source_range_(std::move(source_range)) {}
-``` 
+```py 
 // 构造函数，初始化成员变量 `fn_`、`fn_name_` 和 `source_range_`
 // 如果 `fn` 非空，则使用 `fn` 的名称作为 `fn_name_`
 // 使用 `std::move` 将 `source_range` 移动到 `source_range_`
@@ -182,7 +182,7 @@ InlinedCallStack::InlinedCallStack(
       fn_name_(std::move(function_name)),
       source_range_(std::move(source_range)),
       module_instance_info_(std::move(module_instance_info)) {}
-``` 
+```py 
 // 构造函数，初始化成员变量 `fn_`、`fn_name_`、`source_range_` 和 `module_instance_info_`
 // 使用 `std::move` 将 `function_name`、`source_range` 和 `module_instance_info` 移动到对应的成员变量
 
@@ -211,7 +211,7 @@ InlinedCallStack::InlinedCallStack(
       fn_name_(std::move(function_name)),
       source_range_(std::move(source_range)),
       module_instance_info_(std::move(module_instance_info)) {}
-``` 
+```py 
 // 构造函数，初始化成员变量 `callee_`、`fn_`、`fn_name_`、`source_range_` 和 `module_instance_info_`
 // 使用 `std::move` 将 `callee`、`function_name`、`source_range` 和 `module_instance_info` 移动到对应的成员变量
 
@@ -232,7 +232,7 @@ InlinedCallStack::InlinedCallStack(
 
 
 std::optional<InlinedCallStackPtr> InlinedCallStack::callee() const {
-``` 
+```py 
 // 返回成员变量 `callee_` 的可选值
   return callee_;
 }
@@ -244,7 +244,7 @@ void InlinedCallStack::setCallee(std::optional<InlinedCallStackPtr> callee) {
 }
 
 std::optional<ModuleInstanceInfo> InlinedCallStack::module_instance() const {
-``` 
+```py 
 // 返回成员变量 `module_instance_info_` 的可选值
   return module_instance_info_;
 }
@@ -256,7 +256,7 @@ SourceRange InlinedCallStack::source_range() const {
 }
 
 Function* InlinedCallStack::function() const {
-``` 
+```py 
 // 返回成员变量 `fn_`
   return fn_;
 }

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\LegacyTypeDispatch.h`
 
-```
+```py
 #pragma once
 
 // ATen 中用于分派运算符的传统机制是 Type 对象，它本质上是一个巨大的虚拟分派表，
@@ -45,7 +45,7 @@ namespace at {
  *  }
  *  // 错误的梯度！s.grad() 现在是使用 `s` 在原地更新后的值计算的。
  *  out.backward(torch::ones_like(out));
- * ```
+ * ```py
  * 用户应该在这里使用 `c10::InferenceMode`，这样它会正确地抛出错误，说 "用于梯度计算的变量之一已被修改"。
  */
 struct TORCH_API AutoDispatchBelowAutograd {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\quant_type.py`
 
-```
+```py
 import enum  # 导入枚举模块
 
 __all__ = [

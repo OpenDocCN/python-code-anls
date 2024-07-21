@@ -1,6 +1,6 @@
 # `.\pytorch\torch\onnx\_internal\fx\op_validation.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 """Module for handling op-level validation during exporting."""
 

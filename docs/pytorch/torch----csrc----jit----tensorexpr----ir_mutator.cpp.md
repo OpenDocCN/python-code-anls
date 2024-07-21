@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\tensorexpr\ir_mutator.cpp`
 
-```
+```py
 #include <torch/csrc/jit/tensorexpr/ir_mutator.h>
 // 引入 IRMutator 类的声明，用于修改和变异 IR（Intermediate Representation）
 

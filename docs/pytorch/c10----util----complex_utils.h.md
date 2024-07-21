@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\complex_utils.h`
 
-```
+```py
 // 如果未定义宏 C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H，则产生编译错误
 #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
 #error \

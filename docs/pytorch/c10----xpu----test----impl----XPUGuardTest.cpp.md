@@ -1,6 +1,6 @@
 # `.\pytorch\c10\xpu\test\impl\XPUGuardTest.cpp`
 
-```
+```py
 // 引入 Google Test 框架的头文件，用于单元测试
 #include <gtest/gtest.h>
 

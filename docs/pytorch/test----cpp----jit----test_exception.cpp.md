@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\jit\test_exception.cpp`
 
-```
+```py
 /*
  * 我们有一个用于异常的 Python 单元测试在 test/jit/test_exception.py。
  * 在这里添加一个 CPP 版本来验证从 C++ 抛出的期望异常类型。

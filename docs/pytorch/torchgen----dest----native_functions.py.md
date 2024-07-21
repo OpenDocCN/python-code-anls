@@ -1,6 +1,6 @@
 # `.\pytorch\torchgen\dest\native_functions.py`
 
-```
+```py
 # 引入新的语言特性，即类型注解，这里是为了支持 Python 3.9 之前的版本
 from __future__ import annotations
 

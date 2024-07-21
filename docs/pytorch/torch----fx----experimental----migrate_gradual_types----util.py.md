@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\experimental\migrate_gradual_types\util.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 从 torch.fx.experimental.migrate_gradual_types.constraint 模块导入所需的符号
 from torch.fx.experimental.migrate_gradual_types.constraint import TVar, DVar, BinConstraintD, \

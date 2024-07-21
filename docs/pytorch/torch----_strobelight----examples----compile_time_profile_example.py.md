@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_strobelight\examples\compile_time_profile_example.py`
 
-```
+```py
 # 引入 torch 库
 import torch
 

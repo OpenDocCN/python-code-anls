@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\rref_impl.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/core/jit_type.h>

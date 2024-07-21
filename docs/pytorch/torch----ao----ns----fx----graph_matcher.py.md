@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\ns\fx\graph_matcher.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和库
 import collections  # 导入collections模块

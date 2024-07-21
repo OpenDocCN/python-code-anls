@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\canonicalize_modified_loop.cpp`
 
-```
+```py
 // 包含必要的头文件和命名空间声明
 #include <functional>
 #include <memory>

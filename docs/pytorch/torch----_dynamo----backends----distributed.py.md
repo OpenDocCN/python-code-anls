@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\backends\distributed.py`
 
-```
+```py
 # 忽略类型检查错误，由于某些特定情况，mypy检查时会忽略错误
 # 导入日志模块，用于记录程序运行时的信息
 import logging

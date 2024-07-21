@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\_qnnpack_pt2e.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入操作符模块
 import operator

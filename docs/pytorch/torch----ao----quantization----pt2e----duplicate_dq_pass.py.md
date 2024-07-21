@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\duplicate_dq_pass.py`
 
-```
+```py
 # 添加类型检查允许未类型化定义
 # 导入日志记录模块
 import logging

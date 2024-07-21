@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\cuda\python_nccl.cpp`
 
-```
+```py
 // 引入 torch/csrc/cuda/python_nccl.h 文件
 
 #include <torch/csrc/cuda/python_nccl.h>

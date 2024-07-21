@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\ForeachUtils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/Device.h>

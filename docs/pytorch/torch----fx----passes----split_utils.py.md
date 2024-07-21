@@ -1,6 +1,6 @@
 # `.\pytorch\torch\fx\passes\split_utils.py`
 
-```
+```py
 # 用于允许未类型化的函数定义
 mypy: allow-untyped-defs
 

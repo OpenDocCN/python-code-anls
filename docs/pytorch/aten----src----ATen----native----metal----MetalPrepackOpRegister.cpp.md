@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\metal\MetalPrepackOpRegister.cpp`
 
-```
+```py
 // 引入 ATen 库的头文件
 #include <ATen/ATen.h>
 // 引入 ATen 核心操作注册的头文件

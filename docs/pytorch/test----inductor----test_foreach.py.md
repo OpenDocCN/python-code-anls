@@ -1,6 +1,6 @@
 # `.\pytorch\test\inductor\test_foreach.py`
 
-```
+```py
 # Owner(s): ["module: inductor"]
 
 # 导入系统相关模块

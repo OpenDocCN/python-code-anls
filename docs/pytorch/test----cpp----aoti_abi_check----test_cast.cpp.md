@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\aoti_abi_check\test_cast.cpp`
 
-```
+```py
 #include <gtest/gtest.h>  // 包含 Google Test 框架的头文件
 
 #include <c10/util/TypeCast.h>  // 包含类型转换相关的头文件

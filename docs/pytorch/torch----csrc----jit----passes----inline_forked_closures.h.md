@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\inline_forked_closures.h`
 
-```
+```py
 #pragma once
 
 

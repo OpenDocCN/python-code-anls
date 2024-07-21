@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\variables\distributed.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于类型检查器忽略特定的错误或警告
 # 声明 functools 模块，用于高阶函数操作
 # 声明 inspect 模块，用于对象内省（introspection）

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\hip\impl\HIPAllocatorMasqueradingAsCUDA.h`
 
-```
+```py
 #pragma once
 
 #include <c10/core/Allocator.h>

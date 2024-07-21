@@ -1,6 +1,6 @@
 # `.\pytorch\test\dynamo\test_decorators.py`
 
-```
+```py
 # 导入必要的模块和库
 # Owner(s): ["module: dynamo"]
 import functools  # 导入 functools 模块，用于装饰器功能

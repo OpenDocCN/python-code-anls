@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_common_passes.py`
 
-```
+```py
 # Owner(s): ["oncall: fx"]
 
 # 导入必要的库和模块

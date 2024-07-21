@@ -1,6 +1,6 @@
 # `.\pytorch\benchmarks\instruction_counts\core\expand.py`
 
-```
+```py
 """Logic for converting human-readable benchmarks into executable form.
 
 This is mostly string manipulation, with just a bit of importlib magic.

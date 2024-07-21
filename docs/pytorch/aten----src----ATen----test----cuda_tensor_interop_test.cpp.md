@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\test\cuda_tensor_interop_test.cpp`
 
-```
+```py
 // 包含 Google Test 的头文件
 #include <gtest/gtest.h>
 

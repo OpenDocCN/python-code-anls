@@ -1,6 +1,6 @@
 # `.\pytorch\functorch\csrc\dim\dim_opcode.c`
 
-```
+```py
 #include <torch/csrc/utils/python_compat.h>
 // 包含 Torch 库中与 Python 兼容性相关的头文件
 

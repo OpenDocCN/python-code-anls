@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_functional_autograd_benchmark.py`
 
-```
+```py
 # Owner(s): ["module: autograd"]
 
 # 导入必要的库

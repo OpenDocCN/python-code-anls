@@ -1,6 +1,6 @@
 # `.\pytorch\test\test_determination.py`
 
-```
+```py
 # Owner(s): ["module: ci"]  # 指定代码所有者为 CI 模块
 
 import os  # 导入操作系统相关模块

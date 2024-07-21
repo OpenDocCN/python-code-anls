@@ -1,6 +1,6 @@
 # `.\pytorch\torch\nn\quantized\modules\dropout.py`
 
-```
+```py
 # 禁止 flake8 检查导入模块时的 F401 错误，用于忽略未使用的导入警告
 r"""Quantized Modules.
 

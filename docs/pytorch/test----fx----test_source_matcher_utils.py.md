@@ -1,6 +1,6 @@
 # `.\pytorch\test\fx\test_source_matcher_utils.py`
 
-```
+```py
 # Owner(s): ["module: fx"]
 
 # 导入必要的模块

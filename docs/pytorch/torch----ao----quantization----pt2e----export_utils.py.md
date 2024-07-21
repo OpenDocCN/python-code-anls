@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\pt2e\export_utils.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入 types 模块，用于处理类型相关操作
 import types

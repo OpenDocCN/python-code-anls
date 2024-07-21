@@ -1,6 +1,6 @@
 # `.\pytorch\torch\ao\quantization\backend_config\executorch.py`
 
-```
+```py
 # TODO: 将 executorch 重命名为 qnnpack_executorch，因为 executorch 是一个通用的运行时，而不是特定的后端
 
 import operator  # 导入 operator 模块，用于操作符相关的函数

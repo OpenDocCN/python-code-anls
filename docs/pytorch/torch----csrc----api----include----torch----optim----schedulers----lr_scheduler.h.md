@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\optim\schedulers\lr_scheduler.h`
 
-```
+```py
 #pragma once
 
 #include <torch/optim/optimizer.h>

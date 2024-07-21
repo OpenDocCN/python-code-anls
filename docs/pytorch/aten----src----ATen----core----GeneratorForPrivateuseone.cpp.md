@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\core\GeneratorForPrivateuseone.cpp`
 
-```
+```py
 #include <mutex>
 #include <ATen/core/GeneratorForPrivateuseone.h>
 

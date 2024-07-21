@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\vulkan\api\Resource.cpp`
 
-```
+```py
       VK_CHECK(vmaCreateBuffer(
           allocator_, // allocator
           &buffer_create_info, // pBufferCreateInfo

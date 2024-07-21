@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_dynamo\profiler.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 引入必要的模块和库
 import dataclasses  # 导入 dataclasses 模块，用于创建数据类

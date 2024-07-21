@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\frontend\tree_views.cpp`
 
-```
+```py
 // 引入 Torch JIT 前端的树视图头文件
 #include <torch/csrc/jit/frontend/tree_views.h>
 

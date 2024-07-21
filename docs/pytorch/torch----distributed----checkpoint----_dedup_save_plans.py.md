@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\checkpoint\_dedup_save_plans.py`
 
-```
+```py
 # 著作权声明，由 Meta Platforms, Inc. 及其关联公司所有
 import dataclasses  # 导入 dataclasses 模块，用于创建和操作数据类
 from collections import defaultdict  # 导入 defaultdict，用于创建默认值为集合的字典

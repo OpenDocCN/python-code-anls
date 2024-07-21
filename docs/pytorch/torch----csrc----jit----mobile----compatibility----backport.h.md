@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\mobile\compatibility\backport.h`
 
-```
+```py
 #pragma once
 
 # 使用 `#pragma once` 来确保头文件只被编译一次，避免重复包含。

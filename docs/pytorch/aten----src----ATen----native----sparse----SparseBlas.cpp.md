@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\sparse\SparseBlas.cpp`
 
-```
+```py
 // 定义宏，仅用于方法操作符断言
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

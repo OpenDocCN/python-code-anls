@@ -1,6 +1,6 @@
 # `.\pytorch\torch\testing\_internal\__init__.py`
 
-```
+```py
 # 定义一个函数，接收一个整数作为参数
 def is_prime(num):
     # 如果输入的数字小于等于1，则不是质数，直接返回 False

@@ -1,6 +1,6 @@
 # `.\pytorch\tools\pyi\gen_pyi.py`
 
-```
+```py
 # 从未来导入注释语法，用于支持类型提示的声明
 from __future__ import annotations
 

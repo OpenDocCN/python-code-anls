@@ -1,6 +1,6 @@
 # `.\pytorch\test\onnx\verify.py`
 
-```
+```py
 import difflib  # 导入 difflib 模块，用于执行字符串之间的差异和比较操作
 import io  # 导入 io 模块，提供了对 Python 内置的 I/O 操作的支持
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\native\TestOps.cpp`
 
-```
+```py
 // 版权声明及宏定义，仅限方法操作符使用
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\templates\RedispatchFunctions.cpp`
 
-```
+```py
 // ${generated_comment}  // 描述生成的注释，可能包含有关代码生成过程或注释的说明
 
 #include <ATen/RedispatchFunctions.h>  // 包含 RedispatchFunctions.h 头文件，提供重新调度相关函数

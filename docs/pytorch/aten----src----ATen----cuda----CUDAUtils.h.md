@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\cuda\CUDAUtils.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/cuda/CUDAContext.h>  // 引入 CUDA 相关的头文件

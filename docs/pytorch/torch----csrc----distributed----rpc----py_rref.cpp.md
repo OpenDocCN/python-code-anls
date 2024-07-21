@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\distributed\rpc\py_rref.cpp`
 
-```
+```py
 // 包含 Torch 分布式 RPC 所需的头文件
 #include <torch/csrc/distributed/rpc/py_rref.h>
 

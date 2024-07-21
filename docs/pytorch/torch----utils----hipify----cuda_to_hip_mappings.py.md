@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\hipify\cuda_to_hip_mappings.py`
 
-```
+```py
 # 导入 collections 模块，用于创建有序字典
 import collections
 

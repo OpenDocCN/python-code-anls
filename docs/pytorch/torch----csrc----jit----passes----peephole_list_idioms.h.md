@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\passes\peephole_list_idioms.h`
 
-```
+```py
 #pragma once
 
 #include <torch/csrc/jit/ir/ir.h>

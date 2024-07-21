@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\runtime\jit_exception.cpp`
 
-```
+```py
 // 包含 torch/csrc/jit/runtime/jit_exception.h 头文件，其中定义了 JITException 类
 #include <torch/csrc/jit/runtime/jit_exception.h>
 

@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp\__init__.py`
 
-```
+```py
 # 定义一个名为 find_duplicates 的函数，接收一个参数 nums
 def find_duplicates(nums):
     # 创建一个空集合 seen，用于存储已经遇到的数字

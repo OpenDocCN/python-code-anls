@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\jit_log.h`
 
-```
+```py
 #pragma once
 #include <torch/csrc/Export.h>
 #include <memory>

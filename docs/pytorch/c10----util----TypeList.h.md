@@ -1,6 +1,6 @@
 # `.\pytorch\c10\util\TypeList.h`
 
-```
+```py
 #pragma once
 
 #include <c10/util/TypeTraits.h>

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\fsdp\_fsdp_extensions.py`
 
-```
+```py
 from abc import ABC, abstractmethod  # 导入抽象基类和抽象方法的装饰器
 from typing import Any, List, Optional, Tuple  # 导入类型提示相关的模块
 

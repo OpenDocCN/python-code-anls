@@ -1,6 +1,6 @@
 # `.\pytorch\test\typing\reveal\opt_size.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 

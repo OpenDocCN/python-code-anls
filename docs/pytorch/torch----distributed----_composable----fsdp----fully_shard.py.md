@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\_composable\fsdp\fully_shard.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的模块和函数
 import functools  # 导入 functools 模块，用于高阶函数（higher-order functions）

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\torch_version.py`
 
-```
+```py
 # 忽略类型检查错误，通常用于跳过类型检查时使用
 # 从 typing 模块导入 Any 和 Iterable 类型
 from typing import Any, Iterable

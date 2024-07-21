@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\jit\codegen\fuser\cpu\resource_strings.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/code_template.h>

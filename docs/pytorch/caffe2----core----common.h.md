@@ -1,6 +1,6 @@
 # `.\pytorch\caffe2\core\common.h`
 
-```
+```py
 #ifndef CAFFE2_CORE_COMMON_H_
 #define CAFFE2_CORE_COMMON_H_
 

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\utils\data\datapipes\_decorator.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入检查模块
 import inspect

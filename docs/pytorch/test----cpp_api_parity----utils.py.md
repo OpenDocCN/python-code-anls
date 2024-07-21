@@ -1,6 +1,6 @@
 # `.\pytorch\test\cpp_api_parity\utils.py`
 
-```
+```py
 # 导入标准库 os，用于操作操作系统相关功能
 import os
 # 导入 shutil 库，提供高级文件操作功能
@@ -45,7 +45,7 @@ TorchNNModuleTestParams = namedtuple(
         #     'extra_args': [],
         #     'other': [],
         # }
-        # ```
+        # ```py
         # ）
         "arg_dict",
         # 是否期望此 NN 模块测试通过 Python/C++ 一致性测试
@@ -109,7 +109,7 @@ TorchNNFunctionalTestParams = namedtuple(
         #     'extra_args': [],
         #     'other': [],
         # }
-        # ```
+        # ```py
         # )
         "arg_dict",
         # Whether we expect this NN functional test to pass the Python/C++ parity test
@@ -245,7 +245,7 @@ def is_criterion_test(test_instance):
 #   "i0",
 #   "t0",
 # ]
-# ```
+# ```py
 def compute_cpp_args_construction_stmts_and_forward_arg_symbols(test_params):
     # 获取测试参数的设备信息
     device = test_params.device

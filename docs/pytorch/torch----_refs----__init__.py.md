@@ -1,6 +1,6 @@
 # `.\pytorch\torch\_refs\__init__.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 导入必要的内置模块和标准库模块
 import builtins

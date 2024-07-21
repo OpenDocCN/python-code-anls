@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\TensorIteratorInternal.h`
 
-```
+```py
 #pragma once
 #include <ATen/native/TensorIterator.h>
 #include <c10/util/SmallBuffer.h>

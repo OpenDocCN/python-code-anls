@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\src\nn\options\linear.cpp`
 
-```
+```py
 #include <torch/nn/options/linear.h>
 
 namespace torch {

@@ -1,6 +1,6 @@
 # `.\pytorch\torch\csrc\api\include\torch\linalg.h`
 
-```
+```py
 #pragma once
 
 #include <ATen/ATen.h>  // 包含 ATen 库，提供张量操作支持
@@ -503,7 +503,7 @@ inline Tensor& inv_out(Tensor& result, const Tensor& input) {
 /// auto A = torch::matmul(A, A.t());
 /// auto L = torch::linalg::cholesky(A);
 /// assert(torch::allclose(torch::matmul(L, L.t()), A));
-/// ```
+/// ```py
 inline Tensor cholesky(const Tensor& self) {
   return detail::cholesky(self);
 }
@@ -1143,7 +1143,7 @@ inline Tensor& svdvals_out(
 /// auto a = torch::eye(4*6).reshape({4, 6, 8, 3});
 /// int64_t ind = 2;
 /// auto ainv = torch::linalg::tensorinv(a, ind);
-/// ```
+/// ```py
 /// 对输入张量进行求逆运算，并返回结果张量。
 inline Tensor inv(const Tensor& input) {
     return detail::inv(input);
@@ -1163,7 +1163,7 @@ inline Tensor& inv_out(Tensor& result, const Tensor& input) {
 /// auto a = torch::eye(2*3*4).reshape({2*3, 4, 2, 3, 4});
 /// auto b = torch::randn(2*3, 4);
 /// auto x = torch::linalg::tensorsolve(a, b);
-/// ```
+/// ```py
 inline Tensor tensorsolve(
     const Tensor& input,
     const Tensor& other,

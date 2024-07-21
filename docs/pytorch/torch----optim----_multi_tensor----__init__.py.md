@@ -1,6 +1,6 @@
 # `.\pytorch\torch\optim\_multi_tensor\__init__.py`
 
-```
+```py
 """
 :mod:`torch.optim._multi_tensor` is a package implementing various optimization algorithms.
 

@@ -1,6 +1,6 @@
 # `.\pytorch\aten\src\ATen\autocast_mode.cpp`
 
-```
+```py
 #include <ATen/autocast_mode.h>  // 包含 ATen 自动转换模式的头文件
 
 #include <mutex>  // 包含互斥锁相关的头文件

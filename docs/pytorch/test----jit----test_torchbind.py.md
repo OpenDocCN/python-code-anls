@@ -1,6 +1,6 @@
 # `.\pytorch\test\jit\test_torchbind.py`
 
-```
+```py
 # Owner(s): ["oncall: jit"]
 
 # 导入所需的模块和库

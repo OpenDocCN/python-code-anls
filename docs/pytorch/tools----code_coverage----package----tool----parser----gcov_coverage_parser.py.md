@@ -1,6 +1,6 @@
 # `.\pytorch\tools\code_coverage\package\tool\parser\gcov_coverage_parser.py`
 
-```
+```py
 from __future__ import annotations
 
 from typing import Any

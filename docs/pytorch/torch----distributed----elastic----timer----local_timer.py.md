@@ -1,6 +1,6 @@
 # `.\pytorch\torch\distributed\elastic\timer\local_timer.py`
 
-```
+```py
 # mypy: allow-untyped-defs
 # 允许未经类型注解的定义，用于静态类型检查工具
 # Copyright (c) Facebook, Inc. and its affiliates.
