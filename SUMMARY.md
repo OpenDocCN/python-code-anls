@@ -1,3 +1,4 @@
++   [AI-GAL 源码解析](docs/ai-gal/README.md)
 +   [ArknightsMower 源码解析](docs/arknight-mower-ai/README.md)
 +   [AutoGPT 源码分析](docs/AutoGPT-ai/README.md)
 +   [BackTrader 源码分析（云金杞）](docs/backtrader-yunjinqi/README.md)
