@@ -44,5 +44,6 @@
 +   [Tranformers 架构和源码解析](docs/transformers/README.md)
 +   [VisualGLM-6B 源码解析](docs/visualglm-6b/README.md)
 +   [yolo-world 源码解析](docs/yolo-world/README.md)
++   [Yolov5 源码解析](docs/yolov5/README.md)
 +   [YoloV5-DNF 源码解析](docs/yolov5-dnf-ai/README.md)
 +   [ZeroNet 源码解析](docs/ZeroNet-ai/README.md)
