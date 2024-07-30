@@ -47,4 +47,5 @@
 +   [yolo-world 源码解析](docs/yolo-world/README.md)
 +   [Yolov5 源码解析](docs/yolov5/README.md)
 +   [YoloV5-DNF 源码解析](docs/yolov5-dnf-ai/README.md)
++   [Yolov8 源码解析](docs/yolov8/README.md)
 +   [ZeroNet 源码解析](docs/ZeroNet-ai/README.md)
