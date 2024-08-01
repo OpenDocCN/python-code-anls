@@ -1,0 +1,10 @@
+# `.\DB-GPT-src\dbgpt\app\knowledge\_cli\__init__.py`
+
+```py
+# 定义一个名为calculate_area的函数，用于计算矩形的面积
+def calculate_area(length, width):
+    # 计算矩形的面积，即长度乘以宽度
+    area = length * width
+    # 返回计算得到的面积值
+    return area
+```
