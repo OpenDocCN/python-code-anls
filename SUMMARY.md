@@ -10,6 +10,7 @@
 +   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
 +   [Comic Translate 源码解析](docs/comic-trans/README.md)
 +   [DB-GPT 源码解析](docs/db-gpt/README.md)
++   [FLUX 源码解析](docs/flux/README.md)
 +   [GraphRAG 源码解析](docs/graphrag/README.md)
 +   [Transformers 源码解析](docs/hf-tfm/README.md)
 +   [Jieba 源码解析](docs/jieba-ai/README.md)
