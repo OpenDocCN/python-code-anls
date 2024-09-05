@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\yolo\model.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 from pathlib import Path  # 导入路径操作模块Path
 

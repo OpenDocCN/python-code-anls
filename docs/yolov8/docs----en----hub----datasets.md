@@ -22,7 +22,7 @@ Once uploaded, datasets can be immediately utilized for model training. This int
 
 ## Upload Dataset
 
-[Ultralytics HUB](https://ultralytics.com/hub) datasets are just like YOLOv5 and YOLOv8 🚀 datasets. They use the same structure and the same label formats to keep everything simple.
+[Ultralytics HUB](https://ultralytics.com/hub) datasets are just like YOLOv5 and YOLOv8  datasets. They use the same structure and the same label formats to keep everything simple.
 
 Before you upload a dataset to [Ultralytics HUB](https://ultralytics.com/hub), make sure to **place your dataset YAML file inside the dataset root directory** and that **your dataset YAML, directory and ZIP have the same name**, as shown in the example below, and then zip the dataset directory.
 

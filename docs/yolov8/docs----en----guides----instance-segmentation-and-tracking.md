@@ -4,7 +4,7 @@ description: Master instance segmentation and tracking with Ultralytics YOLOv8. 
 keywords: instance segmentation, tracking, YOLOv8, Ultralytics, object detection, machine learning, computer vision, python
 ---
 
-# Instance Segmentation and Tracking using Ultralytics YOLOv8 🚀
+# Instance Segmentation and Tracking using Ultralytics YOLOv8 
 
 ## What is Instance Segmentation?
 

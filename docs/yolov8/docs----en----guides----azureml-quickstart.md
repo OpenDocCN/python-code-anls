@@ -4,7 +4,7 @@ description: Learn how to run YOLOv8 on AzureML. Quickstart instructions for ter
 keywords: YOLOv8, AzureML, machine learning, cloud computing, quickstart, terminal, notebooks, model training, Python SDK, AI, Ultralytics
 ---
 
-# YOLOv8 🚀 on AzureML
+# YOLOv8  on AzureML
 
 ## What is Azure?
 

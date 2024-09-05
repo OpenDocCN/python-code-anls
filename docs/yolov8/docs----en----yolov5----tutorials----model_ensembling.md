@@ -4,7 +4,7 @@ description: Learn how to use YOLOv5 model ensembling during testing and inferen
 keywords: YOLOv5, model ensembling, testing, inference, mAP, Recall, Ultralytics, object detection, PyTorch
 ---
 
-📚 This guide explains how to use YOLOv5 🚀 **model ensembling** during testing and inference for improved mAP and Recall.
+📚 This guide explains how to use YOLOv5  **model ensembling** during testing and inference for improved mAP and Recall.
 
 From [https://en.wikipedia.org/wiki/Ensemble_learning](https://en.wikipedia.org/wiki/Ensemble_learning):
 
@@ -30,9 +30,9 @@ python val.py --weights yolov5x.pt --data coco.yaml --img 640 --half
 
 Output:
 
-```shell
+```py
 val: data=./data/coco.yaml, weights=['yolov5x.pt'], batch_size=32, imgsz=640, conf_thres=0.001, iou_thres=0.65, task=val, device=, single_cls=False, augment=False, verbose=False, save_txt=False, save_hybrid=False, save_conf=False, save_json=True, project=runs/val, name=exp, exist_ok=False, half=True
-YOLOv5 🚀 v5.0-267-g6a3ee7c torch 1.9.0+cu102 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
+YOLOv5  v5.0-267-g6a3ee7c torch 1.9.0+cu102 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
 
 Fusing layers...
 Model Summary: 476 layers, 87730285 parameters, 0 gradients
@@ -66,15 +66,15 @@ Multiple pretrained models may be ensembled together at test and inference time 
 - YOLOv5x
 - YOLOv5l6
 
-```bash
+```py
 python val.py --weights yolov5x.pt yolov5l6.pt --data coco.yaml --img 640 --half
 ```py
 
 Output:
 
-```shell
+```py
 val: data=./data/coco.yaml, weights=['yolov5x.pt', 'yolov5l6.pt'], batch_size=32, imgsz=640, conf_thres=0.001, iou_thres=0.6, task=val, device=, single_cls=False, augment=False, verbose=False, save_txt=False, save_hybrid=False, save_conf=False, save_json=True, project=runs/val, name=exp, exist_ok=False, half=True
-YOLOv5 🚀 v5.0-267-g6a3ee7c torch 1.9.0+cu102 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
+YOLOv5  v5.0-267-g6a3ee7c torch 1.9.0+cu102 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
 
 Fusing layers...
 Model Summary: 476 layers, 87730285 parameters, 0 gradients  # Model 1
@@ -107,14 +107,14 @@ Evaluating pycocotools mAP... saving runs/val/exp3/yolov5x_predictions.json...
 
 Append extra models to the `--weights` argument to run ensemble inference:
 
-```bash
+```py
 python detect.py --weights yolov5x.pt yolov5l6.pt --img 640 --source data/images
 ```py
 
 Output:
 
-```bash
-YOLOv5 🚀 v5.0-267-g6a3ee7c torch 1.9.0+cu102 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
+```py
+YOLOv5  v5.0-267-g6a3ee7c torch 1.9.0+cu102 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
 
 Fusing layers...
 Model Summary: 476 layers, 87730285 parameters, 0 gradients

@@ -4,7 +4,7 @@ description: Learn how to set up and run YOLOv5 on AzureML. Follow this quicksta
 keywords: YOLOv5, AzureML, machine learning, compute instance, quickstart, model training, virtual environment, Python, AI, deep learning
 ---
 
-# YOLOv5 🚀 on AzureML
+# YOLOv5  on AzureML
 
 This guide provides a quickstart to use YOLOv5 from an AzureML compute instance.
 

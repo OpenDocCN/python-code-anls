@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\instance.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的模块和库
 from collections import abc
@@ -240,7 +240,7 @@ class Instances:
             segments=[np.array([[5, 5], [10, 10]]), np.array([[15, 15], [20, 20]])],
             keypoints=np.array([[[5, 5, 1], [10, 10, 1]], [[15, 15, 1], [20, 20, 1]]])
         )
-        ```
+        ```py
 
     Note:
         The bounding box format is either 'xywh' or 'xyxy', and is determined by the `bbox_format` argument.

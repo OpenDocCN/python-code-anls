@@ -4,7 +4,7 @@ description: Learn how to estimate object speed using Ultralytics YOLOv8 for app
 keywords: Ultralytics YOLOv8, speed estimation, object tracking, computer vision, traffic control, autonomous navigation, surveillance, security
 ---
 
-# Speed Estimation using Ultralytics YOLOv8 🚀
+# Speed Estimation using Ultralytics YOLOv8 
 
 ## What is Speed Estimation?
 

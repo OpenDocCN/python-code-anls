@@ -4,7 +4,7 @@ description: Learn how to manage and optimize queues using Ultralytics YOLOv8 to
 keywords: queue management, YOLOv8, Ultralytics, reduce wait times, efficiency, customer satisfaction, retail, airports, healthcare, banks
 ---
 
-# Queue Management using Ultralytics YOLOv8 🚀
+# Queue Management using Ultralytics YOLOv8 
 
 ## What is Queue Management?
 

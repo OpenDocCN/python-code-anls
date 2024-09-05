@@ -4,7 +4,7 @@ description: Learn how to use Ultralytics YOLOv8 for real-time object blurring t
 keywords: YOLOv8, object blurring, real-time processing, privacy protection, image manipulation, video editing, Ultralytics
 ---
 
-# Object Blurring using Ultralytics YOLOv8 🚀
+# Object Blurring using Ultralytics YOLOv8 
 
 ## What is Object Blurring?
 

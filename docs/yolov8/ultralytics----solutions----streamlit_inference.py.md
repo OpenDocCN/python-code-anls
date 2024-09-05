@@ -1,6 +1,6 @@
 # `.\yolov8\ultralytics\solutions\streamlit_inference.py`
 
-```
+```py
 # 导入所需的库
 import io  # 用于处理字节流
 import time  # 用于时间相关操作
@@ -37,7 +37,7 @@ def inference(model=None):
     # 定义副标题配置：展示实时目标检测的描述
     sub_title_cfg = """<div><h4 style="color:#042AFF; text-align:center; 
                     font-family: 'Archivo', sans-serif; margin-top:-15px; margin-bottom:50px;">
-                    Experience real-time object detection on your webcam with the power of Ultralytics YOLOv8! 🚀</h4>
+                    Experience real-time object detection on your webcam with the power of Ultralytics YOLOv8! </h4>
                     </div>"""
 
     # 设置Streamlit页面配置：页面标题、布局、侧边栏状态

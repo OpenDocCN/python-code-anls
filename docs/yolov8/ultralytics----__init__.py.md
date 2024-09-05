@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\__init__.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 定义模块版本号
 __version__ = "8.2.69"

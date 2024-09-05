@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\yolo\obb\predict.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入 PyTorch 库
 import torch
@@ -24,7 +24,7 @@ class OBBPredictor(DetectionPredictor):
         args = dict(model='yolov8n-obb.pt', source=ASSETS)
         predictor = OBBPredictor(overrides=args)
         predictor.predict_cli()
-        ```
+        ```py
     """
 
     def __init__(self, cfg=DEFAULT_CFG, overrides=None, _callbacks=None):

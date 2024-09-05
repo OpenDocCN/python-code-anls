@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\engine\trainer.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """
 Train a model on a dataset.
 

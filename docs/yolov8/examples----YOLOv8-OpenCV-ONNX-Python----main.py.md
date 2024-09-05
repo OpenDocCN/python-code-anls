@@ -1,7 +1,7 @@
 # `.\yolov8\examples\YOLOv8-OpenCV-ONNX-Python\main.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的库
 import argparse  # 用于解析命令行参数

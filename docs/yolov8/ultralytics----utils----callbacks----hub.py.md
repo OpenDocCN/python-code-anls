@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\hub.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import json
 from time import time
@@ -85,7 +85,7 @@ def on_train_end(trainer):
         # 停止心跳信息发送
         session.alive = False  # 将会话对象的 alive 属性设为 False
         # 记录信息日志，显示操作完成和模型的访问链接
-        LOGGER.info(f"{PREFIX}Done ✅\n" f"{PREFIX}View model at {session.model_url} 🚀")
+        LOGGER.info(f"{PREFIX}Done ✅\n" f"{PREFIX}View model at {session.model_url} ")
 # 定义在训练开始时运行的回调函数，调用 events 函数并传递 trainer 的参数
 def on_train_start(trainer):
     """Run events on train start."""

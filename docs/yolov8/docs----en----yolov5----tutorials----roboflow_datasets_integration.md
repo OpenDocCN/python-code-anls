@@ -6,7 +6,7 @@ keywords: Roboflow, YOLOv5, data management, dataset labeling, dataset versionin
 
 # Roboflow Datasets
 
-You can now use Roboflow to organize, label, prepare, version, and host your datasets for training YOLOv5 🚀 models. Roboflow is free to use with YOLOv5 if you make your workspace public.
+You can now use Roboflow to organize, label, prepare, version, and host your datasets for training YOLOv5  models. Roboflow is free to use with YOLOv5 if you make your workspace public.
 
 !!! Question "Licensing"
 

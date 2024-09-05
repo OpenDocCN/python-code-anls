@@ -4,7 +4,7 @@ description: Learn how to train YOLOv5 on your own custom datasets with easy-to-
 keywords: YOLOv5, custom dataset, model training, object detection, machine learning, AI, YOLO model, PyTorch, dataset preparation
 ---
 
-📚 This guide explains how to train your own **custom dataset** with [YOLOv5](https://github.com/ultralytics/yolov5) 🚀.
+📚 This guide explains how to train your own **custom dataset** with [YOLOv5](https://github.com/ultralytics/yolov5) .
 
 ## Before You Start
 

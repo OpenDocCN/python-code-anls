@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\utils\loss.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import torch
 import torch.nn as nn

@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\metrics.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """Model validation metrics."""
 
 import math

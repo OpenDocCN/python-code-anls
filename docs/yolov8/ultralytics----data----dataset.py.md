@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\data\dataset.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的模块和库
 import contextlib

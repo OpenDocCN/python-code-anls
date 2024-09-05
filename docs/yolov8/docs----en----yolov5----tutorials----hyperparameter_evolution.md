@@ -4,7 +4,7 @@ description: Learn how to optimize YOLOv5 hyperparameters using genetic algorith
 keywords: YOLOv5, hyperparameter evolution, genetic algorithms, machine learning, optimization, Ultralytics
 ---
 
-📚 This guide explains **hyperparameter evolution** for YOLOv5 🚀. Hyperparameter evolution is a method of [Hyperparameter Optimization](https://en.wikipedia.org/wiki/Hyperparameter_optimization) using a [Genetic Algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm) (GA) for optimization.
+📚 This guide explains **hyperparameter evolution** for YOLOv5 . Hyperparameter evolution is a method of [Hyperparameter Optimization](https://en.wikipedia.org/wiki/Hyperparameter_optimization) using a [Genetic Algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm) (GA) for optimization.
 
 Hyperparameters in ML control various aspects of training, and finding optimal values for them can be a challenge. Traditional methods like grid searches can quickly become intractable due to 1) the high dimensional search space 2) unknown correlations among the dimensions, and 3) expensive nature of evaluating the fitness at each point, making GA a suitable candidate for hyperparameter searches.
 
@@ -22,8 +22,8 @@ pip install -r requirements.txt  # install
 
 YOLOv5 has about 30 hyperparameters used for various training settings. These are defined in `*.yaml` files in the `/data/hyps` directory. Better initial guesses will produce better final results, so it is important to initialize these values properly before evolving. If in doubt, simply use the default values, which are optimized for YOLOv5 COCO training from scratch.
 
-```yaml
-# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+```py
+# YOLOv5  by Ultralytics, AGPL-3.0 license
 # Hyperparameters for low-augmentation COCO training from scratch
 # python train.py --batch 64 --cfg yolov5n6.yaml --weights '' --data coco.yaml --img 640 --epochs 300 --linear
 # See tutorials for hyperparameter evolution https://github.com/ultralytics/yolov5#tutorials
@@ -63,7 +63,7 @@ copy_paste: 0.0 # segment copy-paste (probability)
 
 Fitness is the value we seek to maximize. In YOLOv5 we define a default fitness function as a weighted combination of metrics: `mAP@0.5` contributes 10% of the weight and `mAP@0.5:0.95` contributes the remaining 90%, with [Precision `P` and Recall `R`](https://en.wikipedia.org/wiki/Precision_and_recall) absent. You may adjust these as you see fit or use the default fitness definition in utils/metrics.py (recommended).
 
-```python
+```py
 def fitness(x):
     """Return model fitness as the sum of weighted metrics [P, R, mAP@0.5, mAP@0.5:0.95]."""
     w = [0.0, 0.0, 0.1, 0.9]  # weights for [P, R, mAP@0.5, mAP@0.5:0.95]
@@ -74,13 +74,13 @@ def fitness(x):
 
 Evolution is performed about a base scenario which we seek to improve upon. The base scenario in this example is finetuning COCO128 for 10 epochs using pretrained YOLOv5s. The base scenario training command is:
 
-```bash
+```py
 python train.py --epochs 10 --data coco128.yaml --weights yolov5s.pt --cache
 ```py
 
 To evolve hyperparameters **specific to this scenario**, starting from our initial values defined in **Section 1.**, and maximizing the fitness defined in **Section 2.**, append `--evolve`:
 
-```bash
+```py
 # Single-GPU
 python train.py --epochs 10 --data coco128.yaml --weights yolov5s.pt --cache --evolve
 
@@ -103,7 +103,7 @@ The default evolution settings will run the base scenario 300 times, i.e. for 30
 
 The main genetic operators are **crossover** and **mutation**. In this work mutation is used, with an 80% probability and a 0.04 variance to create new offspring based on a combination of the best parents from all previous generations. Results are logged to `runs/evolve/exp/evolve.csv`, and the highest fitness offspring is saved every generation as `runs/evolve/hyp_evolved.yaml`:
 
-```yaml
+```py
 # YOLOv5 Hyperparameter Evolution Results
 # Best generation: 287
 # Last generation: 300

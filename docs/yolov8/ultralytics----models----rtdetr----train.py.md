@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\rtdetr\train.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入所需模块和库
 from copy import copy
@@ -29,7 +29,7 @@ class RTDETRTrainer(DetectionTrainer):
         args = dict(model='rtdetr-l.yaml', data='coco8.yaml', imgsz=640, epochs=3)
         trainer = RTDETRTrainer(overrides=args)
         trainer.train()
-        ```
+        ```py
     """
 
     # 获取模型方法，初始化并返回用于对象检测任务的 RT-DETR 模型

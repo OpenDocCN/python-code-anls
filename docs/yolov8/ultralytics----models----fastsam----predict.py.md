@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\fastsam\predict.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 import torch
 from PIL import Image
 

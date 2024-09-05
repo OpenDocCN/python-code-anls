@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\hub\auth.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 引入 requests 模块，用于发送 HTTP 请求
 import requests

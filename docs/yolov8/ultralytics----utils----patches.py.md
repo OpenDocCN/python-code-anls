@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\patches.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """Monkey patches to update/extend functionality of existing functions."""
 
 import time
@@ -96,7 +96,7 @@ def torch_save(*args, use_dill=True, **kwargs):
 
     ```py
     # 此处代码块是省略部分，不需要注释
-    ```
+    ```py
     """
     pass  # torch_save函数暂时没有实现内容，直接返回
     """

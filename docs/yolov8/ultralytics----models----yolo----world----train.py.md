@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\yolo\world\train.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import itertools  # 导入 itertools 模块
 
@@ -39,7 +39,7 @@ class WorldTrainer(yolo.detect.DetectionTrainer):
         args = dict(model='yolov8s-world.pt', data='coco8.yaml', epochs=3)
         trainer = WorldTrainer(overrides=args)
         trainer.train()
-        ```
+        ```py
     """
 
     def __init__(self, cfg=DEFAULT_CFG, overrides=None, _callbacks=None):

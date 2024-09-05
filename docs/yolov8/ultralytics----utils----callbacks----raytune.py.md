@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\raytune.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 从 ultralytics.utils 导入 SETTINGS 模块
 from ultralytics.utils import SETTINGS

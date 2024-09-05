@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\fastsam\utils.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 调整边界框使其在一定阈值内粘合到图像边界
 

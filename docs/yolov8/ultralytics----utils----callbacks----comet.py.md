@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\comet.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的模块和变量
 from ultralytics.utils import LOGGER, RANK, SETTINGS, TESTS_RUNNING, ops

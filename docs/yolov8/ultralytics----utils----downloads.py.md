@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\downloads.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的库
 import contextlib  # 提供上下文管理工具的标准库
@@ -53,7 +53,7 @@ def is_url(url, check=False):
     Example:
         ```py
         valid = is_url("https://www.example.com")
-        ```
+        ```py
     """
     with contextlib.suppress(Exception):
         url = str(url)
@@ -79,7 +79,7 @@ def delete_dsstore(path, files_to_delete=(".DS_Store", "__MACOSX")):
         from ultralytics.utils.downloads import delete_dsstore
 
         delete_dsstore('path/to/dir')
-        ```
+        ```py
 
     Note:
         ".DS_Store" 文件由苹果操作系统创建，包含关于文件和文件夹的元数据。它们是隐藏的系统文件，在不同操作系统间传输文件时可能会引起问题。
@@ -120,7 +120,7 @@ def unzip_file(file, path=None, exclude=(".DS_Store", "__MACOSX"), exist_ok=Fals
         from ultralytics.utils.downloads import unzip_file
 
         dir = unzip_file('path/to/file.zip')
-        ```
+        ```py
     """
     from zipfile import ZipFile, BadZipFile
     from pathlib import Path
@@ -286,7 +286,7 @@ def safe_download(
 
         link = "https://ultralytics.com/assets/bus.jpg"
         path = safe_download(link)
-        ```
+        ```py
     """
 
     gdrive = url.startswith("https://drive.google.com/")  # 检查 URL 是否是谷歌驱动器的链接
@@ -434,7 +434,7 @@ def download(url, dir=Path.cwd(), unzip=True, delete=False, curl=False, threads=
     Example:
         ```py
         download('https://ultralytics.com/assets/example.zip', dir='path/to/dir', unzip=True)
-        ```
+        ```py
     """
     dir = Path(dir)  # 将目录参数转换为 Path 对象
     dir.mkdir(parents=True, exist_ok=True)  # 创建目录，如果目录不存在则递归创建

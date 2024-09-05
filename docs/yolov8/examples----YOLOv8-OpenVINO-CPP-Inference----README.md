@@ -4,7 +4,7 @@ Welcome to the YOLOv8 OpenVINO Inference example in C++! This guide will help yo
 
 ## 🌟 Features
 
-- 🚀 **Model Format Support**: Compatible with `ONNX` and `OpenVINO IR` formats.
+-  **Model Format Support**: Compatible with `ONNX` and `OpenVINO IR` formats.
 - ⚡ **Precision Options**: Run models in `FP32`, `FP16`, and `INT8` precisions.
 - 🔄 **Dynamic Shape Loading**: Easily handle models with dynamic input shapes.
 
@@ -66,4 +66,4 @@ yolo export model=yolov8s.pt imgsz=640 format=openvino
 
 ## ❤️ Contributions
 
-We hope this example helps you integrate YOLOv8 with OpenVINO and OpenCV into your C++ projects effortlessly. Happy coding! 🚀
+We hope this example helps you integrate YOLOv8 with OpenVINO and OpenCV into your C++ projects effortlessly. Happy coding! 

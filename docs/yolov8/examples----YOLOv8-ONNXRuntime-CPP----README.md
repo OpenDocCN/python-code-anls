@@ -90,7 +90,7 @@ Note (2): Due to ONNX Runtime, we need to use CUDA 11 and cuDNN 8. Keep in mind 
 
 6. The built executable should now be located in the `build` directory.
 
-## Usage 🚀
+## Usage 
 
 ```py++
 //change your param as you like

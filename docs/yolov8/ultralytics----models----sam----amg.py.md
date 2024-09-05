@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\sam\amg.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入标准数学库
 import math

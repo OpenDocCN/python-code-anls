@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\sam\modules\sam.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 # All rights reserved.

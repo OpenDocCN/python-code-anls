@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\nas\val.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import torch  # 导入PyTorch库
 
@@ -30,7 +30,7 @@ class NASValidator(DetectionValidator):
         validator = model.validator
         # Assumes that raw_preds are available
         final_preds = validator.postprocess(raw_preds)
-        ```
+        ```py
 
     Note:
         This class is generally not instantiated directly but is used internally within the `NAS` class.

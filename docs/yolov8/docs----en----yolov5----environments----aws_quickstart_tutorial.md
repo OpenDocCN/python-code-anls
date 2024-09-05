@@ -4,7 +4,7 @@ description: Discover how to set up and run YOLOv5 on AWS Deep Learning Instance
 keywords: YOLOv5, AWS, Deep Learning, Machine Learning, AWS EC2, YOLOv5 setup, Deep Learning Instances, AI, Object Detection
 ---
 
-# YOLOv5 🚀 on AWS Deep Learning Instance: Your Complete Guide
+# YOLOv5  on AWS Deep Learning Instance: Your Complete Guide
 
 Setting up a high-performance deep learning environment can be daunting for newcomers, but fear not! 🛠️ With this guide, we'll walk you through the process of getting YOLOv5 up and running on an AWS Deep Learning instance. By leveraging the power of Amazon Web Services (AWS), even those new to machine learning can get started quickly and cost-effectively. The AWS platform's scalability is perfect for both experimentation and production deployment.
 

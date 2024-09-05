@@ -206,7 +206,7 @@ class RF100Benchmark:
             list_ind (int): Index for current dataset.
         """
         # 定义跳过的符号列表，这些符号出现在日志行中时将被跳过
-        skip_symbols = ["🚀", "⚠️", "💡", "❌"]
+        skip_symbols = ["", "⚠️", "💡", "❌"]
         
         # 从 YAML 文件中读取类别名称列表
         with open(yaml_path) as stream:

@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\hub\session.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import threading  # 导入多线程支持模块
 import time  # 导入时间模块
@@ -107,7 +107,7 @@ class HUBTrainingSession:
         # 如果模型已经训练完成
         if self.model.is_trained():
             # 输出加载已训练的 HUB 模型的信息
-            print(emojis(f"Loading trained HUB model {self.model_url} 🚀"))
+            print(emojis(f"Loading trained HUB model {self.model_url} "))
             # 获取模型权重的 URL
             self.model_file = self.model.get_weights_url("best")
             return
@@ -116,7 +116,7 @@ class HUBTrainingSession:
         self._set_train_args()
         self.model.start_heartbeat(self.rate_limits["heartbeat"])
         # 输出模型的 URL
-        LOGGER.info(f"{PREFIX}View model at {self.model_url} 🚀")
+        LOGGER.info(f"{PREFIX}View model at {self.model_url} ")
     def create_model(self, model_args):
         """Initializes a HUB training session with the specified model identifier."""
         # 构造包含训练参数的 payload 对象
@@ -154,7 +154,7 @@ class HUBTrainingSession:
         # 启动心跳以便HUB监控代理
         self.model.start_heartbeat(self.rate_limits["heartbeat"])
 
-        LOGGER.info(f"{PREFIX}View model at {self.model_url} 🚀")  # 记录模型的访问链接
+        LOGGER.info(f"{PREFIX}View model at {self.model_url} ")  # 记录模型的访问链接
     def _parse_identifier(identifier):
         """
         Parses the given identifier to determine the type of identifier and extract relevant components.

@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\utils\ops.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import torch  # 导入PyTorch库
 import torch.nn as nn  # 导入PyTorch神经网络模块

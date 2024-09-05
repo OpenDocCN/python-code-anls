@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\nn\modules\conv.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """Convolution modules."""
 
 import math

@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\data\loaders.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import glob  # 导入glob模块，用于获取文件路径列表
 import math  # 导入math模块，提供数学计算函数
@@ -62,7 +62,7 @@ class LoadStreams:
     Example:
          ```py
          yolo predict source='rtsp://example.com/media.mp4'
-         ```
+         ```py
     """
     def __init__(self, sources="file.streams", vid_stride=1, buffer=False):
         """Initialize instance variables and check for consistent input stream shapes."""

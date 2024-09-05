@@ -4,7 +4,7 @@ description: Optimize parking spaces and enhance safety with Ultralytics YOLOv8.
 keywords: parking management, YOLOv8, Ultralytics, vehicle detection, real-time tracking, parking lot optimization, smart parking
 ---
 
-# Parking Management using Ultralytics YOLOv8 🚀
+# Parking Management using Ultralytics YOLOv8 
 
 ## What is Parking Management System?
 

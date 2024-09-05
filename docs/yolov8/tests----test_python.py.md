@@ -1,7 +1,7 @@
 # `.\yolov8\tests\test_python.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import contextlib  # 上下文管理工具
 import urllib  # URL 处理模块

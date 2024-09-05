@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\data\base.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import glob  # 导入用于获取文件路径的模块
 import math  # 导入数学函数模块
@@ -347,7 +347,7 @@ class BaseDataset(Dataset):
             else:
                 # Val transforms
                 return Compose([])
-            ```
+            ```py
         """
         # 用户可以在此处自定义数据增强操作，此处抛出未实现错误，鼓励用户进行定制
         raise NotImplementedError
@@ -369,7 +369,7 @@ class BaseDataset(Dataset):
                 normalized=True, # or False
                 bbox_format="xyxy",  # or xywh, ltwh
             )
-            ```
+            ```py
         """
         # 用户可以在此处自定义标签输出格式，此处抛出未实现错误，鼓励用户进行定制
         raise NotImplementedError

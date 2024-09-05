@@ -4,7 +4,7 @@ description: Transform complex data into insightful heatmaps using Ultralytics Y
 keywords: Ultralytics, YOLOv8, heatmaps, data visualization, data analysis, complex data, patterns, trends, anomalies
 ---
 
-# Advanced Data Visualization: Heatmaps using Ultralytics YOLOv8 🚀
+# Advanced Data Visualization: Heatmaps using Ultralytics YOLOv8 
 
 ## Introduction to Heatmaps
 

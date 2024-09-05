@@ -54,7 +54,7 @@ That's it! You're done 😎
 
 <br>
 
-## 🚀 Training YOLOv5 With ClearML
+##  Training YOLOv5 With ClearML
 
 To enable ClearML experiment tracking, simply install the ClearML pip package.
 
@@ -154,7 +154,7 @@ clearml-data close
 
 ### Run Training Using A ClearML Dataset
 
-Now that you have a ClearML dataset, you can very simply use it to train custom YOLOv5 🚀 models!
+Now that you have a ClearML dataset, you can very simply use it to train custom YOLOv5  models!
 
 ```py
 python train.py --img 640 --batch 16 --epochs 3 --data clearml://<your_dataset_id> --weights yolov5s.pt --cache

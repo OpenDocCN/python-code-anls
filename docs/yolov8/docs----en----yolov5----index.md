@@ -22,7 +22,7 @@ keywords: YOLOv5, Ultralytics, object detection, computer vision, deep learning,
 <br>
 <br>
 
-Welcome to the Ultralytics' <a href="https://github.com/ultralytics/yolov5">YOLOv5</a>🚀 Documentation! YOLOv5, the fifth iteration of the revolutionary "You Only Look Once" object detection model, is designed to deliver high-speed, high-accuracy results in real-time.
+Welcome to the Ultralytics' <a href="https://github.com/ultralytics/yolov5">YOLOv5</a> Documentation! YOLOv5, the fifth iteration of the revolutionary "You Only Look Once" object detection model, is designed to deliver high-speed, high-accuracy results in real-time.
 
 <br><br>
 
@@ -34,11 +34,11 @@ Built on PyTorch, this powerful deep learning framework has garnered immense pop
 
 Here's a compilation of comprehensive tutorials that will guide you through different aspects of YOLOv5.
 
-- [Train Custom Data](tutorials/train_custom_data.md) 🚀 RECOMMENDED: Learn how to train the YOLOv5 model on your custom dataset.
+- [Train Custom Data](tutorials/train_custom_data.md)  RECOMMENDED: Learn how to train the YOLOv5 model on your custom dataset.
 - [Tips for Best Training Results](tutorials/tips_for_best_training_results.md) ☘️: Uncover practical tips to optimize your model training process.
 - [Multi-GPU Training](tutorials/multi_gpu_training.md): Understand how to leverage multiple GPUs to expedite your training.
 - [PyTorch Hub](tutorials/pytorch_hub_model_loading.md) 🌟 NEW: Learn to load pre-trained models via PyTorch Hub.
-- [TFLite, ONNX, CoreML, TensorRT Export](tutorials/model_export.md) 🚀: Understand how to export your model to different formats.
+- [TFLite, ONNX, CoreML, TensorRT Export](tutorials/model_export.md) : Understand how to export your model to different formats.
 - [Test-Time Augmentation (TTA)](tutorials/test_time_augmentation.md): Explore how to use TTA to improve your model's prediction accuracy.
 - [Model Ensembling](tutorials/model_ensembling.md): Learn the strategy of combining multiple models for improved performance.
 - [Model Pruning/Sparsity](tutorials/model_pruning_and_sparsity.md): Understand pruning and sparsity concepts, and how to create a more efficient model.
@@ -89,7 +89,7 @@ Your journey with YOLOv5 doesn't have to be a solitary one. Join our vibrant com
 
 Interested in contributing? We welcome contributions of all forms; from code improvements and bug reports to documentation updates. Check out our [contributing guidelines](../help/contributing.md/) for more information.
 
-We're excited to see the innovative ways you'll use YOLOv5. Dive in, experiment, and revolutionize your computer vision projects! 🚀
+We're excited to see the innovative ways you'll use YOLOv5. Dive in, experiment, and revolutionize your computer vision projects! 
 
 ## FAQ
 

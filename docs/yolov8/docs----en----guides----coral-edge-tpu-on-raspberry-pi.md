@@ -4,7 +4,7 @@ description: Learn how to boost your Raspberry Pi's ML performance using Coral E
 keywords: Coral Edge TPU, Raspberry Pi, YOLOv8, Ultralytics, TensorFlow Lite, ML inference, machine learning, AI, installation guide, setup tutorial
 ---
 
-# Coral Edge TPU on a Raspberry Pi with Ultralytics YOLOv8 🚀
+# Coral Edge TPU on a Raspberry Pi with Ultralytics YOLOv8 
 
 <p align="center">
   <img width="800" src="https://images.ctfassets.net/2lpsze4g694w/5XK2dV0w55U0TefijPli1H/bf0d119d77faef9a5d2cc0dad2aa4b42/Edge-TPU-USB-Accelerator-and-Pi.jpg?w=800" alt="Raspberry Pi single board computer with USB Edge TPU accelerator">

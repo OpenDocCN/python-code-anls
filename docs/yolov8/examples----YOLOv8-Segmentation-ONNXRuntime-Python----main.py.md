@@ -1,7 +1,7 @@
 # `.\yolov8\examples\YOLOv8-Segmentation-ONNXRuntime-Python\main.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import argparse  # 导入命令行参数解析模块
 

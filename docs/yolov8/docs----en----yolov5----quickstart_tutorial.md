@@ -4,7 +4,7 @@ description: Kickstart your real-time object detection journey with YOLOv5! This
 keywords: YOLOv5, Quickstart, real-time object detection, AI, ML, PyTorch, inference, training, Ultralytics, machine learning, deep learning
 ---
 
-# YOLOv5 Quickstart 🚀
+# YOLOv5 Quickstart 
 
 Embark on your journey into the dynamic realm of real-time object detection with YOLOv5! This guide is crafted to serve as a comprehensive starting point for AI enthusiasts and professionals aiming to master YOLOv5. From initial setup to advanced training techniques, we've got you covered. By the end of this guide, you'll have the knowledge to implement YOLOv5 into your projects confidently. Let's ignite the engines and soar into YOLOv5!
 

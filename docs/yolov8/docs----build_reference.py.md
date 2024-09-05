@@ -1,7 +1,7 @@
 # `.\yolov8\docs\build_reference.py`
 
 ```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+# Ultralytics YOLO , AGPL-3.0 license
 """
 Helper file to build Ultralytics Docs reference section. Recursively walks through ultralytics dir and builds an MkDocs
 reference section of *.md files composed of classes and functions, and also creates a nav menu for use in mkdocs.yaml.

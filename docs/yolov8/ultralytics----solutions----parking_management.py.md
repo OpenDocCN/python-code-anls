@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\solutions\parking_management.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import json  # 导入处理 JSON 格式数据的模块
 

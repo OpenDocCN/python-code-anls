@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\mlflow.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """
 MLflow Logging for Ultralytics YOLO.
 

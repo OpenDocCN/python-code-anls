@@ -1,7 +1,7 @@
 # `.\yolov8\tests\test_integrations.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 引入必要的库和模块
 import contextlib

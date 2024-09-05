@@ -4,7 +4,7 @@ description: Discover how to achieve optimal mAP and training results using YOLO
 keywords: YOLOv5 training, mAP, dataset best practices, model selection, training settings, YOLOv5 guide, YOLOv5 tutorial, machine learning
 ---
 
-📚 This guide explains how to produce the best mAP and training results with YOLOv5 🚀.
+📚 This guide explains how to produce the best mAP and training results with YOLOv5 .
 
 Most of the time good results can be obtained with no changes to the models or training settings, **provided your dataset is sufficiently large and well labelled**. If at first you don't get good results, there are steps you might be able to take to improve, but we always recommend users **first train with all default settings** before considering any changes. This helps establish a performance baseline and spot areas for improvement.
 

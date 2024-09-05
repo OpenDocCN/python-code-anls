@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\trackers\bot_sort.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 from collections import deque  # 导入 deque 数据结构，用于存储特征向量历史
 import numpy as np  # 导入 NumPy 库，用于数值计算

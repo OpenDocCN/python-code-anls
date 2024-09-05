@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\files.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import contextlib                   # 导入上下文管理模块
 import glob                         # 导入文件路径模块
@@ -49,7 +49,7 @@ def spaces_in_path(path):
 
         with spaces_in_path('/path/with spaces') as new_path:
             # Your code here
-        ```
+        ```py
     """
 
     # If path has spaces, replace them with underscores
@@ -170,7 +170,7 @@ def update_models(model_names=("yolov8n.pt",), source_dir=Path("."), update_name
 
         model_names = (f"rtdetr-{size}.pt" for size in "lx")
         update_models(model_names)
-        ```
+        ```py
     """
     from ultralytics import YOLO
     from ultralytics.nn.autobackend import default_class_names

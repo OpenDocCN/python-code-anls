@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\solutions\object_counter.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的库
 from collections import defaultdict

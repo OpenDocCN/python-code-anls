@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\data\utils.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import contextlib
 import hashlib
@@ -492,7 +492,7 @@ def check_det_dataset(dataset, autodownload=True):
 
         stats.get_json(save=True)
         stats.process_images()
-        ```
+        ```py
     """
 
     def __init__(self, path="coco8.yaml", task="detect", autodownload=False):
@@ -594,7 +594,7 @@ def autosplit(path=DATASETS_DIR / "coco8/images", weights=(0.9, 0.1, 0.0), annot
         from ultralytics.data.utils import autosplit
 
         autosplit()
-        ```
+        ```py
     """
 
     path = Path(path)  # 图像目录的路径

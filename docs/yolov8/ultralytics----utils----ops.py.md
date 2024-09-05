@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\ops.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import contextlib  # 导入上下文管理器相关的模块
 import math  # 导入数学函数模块
@@ -29,7 +29,7 @@ class Profile(contextlib.ContextDecorator):
             pass  # slow operation here
 
         print(dt)  # prints "Elapsed time is 9.5367431640625e-07 s"
-        ```
+        ```py
     """
 
     def __init__(self, t=0.0, device: torch.device = None):

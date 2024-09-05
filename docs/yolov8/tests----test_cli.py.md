@@ -1,7 +1,7 @@
 # `.\yolov8\tests\test_cli.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 导入必要的模块
 import subprocess  # 用于执行系统命令

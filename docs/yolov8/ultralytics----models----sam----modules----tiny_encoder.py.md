@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\sam\modules\tiny_encoder.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # --------------------------------------------------------
 # TinyViT Model Architecture

@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\neptune.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 从 ultralytics.utils 模块导入 LOGGER、SETTINGS 和 TESTS_RUNNING
 from ultralytics.utils import LOGGER, SETTINGS, TESTS_RUNNING

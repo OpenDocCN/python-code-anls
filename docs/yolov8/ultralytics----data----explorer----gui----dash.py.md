@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\data\explorer\gui\dash.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import sys
 import time

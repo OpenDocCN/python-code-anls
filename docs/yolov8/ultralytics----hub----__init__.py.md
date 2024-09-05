@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\hub\__init__.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import requests  # 导入requests库，用于发送HTTP请求
 
@@ -80,7 +80,7 @@ def logout():
         from ultralytics import hub
 
         hub.logout()
-        ```
+        ```py
     """
     SETTINGS["api_key"] = ""  # 清空SETTINGS中的API密钥
     SETTINGS.save()  # 保存SETTINGS变更
@@ -158,7 +158,7 @@ def check_dataset(path: str, task: str) -> None:
         check_dataset('path/to/coco8-pose.zip', task='pose')  # pose dataset
         check_dataset('path/to/dota8.zip', task='obb')  # OBB dataset
         check_dataset('path/to/imagenet10.zip', task='classify')  # classification dataset
-        ```
+        ```py
     """
     # 使用 HUBDatasetStats 类检查指定路径下的数据集文件（zip 格式），并为指定任务类型生成 JSON 格式的统计信息
     HUBDatasetStats(path=path, task=task).get_json()

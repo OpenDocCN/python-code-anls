@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\base.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """Base callbacks."""
 
 from collections import defaultdict

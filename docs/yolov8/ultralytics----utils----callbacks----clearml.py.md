@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\callbacks\clearml.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 引入必要的日志器、设置和测试运行状态的标志
 from ultralytics.utils import LOGGER, SETTINGS, TESTS_RUNNING

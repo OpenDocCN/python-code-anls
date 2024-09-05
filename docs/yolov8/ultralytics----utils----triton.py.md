@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\triton.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 # 引入必要的类型
 from typing import List

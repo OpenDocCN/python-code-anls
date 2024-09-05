@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\nn\modules\head.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """Model head modules."""
 
 import copy  # 导入复制模块

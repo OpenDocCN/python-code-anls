@@ -4,7 +4,7 @@ description: Discover VisionEye's object mapping and tracking powered by Ultraly
 keywords: VisionEye, YOLOv8, Ultralytics, object mapping, object tracking, distance calculation, computer vision, AI, machine learning, Python, tutorial
 ---
 
-# VisionEye View Object Mapping using Ultralytics YOLOv8 🚀
+# VisionEye View Object Mapping using Ultralytics YOLOv8 
 
 ## What is VisionEye Object Mapping?
 

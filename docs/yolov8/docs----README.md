@@ -40,7 +40,7 @@ To install the ultralytics package in developer mode, ensure you have Git and Py
 
 - This command installs the ultralytics package along with all development dependencies, allowing you to modify the package code and have the changes immediately reflected in your Python environment.
 
-## 🚀 Building and Serving Locally
+##  Building and Serving Locally
 
 The `mkdocs serve` command builds and serves a local version of your MkDocs documentation, ideal for development and testing:
 

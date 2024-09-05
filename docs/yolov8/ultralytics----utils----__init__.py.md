@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\__init__.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import contextlib
 import importlib.metadata
@@ -341,7 +341,7 @@ class ThreadingLocked:
         @ThreadingLocked()
         def my_function():
             # 在此处编写代码
-        ```
+        ```py
     """
 
     def __init__(self):

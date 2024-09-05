@@ -4,7 +4,7 @@ description: Learn how to use Ultralytics YOLOv8 for precise object counting in 
 keywords: object counting, regions, YOLOv8, computer vision, Ultralytics, efficiency, accuracy, automation, real-time, applications, surveillance, monitoring
 ---
 
-# Object Counting in Different Regions using Ultralytics YOLOv8 🚀
+# Object Counting in Different Regions using Ultralytics YOLOv8 
 
 ## What is Object Counting in Regions?
 

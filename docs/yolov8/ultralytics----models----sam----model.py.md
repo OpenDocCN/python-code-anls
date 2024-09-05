@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\models\sam\model.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 """
 SAM model interface.
 

@@ -4,7 +4,7 @@ description: Learn how to train YOLOv5 on multiple GPUs for optimal performance.
 keywords: YOLOv5, multiple GPUs, machine learning, deep learning, PyTorch, data parallel, distributed data parallel
 ---
 
-📚 This guide explains how to properly use **multiple** GPUs to train a dataset with YOLOv5 🚀 on single or multiple machine(s).
+📚 This guide explains how to properly use **multiple** GPUs to train a dataset with YOLOv5  on single or multiple machine(s).
 
 ## Before You Start
 

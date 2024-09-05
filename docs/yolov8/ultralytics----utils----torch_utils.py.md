@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\utils\torch_utils.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 import gc  # 导入垃圾回收模块
 import math  # 导入数学模块
@@ -94,7 +94,7 @@ def autocast(enabled: bool, device: str = "cuda"):
         with autocast(amp=True):
             # Your mixed precision operations here
             pass
-        ```
+        ```py
     """
     # 如果 TORCH_1_13 变量为真，使用 torch.amp.autocast 方法开启自动混合精度模式
     if TORCH_1_13:
@@ -557,7 +557,7 @@ def strip_optimizer(f: Union[str, Path] = "best.pt", s: str = "") -> None:
 
         for f in Path('path/to/model/checkpoints').rglob('*.pt'):
             strip_optimizer(f)
-        ```
+        ```py
 
     Note:
         Use `ultralytics.nn.torch_safe_load` for missing modules with `x = torch_safe_load(f)[0]`

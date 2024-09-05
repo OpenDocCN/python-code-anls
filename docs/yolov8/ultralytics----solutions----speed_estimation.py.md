@@ -1,7 +1,7 @@
 # `.\yolov8\ultralytics\solutions\speed_estimation.py`
 
-```
-# Ultralytics YOLO 🚀, AGPL-3.0 license
+```py
+# Ultralytics YOLO , AGPL-3.0 license
 
 from collections import defaultdict
 from time import time
