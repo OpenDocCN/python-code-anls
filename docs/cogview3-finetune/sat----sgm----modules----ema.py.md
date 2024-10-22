@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\ema.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 从 PyTorch 导入神经网络模块

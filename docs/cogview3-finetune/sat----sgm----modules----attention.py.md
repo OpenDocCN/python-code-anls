@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\attention.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 inspect 模块导入 isfunction 函数，用于检查对象是否为函数

@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\sampling.py`
 
-```
+```py
 # 部分代码移植自 https://github.com/crowsonkb/k-diffusion/blob/master/k_diffusion/sampling.py
 """
     Partially ported from https://github.com/crowsonkb/k-diffusion/blob/master/k_diffusion/sampling.py

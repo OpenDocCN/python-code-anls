@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\diffusion.py`
 
-```
+```py
 # 导入数学库以进行数学运算
 import math
 # 从 typing 模块导入类型提示相关的类

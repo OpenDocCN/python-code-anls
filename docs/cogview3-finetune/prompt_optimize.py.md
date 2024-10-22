@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\prompt_optimize.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入命令行参数解析模块

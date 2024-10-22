@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\wrappers.py`
 
-```
+```py
 # 导入 PyTorch 库及其神经网络模块
 import torch
 import torch.nn as nn

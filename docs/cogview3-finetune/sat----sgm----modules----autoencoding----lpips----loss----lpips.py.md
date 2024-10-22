@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\autoencoding\lpips\loss\lpips.py`
 
-```
+```py
 # 从 https://github.com/richzhang/PerceptualSimilarity/tree/master/models 中剥离的版本
 """Stripped version of https://github.com/richzhang/PerceptualSimilarity/tree/master/models"""
 

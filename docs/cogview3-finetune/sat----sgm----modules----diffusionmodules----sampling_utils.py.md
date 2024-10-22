@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\sampling_utils.py`
 
-```
+```py
 # 导入数学库以进行数学运算
 import math
 # 导入 PyTorch 库以进行张量操作

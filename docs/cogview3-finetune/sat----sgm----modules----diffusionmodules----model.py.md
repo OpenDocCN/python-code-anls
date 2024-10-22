@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\model.py`
 
-```
+```py
 # pytorch_diffusion + derived encoder decoder
 # 导入数学库
 import math

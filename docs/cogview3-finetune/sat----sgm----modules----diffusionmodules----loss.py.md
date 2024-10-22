@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\loss.py`
 
-```
+```py
 # 导入所需的标准库和类型提示
 import os
 import copy

@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\models\autoencoder.py`
 
-```
+```py
 # 导入标准库和第三方库
 import logging  # 用于记录日志信息
 import math  # 提供数学函数

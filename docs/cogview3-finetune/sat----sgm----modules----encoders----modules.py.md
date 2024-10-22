@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\encoders\modules.py`
 
-```
+```py
 # 导入数学库，用于数学计算
 import math
 # 从上下文管理库导入 nullcontext，用于创建一个不执行任何操作的上下文管理器

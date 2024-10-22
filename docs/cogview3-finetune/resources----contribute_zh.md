@@ -15,19 +15,19 @@
 
 1. 安装`ruff`工具
 
-```shell
+```py
 pip install ruff
 ```
 
 接着，运行`ruff`工具
 
-```shell
+```py
 ruff check tools sat inference
 ```
 
 检查代码风格，如果有问题，您可以通过`ruff format .`命令自动修复。
 
-```shell
+```py
 ruff format tools sat inference
 ```
 

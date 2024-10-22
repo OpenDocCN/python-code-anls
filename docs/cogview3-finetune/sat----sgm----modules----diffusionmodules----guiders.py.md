@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\guiders.py`
 
-```
+```py
 # 导入 logging 模块，用于记录日志信息
 import logging
 # 从 abc 模块导入 ABC 类和 abstractmethod 装饰器，用于定义抽象基类和抽象方法

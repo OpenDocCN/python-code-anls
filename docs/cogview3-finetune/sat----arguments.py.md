@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\arguments.py`
 
-```
+```py
 # 导入所需的库
 import argparse  # 处理命令行参数
 import os  # 与操作系统交互的功能

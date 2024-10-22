@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\openaimodel.py`
 
-```
+```py
 # 导入操作系统模块，用于处理文件和目录操作
 import os
 # 导入数学模块，提供数学函数和常量

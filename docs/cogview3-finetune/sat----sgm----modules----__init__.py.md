@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\__init__.py`
 
-```
+```py
 # 从当前包的编码器模块导入 GeneralConditioner 类
 from .encoders.modules import GeneralConditioner
 

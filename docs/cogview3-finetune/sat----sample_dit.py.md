@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sample_dit.py`
 
-```
+```py
 # 导入操作系统模块，用于与操作系统交互
 import os
 # 导入数学模块，提供数学函数和常量

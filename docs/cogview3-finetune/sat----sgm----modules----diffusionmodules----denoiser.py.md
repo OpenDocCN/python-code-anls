@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\denoiser.py`
 
-```
+```py
 # 导入所需的类型定义，便于后续使用
 from typing import Dict, Union
 

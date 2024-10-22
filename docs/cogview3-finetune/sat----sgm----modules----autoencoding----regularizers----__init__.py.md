@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\autoencoding\regularizers\__init__.py`
 
-```
+```py
 # 导入抽象方法的库
 from abc import abstractmethod
 # 导入任意类型和元组类型

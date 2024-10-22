@@ -20,9 +20,9 @@
 
 ## 项目更新
 
-- 🔥🔥 ```2024/10/13```: 我们适配和开源了 [diffusers](https://github.com/huggingface/diffusers) 版本的  **CogView-3Plus-3B**
+- 🔥🔥 ```py/10/13```: 我们适配和开源了 [diffusers](https://github.com/huggingface/diffusers) 版本的  **CogView-3Plus-3B**
   模型。你可以前往[在线体验](https://huggingface.co/spaces/THUDM-HF-SPACE/CogView3-Plus-3B-Space)。
-- 🔥 ```2024/9/29```: 我们已经开源了 **CogView3**  以及 **CogView-3Plus-3B** 。**CogView3** 是一个基于级联扩散的文本生成图像系统，采用了接力扩散框架。
+- 🔥 ```py/9/29```: 我们已经开源了 **CogView3**  以及 **CogView-3Plus-3B** 。**CogView3** 是一个基于级联扩散的文本生成图像系统，采用了接力扩散框架。
   **CogView-3Plus** 是一系列新开发的基 Diffusion Transformer 的文本生成图像模型。
 
 ## 模型介绍
@@ -101,7 +101,7 @@ Zero-SNR
 
 我们提供了一个 [示例脚本](prompt_optimize.py)。我们建议您运行这个脚本，以实现对提示词对润色
 
-```shell
+```py
 python prompt_optimize.py --api_key "智谱AI API Key" --prompt {你的提示词} --base_url "https://open.bigmodel.cn/api/paas/v4" --model "glm-4-plus"
 ```
 
@@ -109,12 +109,12 @@ python prompt_optimize.py --api_key "智谱AI API Key" --prompt {你的提示词
 
 首先，确保从源代码安装`diffusers`库。
 
-```shell
+```py
 pip install git+https://github.com/huggingface/diffusers.git
 ```
 接着，运行以下代码：
 
-```python
+```py
 from diffusers import CogView3PlusPipeline
 import torch
 
@@ -171,7 +171,7 @@ CogView3 是一种新颖的文本生成图像系统，采用了接力扩散的�
 
 🌟 如果您发现我们的工作有所帮助，欢迎引用我们的文章，留下宝贵的stars
 
-```
+```py
 @article{zheng2024cogview3,
   title={Cogview3: Finer and faster text-to-image generation via relay diffusion},
   author={Zheng, Wendi and Teng, Jiayan and Yang, Zhuoyi and Wang, Weihan and Chen, Jidong and Gu, Xiaotao and Dong, Yuxiao and Ding, Ming and Tang, Jie},

@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\discretizer.py`
 
-```
+```py
 # 从 abc 模块导入抽象方法，用于定义抽象基类
 from abc import abstractmethod
 # 从 functools 模块导入 partial，用于创建偏函数

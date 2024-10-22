@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\dit.py`
 
-```
+```py
 # 从 omegaconf 导入 DictConfig 类，用于配置管理
 from omegaconf import DictConfig
 # 从 functools 导入 partial 函数，用于偏函数应用

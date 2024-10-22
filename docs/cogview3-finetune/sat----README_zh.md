@@ -10,7 +10,7 @@
 
 确保你已经正确安装本文件夹中的要求的依赖
 
-```shell
+```py
 pip install -r requirements.txt
 ```
 
@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 接着，你需要将模型文件排版成如下格式：
 
-```
+```py
 .cogview3-plus-3b
 ├── transformer
 │   ├── 1
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 
 由于我们在`CogVideoX`中上传过 `safetensors` 格式的T5模型，一个简单的办法是从`CogVideX-2B`模型中克隆模型，然后将其移动到对应的文件夹中。
 
-```shell
+```py
 git clone https://huggingface.co/THUDM/CogVideoX-2b.git #从huggingface下载模型
 # git clone https://www.modelscope.cn/ZhipuAI/CogVideoX-2b.git #从modelscope下载模型
 mkdir t5-v1_1-xxl
@@ -71,7 +71,7 @@ mv CogVideoX-2b/text_encoder/* CogVideoX-2b/tokenizer/* t5-v1_1-xxl
 
 通过上述方案，你将会得到一个 safetensor 格式的T5文件，确保在 Deepspeed微调过程中读入的时候不会报错。
 
-```
+```py
 ├── added_tokens.json
 ├── config.json
 ├── model-00001-of-00002.safetensors
@@ -88,7 +88,7 @@ mv CogVideoX-2b/text_encoder/* CogVideoX-2b/tokenizer/* t5-v1_1-xxl
 
 这里以`CogView3-Base`为例，提供部分参数的讲解和介绍：
 
-```yaml
+```py
 args:
   mode: inference
   relay_model: False # 当模型类型为 CogView-3-Relay 时，需要将该参数设置为 True
@@ -134,7 +134,7 @@ model:
 
 ### CogView-3Plus
 
-```shell
+```py
   python sample_dit.py --base configs/cogview3_plus.yaml
 ```
 
@@ -142,13 +142,13 @@ model:
 
 + 原始模型
 
-```shell
+```py
 python sample_unet.py --base configs/cogview3_base.yaml
 ```
 
 + 蒸馏版本模型
 
-```bash
+```py
 python sample_unet.py --base configs/cogview3_base_distill_4step.yaml
 ```
 
@@ -156,20 +156,20 @@ python sample_unet.py --base configs/cogview3_base_distill_4step.yaml
 
 + 原始模型
 
-```shell
+```py
 python sample_unet.py --base configs/cogview3_relay.yaml
 ```
 
 + 蒸馏版本模型
 
-```shell
+```py
 python sample_unet.py --base configs/cogview3_relay_distill_1step.yaml 
 ```
 
 输出图片格式为文件夹，其中，文件夹的名字为生成的序号加提示词的前15个字母，文件夹中包含多张图片，具体数量以 `batch` 参数为准。
 其结构应该如下：
 
-```
+```py
 .
 ├── 000000000.png
 ├── 000000001.png

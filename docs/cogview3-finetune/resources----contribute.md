@@ -25,19 +25,19 @@ style. You can organize the code according to the following specifications:
 
 1. Install the `ruff` tool
 
-```shell
+```py
 pip install ruff
 ```
 
 Then, run the `ruff` tool
 
-```shell
+```py
 ruff check tools sat inference
 ```
 
 Check the code style. If there are issues, you can automatically fix them using the `ruff format` command.
 
-```shell
+```py
 ruff format tools sat inference
 ```
 

@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\util.py`
 
-```
+```py
 """
 引用自
 https://github.com/openai/improved-diffusion/blob/main/improved_diffusion/gaussian_diffusion.py

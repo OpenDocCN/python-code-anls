@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\autoencoding\lpips\util.py`
 
-```
+```py
 # 导入所需的库
 import hashlib  # 导入 hashlib 库用于计算文件的 MD5 哈希
 import os  # 导入 os 库用于文件和目录操作

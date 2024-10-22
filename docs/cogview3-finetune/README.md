@@ -21,8 +21,8 @@ Experience the CogView3-Plus-3B model online on <a href="https://huggingface.co/
 
 ## Project Updates
 
-- 🔥🔥 ```2024/10/13```: We have adapted and open-sourced the **CogView-3Plus-3B** model in the [diffusers](https://github.com/huggingface/diffusers) version. You can [experience it online](https://huggingface.co/spaces/THUDM-HF-SPACE/CogView3-Plus-3B-Space).
-- 🔥 ```2024/9/29```: We have open-sourced **CogView3** and **CogView-3Plus-3B**. **CogView3** is a text-to-image system based on cascaded diffusion, utilizing a relay diffusion framework. **CogView-3Plus** is a series of newly developed text-to-image models based on Diffusion Transformers.
+- 🔥🔥 ```py/10/13```: We have adapted and open-sourced the **CogView-3Plus-3B** model in the [diffusers](https://github.com/huggingface/diffusers) version. You can [experience it online](https://huggingface.co/spaces/THUDM-HF-SPACE/CogView3-Plus-3B-Space).
+- 🔥 ```py/9/29```: We have open-sourced **CogView3** and **CogView-3Plus-3B**. **CogView3** is a text-to-image system based on cascaded diffusion, utilizing a relay diffusion framework. **CogView-3Plus** is a series of newly developed text-to-image models based on Diffusion Transformers.
 
 ## Model Introduction
 
@@ -108,20 +108,20 @@ large language models (LLMs) before generating text-to-image, as this will signi
 
 We provide an [example script](prompt_optimize.py). We suggest running this script to refine the prompt:
 
-```shell
+```py
 python prompt_optimize.py --api_key "Zhipu AI API Key" --prompt {your prompt} --base_url "https://open.bigmodel.cn/api/paas/v4" --model "glm-4-plus"
 ```
 
 ### Inference Model (Diffusers)
 
 First, ensure the `diffusers` library is installed **from source**. 
-```
+```py
 pip install git+https://github.com/huggingface/diffusers.git
 ```
 
 Then, run the following code:
 
-```python
+```py
 from diffusers import CogView3PlusPipeline
 import torch
 
@@ -182,7 +182,7 @@ Comparison results from human evaluations:
 
 🌟 If you find our work helpful, feel free to cite our paper and leave a star.
 
-```
+```py
 @article{zheng2024cogview3,
   title={Cogview3: Finer and faster text-to-image generation via relay diffusion},
   author={Zheng, Wendi and Teng, Jiayan and Yang, Zhuoyi and Wang, Weihan and Chen, Jidong and Gu, Xiaotao and Dong, Yuxiao and Ding, Ming and Tang, Jie},

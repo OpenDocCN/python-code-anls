@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\distributions\distributions.py`
 
-```
+```py
 # 导入 NumPy 库，通常用于数值计算
 import numpy as np
 # 导入 PyTorch 库，主要用于深度学习计算

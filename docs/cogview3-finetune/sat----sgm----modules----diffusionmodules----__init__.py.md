@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\__init__.py`
 
-```
+```py
 # 从当前包导入去噪声器类
 from .denoiser import Denoiser
 # 从当前包导入离散化类

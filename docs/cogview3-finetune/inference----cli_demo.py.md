@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\inference\cli_demo.py`
 
-```
+```py
 # 该脚本演示如何使用 Hugging Face 的 `diffusers` 管道生成图像
 """
 This script demonstrates how to generate an image using the CogView3-Plus-3B model with the Hugging Face `diffusers` pipeline.

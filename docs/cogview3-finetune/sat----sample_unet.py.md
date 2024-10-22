@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sample_unet.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 # 导入数学模块

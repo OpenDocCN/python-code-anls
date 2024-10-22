@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\util.py`
 
-```
+```py
 import functools  # 导入 functools 模块以使用高阶函数
 import importlib  # 导入 importlib 模块以动态导入模块
 import os  # 导入 os 模块以进行操作系统相关的功能

@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\autoencoding\losses\__init__.py`
 
-```
+```py
 # 导入类型提示 Any 和 Union
 from typing import Any, Union
 

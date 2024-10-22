@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\inference\gradio_web_demo.py`
 
-```
+```py
 # 主文件用于 Gradio 网络演示，使用 CogView3-Plus-3B 模型生成图像
 """
 THis is the main file for the gradio web demo. It uses the CogView3-Plus-3B model to generate images gradio web demo.

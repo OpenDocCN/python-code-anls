@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\autoencoding\lpips\model\model.py`
 
-```
+```py
 # 导入 functools 模块，用于函数工具
 import functools
 

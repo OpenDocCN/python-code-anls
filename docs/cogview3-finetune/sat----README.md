@@ -12,7 +12,7 @@ The code is the framework used by the team during model training. There are few 
 
 Ensure you have installed the dependencies required by this folder:
 
-```shell
+```py
 pip install -r requirements.txt
 ```
 
@@ -49,7 +49,7 @@ The following links are for different model weights:
 
 Next, arrange the model files into the following format:
 
-```
+```py
 .cogview3-plus-3b
 ├── transformer
 │   ├── 1
@@ -63,7 +63,7 @@ Clone the T5 model. This model is not used for training or fine-tuning but is ne
 
 Since we have uploaded the T5 model in `safetensors` format in `CogVideoX`, a simple way is to clone the model from the `CogVideoX-2B` model and move it to the corresponding folder.
 
-```shell
+```py
 git clone https://huggingface.co/THUDM/CogVideoX-2b.git
 # git clone https://www.modelscope.cn/ZhipuAI/CogVideoX-2b.git
 mkdir t5-v1_1-xxl
@@ -72,7 +72,7 @@ mv CogVideoX-2b/text_encoder/* CogVideoX-2b/tokenizer/* t5-v1_1-xxl
 
 With this setup, you will have a safetensor format T5 file, ensuring no errors during Deepspeed fine-tuning.
 
-```
+```py
 ├── added_tokens.json
 ├── config.json
 ├── model-00001-of-00002.safetensors
@@ -89,7 +89,7 @@ With this setup, you will have a safetensor format T5 file, ensuring no errors d
 
 Here is an example using `CogView3-Base`, with explanations for some of the parameters:
 
-```yaml
+```py
 args:
   mode: inference
   relay_model: False # Set to True when using CogView-3-Relay
@@ -135,7 +135,7 @@ Different models require different code for inference. Here are the inference co
 
 ### CogView-3Plus
 
-```shell
+```py
 python sample_dit.py --base configs/cogview3_plus.yaml
 ```
 
@@ -143,13 +143,13 @@ python sample_dit.py --base configs/cogview3_plus.yaml
 
 + Original model
 
-```shell
+```py
 python sample_unet.py --base configs/cogview3_base.yaml
 ```
 
 + Distilled model
 
-```bash
+```py
 python sample_unet.py --base configs/cogview3_base_distill_4step.yaml
 ```
 
@@ -157,19 +157,19 @@ python sample_unet.py --base configs/cogview3_base_distill_4step.yaml
 
 + Original model
 
-```shell
+```py
 python sample_unet.py --base configs/cogview3_relay.yaml
 ```
 
 + Distilled model
 
-```shell
+```py
 python sample_unet.py --base configs/cogview3_relay_distill_1step.yaml 
 ```
 
 The output image format will be a folder. The folder name will consist of the sequence number and the first 15 characters of the prompt, containing multiple images. The number of images is based on the `batch` parameter. The structure should look like this:
 
-```
+```py
 .
 ├── 000000000.png
 ├── 000000001.png

@@ -1,6 +1,6 @@
 # `.\cogview3-finetune\sat\sgm\modules\diffusionmodules\denoiser_scaling.py`
 
-```
+```py
 # 从 abc 模块导入抽象基类和抽象方法
 from abc import ABC, abstractmethod
 # 从 typing 模块导入任意类型和元组
