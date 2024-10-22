@@ -9,6 +9,8 @@
 +   [GLM-4v-9B 源码解析](docs/chatglm4v-9b/README.md)
 +   [ChatHaruhi 源码解析](docs/ChatHaruhi/README.md)
 +   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
++   [CogVideo & CogVideoX 微调代码源码解析](docs/cogvideo-finetune/README.md)
++   [CogView3 & CogView-3Plus 微调代码源码解析](docs/cogview3-finetune/README.md)
 +   [Comic Translate 源码解析](docs/comic-trans/README.md)
 +   [DB-GPT 源码解析](docs/db-gpt/README.md)
 +   [diffusers 源码解析](docs/diffusers/README.md)
