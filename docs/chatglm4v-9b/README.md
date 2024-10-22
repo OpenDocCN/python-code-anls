@@ -11,20 +11,20 @@ Read this in [English](README_en.md)
 
 ## 项目更新
 
-- 🔥 **News**: ```2024/10/12```: 增加了 GLM-4v-9B 模型对vllm框架的支持
-- 🔥 **News**: ```2024/09/06```: 增加了在 GLM-4v-9B 模型上构建OpenAI API兼容的服务端
-- 🔥 **News**: ```2024/09/05``` 我们开源了使LLMs能够在长上下文问答中生成细粒度引用的模型 [longcite-glm4-9b](https://huggingface.co/THUDM/LongCite-glm4-9b)
+- 🔥 **News**: ```py/10/12```: 增加了 GLM-4v-9B 模型对vllm框架的支持
+- 🔥 **News**: ```py/09/06```: 增加了在 GLM-4v-9B 模型上构建OpenAI API兼容的服务端
+- 🔥 **News**: ```py/09/05``` 我们开源了使LLMs能够在长上下文问答中生成细粒度引用的模型 [longcite-glm4-9b](https://huggingface.co/THUDM/LongCite-glm4-9b)
   以及数据集 [LongCite-45k](https://huggingface.co/datasets/THUDM/LongCite-45k),
   欢迎在 [Huggingface Space](https://huggingface.co/spaces/THUDM/LongCite) 在线体验。
-- 🔥**News**: ```2024/09/04```: 增加了在 GLM-4-9B-Chat 模型上使用带有 Lora adapter 的 vLLM 演示代码
-- 🔥**News**: ```2024/08/15```: 我们开源具备长文本输出能力(单轮对话大模型输出可超过1万token)
+- 🔥**News**: ```py/09/04```: 增加了在 GLM-4-9B-Chat 模型上使用带有 Lora adapter 的 vLLM 演示代码
+- 🔥**News**: ```py/08/15```: 我们开源具备长文本输出能力(单轮对话大模型输出可超过1万token)
   的模型 [longwriter-glm4-9b](https://huggingface.co/THUDM/LongWriter-glm4-9b)
   以及数据集 [LongWriter-6k](https://huggingface.co/datasets/THUDM/LongWriter-6k),
   欢迎在 [Huggingface Space](https://huggingface.co/spaces/THUDM/LongWriter)
   或 [魔搭社区空间](https://modelscope.cn/studios/ZhipuAI/LongWriter-glm4-9b-demo) 在线体验。
-- 🔥 **News**: ```2024/08/12```: GLM-4-9B-Chat 模型依赖的`transformers`版本升级到 `4.44.0`，请重新拉取除模型权重(
+- 🔥 **News**: ```py/08/12```: GLM-4-9B-Chat 模型依赖的`transformers`版本升级到 `4.44.0`，请重新拉取除模型权重(
   `*.safetensor` 文件 和 `tokenizer.model`)外的文件并参考 `basic_demo/requirements.txt` 严格更新依赖。
-- 🔥 **News**: ```2024/07/24```:
+- 🔥 **News**: ```py/07/24```:
   我们发布了与长文本相关的最新技术解读，关注 [这里](https://medium.com/@ChatGLM/glm-long-scaling-pre-trained-model-contexts-to-millions-caa3c48dea85)
   查看我们在训练 GLM-4-9B 开源模型中关于长文本技术的技术报告。
 - 🔥 **News**: ``2024/7/16``: GLM-4-9B-Chat 模型依赖的`transformers`版本升级到 `4.42.4`,
@@ -144,7 +144,7 @@ GLM-4V-9B 是一个多模态语言模型，具备视觉理解能力，其相关�
 
 使用 transformers 后端进行推理:
 
-```python
+```py
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
@@ -183,7 +183,7 @@ with torch.no_grad():
 
 使用 vLLM 后端进行推理:
 
-```python
+```py
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
@@ -218,7 +218,7 @@ print(outputs[0].outputs[0].text)
 
 使用 transformers 后端进行推理:
 
-```python
+```py
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -255,7 +255,7 @@ with torch.no_grad():
 
 使用 vLLM 后端进行推理:
 
-```python
+```py
 from PIL import Image
 from vllm import LLM, SamplingParams
 

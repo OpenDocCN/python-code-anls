@@ -18,13 +18,13 @@
 ## 安装依赖
 
 在开始推理之前，请你先安装`basic_demo`中的依赖，同时您需要安装本目录下的依赖项：
-```shell
+```py
 pip install -r requirements.txt
 ```
 
 ## 运行模型推理
 
-```shell
+```py
 python itrex_cli_demo.py
 ```
 

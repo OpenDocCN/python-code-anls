@@ -9,22 +9,22 @@
 
 ## Update
 
-- 🔥 **News**: ```2024/10/12```: Add GLM-4v-9B model support for vllm framework.
-- 🔥 **News**: ```2024/09/06```: Add support for OpenAI API server on the GLM-4v-9B model.
-- 🔥 **News**: ```2024/09/05```: We open-sourced a model enabling LLMs to generate fine-grained citations in
+- 🔥 **News**: ```py/10/12```: Add GLM-4v-9B model support for vllm framework.
+- 🔥 **News**: ```py/09/06```: Add support for OpenAI API server on the GLM-4v-9B model.
+- 🔥 **News**: ```py/09/05```: We open-sourced a model enabling LLMs to generate fine-grained citations in
   long-context Q&A: [longcite-glm4-9b](https://huggingface.co/THUDM/LongCite-glm4-9b), along with the
   dataset [LongCite-14k](https://huggingface.co/datasets/THUDM/LongCite-45k). You are welcome to experience it online
   at [Huggingface Space](https://huggingface.co/spaces/THUDM/LongCite).
-- 🔥 **News**: ```2024/09/04```: Add demo code for using vLLM with LoRA adapter on the GLM-4-9B-Chat model.
-- 🔥 **News**: ```2024/08/15```: We have open-sourced a model with long-text output capability (single turn LLM output
+- 🔥 **News**: ```py/09/04```: Add demo code for using vLLM with LoRA adapter on the GLM-4-9B-Chat model.
+- 🔥 **News**: ```py/08/15```: We have open-sourced a model with long-text output capability (single turn LLM output
   can exceed
   10K tokens) [longwriter-glm4-9b](https://huggingface.co/THUDM/LongWriter-glm4-9b) and the
   dataset [LongWriter-6k](https://huggingface.co/datasets/THUDM/LongWriter-6k). You're welcome
   to [try it online](https://huggingface.co/spaces/THUDM/LongWriter).
-- 🔥 **News**: ```2024/08/12```: The `transformers` version required for the GLM-4-9B-Chat model has been upgraded
+- 🔥 **News**: ```py/08/12```: The `transformers` version required for the GLM-4-9B-Chat model has been upgraded
   to `4.44.0`. Please pull all files again except for the model weights (`*.safetensor` files and `tokenizer.model`),
   and strictly update the dependencies as per `basic_demo/requirements.txt`.
-- 🔥 **News**: ```2024/07/24```:  we released the latest technical interpretation related to long texts. Check
+- 🔥 **News**: ```py/07/24```:  we released the latest technical interpretation related to long texts. Check
   out [here](https://medium.com/@ChatGLM/glm-long-scaling-pre-trained-model-contexts-to-millions-caa3c48dea85) to view
   our
   technical report on long context technology in the training of the open-source GLM-4-9B model.
@@ -161,7 +161,7 @@ classic tasks are as follows:
 
 Use the transformers backend for inference:
 
-```python
+```py
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
@@ -200,7 +200,7 @@ with torch.no_grad():
 
 Use the vLLM backend for inference:
 
-```python
+```py
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
@@ -235,7 +235,7 @@ print(outputs[0].outputs[0].text)
 
 Use the transformers backend for inference:
 
-```python
+```py
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -272,7 +272,7 @@ with torch.no_grad():
 
 Use the vLLM backend for inference:
 
-```python
+```py
 from PIL import Image
 from vllm import LLM, SamplingParams
 

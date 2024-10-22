@@ -10,7 +10,7 @@ Read this in [English](README_en.md).
 
 首先，你需要安装依赖
 
-```bash
+```py
 pip install -r requirements.txt
 ```
 

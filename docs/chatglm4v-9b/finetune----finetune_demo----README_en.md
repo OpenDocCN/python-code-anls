@@ -34,7 +34,7 @@ fine-tuning solution, more optimizations require developers to explore on their 
 Before starting fine-tuning, please install the dependencies in `basic_demo` and clone the latest model repos (Hugging
 Face) first. You also need to install the dependencies in this directory:
 
-```bash
+```py
 pip install -r requirements.txt
 ```
 
@@ -48,7 +48,7 @@ different roles to calculate `loss` for multiple rounds of replies in one calcul
 
 For data files, the sample uses the following format:
 
-```json
+```py
 [
   {
     "messages": [
@@ -106,7 +106,7 @@ For data files, the sample uses the following format:
 
 This is a sample without tools:
 
-```json
+```py
 {
   "messages": [
     {
@@ -123,7 +123,7 @@ This is a sample without tools:
 
 This is a sample with tools:
 
-```json
+```py
 {
   "messages": [
     {
@@ -176,7 +176,7 @@ This is a sample with tools:
 
 This is a sample with VQA Task:
 
-```json
+```py
 {
   "messages": [
     {
@@ -257,14 +257,14 @@ The fine-tuning configuration file is located in the `config` directory, includi
 Execute **single machine multi-card/multi-machine multi-card** run through the following code, which uses `deepspeed` as
 the acceleration solution, and you need to install `deepspeed`.
 
-```shell
+```py
 OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml # For Chat Fine-tune
 OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_vision.py  data/CogVLM-311K/  THUDM/glm-4v-9b  configs/lora.yaml  # For VQA Fine-tune
 ```
 
 Execute **single machine single card** run through the following code.
 
-```shell
+```py
 python finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml # For Chat Fine-tune
 python finetune_vision.py  data/CogVLM-311K/  THUDM/glm-4v-9b configs/lora.yaml # For VQA Fine-tune
 ```
@@ -280,7 +280,7 @@ half-trained model, you can add a fourth parameter, which can be passed in two w
 
 For example, this is an example code to continue fine-tuning from the last saved point
 
-```shell
+```py
 python finetune.py data/AdvertiseGen/ THUDM/glm-4-9b-chat configs/lora.yaml yes
 ```
 
@@ -290,7 +290,7 @@ python finetune.py data/AdvertiseGen/ THUDM/glm-4-9b-chat configs/lora.yaml yes
 
 You can Use our fine-tuned model in `finetune_demo/inference.py`, and you can easily test it with just one line of code.
 
-```shell
+```py
 python inference.py your_finetune_path
 ```
 
@@ -308,7 +308,7 @@ to the following tutorial.
 > If the location of your original model changes, you should modify the path of `base_model_name_or_path`
 > in `adapter_config.json`.
 
-```python
+```py
 def load_model_and_tokenizer(
         model_dir: Union[str, Path], trust_remote_code: bool = True
 ) -> tuple[ModelType, TokenizerType]:

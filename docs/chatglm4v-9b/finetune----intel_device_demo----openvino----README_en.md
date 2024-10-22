@@ -8,7 +8,7 @@ This example will show how to deploy the GLM-4-9B-Chat model using OpenVINO.
 
 First, you need to install the dependencies
 
-```bash
+```py
 pip install -r requirements.txt
 ```
 

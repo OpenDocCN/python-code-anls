@@ -9,7 +9,7 @@ Read this in [English](README_en.md)
 我们建议通过 [Conda](https://docs.conda.io/en/latest/) 进行环境管理。
 执行以下命令新建一个 conda 环境并安装所需依赖：
 
-```bash
+```py
 conda create -n glm-4-demo python=3.12
 conda activate glm-4-demo
 pip install -r requirements.txt
@@ -18,7 +18,7 @@ pip install -r requirements.txt
 请注意，本项目需要 Python 3.10 或更高版本。
 此外，使用 Code Interpreter 还需要安装 Jupyter 内核：
 
-```bash
+```py
 ipython kernel install --name glm-4-demo --user
 ```
 
@@ -27,7 +27,7 @@ ipython kernel install --name glm-4-demo --user
 若要使用浏览器和搜索功能，还需要启动浏览器后端。首先，根据 [Node.js](https://nodejs.org/en/download/package-manager)
 官网的指示安装 Node.js，然后安装包管理器 [PNPM](https://pnpm.io) 之后安装浏览器服务的依赖：
 
-```bash
+```py
 cd browser
 npm install -g pnpm
 pnpm install
@@ -37,7 +37,7 @@ pnpm install
 
 1. 修改 `browser/src/config.ts` 中的 `BING_SEARCH_API_KEY` 配置浏览器服务需要使用的 Bing 搜索 API Key：
 
-    ```diff
+    ```py
     export default {
 
         BROWSER_TIMEOUT: 10000,
@@ -50,7 +50,7 @@ pnpm install
     ```
    如果您注册的是Bing Customer Search的API，您可以修改您的配置文件为如下，并且填写您的Custom Configuration ID:
 
-    ```diff
+    ```py
     export default {
         LOG_LEVEL: 'debug',
         BROWSER_TIMEOUT: 10000,
@@ -65,7 +65,7 @@ pnpm install
 2. 文生图功能需要调用 CogView API。修改 `src/tools/config.py`
    ，提供文生图功能需要使用的 [智谱 AI 开放平台](https://open.bigmodel.cn) API Key：
 
-    ```diff
+    ```py
     BROWSER_SERVER_URL = 'http://localhost:3000'
     
     IPYKERNEL = 'glm-4-demo'
@@ -76,14 +76,14 @@ pnpm install
 
 3. 启动浏览器后端，在单独的 shell 中：
 
-    ```bash
+    ```py
     cd browser
     pnpm start
     ```
 
 4. 运行以下命令在本地加载模型并启动 demo：
 
-    ```bash
+    ```py
     streamlit run src/main.py
     ```
 
@@ -141,7 +141,7 @@ GLM-4 Demo 拥有三种模式：
 
 例如，`get_weather` 工具的注册如下：
 
-```python
+```py
 @register_tool
 def get_weather(
         city_name: Annotated[str, 'The name of the city to be queried', True],

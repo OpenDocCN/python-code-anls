@@ -36,7 +36,7 @@ GLM-4V-9B is a multimodal language model with visual understanding capabilities.
 **Please strictly follow the [dependencies](https://github.com/THUDM/GLM-4/blob/main/basic_demo/requirements.txt) to install, otherwise it will not run properly**
 
 
-```python
+```py
 
 import torch
 from PIL import Image

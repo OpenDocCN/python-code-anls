@@ -154,10 +154,10 @@ class Conversation:
         match self.role.value:
             case Role.TOOL.value:
                 # 格式化工具调用的信息
-                text = f"Calling tool `{self.metadata}`:\n\n```python\n{text}\n```"
+                text = f"Calling tool `{self.metadata}`:\n\n```py\n{text}\n```"
             case Role.OBSERVATION.value:
                 # 格式化观察结果的信息
-                text = f"```python\n{text}\n```"
+                text = f"```py\n{text}\n```"
         # 返回处理后的文本
         return text
 

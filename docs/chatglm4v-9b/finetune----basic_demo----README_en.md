@@ -78,7 +78,7 @@ If you want to run all the codes in this folder provided by the official, you al
 
 Install dependencies
 
-```shell
+```py
 pip install -r requirements.txt
 ```
 
@@ -91,21 +91,21 @@ pip install -r requirements.txt
 
 + Use the command line to communicate with the GLM-4-9B model.
 
-```shell
+```py
 python trans_cli_demo.py # GLM-4-9B-Chat
 python trans_cli_vision_demo.py # GLM-4V-9B
 ```
 
 + Use the Gradio web client to communicate with the  GLM-4-9B model.
 
-```shell
+```py
 python trans_web_demo.py  # GLM-4-9B-Chat
 python trans_web_vision_demo.py # GLM-4V-9B
 ```
 
 + Use Batch inference.
 
-```shell
+```py
 python trans_batch_demo.py
 ```
 
@@ -113,13 +113,13 @@ python trans_batch_demo.py
 
 + Use the command line to communicate with the GLM-4-9B-Chat model.
 
-```shell
+```py
 python vllm_cli_demo.py
 ```
 
 + use LoRA adapters with vLLM on GLM-4-9B-Chat model.
 
-```python
+```py
 # vllm_cli_demo.py
 # add LORA_PATH = ''
 ```
@@ -130,13 +130,13 @@ python vllm_cli_demo.py
 
 Start the server:
 
-```shell
+```py
 python openai_api_server.py
 ```
 
 Client request:
 
-```shell
+```py
 python openai_api_request.py
 ```
 
@@ -144,7 +144,7 @@ python openai_api_request.py
 
 Users can use this code to test the generation speed of the model on the transformers backend on their own devices:
 
-```shell
+```py
 python trans_stress_test.py
 ```
 
@@ -152,7 +152,7 @@ python trans_stress_test.py
 
 Users can run the above code in the Ascend hardware environment. They only need to change the transformers to openmind and the cuda device in device to npu.
 
-```shell
+```py
 #from transformers import AutoModelForCausalLM, AutoTokenizer
 from openmind import AutoModelForCausalLM, AutoTokenizer
 

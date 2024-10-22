@@ -53,7 +53,7 @@ GLM-4V-9B 是一个多模态语言模型，具备视觉理解能力，其相关�
 **请严格按照[依赖](https://github.com/THUDM/GLM-4/blob/main/basic_demo/requirements.txt)安装，否则无法正常运行。**
 。
 
-```python
+```py
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer

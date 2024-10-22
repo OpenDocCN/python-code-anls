@@ -8,7 +8,7 @@ We recommend using [Conda](https://docs.conda.io/en/latest/) for environment man
 
 Execute the following commands to create a conda environment and install the required dependencies:
 
-```bash
+```py
 conda create -n glm-4-demo python=3.12
 conda activate glm-4-demo
 pip install -r requirements.txt
@@ -17,7 +17,7 @@ pip install -r requirements.txt
 Please note that this project requires Python 3.10 or higher.
 In addition, you need to install the Jupyter kernel to use the Code Interpreter:
 
-```bash
+```py
 ipython kernel install --name glm-4-demo --user
 ```
 
@@ -30,7 +30,7 @@ the instructions on the [Node.js](https://nodejs.org/en/download/package-manager
 official website, then install the package manager [PNPM](https://pnpm.io) and then install the browser service
 dependencies:
 
-```bash
+```py
 cd browser
 npm install -g pnpm
 pnpm install
@@ -41,7 +41,7 @@ pnpm install
 1. Modify `BING_SEARCH_API_KEY` in `browser/src/config.ts` to configure the Bing Search API Key that the browser service
    needs to use:
 
-```diff
+```py
 export default {
 
    BROWSER_TIMEOUT: 10000,
@@ -56,7 +56,7 @@ export default {
 2. The Wenshengtu function needs to call the CogView API. Modify `src/tools/config.py`
    , provide the [Zhipu AI Open Platform](https://open.bigmodel.cn) API Key required for the Wenshengtu function:
 
-```diff
+```py
 BROWSER_SERVER_URL = 'http://localhost:3000'
 
 IPYKERNEL = 'glm4-demo'
@@ -67,14 +67,14 @@ COGVIEW_MODEL = 'cogview-3'
 
 3. Start the browser backend in a separate shell:
 
-```bash
+```py
 cd browser
 pnpm start
 ```
 
 4. Run the following commands to load the model locally and start the demo:
 
-```bash
+```py
 streamlit run src/main.py
 ```
 
@@ -113,7 +113,7 @@ annotate the parameter type, description, and whether it is required.
 
 For example, the registration of the `get_weather` tool is as follows:
 
-```python
+```py
 @register_tool
 def get_weather(
         city_name: Annotated[str, 'The name of the city to be queried', True],

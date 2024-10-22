@@ -74,7 +74,7 @@ Read this in [English](README_en.md).
 
 安装依赖
 
-```shell
+```py
 pip install -r requirements.txt
 ```
 
@@ -86,21 +86,21 @@ pip install -r requirements.txt
 
 + 使用命令行与 GLM-4-9B 模型进行对话。
 
-```shell
+```py
 python trans_cli_demo.py # GLM-4-9B-Chat
 python trans_cli_vision_demo.py # GLM-4V-9B
 ```
 
 + 使用 Gradio 网页端与 GLM-4-9B 模型进行对话。
 
-```shell
+```py
 python trans_web_demo.py  # GLM-4-9B-Chat
 python trans_web_vision_demo.py # GLM-4V-9B
 ```
 
 + 使用 Batch 推理。
 
-```shell
+```py
 python trans_batch_demo.py
 ```
 
@@ -108,12 +108,12 @@ python trans_batch_demo.py
 
 + 使用命令行与 GLM-4-9B-Chat 模型进行对话。
 
-```shell
+```py
 python vllm_cli_demo.py
 ```
 
 + 在 GLM-4-9B-Chat 模型上使用带有 Lora adapter 的 vLLM
-```python
+```py
 # vllm_cli_demo.py
 # 添加 LORA_PATH = ''
 ```
@@ -124,13 +124,13 @@ python vllm_cli_demo.py
 
 启动服务端：
 
-```shell
+```py
 python openai_api_server.py
 ```
 
 客户端请求：
 
-```shell
+```py
 python openai_api_request.py
 ```
 
@@ -138,7 +138,7 @@ python openai_api_request.py
 
 用户可以在自己的设备上使用本代码测试模型在 transformers后端的生成速度:
 
-```shell
+```py
 python trans_stress_test.py
 ```
 
@@ -146,7 +146,7 @@ python trans_stress_test.py
 
 用户可以在昇腾硬件环境下运行以上代码，只需将transformers修改为openmind，将device中的cuda设备修改为npu：
 
-```shell
+```py
 #from transformers import AutoModelForCausalLM, AutoTokenizer
 from openmind import AutoModelForCausalLM, AutoTokenizer
 

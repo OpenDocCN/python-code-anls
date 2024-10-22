@@ -19,13 +19,13 @@ Test hardware information:
 ## Installing Dependencies
 
 Before starting the inference, please install the dependencies in `basic_demo`, and you need to install the dependencies in this directory:
-```shell
+```py
 pip install -r requirements.txt
 ```
 
 ## Running Model Inference
 
-```shell
+```py
 python itrex_cli_demo.py
 ```
 

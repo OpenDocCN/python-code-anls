@@ -29,7 +29,7 @@ configs 文件夹中的配置文件设置**
 
 在开始微调之前，请你先安装 `basic_demo` 中的依赖，并保证克隆了最新版本的模型仓库，同时您需要安装本目录下的依赖项：
 
-```bash
+```py
 pip install -r requirements.txt
 ```
 
@@ -45,7 +45,7 @@ pip install -r requirements.txt
 
 如果您仅希望微调模型的对话能力，而非工具能力，您应该按照以下格式整理数据。
 
-```json
+```py
 [
   {
     "messages": [
@@ -103,7 +103,7 @@ pip install -r requirements.txt
 
 这里是一个不带有工具的例子:
 
-```json
+```py
 {
   "messages": [
     {
@@ -120,7 +120,7 @@ pip install -r requirements.txt
 
 这是一个带有工具调用的例子:
 
-```json
+```py
 {
   "messages": [
     {
@@ -173,7 +173,7 @@ pip install -r requirements.txt
 
 这是一个视觉VQA微调的例子：
 
-```json
+```py
 {
   "messages": [
     {
@@ -252,14 +252,14 @@ pip install -r requirements.txt
 
 通过以下代码执行 **单机多卡/多机多卡** 运行，这是使用 `deepspeed` 作为加速方案的，您需要安装 `deepspeed`。接着，按照此命令运行：
 
-```shell
+```py
 OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml # For Chat Fine-tune
 OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_vision.py  data/CogVLM-311K/  THUDM/glm-4v-9b  configs/lora.yaml  # For VQA Fine-tune
 ```
 
 通过以下代码执行 **单机单卡** 运行。
 
-```shell
+```py
 python finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml # For Chat Fine-tune
 python finetune_vision.py  data/CogVLM-311K/  THUDM/glm-4v-9b configs/lora.yaml # For VQA Fine-tune
 ```
@@ -273,7 +273,7 @@ python finetune_vision.py  data/CogVLM-311K/  THUDM/glm-4v-9b configs/lora.yaml 
 
 例如，这就是一个从最后一个保存点继续微调的示例代码
 
-```shell
+```py
 python finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml yes
 ```
 
@@ -283,7 +283,7 @@ python finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml y
 
 您可以在 `finetune_demo/inference.py` 中使用我们的微调后的模型，仅需要一行代码就能简单的进行测试。
 
-```shell
+```py
 python inference.py your_finetune_path
 ```
 
@@ -298,7 +298,7 @@ python inference.py your_finetune_path
 > 请注意，对于 LORA 和 P-TuningV2 我们没有合并训练后的模型，而是在`adapter_config.json`
 > 中记录了微调型的路径，如果你的原始模型位置发生更改，则你应该修改`adapter_config.json`中`base_model_name_or_path`的路径。
 
-```python
+```py
 def load_model_and_tokenizer(
         model_dir: Union[str, Path], trust_remote_code: bool = True
 ) -> tuple[ModelType, TokenizerType]:
