@@ -1,6 +1,6 @@
 # `.\chatglm4v-9b\modeling_chatglm.py`
 
-```
+```py
 # PyTorch GLM-4V 模型的文档字符串
 """ PyTorch GLM-4V model. """
 # 导入数学库

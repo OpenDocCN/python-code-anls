@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\finetune_demo\inference.py`
 
-```
+```py
 # 从 pathlib 库导入 Path 类，用于路径操作
 from pathlib import Path
 # 导入用于类型注解的 Annotated 和 Union

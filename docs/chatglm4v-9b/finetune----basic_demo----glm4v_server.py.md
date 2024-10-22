@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\glm4v_server.py`
 
-```
+```py
 # 导入垃圾回收模块
 import gc
 # 导入线程模块

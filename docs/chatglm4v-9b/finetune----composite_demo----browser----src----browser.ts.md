@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\browser\src\browser.ts`
 
-```
+```py
 import { JSDOM } from 'jsdom'; // 从 jsdom 库导入 JSDOM 类，用于创建 DOM 对象
 import TurndownService from 'turndown'; // 从 turndown 库导入 TurndownService 类，用于将 HTML 转换为 Markdown
 

@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\vllm_cli_demo.py`
 
-```
+```py
 """
 这个脚本创建了一个命令行界面（CLI）示例，使用 vllm 后端和 glm-4-9b 模型，
 允许用户通过命令行接口与模型进行交互。

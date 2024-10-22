@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\browser\src\utils.ts`
 
-```
+```py
 # 导入 winston 日志库
 import winston from 'winston';
 

@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\browser\src\config.ts`
 
-```
+```py
 # 导出一个默认的配置对象
 export default {
     # 设置日志级别为 'debug'

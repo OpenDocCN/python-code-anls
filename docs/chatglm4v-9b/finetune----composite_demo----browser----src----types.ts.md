@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\browser\src\types.ts`
 
-```
+```py
 # 定义文件接口，包含文件的 ID、名称和大小
 export interface File {
   # 文件的唯一标识符

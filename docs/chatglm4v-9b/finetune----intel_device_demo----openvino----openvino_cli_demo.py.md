@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\intel_device_demo\openvino\openvino_cli_demo.py`
 
-```
+```py
 # 导入 argparse 库用于处理命令行参数
 import argparse
 # 从 typing 导入 List 和 Tuple 类型提示

@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\utils.py`
 
-```
+```py
 # 从 langchain_community 的文档加载器导入 PyMuPDFLoader
 from langchain_community.document_loaders import PyMuPDFLoader
 # 导入处理 Word 文档的库

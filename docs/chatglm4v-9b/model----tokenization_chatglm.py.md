@@ -1,6 +1,6 @@
 # `.\chatglm4v-9b\tokenization_chatglm.py`
 
-```
+```py
 # 导入所需的库和模块
 import regex as re  # 正则表达式库
 import base64  # 用于处理 Base64 编码

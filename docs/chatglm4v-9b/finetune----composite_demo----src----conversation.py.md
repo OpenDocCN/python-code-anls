@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\conversation.py`
 
-```
+```py
 # 导入 JSON 模块，用于处理 JSON 数据
 import json
 # 导入正则表达式模块，用于字符串匹配
@@ -154,10 +154,10 @@ class Conversation:
         match self.role.value:
             case Role.TOOL.value:
                 # 格式化工具调用的信息
-                text = f"Calling tool `{self.metadata}`:\n\n```py\n{text}\n```"
+                text = f"Calling tool `{self.metadata}`:\n\n```py\n{text}\n```py"
             case Role.OBSERVATION.value:
                 # 格式化观察结果的信息
-                text = f"```py\n{text}\n```"
+                text = f"```py\n{text}\n```py"
         # 返回处理后的文本
         return text
 

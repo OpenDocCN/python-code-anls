@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\tools\python.py`
 
-```
+```py
 # 导入用于打印美化的模块
 from pprint import pprint
 # 导入队列模块
@@ -20,7 +20,7 @@ import streamlit as st
 # 定义正则表达式用于匹配 ANSI 转义序列
 ANSI_ESCAPE = re.compile(r'(\x9B|\x1B\[|\u001b\[)[0-?]*[ -/]*[@-~]')
 # 定义正则表达式用于匹配代码块
-CODE = re.compile(r'```([^\n]*)\n(.*?)```')
+CODE = re.compile(r'```([^\n]*)\n(.*?)```py')
 
 # 定义 CodeKernel 类
 class CodeKernel:

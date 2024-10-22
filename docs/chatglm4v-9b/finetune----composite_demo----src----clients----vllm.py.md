@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\clients\vllm.py`
 
-```
+```py
 """
 vLLM client.  # vLLM 客户端的说明
 Please install [vLLM](https://github.com/vllm-project/vllm) according to its

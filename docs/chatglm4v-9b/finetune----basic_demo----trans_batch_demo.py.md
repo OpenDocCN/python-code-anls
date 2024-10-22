@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\trans_batch_demo.py`
 
-```
+```py
 """
 # 示例文档，说明如何使用批量请求 glm-4-9b，
 # 这里需要自己构建对话格式，然后调用批量函数以进行批量请求。

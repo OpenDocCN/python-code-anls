@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\tools\browser.py`
 
-```
+```py
 # 简单的浏览器工具说明
 """
 Simple browser tool.

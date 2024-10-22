@@ -1,6 +1,6 @@
 # `.\chatglm4v-9b\configuration_chatglm.py`
 
-```
+```py
 # 从 transformers 库导入预训练配置类
 from transformers import PretrainedConfig
 

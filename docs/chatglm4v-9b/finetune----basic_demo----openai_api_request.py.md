@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\openai_api_request.py`
 
-```
+```py
 """
 该脚本创建了一个 OpenAI 请求示例，用于与 glm-4-9b 模型进行交互，只需使用 OpenAI API 进行交互。
 """

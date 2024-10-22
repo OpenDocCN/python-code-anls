@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\client.py`
 
-```
+```py
 # 这是 composite_demo 的客户端部分
 """
 

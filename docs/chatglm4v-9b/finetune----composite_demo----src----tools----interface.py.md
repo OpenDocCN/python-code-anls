@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\tools\interface.py`
 
-```
+```py
 # 从数据类模块导入 dataclass 装饰器
 from dataclasses import dataclass
 # 从类型提示模块导入 Any 类型

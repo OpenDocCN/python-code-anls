@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\trans_web_demo.py`
 
-```
+```py
 # 该脚本使用 Gradio 创建 GLM-4-9B 模型的交互式网络演示
 """
 This script creates an interactive web demo for the GLM-4-9B model using Gradio,

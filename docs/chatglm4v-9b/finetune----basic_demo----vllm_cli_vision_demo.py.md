@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\vllm_cli_vision_demo.py`
 
-```
+```py
 # 该脚本创建一个 CLI 演示，使用 vllm 后端支持 glm-4v-9b 模型，
 # 允许用户通过命令行界面与模型互动。
 

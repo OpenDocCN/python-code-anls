@@ -326,7 +326,7 @@ def load_model_and_tokenizer(
 
 ## 参考文献
 
-```
+```py
 
 @inproceedings{liu2022p,
 title={P-tuning: Prompt tuning can be comparable to fine-tuning across scales and tasks},

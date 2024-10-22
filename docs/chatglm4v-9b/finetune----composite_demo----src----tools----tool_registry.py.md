@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\tools\tool_registry.py`
 
-```
+```py
 """
 该代码是工具注册部分。通过注册工具，模型可以调用该工具。
 该代码为模型提供扩展功能，使其能够通过定义的接口调用和与各种工具交互。

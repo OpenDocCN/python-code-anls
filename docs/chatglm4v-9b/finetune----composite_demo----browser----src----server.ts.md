@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\browser\src\server.ts`
 
-```
+```py
 # 导入 express 和相关类型
 import express, { Express, Request, Response } from 'express';
 

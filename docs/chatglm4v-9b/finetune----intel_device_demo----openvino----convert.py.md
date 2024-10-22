@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\intel_device_demo\openvino\convert.py`
 
-```
+```py
 """
 该脚本用于将原始模型转换为 OpenVINO IR 格式。
 可以查看原始代码 https://github.com/OpenVINO-dev-contest/chatglm3.openvino/blob/main/convert.py

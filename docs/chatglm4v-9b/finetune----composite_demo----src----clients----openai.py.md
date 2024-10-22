@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\clients\openai.py`
 
-```
+```py
 """
 OpenAI API client.  # 定义一个文档字符串，说明该模块是 OpenAI API 客户端
 """

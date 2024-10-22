@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\openai_api_server.py`
 
-```
+```py
 # 导入操作系统相关的模块
 import os
 # 导入用于运行子进程的模块

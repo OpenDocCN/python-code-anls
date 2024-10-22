@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\tools\config.py`
 
-```
+```py
 # 定义浏览器服务器的 URL 地址
 BROWSER_SERVER_URL = 'http://localhost:3000'
 

@@ -18,7 +18,7 @@ pip install -r requirements.txt
 
 由于需要将Huggingface模型转换为OpenVINO IR模型，因此您需要下载模型并转换。
 
-```
+```py
 python3 convert.py --model_id THUDM/glm-4-9b-chat --output {your_path}/glm-4-9b-chat-ov
 ```
 
@@ -30,7 +30,7 @@ python3 convert.py --model_id THUDM/glm-4-9b-chat --output {your_path}/glm-4-9b-
 
 
 转换过程如下：
-```
+```py
 ====Exporting IR=====
 Framework not specified. Using pt to export the model.
 Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:04<00:00,  2.14it/s]
@@ -55,7 +55,7 @@ Special tokens have been added in the vocabulary, make sure the associated word 
 ```
 ## 3. 运行 GLM-4-9B-Chat 模型
 
-```
+```py
 python3 chat.py --model_path {your_path}/glm-4-9b-chat-ov --max_sequence_length 4096 --device CPU
 ```
 

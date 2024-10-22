@@ -1,6 +1,6 @@
 # `.\chatglm4v-9b\visual.py`
 
-```
+```py
 # 导入必要的库
 import torch  # 导入 PyTorch 库
 from torch import nn  # 从 PyTorch 导入神经网络模块

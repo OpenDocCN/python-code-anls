@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\glm_server.py`
 
-```
+```py
 # 导入时间模块，用于时间处理
 import time
 # 从 asyncio 日志中导入 logger，通常用于异步日志记录

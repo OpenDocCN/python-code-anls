@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\trans_cli_vision_demo.py`
 
-```
+```py
 """
 # 此脚本创建一个命令行界面（CLI）演示，使用 transformers 后端，针对 glm-4v-9b 模型，
 # 允许用户通过命令行界面与模型进行交互。

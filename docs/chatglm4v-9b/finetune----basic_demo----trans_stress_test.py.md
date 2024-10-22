@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\trans_stress_test.py`
 
-```
+```py
 # 导入所需的库
 import argparse  # 用于解析命令行参数
 import time  # 用于时间操作

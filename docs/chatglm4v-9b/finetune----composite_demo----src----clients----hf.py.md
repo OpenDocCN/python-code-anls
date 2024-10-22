@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\clients\hf.py`
 
-```
+```py
 """
 HuggingFace client.  # HuggingFace 客户端的文档说明
 """

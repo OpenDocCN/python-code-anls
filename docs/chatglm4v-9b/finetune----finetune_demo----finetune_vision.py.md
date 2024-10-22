@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\finetune_demo\finetune_vision.py`
 
-```
+```py
 # -*- coding: utf-8 -*-  # 指定文件编码为 UTF-8
 import os  # 导入操作系统功能模块
 import jieba  # 导入中文分词库

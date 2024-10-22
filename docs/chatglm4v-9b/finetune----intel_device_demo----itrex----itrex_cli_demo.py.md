@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\intel_device_demo\itrex\itrex_cli_demo.py`
 
-```
+```py
 """
 该脚本创建一个命令行接口（CLI）演示，使用 transformers 后端，适用于 glm-4-9b 模型，结合 Intel® Extension for Transformers
 """

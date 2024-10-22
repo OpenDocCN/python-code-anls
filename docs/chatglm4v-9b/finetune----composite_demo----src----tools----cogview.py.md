@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\composite_demo\src\tools\cogview.py`
 
-```
+```py
 # 导入 Streamlit 库，用于构建 Web 应用
 import streamlit as st
 # 导入 ZhipuAI 类，作为 AI 客户端

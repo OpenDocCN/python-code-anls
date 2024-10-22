@@ -1,6 +1,6 @@
 # `.\chatglm4-finetune\basic_demo\trans_web_vision_demo.py`
 
-```
+```py
 """
 # 该脚本创建一个 Gradio 演示，使用 glm-4v-9b 模型作为 Transformers 后端，允许用户通过 Gradio Web UI 与模型互动。
 
