@@ -29,6 +29,7 @@
 +   [Matplotlib 源码解析](docs/matplotlib/README.md)
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
 +   [MinerU 源码解析](docs/mineru/README.md)
++   [MiniMind-V 源码解析](docs/minimind-v/README.md)
 +   [NumPy 源码解析](docs/numpy/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)
 +   [PaddleOCR 源码解析](docs/paddleocr-ai/README.md)
