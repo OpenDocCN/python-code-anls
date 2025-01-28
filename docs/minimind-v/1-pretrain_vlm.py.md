@@ -1,6 +1,6 @@
 # `.\minimind-v\1-pretrain_vlm.py`
 
-```
+```py
 # 导入操作系统相关模块
 import os
 # 导入平台相关模块，用于获取系统平台信息

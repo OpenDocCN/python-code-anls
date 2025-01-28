@@ -1,6 +1,6 @@
 # `.\minimind-v\model\model.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入用于处理结构化二进制数据的库

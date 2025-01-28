@@ -1,6 +1,6 @@
 # `.\minimind-v\web_server.py`
 
-```
+```py
 import gradio as gr  # 导入 Gradio 库，用于创建用户界面
 import os  # 导入 os 库，用于与操作系统进行交互（如文件路径处理）
 import random  # 导入 random 库，用于生成随机数

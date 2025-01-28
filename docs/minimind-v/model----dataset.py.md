@@ -1,6 +1,6 @@
 # `.\minimind-v\model\dataset.py`
 
-```
+```py
 # 导入所需的库
 import json  # 用于处理 JSON 数据格式
 import random  # 用于生成随机数或选择随机项

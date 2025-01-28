@@ -1,6 +1,6 @@
 # `.\minimind-v\model\LMConfig.py`
 
-```
+```py
 # 从 transformers 库导入 PretrainedConfig 类，用于定义预训练模型的配置
 from transformers import PretrainedConfig
 # 从 typing 库导入 List 类型注解，用于声明列表类型

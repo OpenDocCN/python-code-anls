@@ -1,6 +1,6 @@
 # `.\minimind-v\model\vision_utils.py`
 
-```
+```py
 # 导入必要的库
 import warnings
 # 从 transformers 库中导入 CLIP 处理器和模型

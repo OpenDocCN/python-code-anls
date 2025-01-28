@@ -1,6 +1,6 @@
 # `.\minimind-v\export_model.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 导入警告模块

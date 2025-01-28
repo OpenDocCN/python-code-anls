@@ -1,6 +1,6 @@
 # `.\minimind-v\3-eval_chat.py`
 
-```
+```py
 # 导入所需的库
 import os  # 用于操作系统相关功能（如文件路径、目录管理等）
 import random  # 用于生成随机数
