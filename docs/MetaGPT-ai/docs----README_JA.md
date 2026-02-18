@@ -5,24 +5,17 @@
 </p>
 
 <p align="center">
+[ <a href="../README.md">En</a> |
+<a href="README_CN.md">中</a> |
+<a href="README_FR.md">Fr</a> |
+<b>日</b> ]
 <b>GPT にさまざまな役割を割り当てることで、複雑なタスクのための共同ソフトウェアエンティティを形成します。</b>
 </p>
 
 <p align="center">
-<a href="docs/README_CN.md"><img src="https://img.shields.io/badge/文档-中文版-blue.svg" alt="CN doc"></a>
-<a href="README.md"><img src="https://img.shields.io/badge/document-English-blue.svg" alt="EN doc"></a>
-<a href="docs/README_JA.md"><img src="https://img.shields.io/badge/ドキュメント-日本語-blue.svg" alt="JA doc"></a>
-<a href="https://discord.gg/wCp6Q3fsAk"><img src="https://img.shields.io/badge/Discord-Join-blue?logo=discord&logoColor=white&color=blue" alt="Discord Follow"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-<a href="docs/ROADMAP.md"><img src="https://img.shields.io/badge/ROADMAP-路线图-blue" alt="roadmap"></a>
+<a href="https://discord.gg/DYn29wFk9z"><img src="https://dcbadge.vercel.app/api/server/DYn29wFk9z?style=flat" alt="Discord Follow"></a>
 <a href="https://twitter.com/MetaGPT_"><img src="https://img.shields.io/twitter/follow/MetaGPT?style=social" alt="Twitter Follow"></a>
-</p>
-
-<p align="center">
-   <a href="https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/geekan/MetaGPT"><img src="https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode" alt="Open in Dev Containers"></a>
-   <a href="https://codespaces.new/geekan/MetaGPT"><img src="https://img.shields.io/badge/Github_Codespace-Open-blue?logo=github" alt="Open in GitHub Codespaces"></a>
-   <a href="https://huggingface.co/spaces/deepwisdom/MetaGPT" target="_blank"><img alt="Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97%20-Hugging%20Face-blue?color=blue&logoColor=white" /></a>
-</p>
 
 1. MetaGPT は、**1 行の要件** を入力とし、**ユーザーストーリー / 競合分析 / 要件 / データ構造 / API / 文書など** を出力します。
 2. MetaGPT には、**プロダクト マネージャー、アーキテクト、プロジェクト マネージャー、エンジニア** が含まれています。MetaGPT は、**ソフトウェア会社のプロセス全体を、慎重に調整された SOP とともに提供します。**
@@ -35,7 +28,7 @@
 ## MetaGPT の能力
 
 
-https://github.com/geekan/MetaGPT/assets/34952977/34345016-5d13-489d-b9f9-b82ace413419
+https://github.com/user-attachments/assets/888cb169-78c3-4a42-9d62-9d90ed3928c9
 
 
 
@@ -57,24 +50,21 @@ https://github.com/geekan/MetaGPT/assets/34952977/34345016-5d13-489d-b9f9-b82ace
 - [Matthew Berman: How To Install MetaGPT - Build A Startup With One Prompt!!](https://youtu.be/uT75J_KG_aY)
 
 ### 伝統的なインストール
+> Python 3.9 以上がシステムにインストールされていることを確認してください。これは `python --version` を使ってチェックできます。  
+> 以下のようにcondaを使うことができます：`conda create -n metagpt python=3.9 && conda activate metagpt`
 
-```py
-# ステップ 1: Python 3.9+ がシステムにインストールされていることを確認してください。これを確認するには:
-python3 --version
+```bash
+pip install metagpt
+metagpt --init-config  # ~/.metagpt/config2.yaml を作成し、自分の設定に合わせて変更してください
+metagpt "2048ゲームを作成する"  # これにより ./workspace にリポジトリが作成されます
+```
 
-# ステップ 2: リポジトリをローカルマシンにクローンし、インストールする。
-git clone https://github.com/geekan/MetaGPT.git
-cd MetaGPT
-pip install -e.
+または、ライブラリとして使用することもできます
 
-# ステップ 3: metagpt を実行する
-# config.yaml を key.yaml にコピーし、独自の OPENAI_API_KEY を設定します
-metagpt "Write a cli snake game"
-
-# ステップ 4 [オプション]: 実行中に PRD ファイルなどのアーティファクトを保存する場合は、ステップ 3 の前にこのステップを実行できます。デフォルトでは、フレームワークには互換性があり、この手順を実行しなくてもプロセス全体を完了できます。
-# NPM がシステムにインストールされていることを確認してください。次に mermaid-js をインストールします。(お使いのコンピューターに npm がない場合は、Node.js 公式サイトで Node.js https://nodejs.org/ をインストールしてください。）
-npm --version
-sudo npm install -g @mermaid-js/mermaid-cli
+```python
+from metagpt.software_company import generate_repo, ProjectRepo
+repo: ProjectRepo = generate_repo("2048ゲームを作成する")  # または ProjectRepo("<パス>")
+print(repo)  # リポジトリの構造とファイルを出力します
 ```
 
 **注:**
@@ -84,15 +74,15 @@ Chromium のダウンロードをスキップすることができます。
 
 - このツールをグローバルにインストールする[問題を抱えている](https://github.com/mermaidjs/mermaid.cli/issues/15)人もいます。ローカルにインストールするのが代替の解決策です、
 
-  ```py
+  ```bash
   npm install @mermaid-js/mermaid-cli
   ```
 
 - config.yml に mmdc のコンフィグを記述するのを忘れないこと
 
-  ```py
-  PUPPETEER_CONFIG: "./config/puppeteer-config.json"
-  MMDC: "./node_modules/.bin/mmdc"
+  ```yml
+  puppeteer_config: "./config/puppeteer-config.json"
+  path: "./node_modules/.bin/mmdc"
   ```
 
 - もし `pip install -e.` がエラー `[Errno 13] Permission denied: '/usr/local/lib/python3.11/dist-packages/test-easy-install-13129.write-test'` で失敗したら、代わりに `pip install -e. --user` を実行してみてください
@@ -102,7 +92,7 @@ Chromium のダウンロードをスキップすることができます。
   - Playwright
     - **Playwright のインストール**
 
-    ```py
+    ```bash
     pip install playwright
     ```
 
@@ -110,22 +100,23 @@ Chromium のダウンロードをスキップすることができます。
 
     PDF変換をサポートするには、Chrominumをインストールしてください。
 
-    ```py
+    ```bash
     playwright install --with-deps chromium
     ```
 
-    - **modify `config.yaml`**
+    - **modify `config2.yaml`**
 
-    config.yaml から MERMAID_ENGINE のコメントを外し、`playwright` に変更する
+    config2.yaml から mermaid.engine のコメントを外し、`playwright` に変更する
 
-    ```py
-    MERMAID_ENGINE: playwright
+    ```yaml
+    mermaid:
+      engine: playwright
     ```
 
   - pyppeteer
     - **pyppeteer のインストール**
 
-    ```py
+    ```bash
     pip install pyppeteer
     ```
 
@@ -133,31 +124,33 @@ Chromium のダウンロードをスキップすることができます。
 
     pyppeteer を使えばインストールされているブラウザを使うことができます、以下の環境を設定してください
 
-    ```py
+    ```bash
     export PUPPETEER_EXECUTABLE_PATH = /path/to/your/chromium or edge or chrome
     ```
 
     ブラウザのインストールにこのコマンドを使わないでください、これは古すぎます
 
-    ```py
+    ```bash
     pyppeteer-install
     ```
 
-    - **`config.yaml` を修正**
+    - **`config2.yaml` を修正**
 
-    config.yaml から MERMAID_ENGINE のコメントを外し、`pyppeteer` に変更する
+    config2.yaml から mermaid.engine のコメントを外し、`pyppeteer` に変更する
 
-    ```py
-    MERMAID_ENGINE: pyppeteer
+    ```yaml
+    mermaid:
+      engine: pyppeteer
     ```
 
   - mermaid.ink
-    - **`config.yaml` を修正**
+    - **`config2.yaml` を修正**
 
-    config.yaml から MERMAID_ENGINE のコメントを外し、`ink` に変更する
+    config2.yaml から mermaid.engine のコメントを外し、`ink` に変更する
 
-    ```py
-    MERMAID_ENGINE: ink
+    ```yaml
+    mermaid:
+      engine: ink
     ```
 
     注: この方法は pdf エクスポートに対応していません。
@@ -165,17 +158,17 @@ Chromium のダウンロードをスキップすることができます。
 ### Docker によるインストール
 > Windowsでは、"/opt/metagpt"をDockerが作成する権限を持つディレクトリに置き換える必要があります。例えば、"D:\Users\x\metagpt"などです。
 
-```py
-# ステップ 1: metagpt 公式イメージをダウンロードし、config.yaml を準備する
+```bash
+# ステップ 1: metagpt 公式イメージをダウンロードし、config2.yaml を準備する
 docker pull metagpt/metagpt:latest
 mkdir -p /opt/metagpt/{config,workspace}
-docker run --rm metagpt/metagpt:latest cat /app/metagpt/config/config.yaml > /opt/metagpt/config/key.yaml
-vim /opt/metagpt/config/key.yaml # 設定を変更する
+docker run --rm metagpt/metagpt:latest cat /app/metagpt/config/config2.yaml > /opt/metagpt/config/config2.yaml
+vim /opt/metagpt/config/config2.yaml # 設定を変更する
 
 # ステップ 2: コンテナで metagpt デモを実行する
 docker run --rm \
     --privileged \
-    -v /opt/metagpt/config/key.yaml:/app/metagpt/config/key.yaml \
+    -v /opt/metagpt/config/config2.yaml:/app/metagpt/config/config2.yaml \
     -v /opt/metagpt/workspace:/app/metagpt/workspace \
     metagpt/metagpt:latest \
     metagpt "Write a cli snake game"
@@ -183,7 +176,7 @@ docker run --rm \
 # コンテナを起動し、その中でコマンドを実行することもできます
 docker run --name metagpt -d \
     --privileged \
-    -v /opt/metagpt/config/key.yaml:/app/metagpt/config/key.yaml \
+    -v /opt/metagpt/config/config2.yaml:/app/metagpt/config/config2.yaml \
     -v /opt/metagpt/workspace:/app/metagpt/workspace \
     metagpt/metagpt:latest
 
@@ -194,13 +187,13 @@ $ metagpt "Write a cli snake game"
 コマンド `docker run ...` は以下のことを行います:
 
 - 特権モードで実行し、ブラウザの実行権限を得る
-- ホスト設定ファイル `/opt/metagpt/config/key.yaml` をコンテナ `/app/metagpt/config/key.yaml` にマップします
+- ホスト設定ファイル `/opt/metagpt/config/config2.yaml` をコンテナ `/app/metagpt/config/config2.yaml` にマップします
 - ホストディレクトリ `/opt/metagpt/workspace` をコンテナディレクトリ `/app/metagpt/workspace` にマップするs
 - デモコマンド `metagpt "Write a cli snake game"` を実行する
 
 ### 自分でイメージをビルドする
 
-```py
+```bash
 # また、自分で metagpt イメージを構築することもできます。
 git clone https://github.com/geekan/MetaGPT.git
 cd MetaGPT && docker build -t metagpt:custom .
@@ -208,22 +201,17 @@ cd MetaGPT && docker build -t metagpt:custom .
 
 ## 設定
 
-- `OPENAI_API_KEY` を `config/key.yaml / config/config.yaml / env` のいずれかで設定します。
-- 優先順位は: `config/key.yaml > config/config.yaml > env` の順です。
+- `api_key` を `~/.metagpt/config2.yaml / config/config2.yaml` のいずれかで設定します。
+- 優先順位は: `~/.metagpt/config2.yaml > config/config2.yaml > env` の順です。
 
-```py
+```bash
 # 設定ファイルをコピーし、必要な修正を加える。
-cp config/config.yaml config/key.yaml
+cp config/config2.yaml ~/.metagpt/config2.yaml
 ```
-
-| 変数名                                  | config/key.yaml                           | env                                             |
-| --------------------------------------- | ----------------------------------------- | ----------------------------------------------- |
-| OPENAI_API_KEY # 自分のキーに置き換える | OPENAI_API_KEY: "sk-..."                  | export OPENAI_API_KEY="sk-..."                  |
-| OPENAI_BASE_URL # オプション            | OPENAI_BASE_URL: "https://<YOUR_SITE>/v1" | export OPENAI_BASE_URL="https://<YOUR_SITE>/v1" |
 
 ## チュートリアル: スタートアップの開始
 
-```py
+```shell
 # スクリプトの実行
 metagpt "Write a cli snake game"
 # プロジェクトの実施にエンジニアを雇わないこと
@@ -238,13 +226,13 @@ metagpt "Write a cli snake game" --code_review
 
 要件を述べるときに、どのプラットフォームまたはツールを使用するかを指定できます。
 
-```py
+```shell
 metagpt "pygame をベースとした cli ヘビゲームを書く"
 ```
 
 ### 使用方法
 
-```py
+```
 会社名
     metagpt - 私たちは AI で構成されたソフトウェア・スタートアップです。私たちに投資することは、無限の可能性に満ちた未来に力を与えることです。
 
@@ -274,7 +262,7 @@ metagpt "pygame をベースとした cli ヘビゲームを書く"
 
 ### コードウォークスルー
 
-```py
+```python
 from metagpt.team import Team
 from metagpt.roles import ProjectManager, ProductManager, Architect, Engineer
 
@@ -296,18 +284,25 @@ async def startup(idea: str, investment: float = 3.0, n_round: int = 5):
 - [MetaGPT クイックスタート](https://deepwisdom.feishu.cn/wiki/CyY9wdJc4iNqArku3Lncl4v8n2b)
 
 Hugging Face Space で試す
-- https://huggingface.co/spaces/deepwisdom/MetaGPT
+- https://huggingface.co/spaces/deepwisdom/MetaGPT-SoftwareCompany
 
 ## 引用
 
-現時点では、[arXiv 論文](https://arxiv.org/abs/2308.00352)を引用してください:
+研究論文でMetaGPTやData Interpreterを使用する場合は、以下のように当社の作業を引用してください：
 
-```py
-@misc{hong2023metagpt,
-      title={MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework}, 
-      author={Sirui Hong and Mingchen Zhuge and Jonathan Chen and Xiawu Zheng and Yuheng Cheng and Ceyao Zhang and Jinlin Wang and Zili Wang and Steven Ka Shing Yau and Zijuan Lin and Liyang Zhou and Chenyu Ran and Lingfeng Xiao and Chenglin Wu and Jürgen Schmidhuber},
-      year={2023},
-      eprint={2308.00352},
+```bibtex
+@inproceedings{hong2024metagpt,
+      title={Meta{GPT}: Meta Programming for A Multi-Agent Collaborative Framework},
+      author={Sirui Hong and Mingchen Zhuge and Jonathan Chen and Xiawu Zheng and Yuheng Cheng and Jinlin Wang and Ceyao Zhang and Zili Wang and Steven Ka Shing Yau and Zijuan Lin and Liyang Zhou and Chenyu Ran and Lingfeng Xiao and Chenglin Wu and J{\"u}rgen Schmidhuber},
+      booktitle={The Twelfth International Conference on Learning Representations},
+      year={2024},
+      url={https://openreview.net/forum?id=VtmBAGCN7o}
+}
+@misc{hong2024data,
+      title={Data Interpreter: An LLM Agent For Data Science}, 
+      author={Sirui Hong and Yizhang Lin and Bang Liu and Bangbang Liu and Binhao Wu and Danyang Li and Jiaqi Chen and Jiayi Zhang and Jinlin Wang and Li Zhang and Lingyao Zhang and Min Yang and Mingchen Zhuge and Taicheng Guo and Tuo Zhou and Wei Tao and Wenyi Wang and Xiangru Tang and Xiangtao Lu and Xiawu Zheng and Xinbing Liang and Yaying Fei and Yuheng Cheng and Zongze Xu and Chenglin Wu},
+      year={2024},
+      eprint={2402.18679},
       archivePrefix={arXiv},
       primaryClass={cs.AI}
 }

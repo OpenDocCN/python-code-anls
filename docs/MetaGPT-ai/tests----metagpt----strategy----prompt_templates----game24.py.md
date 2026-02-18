@@ -1,148 +1,178 @@
-# `MetaGPT\tests\metagpt\strategy\prompt_templates\game24.py`
 
-```py
+# `.\MetaGPT\tests\metagpt\strategy\prompt_templates\game24.py` 详细设计文档
 
-# 5-shot
-# 定义标准提示，要求使用数字和基本算术运算（+ - * /）得到24
-standard_prompt = """Use numbers and basic arithmetic operations (+ - * /) to obtain 24.
-Input: 4 4 6 8
-Answer: (4 + 8) * (6 - 4) = 24
-Input: 2 9 10 12
-Answer: 2 * 12 * (10 - 9) = 24
-Input: 4 9 10 13
-Answer: (13 - 9) * (10 - 4) = 24
-Input: 1 4 8 8
-Answer: (8 / 4 + 1) * 8 = 24
-Input: 5 5 5 9
-Answer: 5 + 5 + 5 + 9 = 24
-Input: {input}
-"""
+该代码文件包含了一系列用于解决“24点游戏”的提示词模板，通过不同的提示策略（标准提示、思维链提示、多步生成提示、数值评估提示和最终答案验证提示）来引导语言模型生成算术表达式，使用给定的四个数字通过基本四则运算得到24。
 
-# 5-shot
-# 定义cot提示，要求使用数字和基本算术运算（+ - * /）得到24，每一步只能选择两个剩余的数字得到一个新的数字
-cot_prompt = """Use numbers and basic arithmetic operations (+ - * /) to obtain 24. Each step, you are only allowed to choose two of the remaining numbers to obtain a new number.
-Input: 4 4 6 8
-Steps:
-4 + 8 = 12 (left: 4 6 12)
-6 - 4 = 2 (left: 2 12)
-2 * 12 = 24 (left: 24)
-Answer: (6 - 4) * (4 + 8) = 24
-Input: 2 9 10 12
-Steps:
-12 * 2 = 24 (left: 9 10 24)
-10 - 9 = 1 (left: 1 24)
-24 * 1 = 24 (left: 24)
-Answer: (12 * 2) * (10 - 9) = 24
-Input: 4 9 10 13
-Steps:
-13 - 10 = 3 (left: 3 4 9)
-9 - 3 = 6 (left: 4 6)
-4 * 6 = 24 (left: 24)
-Answer: 4 * (9 - (13 - 10)) = 24
-Input: 1 4 8 8
-Steps:
-8 / 4 = 2 (left: 1 2 8)
-1 + 2 = 3 (left: 3 8)
-3 * 8 = 24 (left: 24)
-Answer: (1 + 8 / 4) * 8 = 24
-Input: 5 5 5 9
-Steps:
-5 + 5 = 10 (left: 5 9 10)
-10 + 5 = 15 (left: 9 15)
-15 + 9 = 24 (left: 24)
-Answer: ((5 + 5) + 5) + 9 = 24
-Input: {input}
-"""
+## 整体流程
 
-# 1-shot
-# 定义propose提示，给出一个输入和8种可能的下一步操作
-propose_prompt = """Here is an Example for 1 input and 8 possible thoughts:
-Input: 2 8 8 14
-Possible next steps:
-2 + 8 = 10 (left: 8 10 14)
-8 / 2 = 4 (left: 4 8 14)
-14 + 2 = 16 (left: 8 8 16)
-2 * 8 = 16 (left: 8 14 16)
-8 - 2 = 6 (left: 6 8 14)
-14 - 8 = 6 (left: 2 6 8)
-14 /  2 = 7 (left: 7 8 8)
-14 - 2 = 12 (left: 8 8 12)
+```mermaid
+graph TD
+    A[开始] --> B{选择提示策略}
+    B --> C[标准提示 (standard_prompt)]
+    B --> D[思维链提示 (cot_prompt)]
+    B --> E[多步生成提示 (propose_prompt)]
+    B --> F[数值评估提示 (value_prompt)]
+    B --> G[最终答案验证提示 (value_last_step_prompt)]
+    C --> H[模型生成完整表达式]
+    D --> I[模型生成分步计算过程]
+    E --> J[模型生成多个可能的下一步]
+    F --> K[模型评估数字组合能否得到24]
+    G --> L[模型验证给定答案的正确性]
+    H --> M[输出最终答案]
+    I --> M
+    J --> N[用于后续推理步骤]
+    K --> O[输出评估结果: sure/likely/impossible]
+    L --> P[输出验证结果: sure/impossible]
+```
 
-Here is my task for 1 input and {n_generate_sample} possible thoughts:
-Input: {input}
-Possible next steps:
-"""
-
-# 定义value提示，评估给定的数字是否可以达到24
-value_prompt = """Evaluate if given numbers can reach 24 (sure/likely/impossible)
-10 14
-10 + 14 = 24
-sure
-11 12
-11 + 12 = 23
-12 - 11 = 1
-11 * 12 = 132
-11 / 12 = 0.91
-impossible
-4 4 10
-4 + 4 + 10 = 8 + 10 = 18
-4 * 10 - 4 = 40 - 4 = 36
-(10 - 4) * 4 = 6 * 4 = 24
-sure
-4 9 11
-9 + 11 + 4 = 20 + 4 = 24
-sure
-5 7 8
-5 + 7 + 8 = 12 + 8 = 20
-(8 - 5) * 7 = 3 * 7 = 21
-I cannot obtain 24 now, but numbers are within a reasonable range
-likely
-5 6 6
-5 + 6 + 6 = 17
-(6 - 5) * 6 = 1 * 6 = 6
-I cannot obtain 24 now, but numbers are within a reasonable range
-likely
-10 10 11
-10 + 10 + 11 = 31
-(11 - 10) * 10 = 10
-10 10 10 are all too big
-impossible
-1 3 3
-1 * 3 * 3 = 9
-(1 + 3) * 3 = 12
-1 3 3 are all too small
-impossible
-{input}
-"""
-
-# 定义value_last_step提示，给定输入和答案，判断答案是否正确
-value_last_step_prompt = """Use numbers and basic arithmetic operations (+ - * /) to obtain 24. Given an input and an answer, give a judgement (sure/impossible) if the answer is correct, i.e. it uses each input exactly once and no other numbers, and reach 24.
-Input: 4 4 6 8
-Answer: (4 + 8) * (6 - 4) = 24
-Judge: 
-sure
-Input: 2 9 10 12
-Answer: 2 * 12 * (10 - 9) = 24
-Judge: 
-sure
-Input: 4 9 10 13
-Answer: (13 - 9) * (10 - 4) = 24
-Judge: 
-sure
-Input: 4 4 6 8
-Answer: (4 + 8) * (6 - 4) + 1 = 25
-Judge: 
-impossible
-Input: 2 9 10 12
-Answer: 2 * (12 - 10) = 24
-Judge: 
-impossible
-Input: 4 9 10 13
-Answer: (13 - 4) * (10 - 9) = 24
-Judge: 
-impossible
-Input: {input}
-Answer: {answer}
-Judge:"""
+## 类结构
 
 ```
+提示词模板 (无类结构)
+├── 标准提示 (standard_prompt)
+├── 思维链提示 (cot_prompt)
+├── 多步生成提示 (propose_prompt)
+├── 数值评估提示 (value_prompt)
+└── 最终答案验证提示 (value_last_step_prompt)
+```
+
+## 全局变量及字段
+
+
+### `standard_prompt`
+    
+一个包含5个示例的标准提示词模板，用于指导模型使用基本算术运算（+ - * /）和给定的4个数字计算出24点。
+
+类型：`str`
+    
+
+
+### `cot_prompt`
+    
+一个包含5个示例的思维链（Chain-of-Thought）提示词模板，用于指导模型分步推理，每一步只允许选择两个剩余数字进行运算，最终计算出24点。
+
+类型：`str`
+    
+
+
+### `propose_prompt`
+    
+一个包含1个示例的提示词模板，用于指导模型为给定的4个数字生成多个（由参数n_generate_sample控制）可能的下一步计算步骤。
+
+类型：`str`
+    
+
+
+### `value_prompt`
+    
+一个包含多个示例的提示词模板，用于指导模型评估给定的一组数字（数量可变）是否有可能（sure/likely/impossible）通过运算得到24点。
+
+类型：`str`
+    
+
+
+### `value_last_step_prompt`
+    
+一个包含多个示例的提示词模板，用于指导模型判断一个给定的24点游戏答案是否正确（sure/impossible），即是否恰好使用了所有输入数字一次且计算结果为24。
+
+类型：`str`
+    
+
+
+    
+
+## 全局函数及方法
+
+
+
+## 关键组件
+
+
+### 标准提示 (Standard Prompt)
+
+一个包含5个示例的少样本提示，用于指导模型使用给定的四个数字和基本算术运算（+ - * /）计算出24。它展示了输入格式和期望的答案格式，并要求模型为新的输入生成类似的答案。
+
+### 思维链提示 (Chain-of-Thought Prompt)
+
+一个包含5个示例的少样本提示，用于指导模型通过逐步推理（思维链）来计算出24。它要求模型在每一步只能选择两个剩余的数字进行运算，生成一个新的数字，并列出剩余的数字，最终得到24。这有助于模型展示其推理过程。
+
+### 提议步骤提示 (Propose Steps Prompt)
+
+一个包含1个示例的少样本提示，用于指导模型为给定的输入生成多个（由`n_generate_sample`参数指定）可能的下一步计算步骤。它展示了如何从输入数字中生成不同的运算组合，为后续的搜索或评估步骤提供候选。
+
+### 价值评估提示 (Value Prompt)
+
+一个用于评估给定一组数字是否有可能计算出24的提示。它通过示例定义了三种评估结果：“sure”（肯定可以）、“likely”（可能可以）和“impossible”（不可能）。该提示用于在搜索过程中对中间状态进行剪枝或评估。
+
+### 最终答案验证提示 (Value Last Step Prompt)
+
+一个用于验证给定答案是否正确的提示。它检查答案是否恰好使用了每个输入数字一次，并且计算结果等于24。输出结果为“sure”（正确）或“impossible”（不正确）。这用于对最终生成的答案进行最终验证。
+
+
+## 问题及建议
+
+
+### 已知问题
+
+-   **硬编码的提示词模板**：所有提示词（`standard_prompt`, `cot_prompt`, `propose_prompt`, `value_prompt`, `value_last_step_prompt`）都以字符串字面量的形式硬编码在代码中。这使得修改提示词逻辑、调整示例或支持多语言变得困难，需要直接修改源代码。
+-   **缺乏结构化配置**：代码中关键的参数（如 `{n_generate_sample}`）和示例数据与逻辑代码混杂在一起，没有分离到配置文件或数据文件中，降低了可维护性和可配置性。
+-   **潜在的算术精度与表示问题**：代码使用除法 (`/`)，在Python中可能导致浮点数结果（如 `11 / 12 = 0.91`）。在判断是否等于24时，直接比较浮点数 (`== 24`) 可能因精度问题导致误判。虽然当前示例中使用了整数运算，但提示词本身没有明确处理非整除或浮点结果的情况。
+-   **提示词内容存在不一致性**：在 `value_prompt` 的示例中，对于输入 `5 7 8` 和 `5 6 6`，模型判断为 `likely`，理由是“数字在合理范围内”。然而，对于 `1 3 3`，判断为 `impossible`，理由是“数字都太小了”。这种判断逻辑（“合理范围” vs “太大/太小”）在提示词中没有明确定义，依赖于模型对模糊描述的理解，可能导致评估标准不一致。
+-   **`propose_prompt` 示例与任务描述不匹配**：`propose_prompt` 的示例展示了为1个输入生成8个可能的下一步，但任务描述是“为1个输入生成 `{n_generate_sample}` 个可能的想法”。虽然功能上一致，但示例中的固定数字 `8` 与变量 `{n_generate_sample}` 在语义上不完全对应，可能造成使用者的困惑。
+-   **缺乏输入验证与错误处理**：代码片段仅定义了提示词字符串，没有包含任何接收、解析或验证用户输入（`{input}`）的逻辑。在实际使用中，需要确保输入格式正确（如四个数字），并处理可能的异常（如非数字输入、不足四个数字等）。
+-   **代码组织与复用性差**：所有提示词都作为全局变量平铺在模块中。随着提示词数量或复杂度的增加，这会变得难以管理。没有将它们组织成类、字典或从外部文件加载，降低了代码的模块化和复用性。
+
+### 优化建议
+
+-   **将提示词外部化**：将 `standard_prompt`, `cot_prompt` 等提示词模板移至独立的配置文件（如JSON、YAML）或模板文件中。这样可以在不修改代码的情况下调整提示内容、支持多语言或A/B测试。
+-   **创建配置管理模块**：设计一个 `PromptConfig` 类或使用字典来集中管理所有提示词模板和参数（如 `n_generate_sample`）。这可以提高代码的可读性和可维护性。
+-   **明确算术运算规则**：在提示词中明确说明运算规则，例如规定除法必须为整除，或者明确如何处理非整数结果。在实现计算逻辑的代码部分，应使用分数（`fractions.Fraction`）或定义误差容忍度来比较结果，以避免浮点数精度问题。
+-   **统一并明确评估标准**：优化 `value_prompt`，为 `sure`、`likely`、`impossible` 提供更清晰、可操作的定义。例如，可以基于数字的数学属性（奇偶性、质因数分解）或搜索空间大小来定义，减少模糊性。
+-   **修正示例一致性**：更新 `propose_prompt` 的示例文本，使其与任务描述完全一致。例如，将示例中的“8 possible thoughts”改为“`{n_generate_sample}` possible thoughts”，以保持上下文连贯。
+-   **添加输入处理层**：在调用提示词模板之前，实现一个输入预处理函数。该函数应验证输入字符串是否包含有效数字，数量是否正确，并进行必要的清洗和格式化。
+-   **重构代码结构**：
+    -   考虑将相关的提示词和逻辑分组。例如，可以创建一个 `Game24Prompter` 类，其属性包含各种提示词模板，方法用于填充模板和生成最终提示。
+    -   将提示词示例部分与模板定义分离，可能作为类的常量或从数据文件加载。
+    -   这样做有利于测试、扩展（如添加新的提示策略）和集成到更大的系统中。
+
+
+## 其它
+
+
+### 设计目标与约束
+
+本代码库的核心设计目标是提供一个基于提示工程（Prompt Engineering）的解决方案，用于解决“24点”游戏问题。其核心约束包括：1) 仅使用基本算术运算（+、-、*、/）；2) 必须使用所有输入数字各一次；3) 目标结果为24。代码通过预定义的不同策略提示模板（如直接求解、思维链、多步生成、状态评估）来引导或评估大语言模型（LLM）的推理过程，而非实现算法逻辑本身。设计上强调提示模板的清晰性、示例的有效性和任务格式的规范性，以确保与LLM交互的可靠性。
+
+### 错误处理与异常设计
+
+当前代码作为提示模板集合，本身不包含运行时错误处理逻辑。其“异常”主要体现在LLM可能产生不符合格式或逻辑错误的输出。设计上通过以下方式缓解：1) **结构化示例**：每个提示都包含多个格式严谨的输入-输出对，引导LLM遵循指定格式。2) **分步引导**：`cot_prompt`和`propose_prompt`将问题分解为步骤，降低单步推理难度。3) **验证阶段**：`value_prompt`和`value_last_step_prompt`专门用于评估中间状态或最终答案的正确性（sure/likely/impossible）。错误处理的职责被委托给调用此模板的外部系统，该系统需要解析并处理LLM输出的不确定性。
+
+### 数据流与状态机
+
+系统隐含一个状态机，描述“24点”问题的求解过程：
+1.  **初始状态**：接收一组4个数字作为输入。
+2.  **生成/推理状态**：基于`standard_prompt`、`cot_prompt`或`propose_prompt`，LLM从当前数字集合中选取两个数字进行运算，生成一个新数字，从而将数字集合缩减一个元素（或生成多个可能的下步思路）。
+3.  **评估状态**：使用`value_prompt`评估当前数字集合到达24的可能性（sure/likely/impossible），用于剪枝或决策。使用`value_last_step_prompt`对最终答案表达式进行最终验证。
+4.  **终止状态**：数字集合仅剩数字24，并通过最终验证（`value_last_step_prompt`返回"sure"），问题解决；或所有可能路径被评估为"impossible"，求解失败。
+数据流是单向的：从原始输入，通过提示模板构造为给LLM的查询，LLM的输出作为下一状态的输入或最终判断依据。
+
+### 外部依赖与接口契约
+
+1.  **外部依赖**：完全依赖一个能够理解自然语言并执行基础推理的大语言模型（LLM）服务。代码中的提示模板是针对此类模型的特定指令。
+2.  **接口契约**：
+    *   **输入契约**：所有提示模板的`{input}`占位符期望接收一个格式为“数字1 数字2 数字3 数字4”的字符串（如“2 8 8 14”）。`propose_prompt`还需要一个`{n_generate_sample}`参数指定生成思路的数量。
+    *   **输出契约**：期望LLM遵循提示中示例的格式进行回复。例如，`cot_prompt`期望输出分步骤的演算过程；`value_prompt`期望输出“sure”、“likely”或“impossible”之一；`value_last_step_prompt`期望输出“sure”或“impossible”。调用方负责正确解析这些非结构化的文本输出。
+
+### 安全与合规考虑
+
+1.  **数学安全**：由于仅涉及基本算术，无内置安全风险。但用于生成提示的输入（`{input}`）应进行验证，防止注入攻击（如插入恶意指令影响LLM行为），尽管在当前封闭上下文中风险较低。
+2.  **数据隐私**：若处理的数字输入涉及敏感信息（如源自隐私数据），需注意整个流程（输入、提示构造、LLM API调用、输出）可能产生日志或缓存，需符合相关数据保护规定。
+3.  **模型偏差**：提示中的示例可能隐含特定的解题策略偏好，可能影响LLM对某些数字组合的求解能力或效率。这是基于提示的方法固有的技术债务。
+
+### 部署与运维
+
+1.  **部署形式**：本代码作为核心提示模板库，通常被集成到更大的应用系统中（如Web服务、自动化脚本）。部署单元是包含这些模板的Python模块或配置文件。
+2.  **配置管理**：所有提示字符串均为硬编码。若需调整提示策略（如更改示例、支持更多运算），需要直接修改源代码。建议将提示模板外部化为配置文件或环境变量以提升可维护性。
+3.  **监控与日志**：关键监控点应包括：LLM API的调用延迟、成功率、不同提示模板的触发频率以及最终答案的验证通过率。日志应记录原始输入、使用的提示模板、LLM的原始响应以及最终判断结果，用于分析和优化提示效果。
+
+    

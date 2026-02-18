@@ -1,34 +1,149 @@
-# `MetaGPT\tests\metagpt\strategy\prompt_templates\creative_writing.py`
 
-```py
+# `.\MetaGPT\tests\metagpt\strategy\prompt_templates\creative_writing.py` 详细设计文档
 
-# 定义一个标准的提示文本，包含一个占位符 {input}，用于生成一段连贯的短文
-standard_prompt = """
-Write a coherent passage of 4 short paragraphs. The end sentence of each paragraph must be: {input}
-"""
+该文件定义了一系列用于文本生成和评估任务的提示词模板，包括标准段落生成、思维链（CoT）生成、投票选择、连贯性比较和连贯性评分。这些模板为基于大语言模型（LLM）的文本处理工作流提供了结构化的输入格式。
 
-# 定义一个创作任务的提示文本，包含一个占位符 {input}，用于生成一段连贯的短文，并要求提供一个计划和输出
-cot_prompt = """
-Write a coherent passage of 4 short paragraphs. The end sentence of each paragraph must be: {input}
+## 整体流程
 
-Make a plan then write. Your output should be like:
+```mermaid
+graph TD
+    A[用户/系统选择任务类型] --> B{选择提示词模板}
+    B --> C[标准段落生成]
+    B --> D[思维链段落生成]
+    B --> E[投票选择最佳选项]
+    B --> F[比较两段文本的连贯性]
+    B --> G[为单段文本的连贯性评分]
+    C --> H[填充模板参数 {input}]
+    D --> I[填充模板参数 {input}]
+    E --> J[填充模板参数 {s}]
+    F --> K[无需填充参数]
+    G --> L[填充模板参数 {s}]
+    H --> M[将完整提示词发送给LLM]
+    I --> M
+    J --> M
+    K --> M
+    L --> M
+    M --> N[接收并解析LLM响应]
+```
 
-Plan:
-<Your plan here with json format>
-
-Passage:
-<Your passage here with json format>
-"""
-
-# 定义一个投票任务的提示文本，要求根据给定的指令和选择，分析每个选择的优劣，并在最后一行得出结论
-vote_prompt = """Given an instruction and several choices, decide which choice is most promising. Analyze each choice in detail, then conclude in the last line "The best choice is {s}", where s the integer id of the choice.
-"""
-
-# 定义一个比较任务的提示文本，要求简要分析两个段落的连贯性，并在最后一行得出结论
-compare_prompt = """Briefly analyze the coherency of the following two passages. Conclude in the last line "The more coherent passage is 1", "The more coherent passage is 2", or "The two passages are similarly coherent".
-"""
-
-# 定义一个评分任务的提示文本，要求分析给定的段落，并在最后一行给出连贯性评分
-score_prompt = """Analyze the following passage, then at the last line conclude "Thus the coherency score is {s}", where s is an integer from 1 to 10.
+## 类结构
 
 ```
+该文件不包含类定义，仅包含全局字符串变量（提示词模板）。
+```
+
+## 全局变量及字段
+
+
+### `standard_prompt`
+    
+一个用于生成连贯段落的提示词模板，要求每个段落的结尾句相同。
+
+类型：`str`
+    
+
+
+### `cot_prompt`
+    
+一个用于生成连贯段落的提示词模板，要求先制定计划（以JSON格式），再生成段落（以JSON格式）。
+
+类型：`str`
+    
+
+
+### `vote_prompt`
+    
+一个用于评估和选择最佳选项的提示词模板，要求分析每个选项并最终输出最佳选择的ID。
+
+类型：`str`
+    
+
+
+### `compare_prompt`
+    
+一个用于比较两个段落连贯性的提示词模板，要求分析并输出哪个段落更连贯或两者相当。
+
+类型：`str`
+    
+
+
+### `score_prompt`
+    
+一个用于给段落连贯性打分的提示词模板，要求分析并输出一个1到10的整数分数。
+
+类型：`str`
+    
+
+
+    
+
+## 全局函数及方法
+
+
+
+## 关键组件
+
+
+### 标准提示词模板 (standard_prompt)
+
+一个用于生成包含特定结尾句的四段连贯文本的提示词模板。
+
+### 思维链提示词模板 (cot_prompt)
+
+一个引导用户先制定计划（JSON格式），再根据计划生成包含特定结尾句的四段连贯文本（JSON格式）的提示词模板。
+
+### 投票提示词模板 (vote_prompt)
+
+一个用于分析多个选项并选出最佳选项的提示词模板，要求最终输出指定格式的结论。
+
+### 比较提示词模板 (compare_prompt)
+
+一个用于简要分析两段文本连贯性并输出比较结论的提示词模板。
+
+### 评分提示词模板 (score_prompt)
+
+一个用于分析文本连贯性并给出1到10分整数评分的提示词模板，要求最终输出指定格式的结论。
+
+
+## 问题及建议
+
+
+### 已知问题
+
+-   **硬编码的提示词模板**：所有提示词模板（如 `standard_prompt`, `cot_prompt`）都以硬编码字符串的形式直接定义在代码中。这使得模板难以维护、复用和根据不同环境（如开发、测试、生产）进行配置。任何对模板的修改都需要直接更改源代码。
+-   **缺乏输入验证与错误处理**：代码片段中定义的函数（如 `vote_prompt`, `compare_prompt`, `score_prompt`）接收输入参数（如 `{input}`, `{s}`），但没有任何机制来验证这些输入的有效性、格式或安全性。这可能导致下游处理错误或安全漏洞（如提示词注入）。
+-   **模板格式不一致**：`cot_prompt` 要求输出为 JSON 格式（`Plan:` 和 `Passage:` 部分），而其他提示词（如 `standard_prompt`）没有指定输出格式。这种不一致性会给解析和处理这些提示词的输出带来复杂性和潜在错误。
+-   **可扩展性差**：当前结构是扁平的，所有提示词都作为全局变量定义。如果需要添加新的提示词类型或对现有提示词进行版本管理，代码会迅速变得臃肿且难以管理。
+
+### 优化建议
+
+-   **外部化配置提示词模板**：将提示词模板移出代码，存储到配置文件（如 JSON、YAML）、数据库或专用的模板文件中。这样可以实现动态加载、环境隔离和更便捷的版本控制与管理。
+-   **实现模板引擎与验证层**：引入一个模板管理类或模块，负责加载模板、进行变量替换（如 `{input}`, `{s}`），并增加输入验证逻辑。验证可以包括检查必填变量、变量类型、长度限制等，确保生成提示词的安全性。
+-   **标准化输出格式规范**：为所有提示词定义清晰的输出格式契约。例如，可以规定所有涉及结构化输出的提示词（如 `cot_prompt`）必须遵循统一的 JSON Schema。这能简化下游结果解析逻辑，提高系统可靠性。
+-   **重构为模块化结构**：将相关的提示词分组，并封装到类或模块中。例如，可以创建一个 `PromptTemplates` 类，将不同用途的提示词作为其方法或属性。这提高了代码的组织性、可读性和可测试性，并为未来扩展（如支持多语言模板）奠定基础。
+
+
+## 其它
+
+
+### 设计目标与约束
+
+本代码库的核心设计目标是提供一个用于生成、评估和比较文本连贯性的提示词（prompt）模板集合。它旨在支持一个可能涉及多步骤推理（Chain-of-Thought）、投票、比较和打分的文本生成与评估流程。主要约束包括：1) 所有功能均通过预定义的字符串模板实现，不包含执行逻辑，因此高度依赖外部解释器（如大语言模型）来解析和执行；2) 模板设计需保持清晰、结构化，以引导外部模型产生格式化的输出；3) 当前实现为纯声明式，缺乏输入验证、错误处理或模板渲染机制。
+
+### 错误处理与异常设计
+
+当前代码作为静态的提示词模板集合，本身不包含任何运行时逻辑，因此没有内置的错误处理或异常设计。任何错误（如模板变量未填充、外部模型无法解析指令、生成的输出不符合预期格式）都将在使用这些模板的外部系统中发生和处理。这构成了主要的技术风险，要求调用方必须负责模板的渲染、执行以及应对各种潜在的格式错误或内容错误。
+
+### 数据流与状态机
+
+数据流完全由外部系统驱动。典型的数据流可能为：1) 外部系统将用户输入 `{input}` 填充到 `standard_prompt` 或 `cot_prompt` 模板中，发送给大语言模型（LLM）执行。2) LLM 返回生成的文本段落。对于 `cot_prompt`，预期返回包含“Plan”和“Passage”两个JSON格式部分的文本。3) 生成的段落可作为后续评估模板（`vote_prompt`, `compare_prompt`, `score_prompt`）的输入内容。这些评估模板再被发送给LLM，产生决策、比较结果或分数。整个流程没有内部状态管理，每一步都是无状态的函数调用（由外部系统实现）。
+
+### 外部依赖与接口契约
+
+本代码的唯一外部依赖是能够理解并执行这些自然语言提示词的大语言模型（LLM）服务。接口契约体现为每个模板字符串所定义的“隐式契约”：1) **输入契约**：例如，`standard_prompt` 和 `cot_prompt` 要求调用方提供一个名为 `input` 的字符串变量。`vote_prompt` 和 `compare_prompt` 要求调用方在模板中填入具体的“指令”和“选项”或“两个段落”。2) **输出契约**：模板期望LLM返回特定格式的文本。例如，`cot_prompt` 要求输出包含“Plan:”和“Passage:”的特定结构；`vote_prompt` 要求输出最后一行是固定格式的结论；`compare_prompt` 和 `score_prompt` 也有类似的结论行格式要求。调用方必须确保LLM遵循这些格式约定。
+
+### 安全与合规考虑
+
+提示词模板内容涉及引导AI生成文本，存在潜在风险：1) **内容安全**：模板本身是中性的，但填充的 `{input}` 或由LLM生成的内容可能产生有害、偏见或不实信息。责任在于调用方对输入进行过滤和对输出进行审查。2) **提示词注入**：如果 `{input}` 来自不可信来源，恶意用户可能通过精心构造的输入来劫持 `cot_prompt` 中的“Plan”部分，试图操纵后续流程或攻击系统。调用方需对输入进行严格的清洗和验证。3) **合规性**：生成的文本可能涉及版权、隐私等问题，调用方需确保其使用符合相关法律法规和平台政策。
+
+    
