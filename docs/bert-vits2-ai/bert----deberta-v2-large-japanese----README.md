@@ -28,7 +28,7 @@ Japanese portion of OSCAR.
 
 You can use this model for masked language modeling as follows:
 
-```py
+```python
 from transformers import AutoTokenizer, AutoModelForMaskedLM
 
 tokenizer = AutoTokenizer.from_pretrained('ku-nlp/deberta-v2-large-japanese')

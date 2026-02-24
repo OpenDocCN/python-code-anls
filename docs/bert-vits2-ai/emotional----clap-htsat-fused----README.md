@@ -33,7 +33,7 @@ You can use this model for zero shot audio classification or extracting audio an
 
 ### Using `pipeline`
 
-```py
+```python
 from datasets import load_dataset
 from transformers import pipeline
 
@@ -52,7 +52,7 @@ You can also get the audio and text embeddings using `ClapModel`
 
 ### Run the model on CPU:
 
-```py
+```python
 from datasets import load_dataset
 from transformers import ClapModel, ClapProcessor
 
@@ -68,7 +68,7 @@ audio_embed = model.get_audio_features(**inputs)
 
 ### Run the model on GPU:
 
-```py
+```python
 from datasets import load_dataset
 from transformers import ClapModel, ClapProcessor
 
@@ -86,7 +86,7 @@ audio_embed = model.get_audio_features(**inputs)
 # Citation
 
 If you are using this model for your work, please consider citing the original paper:
-```py
+```
 @misc{https://doi.org/10.48550/arxiv.2211.06687,
   doi = {10.48550/ARXIV.2211.06687},
 

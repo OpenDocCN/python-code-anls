@@ -1,10 +1,8 @@
-# BertVITS2 源码解析
-
 <div align="center">
 
-<img alt="LOGO" src="https://cdn.jsdelivr.net/gh/fishaudio/fish-diffusion@main/images/logo_512x512.png" width="256" height="256" />
+<img alt="LOGO" src="https://avatars.githubusercontent.com/u/122017386" width="256" height="256" />
 
-# Bert-VITS2
+# Bert-VITS2 源码解析
 
 VITS2 Backbone with multilingual bert
 
@@ -12,6 +10,10 @@ For quick guide, please refer to `webui_preprocess.py`.
 
 简易教程请参见 `webui_preprocess.py`。
 
+## 【项目推介】
+# FishAudio下的全新自回归TTS [Fish-Speech](https://github.com/fishaudio/fish-speech)现已可用，效果为目前开源SOTA水准，且在持续维护，推荐使用该项目作为BV2/GSV的替代。本项目短期内不再进行维护。
+## Demo Video: https://www.bilibili.com/video/BV18E421371Q
+## Tech slides Video: https://www.bilibili.com/video/BV1zJ4m1K7cj
 ## 请注意，本项目核心思路来源于[anyvoiceai/MassTTS](https://github.com/anyvoiceai/MassTTS) 一个非常好的tts项目
 ## MassTTS的演示demo为[ai版峰哥锐评峰哥本人,并找回了在金三角失落的腰子](https://www.bilibili.com/video/BV1w24y1c7z9)
 
@@ -26,7 +28,6 @@ For quick guide, please refer to `webui_preprocess.py`.
 ### 严禁用于任何政治相关用途。
 #### Video:https://www.bilibili.com/video/BV1hp4y1K78E
 #### Demo:https://www.bilibili.com/video/BV1TF411k78w
-#### QQ Group：815818430
 ## References
 + [anyvoiceai/MassTTS](https://github.com/anyvoiceai/MassTTS)
 + [jaywalnut310/vits](https://github.com/jaywalnut310/vits)

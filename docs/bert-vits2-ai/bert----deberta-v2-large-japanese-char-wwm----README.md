@@ -30,7 +30,7 @@ This model is trained with character-level tokenization and whole word masking.
 
 You can use this model for masked language modeling as follows:
 
-```py
+```python
 from transformers import AutoTokenizer, AutoModelForMaskedLM
 tokenizer = AutoTokenizer.from_pretrained('ku-nlp/deberta-v2-large-japanese-char-wwm')
 model = AutoModelForMaskedLM.from_pretrained('ku-nlp/deberta-v2-large-japanese-char-wwm')
