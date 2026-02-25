@@ -1,182 +1,205 @@
-# BitsAndBytes 源码解析
+# bitsandbytes 源码解析
 
-# bitsandbytes
+<p align="center"><img src="https://avatars.githubusercontent.com/u/175231607?s=200&v=4" alt=""></p>
+<h1 align="center">bitsandbytes</h1>
+<p align="center">
+    <a href="https://github.com/bitsandbytes-foundation/bitsandbytes/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/bitsandbytes-foundation/bitsandbytes.svg?color=blue"></a>
+    <a href="https://pepy.tech/project/bitsandbytes"><img alt="Downloads" src="https://static.pepy.tech/badge/bitsandbytes/month"></a>
+    <a href="https://github.com/bitsandbytes-foundation/bitsandbytes/actions/workflows/tests-nightly.yml"><img alt="Nightly Unit Tests" src="https://img.shields.io/github/actions/workflow/status/bitsandbytes-foundation/bitsandbytes/tests-nightly.yml?logo=github&label=Nightly%20Tests"></a>
+    <a href="https://github.com/bitsandbytes-foundation/bitsandbytes/releases"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/bitsandbytes-foundation/bitsandbytes"></a>
+    <a href="https://pypi.org/project/bitsandbytes/"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/bitsandbytes"></a>
+</p>
 
-The bitsandbytes is a lightweight wrapper around CUDA custom functions, in particular 8-bit optimizers, matrix multiplication (LLM.int8()), and quantization functions.
+`bitsandbytes` enables accessible large language models via k-bit quantization for PyTorch. We provide three main features for dramatically reducing memory consumption for inference and training:
 
+* 8-bit optimizers uses block-wise quantization to maintain 32-bit performance at a small fraction of the memory cost.
+* LLM.int8() or 8-bit quantization enables large language model inference with only half the required memory and without any performance degradation. This method is based on vector-wise quantization to quantize most features to 8-bits and separately treating outliers with 16-bit matrix multiplication.
+* QLoRA or 4-bit quantization enables large language model training with several memory-saving techniques that don't compromise performance. This method quantizes a model to 4-bits and inserts a small set of trainable low-rank adaptation (LoRA) weights to allow training.
 
+The library includes quantization primitives for 8-bit & 4-bit operations, through `bitsandbytes.nn.Linear8bitLt` and `bitsandbytes.nn.Linear4bit` and 8-bit optimizers through `bitsandbytes.optim` module.
 
-Resources:
-- [8-bit Optimizer Paper](https://arxiv.org/abs/2110.02861) --  [Video](https://www.youtube.com/watch?v=IxrlHAJtqKE) -- [Docs](https://bitsandbytes.readthedocs.io/en/latest/)
+## System Requirements
+bitsandbytes has the following minimum requirements for all platforms:
 
-- [LLM.int8() Paper](https://arxiv.org/abs/2208.07339) -- [LLM.int8() Software Blog Post](https://huggingface.co/blog/hf-bitsandbytes-integration) -- [LLM.int8() Emergent Features Blog Post](https://timdettmers.com/2022/08/17/llm-int8-and-emergent-features/)
+* Python 3.10+
+* [PyTorch](https://pytorch.org/get-started/locally/) 2.3+
+  * _Note: While we aim to provide wide backwards compatibility, we recommend using the latest version of PyTorch for the best experience._
 
-## TL;DR
-**Requirements**
-Python >=3.8. Linux distribution (Ubuntu, MacOS, etc.) + CUDA > 10.0.
+#### Accelerator support:
 
-(Deprecated: CUDA 10.0 is deprecated and only CUDA >= 11.0) will be supported with release 0.39.0)
+<small>Note: this table reflects the status of the current development branch. For the latest stable release, see the
+[document in the 0.49.2 tag](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/0.49.2/README.md#accelerator-support).
+</small>
 
-**Installation**:
+##### Legend:
+🚧 = In Development,
+〰️ = Partially Supported,
+✅ = Supported,
+🐢 = Slow Implementation Supported,
+❌ = Not Supported
 
-``pip install bitsandbytes``
+<table>
+  <thead>
+    <tr>
+      <th>Platform</th>
+      <th>Accelerator</th>
+      <th>Hardware Requirements</th>
+      <th>LLM.int8()</th>
+      <th>QLoRA 4-bit</th>
+      <th>8-bit Optimizers</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="6">🐧 <strong>Linux, glibc >= 2.24</strong></td>
+    </tr>
+    <tr>
+      <td align="right">x86-64</td>
+      <td>◻️ CPU</td>
+      <td>Minimum: AVX2<br>Optimized: AVX512F, AVX512BF16</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟩 NVIDIA GPU <br><code>cuda</code></td>
+      <td>SM60+ minimum<br>SM75+ recommended</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟥 AMD GPU <br><code>cuda</code></td>
+      <td>
+        CDNA: gfx90a, gfx942, gfx950<br>
+        RDNA: gfx1100, gfx1101, gfx1150, gfx1151, gfx1200, gfx1201
+      </td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟦 Intel GPU <br><code>xpu</code></td>
+      <td>
+        Data Center GPU Max Series<br>
+        Arc A-Series (Alchemist)<br>
+        Arc B-Series (Battlemage)
+      </td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>〰️</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟪 Intel Gaudi <br><code>hpu</code></td>
+      <td>Gaudi2, Gaudi3</td>
+      <td>✅</td>
+      <td>〰️</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td align="right">aarch64</td>
+      <td>◻️ CPU</td>
+      <td></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟩 NVIDIA GPU <br><code>cuda</code></td>
+      <td>SM75+</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td colspan="6">🪟 <strong>Windows 11 / Windows Server 2022+</strong></td>
+    </tr>
+    <tr>
+      <td align="right">x86-64</td>
+      <td>◻️ CPU</td>
+      <td>AVX2</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟩 NVIDIA GPU <br><code>cuda</code></td>
+      <td>SM60+ minimum<br>SM75+ recommended</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>🟦 Intel GPU <br><code>xpu</code></td>
+      <td>
+        Arc A-Series (Alchemist) <br>
+        Arc B-Series (Battlemage)
+      </td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>〰️</td>
+    </tr>
+    <tr>
+      <td colspan="6">🍎 <strong>macOS 14+</strong></td>
+    </tr>
+    <tr>
+      <td align="right">arm64</td>
+      <td>◻️ CPU</td>
+      <td>Apple M1+</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>⬜ Metal <br><code>mps</code></td>
+      <td>Apple M1+</td>
+      <td>🐢</td>
+      <td>🐢</td>
+      <td>❌</td>
+  </tbody>
+</table>
 
-In some cases it can happen that you need to compile from source. If this happens please consider submitting a bug report with `python -m bitsandbytes` information. What now follows is some short instructions which might work out of the box if `nvcc` is installed. If these do not work see further below.
+## :book: Documentation
+* [Official Documentation](https://huggingface.co/docs/bitsandbytes/main)
+* 🤗 [Transformers](https://huggingface.co/docs/transformers/quantization/bitsandbytes)
+* 🤗 [Diffusers](https://huggingface.co/docs/diffusers/quantization/bitsandbytes)
+* 🤗 [PEFT](https://huggingface.co/docs/peft/developer_guides/quantization#quantize-a-model)
 
-Compilation quickstart:
-```py
-git clone https://github.com/timdettmers/bitsandbytes.git
-cd bitsandbytes
+## :heart: Sponsors
+The continued maintenance and development of `bitsandbytes` is made possible thanks to the generous support of our sponsors. Their contributions help ensure that we can keep improving the project and delivering valuable updates to the community.
 
-# CUDA_VERSIONS in {110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122}
-# make argument in {cuda110, cuda11x, cuda12x}
-# if you do not know what CUDA you have, try looking at the output of: python -m bitsandbytes
-CUDA_VERSION=117 make cuda11x
-python setup.py install
-```
-
-**Using Int8 inference with HuggingFace Transformers**
-
-```py
-from transformers import AutoModelForCausalLM
-model = AutoModelForCausalLM.from_pretrained(
-  'decapoda-research/llama-7b-hf',
-  device_map='auto',
-  load_in_8bit=True,
-  max_memory={
-    i: f'{int(torch.cuda.mem_get_info(i)[0]/1024**3)-2}GB'
-    for i in range(torch.cuda.device_count())
-  }
-)
-```
-
-A more detailed example, can be found in [examples/int8_inference_huggingface.py](examples/int8_inference_huggingface.py).
-
-**Using 8-bit optimizer**:
-1. Comment out optimizer: ``#torch.optim.Adam(....)``
-2. Add 8-bit optimizer of your choice ``bnb.optim.Adam8bit(....)`` (arguments stay the same)
-3. Replace embedding layer if necessary: ``torch.nn.Embedding(..) -> bnb.nn.Embedding(..)``
-
-
-**Using 8-bit Inference**:
-1. Comment out torch.nn.Linear: ``#linear = torch.nn.Linear(...)``
-2. Add bnb 8-bit linear light module: ``linear = bnb.nn.Linear8bitLt(...)`` (base arguments stay the same)
-3. There are two modes:
-   - Mixed 8-bit training with 16-bit main weights. Pass the argument ``has_fp16_weights=True`` (default)
-   - Int8 inference. Pass the argument ``has_fp16_weights=False``
-4. To use the full LLM.int8() method, use the ``threshold=k`` argument. We recommend ``k=6.0``.
-```py
-# LLM.int8()
-linear = bnb.nn.Linear8bitLt(dim1, dim2, bias=True, has_fp16_weights=False, threshold=6.0)
-# inputs need to be fp16
-out = linear(x.to(torch.float16))
-```
-
-
-## Features
-- 8-bit Matrix multiplication with mixed precision decomposition
-- LLM.int8() inference
-- 8-bit Optimizers: Adam, AdamW, RMSProp, LARS, LAMB, Lion (saves 75% memory)
-- Stable Embedding Layer: Improved stability through better initialization, and normalization
-- 8-bit quantization: Quantile, Linear, and Dynamic quantization
-- Fast quantile estimation: Up to 100x faster than other algorithms
-
-## Requirements & Installation
-
-Requirements: anaconda, cudatoolkit, pytorch
-
-Hardware requirements:
- - LLM.int8(): NVIDIA Turing (RTX 20xx; T4) or Ampere GPU (RTX 30xx; A4-A100); (a GPU from 2018 or newer).
- - 8-bit optimizers and quantization: NVIDIA Kepler GPU or newer (>=GTX 78X).
-
-Supported CUDA versions: 10.2 - 12.2
-
-The bitsandbytes library is currently only supported on Linux distributions. Windows is not supported at the moment.
-
-The requirements can best be fulfilled by installing pytorch via anaconda. You can install PyTorch by following the ["Get Started"](https://pytorch.org/get-started/locally/) instructions on the official website.
-
-To install run:
-
-``pip install bitsandbytes``
-
-## Using bitsandbytes
-
-### Using Int8 Matrix Multiplication
-
-For straight Int8 matrix multiplication with mixed precision decomposition you can use ``bnb.matmul(...)``. To enable mixed precision decomposition, use the threshold parameter:
-```py
-bnb.matmul(..., threshold=6.0)
-```
-
-For instructions how to use LLM.int8() inference layers in your own code, see the TL;DR above or for extended instruction see [this blog post](https://huggingface.co/blog/hf-bitsandbytes-integration).
-
-### Using the 8-bit Optimizers
-
-With bitsandbytes 8-bit optimizers can be used by changing a single line of code in your codebase. For NLP models we recommend also to use the StableEmbedding layers (see below) which improves results and helps with stable 8-bit optimization.  To get started with 8-bit optimizers, it is sufficient to replace your old optimizer with the 8-bit optimizer in the following way:
-```py
-import bitsandbytes as bnb
-
-# adam = torch.optim.Adam(model.parameters(), lr=0.001, betas=(0.9, 0.995)) # comment out old optimizer
-adam = bnb.optim.Adam8bit(model.parameters(), lr=0.001, betas=(0.9, 0.995)) # add bnb optimizer
-adam = bnb.optim.Adam(model.parameters(), lr=0.001, betas=(0.9, 0.995), optim_bits=8) # equivalent
-
-
-torch.nn.Embedding(...) ->  bnb.nn.StableEmbedding(...) # recommended for NLP models
-```
-
-Note that by default all parameter tensors with less than 4096 elements are kept at 32-bit even if you initialize those parameters with 8-bit optimizers. This is done since such small tensors do not save much memory and often contain highly variable parameters (biases) or parameters that require high precision (batch norm, layer norm). You can change this behavior like so:
-```py
-# parameter tensors with less than 16384 values are optimized in 32-bit
-# it is recommended to use multiplies of 4096
-adam = bnb.optim.Adam8bit(model.parameters(), min_8bit_size=16384)
-```
-
-### Change Bits and other Hyperparameters for Individual Parameters
-
-If you want to optimize some unstable parameters with 32-bit Adam and others with 8-bit Adam, you can use the `GlobalOptimManager`. With this, we can also configure specific hyperparameters for particular layers, such as embedding layers. To do that, we need two things: (1) register the parameter while they are still on the CPU, (2) override the config with the new desired hyperparameters (anytime, anywhere). See our [guide](howto_config_override.md) for more details
-
-### Fairseq Users
-
-To use the Stable Embedding Layer, override the respective `build_embedding(...)` function of your model. Make sure to also use the `--no-scale-embedding` flag to disable scaling of the word embedding layer (nor replaced with layer norm). You can use the optimizers by replacing the optimizer in the respective file (`adam.py` etc.).
-
-## Release and Feature History
-
-For upcoming features and changes and full history see [Patch Notes](CHANGELOG.md).
-
-## Errors
-
-1. RuntimeError: CUDA error: no kernel image is available for execution on the device. [Solution](errors_and_solutions.md#No-kernel-image-available)
-2. __fatbinwrap_.. [Solution](errors_and_solutions.md#fatbinwrap_)
-
-## Compile from source
-To compile from source, you need an installation of CUDA. If `nvcc` is not installed, you can install the CUDA Toolkit with nvcc through the following commands.
-
-```py
-wget https://raw.githubusercontent.com/TimDettmers/bitsandbytes/main/install_cuda.sh
-# Syntax cuda_install CUDA_VERSION INSTALL_PREFIX EXPORT_TO_BASH
-#   CUDA_VERSION in {110, 111, 112, 113, 114, 115, 116, 117, 118, 120, 121, 122}
-#   EXPORT_TO_BASH in {0, 1} with 0=False and 1=True
-
-# For example, the following installs CUDA 11.7 to ~/local/cuda-11.7 and exports the path to your .bashrc
-bash install_cuda.sh 117 ~/local 1
-```
-
-To use a specific CUDA version just for a single compile run, you can set the variable `CUDA_HOME`, for example the following command compiles `libbitsandbytes_cuda117.so` using compiler flags for cuda11x with the cuda version at `~/local/cuda-11.7`:
-
-``CUDA_HOME=~/local/cuda-11.7 CUDA_VERSION=117 make cuda11x``
-
-For more detailed instruction, please follow the [compile_from_source.md](compile_from_source.md) instructions.
+<kbd><a href="https://hf.co" target="_blank"><img width="100" src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" alt="Hugging Face"></a></kbd>
+&nbsp;
+<kbd><a href="https://intel.com" target="_blank"><img width="100" src="https://avatars.githubusercontent.com/u/17888862?s=100&v=4" alt="Intel"></a></kbd>
 
 ## License
-
-The majority of bitsandbytes is licensed under MIT, however portions of the project are available under separate license terms: Pytorch is licensed under the BSD license.
-
-We thank Fabio Cannizzo for his work on [FastBinarySearch](https://github.com/fabiocannizzo/FastBinarySearch) which we use for CPU quantization.
+`bitsandbytes` is MIT licensed.
 
 ## How to cite us
-If you found this library and found LLM.int8() useful, please consider citing our work:
+If you found this library useful, please consider citing our work:
 
-```py
+### QLoRA
+
+```bibtex
+@article{dettmers2023qlora,
+  title={Qlora: Efficient finetuning of quantized llms},
+  author={Dettmers, Tim and Pagnoni, Artidoro and Holtzman, Ari and Zettlemoyer, Luke},
+  journal={arXiv preprint arXiv:2305.14314},
+  year={2023}
+}
+```
+
+### LLM.int8()
+
+```bibtex
 @article{dettmers2022llmint8,
   title={LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale},
   author={Dettmers, Tim and Lewis, Mike and Belkada, Younes and Zettlemoyer, Luke},
@@ -185,9 +208,9 @@ If you found this library and found LLM.int8() useful, please consider citing ou
 }
 ```
 
-For 8-bit optimizers or quantization routines, please consider citing the following work:
+### 8-bit Optimizers
 
-```py
+```bibtex
 @article{dettmers2022optimizers,
   title={8-bit Optimizers via Block-wise Quantization},
   author={Dettmers, Tim and Lewis, Mike and Shleifer, Sam and Zettlemoyer, Luke},
