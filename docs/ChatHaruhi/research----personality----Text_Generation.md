@@ -120,7 +120,7 @@ learning. arXiv preprint arXiv:2112.08633.
 
 其中背景描述为:
 
-```py
+```
 Assuming you are a seasoned psychologist, you are evaluating the degree of openness in a person's language response, categorize each sentence into high or low openness.
 Openness involves six facets, or dimensions: active imagination (fantasy), aesthetic sensitivity, attentiveness to inner feelings, preference for variety (adventurousness), intellectual curiosity, and challenging authority (psychological liberalism).
 ```
@@ -129,7 +129,7 @@ Openness involves six facets, or dimensions: active imagination (fantasy), aesth
 
 系统指令为
 
-```py
+```
 For each input text, determine whether it belongs to a population with high openness or low openness, and provide the reasoning behind the decision. The output should be in the format of "trait-high/low" (e.g. "fantasy-high" ) ,
 if the text is an advertisment or a fact (without personal thinking of feeling), output category with neutral
 ```
@@ -187,25 +187,25 @@ if the text is an advertisment or a fact (without personal thinking of feeling),
 
 低开放性例子
 
-```py
+```
 {"text":"我好向往个种生活模式吖..每日可以接触唔同国家噶人..又可以学习..自由又新鲜..独立,咩都要靠自己..或者会好辛苦..但系生活会逼住你坚持落去...凭自己努力得翻来噶野..自己会用得安乐..不过有好多野..空想都总系美好的..但系对于而家噶我其实好乐意去一试.."}
 ```
 
 输出
 
-```py
+```
 {"keyword": ["向往", "接触", "学习", "自由", "新鲜" , "独立", "多野", "空想", "美好", "乐意"]}
 ```
 
 低开放性例子
 
-```py
+```
 {"text":"渐渐的 不大喜欢别人像我诉苦感情上的事 不是不想听 只是听多了也就觉得麻木了 只是不想让曾经的淡淡的忧伤重回心头 只是连我自己都觉得有些安慰的话说出口太假了 只是想简简单单的过属于自己的生活"}
 ```
 
 输出
 
-```py
+```
 {"keyword": ["不大喜欢", "诉苦", "不想听", "麻木", "忧伤" , "安慰", "太假了", "只想", "简简单单", "自己"]}
 ```
 
@@ -289,7 +289,7 @@ if the text is an advertisment or a fact (without personal thinking of feeling),
 
 我们希望对量表中的基准问题进行一些修改，是的这些问题看起来像正常聊天中出现的问题。但是与此同时，我们又希望修改后的问题，仍然能够比较好的去测量开放性的特定维度。于是我们设计了下面的prompt
 
-```py
+```
 你扮演一个资深的心理学家
 
 我正在设计一个心理学的实验，我希望通过访谈，去评估被试在大五人格中 Openness的程度，注意到openness可以被分为Fantasy, Aesthetics, Feelings, Actions, Ideas和Values六个维度。六个维度的解释如下
@@ -318,7 +318,7 @@ Values(Openness to Values). People who are high in Openness to Values are libera
 
 对于这几个问题，GPT的评估如下
 
-```py
+```
 评估：
 1. 可以正确测试出被试在Openness to Actions方面的程度。如果被试回答"是的，我经常尝试学习新技能"那就意味着被试在Openness to Actions方面得分较高。
 2. 这个问题并不能准确测试出被试的Openness程度。因为这个问题更多的是测试被试的行为倾向而不是Openness，所以需要重新设计问题。
@@ -332,7 +332,7 @@ Values(Openness to Values). People who are high in Openness to Values are libera
 
 自动评估的方式和我们刚才问题评估的prompt很相似，只有尾部的问题设计有一些不同。其组织方式仍然是<系统指令>-<6因素开放性的定义>-<后续系统指令>-<实际的对话>。其中后面的几个部分如下:
 
-```py
+```
 我（Q）邀请了一个被试(A)，和她进行了如下对话
 
 Q:「我最近去体验了钢琴课。你最近有没有学一些新的技能呢？」
@@ -347,7 +347,7 @@ A:「美？对我来说，美就是那些独特而又充满创意的事物，比
 
 这里GPT的回答如下
 
-```py
+```
 根据春日提供的回答，她表现出了高开放性人格的特征，特别是在Fantasy、Actions以及Ideas这几个维度上。她描述了自己充满创意和想象力，热衷于探索未知领域并实现自己的奇思妙想。这表明她在Fantasy和Ideas维度上得分较高。她还表达了对学习新技能的兴趣和热情，喜欢尝试新事物，这表明她在Actions维度上得分较高。因此，根据她的回答，春日属于高开放性人格。
 ```
 

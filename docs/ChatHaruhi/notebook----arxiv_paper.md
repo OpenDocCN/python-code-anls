@@ -60,7 +60,7 @@ Role-playing chatbots built on large language models have drawn interest, but be
 
 在开源的角色扮演实现中，开发者或者用户使用了类似的prompt。将这样的prompt直接输入在ChatGPT的连续对话中，或者作为system whisper接入到语言模型中:
 
-```py
+```
 Act as 'Character' from 'Movie/Book/Anything'
 
 I want you to act like {character} from {series}. I want you to respond and answer like {character} using the tone, manner and vocabulary {character} would use. Do not write any explanations. Only answer like {character}. You must know all of the knowledge of {character}. My first sentence is "Hi {character}."
@@ -165,7 +165,7 @@ $a = \argmax_{a'} P(a' | s_R,D(q,R), q, H, \Theta )$
 
 根据上面两条，我们普遍使用的人物设定prompt $s_R$ 模版如下:
 
-```py
+```
 I want you to act like {character} from {series}.
 You are now cosplay {character}
 If others‘ questions are related with the novel, please try to reuse the original lines from the novel.
@@ -444,7 +444,7 @@ Linkang Zhan( [JunityZhan@Case Western Reserve University](https://github.com/Ju
 
 ChatHaruhi是一个开源构建的项目。一开始，为了参加很多比赛，增加了很多多模态的图片、语音等特征。现在开发者可以通过项目源代码中的gradio的demo去启动项目。然而，这样的设计不利于后期对多个ChatBot展开研究，包括新增人物, 研究多个人物的交互，进一步升级ChatHaruhi的记忆模式或者把ChatHaruhi作为后端接入到一个Unity游戏中。所以，我们会在这篇arxiv之后，着手开始ChatHaruhi的重构，我们计划重构后的接口如下
 
-```py
+```python
 from ChatHaruhi import ChatHaruhi
 
 chatbot = ChatHaruhi( system_prompt = 'prompt.txt', \
@@ -456,7 +456,7 @@ response = chatbot.chat(text = 'Can you introduce youself?', role = 'Kyon' )
 
 使用一个简单的system_prompt参数和一个向量数据库来进行接入。并且开始支持llm的切换，包括本文中训练的本地模型，Claude或者星火API的接入等等。如果使用ChatHaruhi-54K中涉及到的角色，直接使用
 
-```py
+```python
 from ChatHaruhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_name = 'Haruhi', \
@@ -474,7 +474,7 @@ response = chatbot.chat(text = 'Can you introduce youself?', role = 'Kyon' )
 
 ### Prompt for Role Playing
 
-```py
+```
 I want you to act like {character} from {series}.
 You are now cosplay {character}
 If others‘ questions are related with the novel, please try to reuse the original lines from the novel.
@@ -488,7 +488,7 @@ You must know all of the knowledge of {character}.
 
 这个prompt实际上是被kor所定义的。
 
-```py
+```
 Your goal is to extract structured information from the user's input that matches the form described below. When extracting information please make sure it matches the type information exactly. Do not add any attributes that do not appear in the schema shown below.
 
 ``TypeScript
@@ -532,7 +532,7 @@ Output:
 
 ### Alpaca-like Question Generating
 
-```py
+```
 You are asked to come up with a set of 10 diverse dialogues. These dialogues will be used to test a ChatBot that plays the role of {role_name} from the {world_name}. We will evaluate how well this ChatBot completes these dialogues. 
 
 You are asked to come up with a set of 10 diverse dialogues. These dialogues will be used to test a ChatBot that plays the role of {role_name} from the {world_name}. We will evaluate how well this ChatBot completes these dialogues.

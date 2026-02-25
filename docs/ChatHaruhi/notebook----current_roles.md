@@ -6,7 +6,7 @@
 
 使用这种方式调用
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_name = 'haruhi', llm = 'openai')
@@ -17,7 +17,7 @@ print(response)
 
 ChatHaruhi-54K中支持的32个角色可以在role_name_to_file中看到。目前是支持这些
 
-```py
+```python
 
 role_name_Haruhiu = {'汤师爷': 'tangshiye', 'tangshiye': 'tangshiye', 'Tangshiye': 'tangshiye', 
                      '慕容复': 'murongfu', 'murongfu': 'murongfu', 'Murongfu': 'murongfu', 
@@ -55,7 +55,7 @@ role_name_Haruhiu = {'汤师爷': 'tangshiye', 'tangshiye': 'tangshiye', 'Tangsh
 
 使用这种方式调用
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_from_hf = 'silk-road/linghuchong', \
@@ -89,7 +89,7 @@ print(response)
 
 这些角色可以通过
 
-```py
+```python
 chatbot = ChatHaruhi( role_from_hf = 'silk-road/ChatHaruhi-from-RoleLLM/Jack-Sparrow', \
                       llm = 'openai',
                       embedding = 'bge_en')

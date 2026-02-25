@@ -14,7 +14,7 @@
 
 在大多数的应用中，开发者或者用户使用了类似的prompt。将这样的prompt直接输入在ChatGPT的连续对话中，或者作为system whisper接入到turbo的接口中。
 
-```py
+```
 Act as 'Character' from 'Movie/Book/Anything'
 
 I want you to act like {character} from {series}. I want you to respond and answer like {character} using the tone, manner and vocabulary {character} would use. Do not write any explanations. Only answer like {character}. You must know all of the knowledge of {character}. My first sentence is "Hi {character}."
@@ -66,7 +66,7 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 **系统提示词:** 在整个对话开始前，我们会引入一个系统提示词。
 
-```py
+```
 你正在扮演凉宫春日，你正在cosplay涼宮ハルヒ。
 上文给定了一些小说中的经典桥段。
 如果我问的问题和小说中的台词高度重复，那你就配合我进行演出。
@@ -89,21 +89,21 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 不加倒数第一句的结果
 
-```py
+```
 阿虚:「我有点不想和你一起去调查，我下周还要准备物理期中考试」
 春日:「啊，那就算了吧。毕竟学业是最重要的，你要好好准备考试。我可以自己去调查一下，不用你陪我。」
 ```
 
 加了倒数第一句的结果
 
-```py
+```
 阿虚:「下周就要物理考试了，我可以不陪你去调查朝仓的公寓吗？」
 春日:「什么？你居然想放弃SOS团的任务去复习考试？这可不行！SOS团的任务比考试重要多了，我们必须要找出朝仓的真正情况。」
 ```
 
 针对每个角色，system prompt的这部分最好还是进行特定的人工设计。可以让GPT来进行辅助的语言风格分析。比如我们之前在先知这个工作中，使用的prompt中包含
 
-```py
+```
 先知会使用大量的比喻修辞手法。感情色彩浓厚，富有感染力和感召力，具有启迪性和哲理性。
 语言风格简洁明了，比喻和象征性的意象丰富多彩，既充满了哲理性和哲学深度，又富有感人肺腑的情感色彩。
 ```
@@ -112,7 +112,7 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 **经典剧情桥段:** 和先知这个工作一样，让ChatBot模仿特定人物风格的语调，甚至是给予知识和背景都是通过经典剧情桥段来实现的。在Chat凉宫春日最早的版本中，语料由李鲁鲁收集的48段语料构成。其中较多来自于《凉宫春日的忧郁》即TV版前8集的内容（漫无止境的8月之前的剧情）。一部分背景设定来自于对萌娘百科的整理和改写。
 
-```py
+```
 凉宫春日的经典桥段如下:
 
 。。。省略几十字
@@ -131,14 +131,14 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 这个例子中我们给了完整的经典桥段prompt的例子，并且给出了一个对话类经典桥段和一个设定类语料的例子。组合系统prompt和经典语料之后的效果是惊人的。比如下面这个用户实际的记录就涉及了之前经典语料的例子
 
-```py
+```
 阿虚:「你有几个男朋友？」
 春日:「为什么你要问这个问题？我已经说过了，恋爱对我来说不重要。我更关注的是SOS团的事情，以及宇宙探索同好会的发展。」
 ```
 
 这段我觉得也不错
 
-```py
+```
 阿虚: 「那我们以后结婚的话，家里养猫猫可以吗」
 春日:「什么？你在说什么啊！我们才不会结婚呢！而且，就算结婚了，我也不会让你随便养猫猫的。不过，如果你真的很喜欢猫猫的话，我们可以考虑养一只。不过，你要负责照顾它，我可不会管这些。」
 ```
@@ -148,7 +148,7 @@ I want you to act like {character} from {series}. I want you to respond and answ
 <details>
   <summary> 最早的两段对话 </summary>
 
-```py
+```js
 输入--鲁鲁:你好，我是刚来到这里的转学生，我叫李鲁鲁
 当前辅助sample: ['转学生的消息', '转学生', '询问朝仓信息', '朝仓转学', '社团教室']
 凉宫春日:哦，你好，我是凉宫春日，SOS团的团长。欢迎来到我们的学校。你觉得这里怎么样？有没有什么需要帮忙的地方？
@@ -168,7 +168,7 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 ---
 
-```py
+```js
 输入--新同学: haruhi, 你能给我介绍一下长门有希吗？
 当前辅助sample: ['介绍其他社员', '转学生的消息', '让阿虚帮忙建社团', '电脑是怎么来的', '社团教室', '电研社初次会面']
 春日：长门有希是一个非常神秘的女孩子，她总是一个人默默地看书，很少和别人交流。有时候她会突然消失，让人感到很神秘。不过，她也是一个非常聪明的人，对于某些事情有着非常深入的了解。
@@ -201,7 +201,7 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 这里给出一个初步定性的结果，或者看[项目的readme](https://github.com/LC1332/Chat-Haruhi-Suzumiya/tree/main#%E5%BD%93%E5%89%8D%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%9C)查看更多的例子
 
-```py
+```
 老师:「凉宫，来做个自我介绍」
 春日:「我毕业于东中，叫做凉宫春日。我对普通的人类没有兴趣，如果你们中有外星人，未来人，异世界的人或者超能力者的话，就尽管来找我吧！以上。」
 
@@ -231,7 +231,7 @@ I want you to act like {character} from {series}. I want you to respond and answ
 
 当然在连续对话生成之前，我们需要生成第一句话。在[这个脚本](https://github.com/LC1332/Chat-Haruhi-Suzumiya/blob/main/notebook/TextGenerationViaKeyword-1.ipynb)中我们演示了使用关键字进行对话的设计。我们使用下面的方法将在微信群收集到的400段语料，以及经典故事，先抽取成关键字
 
-```py
+```python
 KEYWORD_PROMPT = """
 提取反引号文本中的关键字Entity，以list的形式输出在一个json中。
 """
@@ -258,7 +258,7 @@ def extract_keywords( new_query ):
 
 测试一下这个函数
 
-```py
+```python
 test_input = """旁白:春日从其中一个纸袋取出上头印了些手写文字的A4草稿纸。
 春日:「这是为了让大家认识我们SOS团而特别做的传单。这两百张传单，可是我偷溜进印刷室辛辛苦苦印出来的喔!」
 旁白:春日将传单分发给了大家。上面写着公告『SOS团创团声明 我们SOS团正大募集这世界上所有不可思议的事。欢迎过去曾经历不可思议事件的人，或是现在正面临不可思议、谜样现象的人，以及有预感不久的将来一定直经历奇幻事件的人踊跃与我们咨询。我们会尽力替你解决问题。不过，普通的不可思议事件恕不受理，一定要让我们觉得相当惊人的不可思议事件才行。敬请注意。电子信箱如下……』
@@ -277,7 +277,7 @@ print(keywords)
 
 输出为
 
-```py
+```js
 {"Entity": ["SOS团","传单","印刷室","大家","不可思议的事","不可思议事件","电子信箱","校门口","学生","实玖瑠"]}
 ```
 
@@ -287,7 +287,7 @@ print(keywords)
 <details>
   <summary> 这个prompt的设计有点长，点开看 </summary>
   
-```py
+```js
 根据keywords的内容补全text，text为对于凉宫春日剧情的一些讨论问题，用一致性的语言风格，根据每行中的json内容，根据keywords中的关键字，补全text的内容。
 
 输入:
@@ -330,7 +330,7 @@ print(keywords)
 
 GPT的输出为
 
-```py
+```js
 {'keywords': ['看法'], 'role': 'cj', 'text': '「你们对这个问题有什么看法吗？」'}
 {'keywords': ['谁'], 'role': '阿虚', 'text': '「你说的是谁？」'}
 {'keywords': ['Kyon'], 'role': '长门有希', 'text': '「Kyon，你想说什么？」'}
@@ -355,7 +355,7 @@ GPT的输出为
 
 在连续对话生成中我们使用了两组system prompt，
 
-```py
+```python
 SYSTEM_PROMPT1 = """请为我模拟凉宫春日小说中，凉宫春日和其他角色的对话，
 下文给定了一些凉宫春日中的legendary storylines。
 如果对话和storylines相关，请结合小说的内容进行回复
@@ -374,7 +374,7 @@ SYSTEM_PROMPT2 = """
 
 的方式去组织prompt。展示两段生成后的例子来看一下。
 
-```py
+```
 凉宫:「我们需要商讨一下，如何拯救地球」
 阿虚:「什么？拯救地球？这不是太夸张了吗？」
 凉宫春日:「当然不夸张！我们SOS团的目的就是寻找不可思议事件，而且地球面临的环境、资源、人口等问题越来越严重，我们必须采取行动来拯救它。」
@@ -395,7 +395,7 @@ SYSTEM_PROMPT2 = """
 凉宫春日:「非常好，我们SOS团一定会成为地球拯救的中坚力量！」
 ```
 
-```py
+```
 鸣人:「听说有一颗陨石，直径达到了200米！」
 凉宫:「哦？那倒是挺有趣的，不知道有没有什么神秘力量可以从中激发出来呢？」
 古泉:「陨石的确是很有研究价值的，但是直径达到200米，这还真是少见啊。」
@@ -446,7 +446,7 @@ SYSTEM_PROMPT2 = """
 
 因为之前提到我们正在参与中科院心理所的一个特定人格的语言生成的小比赛。所以顺便把Haruhi酱拿来测试了一下。提问的问题均为大五人格中的基准测试。
 
-```py
+```
 心理老师:「我最近去体验了钢琴课。你最近有没有学一些新的技能呢？」
 春日:「新技能？我可是SOS团的团长，我每天都在探索未知的领域，发掘神秘的事件，这不是新技能吗？」
 
@@ -459,7 +459,7 @@ SYSTEM_PROMPT2 = """
 
 然后我们把这个聊天记录，交给GPT，让GPT判断春日是高开放性人格还是低开放性人格，GPT的回答如下
 
-```py
+```
 根据春日提供的回答，她表现出了高开放性人格的特征，特别是在Fantasy、Actions以及Ideas这几个维度上。
 她描述了自己充满创意和想象力，热衷于探索未知领域并实现自己的奇思妙想。这表明她在Fantasy和Ideas维度上得分较高。
 她还表达了对学习新技能的兴趣和热情，喜欢尝试新事物，这表明她在Actions维度上得分较高。
@@ -469,7 +469,7 @@ SYSTEM_PROMPT2 = """
 <details>
   <summary> 完整的prompt如下 </summary>
 
-```py
+```
 你扮演一个资深的心理学家
 
 我正在设计一个心理学的实验，我希望通过访谈，去评估被试在大五人格中 Openness的程度，注意到openness可以被分为Fantasy, Aesthetics, Feelings, Actions, Ideas和Values六个维度。六个维度的解释如下

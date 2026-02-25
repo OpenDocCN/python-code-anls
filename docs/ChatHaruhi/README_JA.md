@@ -147,13 +147,13 @@ https://github.com/LC1332/Chat-Haruhi-Suzumiya/assets/5266090/8b88c8ac-262f-4705
 
 今後の研究の便宜のため、リファクタリングした ChatHaruhi2.0 を pip 経由で起動できるようにしました。現在、2.0 では画像と音声のデザインが削除されていますが、これは今後の研究でリファクタリングする予定です。インストールは以下です:
 
-```py
+```shell
 pip -q install transformers openai tiktoken langchain chromadb zhipuai chatharuhi
 ```
 
 そして、次のようにコールします:
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi(
@@ -266,7 +266,7 @@ Chat Haruhi Suzumiya は CoT と同様の戦略を採用しており、通常の
 ### 引用
 
 このリポジトリのデータやコードを使用する場合は、リポジトリを引用してください。
-```py
+```
 @misc{li2023chatharuhi,
       title={ChatHaruhi: Reviving Anime Character in Reality via Large Language Model},
       author={Cheng Li and Ziang Leng and Chenxi Yan and Junyi Shen and Hao Wang and Weishi MI and Yaying Fei and Xiaoyang Feng and Song Yan and HaoSheng Wang and Linkang Zhan and Yaokai Jia and Pingyu Wu and Haozhen Sun},
@@ -291,7 +291,7 @@ ChatHaruhi は、画像や音声などのマルチモーダル機能を追加し
 
 この arxiv リリースの後、私たちは ChatHaruhi を以下のインターフェイスで再構築する予定です:
 
-```py
+```python
 from ChatHaruhi import ChatHaruhi
 
 chatbot = ChatHaruhi( system_prompt = 'prompt.txt', \
@@ -303,7 +303,7 @@ response = chatbot.chat(text = 'Can you introduce youself?', role = 'Kyon' )
 
 システムは、シンプルな system_prompt パラメータとベクトルデータベースをアクセスに使用する。本論文のローカル学習モデル、Claude、Spark API などの LLM の切り替えをサポートする。ChatHaruhi-52K のキャラクターを使った会話については、以下のボックスから直接使用することができます。
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_name = 'baizhantang', llm = 'openai')

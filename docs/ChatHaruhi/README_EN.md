@@ -155,13 +155,13 @@ https://github.com/LC1332/Chat-Haruhi-Suzumiya/assets/5266090/8b88c8ac-262f-4705
 
 For convenience of future research, the refactored ChatHaruhi2.0 can now be started via pip. Currently 2.0 removes the design of images and sounds, which will be refactored in our follow-up research. You can install it via the following:
 
-```py
+```shell
 pip -q install transformers openai tiktoken langchain chromadb zhipuai chatharuhi 
 ```
 
 And call it like this:
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi(
@@ -178,7 +178,7 @@ Here is the English translation:
 
 ChatHaruhi now supports directly dragging and dropping chatbot databases in our specified format from Hugging Face.
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi(
@@ -191,7 +191,7 @@ print(response)
 
 For 95 English characters in [RoleLLM](https://github.com/InteractiveNLP-Team/RoleLLM-public), you can call them like this:
 
-```py 
+```python 
 chatbot = ChatHaruhi(
   role_from_hf = 'silk-road/ChatHaruhi-from-RoleLLM/Jack-Sparrow',
   llm = 'openai', 
@@ -299,7 +299,7 @@ If you are interested in sponsoring the [Luotuo Project](https://github.com/LC13
 ### Citation
 
 Please cite the repo if you use the data or code in this repo.
-```py
+```
 @misc{li2023chatharuhi,
       title={ChatHaruhi: Reviving Anime Character in Reality via Large Language Model}, 
       author={Cheng Li and Ziang Leng and Chenxi Yan and Junyi Shen and Hao Wang and Weishi MI and Yaying Fei and Xiaoyang Feng and Song Yan and HaoSheng Wang and Linkang Zhan and Yaokai Jia and Pingyu Wu and Haozhen Sun},
@@ -324,7 +324,7 @@ ChatHaruhi started as an open source project with multimodal features like image
   
 After this arxiv release, we will rebuild ChatHaruhi with the following planned interfaces:
 
-```py
+```python
 from ChatHaruhi import ChatHaruhi
 
 chatbot = ChatHaruhi( system_prompt = 'prompt.txt', \
@@ -336,7 +336,7 @@ response = chatbot.chat(text = 'Can you introduce youself?', role = 'Kyon' )
 
 The system will use a simple system_prompt parameter and vector database for access. It will support switching between LLMs like the locally trained model from this paper, Claude, Spark API, etc. For conversations using the ChatHaruhi-52K characters, you can use them directly out of the box below.
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_name = 'baizhantang', llm = 'openai')

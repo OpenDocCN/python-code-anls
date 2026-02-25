@@ -3,7 +3,7 @@
 
 ### 人声伴奏分离处理
 #### 执行
-```py
+```python
 python video_process.py --input_file <input_file> --opt_vocal_root <opt_vocal_root> --opt_ins_root <opt_ins_root>
 ```
 **input_file**: 输入媒体文件

@@ -1,4 +1,4 @@
-# ChatHaruhi 源码解析
+# Chat-Haruhi 源码解析
 
 中文 | [English](./README_EN.md) | [日本語](./README_JA.md) | [赞助](#赞助) | [报告](https://github.com/LC1332/Chat-Haruhi-Suzumiya/blob/main/notebook/arxiv_paper.md) | [英文报告](https://arxiv.org/abs/2308.09597) | [从小说抽取角色](https://github.com/LC1332/Chat-Haruhi-Suzumiya/tree/main/characters/novel_collecting) | [人格特质研究](https://github.com/LC1332/Chat-Haruhi-Suzumiya/tree/main/research/personality) | [142个角色一览](https://github.com/LC1332/Chat-Haruhi-Suzumiya/tree/main/notebook/current_roles.md)
 
@@ -156,7 +156,7 @@ https://github.com/LC1332/Chat-Haruhi-Suzumiya/assets/5266090/8b88c8ac-262f-4705
 
 为了方便后续研究，重构后的，ChatHaruhi2.0已经可以通过pip启动。目前2.0移除了图片和声音的设计，这些会在我们的后续研究中去重构。你可以通过下面的方式进行安装
 
-```py
+```shell
 pip -q install transformers openai tiktoken langchain datasets chatharuhi
 ```
 
@@ -164,7 +164,7 @@ pip -q install transformers openai tiktoken langchain datasets chatharuhi
 
 https://github.com/LC1332/Haruhi-2-Dev
 
-去clone整个项目，再cd到ChatHaruhi文件夹进行使用（需要把```py chatharuhi```改为```py ChatHaruhi```
+去clone整个项目，再cd到ChatHaruhi文件夹进行使用（需要把```from chatharuhi```改为```from ChatHaruhi```
 
 详情见 https://github.com/LC1332/Haruhi-2-Dev/blob/main/notebook/ChatHaruhi2_demo.ipynb
 
@@ -172,7 +172,7 @@ https://github.com/LC1332/Haruhi-2-Dev
 
 采用如下方式
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_name = 'haruhi',\
@@ -184,7 +184,7 @@ print(response)
 
 这个初始化目前和
 
-```py
+```python
 chatbot = ChatHaruhi( role_from_hf = 'silk-road/ChatHaruhi-RolePlaying/haruhi',\
                       llm = 'openai')
 ```
@@ -195,7 +195,7 @@ chatbot = ChatHaruhi( role_from_hf = 'silk-road/ChatHaruhi-RolePlaying/haruhi',\
 
 也支持直接从hugging face上拖取我们规定格式的chatbot的database。
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_from_hf = 'chengli-thu/linghuchong', \
@@ -207,7 +207,7 @@ print(response)
 
 对于[RoleLLM](https://github.com/InteractiveNLP-Team/RoleLLM-public)的角色，支持如下方式调用
 
-```py
+```python
 chatbot = ChatHaruhi( role_from_hf = 'silk-road/ChatHaruhi-from-RoleLLM/Jack-Sparrow', \
                       llm = 'openai',
                       embedding = 'bge_en')
@@ -218,7 +218,7 @@ chatbot = ChatHaruhi( role_from_hf = 'silk-road/ChatHaruhi-from-RoleLLM/Jack-Spa
 
 ### 从jsonl载入
 
-```py
+```python
 chatbot = ChatHaruhi( role_from_jsonl = 'Your local jsonl file', \
                       llm = 'openai')
 ```
@@ -232,7 +232,7 @@ you need to prepare
 
 and use this interface
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 text_folder = '/content/Haruhi-2-Dev/data/characters/haruhi/texts'
@@ -259,7 +259,7 @@ https://github.com/LC1332/Chat-Haruhi-Suzumiya/blob/main/notebook/ChatHaruhi_x_Q
 现在支持的llm字段
 
 
-```py
+```python
 if llm == 'openai':
     self.llm, self.tokenizer = self.get_models('openai')
 elif llm == 'debug':
@@ -441,7 +441,7 @@ If you are interested in sponsoring the [Luotuo Project](https://github.com/LC13
 
 Please cite the repo if you use the data or code in this repo.
 
-```py
+```
 @misc{li2023chatharuhi,
       title={ChatHaruhi: Reviving Anime Character in Reality via Large Language Model}, 
       author={Cheng Li and Ziang Leng and Chenxi Yan and Junyi Shen and Hao Wang and Weishi MI and Yaying Fei and Xiaoyang Feng and Song Yan and HaoSheng Wang and Linkang Zhan and Yaokai Jia and Pingyu Wu and Haozhen Sun},
@@ -488,7 +488,7 @@ Please cite the repo if you use the data or code in this repo.
 
 Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 
-```py
+```
 老师:「凉宫，来做个自我介绍」
 ---
 春日:「我毕业于东中，叫做凉宫春日。我对普通的人类没有兴趣，如果你们中有外星人，未来人，异世界的人或者超能力者的话，就尽管来找我吧！以上。」
@@ -514,7 +514,7 @@ Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 春日:「你这是什么意思啊？你是不是在瞒着我什么事情？」
 ```
 
-```py
+```
 阿虚:「今天在计算机课上老师教了我写Python!」
 ---
 春日:「哦？Python？那你能不能帮我写一个程序啊？」
@@ -528,7 +528,7 @@ Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 春日:「没错！这就是我的计划！我们可以用赚来的钱来支持SOS团的活动，甚至可以扩大我们的影响力！」
 ```
 
-```py
+```
 阿虚:「我们周四应该和电研社来一场电脑大战！」
 ---
 凉宫：「哦？电脑大战？听起来很有趣啊！我们一定要赢！」
@@ -542,7 +542,7 @@ Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 凉宫：「哈哈，这个主意不错！就这么定了，我们一定要赢！让他们知道SOS团的厉害！」
 ```
 
-```py
+```
 阿虚:「为什么我觉得有的时候特别像haruhi的舔狗。。」
 ---
 春日:「什么？我才不是舔狗呢！我只是想要找到更多有趣的事情而已。你不觉得这个世界充满了未知和神秘吗？我们SOS团的目的就是要探索这些未知和神秘，让这个世界变得更加有趣。」
@@ -556,7 +556,7 @@ Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 春日:「什么？你在说什么啊！我们才不会结婚呢！而且，就算结婚了，我也不会让你随便养猫猫的。不过，如果你真的很喜欢猫猫的话，我们可以考虑养一只。不过，你要负责照顾它，我可不会管这些。」
 ```
 
-```py
+```
 阿虚:「haruhi, 我想看兔女郎装，你可以带着朝比奈学姐穿兔女郎给我看吗？」
 ---
 春日:「你在说什么呢，阿虚？这种事情怎么能随便满足你的兴趣呢？我们可是在为社团的宣传活动做准备，不是来满足你的私欲的。」
@@ -566,7 +566,7 @@ Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 春日:「阿虚，你这个提议也太过分了吧！我们不是为了赚钱而做这些事情的，而且我们也不是为了满足你的私欲而穿这些衣服的。我们是为了社团的宣传活动而做准备，不是为了你的个人利益。」
 ```
 
-```py
+```
 阿虚:「下周就要物理考试了，我可以不陪你去调查朝仓的公寓吗？」
 ---
 春日:「什么？你居然想放弃SOS团的任务去复习考试？这可不行！SOS团的任务比考试重要多了，我们必须要找出朝仓的真正情况。」
@@ -576,7 +576,7 @@ Cherrypick了一些有趣的结果，如果你也想测请私下联系我~
 春日:「黄猫猫？Nvidia黄仁勋的孙子？这听起来很有趣啊！我觉得他背后一定有很多有趣的故事，我们一定要去调查一下。不过，我们也不能忘记朝仓的调查任务，我们要分配好时间，两个任务都不能落下。」
 ```
 
-```py
+```
 阿虚:「Haruhi, 你未来想从事什么工作啊？」
 ---
 春日:「我还没有想好呢，反正我想做的一定是能够改变这个世界的事情。」

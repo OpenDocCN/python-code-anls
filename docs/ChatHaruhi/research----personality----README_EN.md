@@ -7,13 +7,13 @@
 
 Ensure you have correctly installed `ChatHaruhi2` and all necessary dependencies. If not yet installed, you can do so with the following commands:
 
-```py
+```bash
 pip install torch torchvision torchaudio
 pip install transformers openai tiktoken langchain chromadb zhipuai chatharuhi datasets jsonlines
 ```
 
 Enter the code folder.
-```py
+```bash
 cd code
 ```
 
@@ -25,19 +25,19 @@ To assess the personality of a specific ChatHaruhi Bot, use the following comman
 
 Quick Test:
 
-```py
+```bash
 python assess_personality.py --questionnaire_type mbti --character hutao --eval_setting sample
 ```
 
 Balanced Effectiveness and Efficiency:
 
-```py
+```bash
 python assess_personality.py --questionnaire_type mbti --character hutao --eval_setting collective
 ```
 
 Optimal Effectiveness:
 
-```py
+```bash
 python assess_personality.py --questionnaire_type mbti --character hutao --eval_setting batch --evaluator gpt-4 
 ```
 
@@ -213,7 +213,7 @@ In summary, the contributions of this paper are mainly three-fold:
 
 Please cite our paper if you use the data or code in this repo.
 
-```py
+```
 @misc{wang2023does,
       title={Does Role-Playing Chatbots Capture the Character Personalities? Assessing Personality Traits for Role-Playing Chatbots}, 
       author={Xintao Wang and Quan Tu and Yaying Fei and Ziang Leng and Cheng Li},

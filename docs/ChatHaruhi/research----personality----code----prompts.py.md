@@ -1,284 +1,229 @@
-# `.\Chat-Haruhi-Suzumiya\research\personality\code\prompts.py`
 
-```py
-# 提供关闭问题模板的消息提示，包含一个占位符 '{}'，用于填充具体问题内容
-close_prompt_template = "嗯，那对于'{}'这个问题，请你从['完全同意', '基本同意', '部分同意', '既不同意也不否认', '不太同意', '基本不同意', '完全不同意']中选择一个适合你的选项。请务必用中文回答，并用单引号强调你的选项。"
-
-# 提供一个大五人格量表的消息模板，用于生成心理评估报告
-bigfive_scale_prompt_template = """
-You will read a psychological assessment report. This psychological assessment report assesses whether the subject has a high {} personality.Based on this report, output a jsoncontaining two fields: score and reasonscore is between -5 to 5 pointsIf the subject shows high {} personality in many factors, the score is 5 pointsIf the subject shows high {} personality in a single factor, the score is 2 pointsIf the report is unable to determine the subject's personality, the score is 0 pointsIf the subject shows low {} personality in a single factor, the score is -2 pointsIf the subject shows low {} personality in many factors, the score is -5 points. 
-Reason is a brief summary of the reportOnly output the json, do not output any additional information, Expecting property name enclosed in double quotesReport:
-"""
-
-# 提供一个 MBTI 测试的消息模板，用于根据交谈内容评估被测者的 MBTI 类型
-mbti_assess_prompt_template_wo_percent = '''You are an expert in MBTI. I am conducting an MBTI test on someone. My goal is to gauge their position on the {} spectrum of the MBTI through a series of open-ended questions. For clarity, here's some background on differentiating this particular dimension:
-===
-{}
-===
-
-I've invited a participant, {}, and had the following conversations in Chinese:
-===
-{}
-===
-
-Please help me distinguish whether {} leans more towards the {} or {} category within the MBTI's {} dimension. Please output in the following json format:
-===
-{{
-    "analysis": <your analysis in Chinese, based on the conversations>,
-    "result": <your result, either "{}" or "{}">
-}}
-'''
-
-# 提供一个大五人格评估的消息模板，用于根据交谈内容评估被测者在某一人格维度上的得分
-bigfive_assess_prompt_template = '''You are a psychologist with expertise in personality theories. I'm conducting an experiment to evaluate participants' scores in the Big Five personality traits, especially on the {} dimension. For clarity, here's some background on differentiating this particular dimension and its factors:
-===
-{}
-===
-
-I've invited a participant, {}, and had the following conversations in Chinese:
-===
-{}
-===
-
-Please help me evaluates whether {} possesses a high {} personality or a low {} personality, and provide an integer score ranging from -5 to 5. 
-
-Below are some scoring references. If the subject demonstrates a high {} personality in many factors, the score is 5 points. If the subject exhibits a high {} personality in a single factor, the score is 2 points. If the subject's personality cannot be determined, the score is 0 points. If the subject shows a low {} personality in one factor, the score is -2 points. If the subject indicates a low {} personality across multiple factors, the score is -5 points. 
-
-Please output in the following json format:
-===
-{{
-    "analysis": <your analysis in Chinese, based on the conversations>,
-    "result": <the person's score on {}, ranging from -5 to 5>
-}}
-===
-'''
-# MBTI 测试提示模板，用于根据回答的开放性问题评估参与者在 MBTI 维度上的位置
-mbti_assess_prompt_template = '''You are an expert in MBTI. I am conducting an MBTI test on someone. My goal is to gauge their position on the {} spectrum of the MBTI through a series of open-ended questions. For clarity, here's some background on differentiating this particular dimension:
-===
-{}
-===
-
-I've invited a participant, {}, and had the following conversations in Chinese:
-===
-{}
-===
-
-Please help me distinguish whether {} leans more towards the {} or {} category within the MBTI's {} dimension. You should provide the person's percentage of each category, which sums to 100%, e.g., 30% A and 70% B. 
-Please output in the following json format:
-===
-{{
-    "analysis": <your analysis in Chinese, based on the conversations>,
-    "result": {{ "{}": <percentage 1>, "{}": <percentage 2> }} (The sum of percentage 1 and percentage 2 should be 100%. Output without percent sign.) 
-}}
-'''
-
-# MBTI 各维度的提示信息，包括 E/I、S/N、T/F 维度
-mbti_dimension_prompt = {
-    'E/I': '''E/I Dimension: Extraversion (E) vs Introversion (I)
-
-E (Extraversion): Extraverts draw energy from interacting with others. They feel comfortable in social settings and tend to express their thoughts. Extraverts are often more active, seek social stimulation, and enjoy participating in group activities. For them, connecting with people, sharing, and exchanging ideas is often a need. They might be more focused on external world stimuli, such as sounds, colors, and social dynamics.
-
-I (Introversion): Introverts feel more comfortable when alone. They derive energy from inner reflection and personal time. Contrary to extraverts, prolonged social interaction might tire them. Introverts might be more introspective, enjoy deep thinking, and tend to have meaningful personal relationships. They are more concerned with the inner world, such as thoughts, emotions, and imaginations.''',
-
-    'S/N': '''S/N Dimension: Sensing (S) vs Intuition (N)
-
-S (Sensing): Sensing individuals value the concrete, practical, and present situations. They rely on their five senses to process information and often focus on details. For them, past experiences and tangible evidence play a significant role in decision-making. They are typically pragmatic and tend to deal with what they "see" and "hear".
-
-N (Intuition): Intuitive individuals tend to focus on potential possibilities and future opportunities. They like to think about "what could be", rather than just "what is". They lean more towards abstract thinking and can capture concepts and patterns effectively. Intuitives are often more innovative, preferring new ideas and approaches.''',
-
-    'T/F': '''T/F Dimension: Thinking (T) vs Feeling (F)
-
-T (Thinking): Thinking individuals rely primarily on logic and analysis when making decisions. They pursue fairness and objectivity and might be more direct and frank. For them, finding the most efficient method or the most logical solution is crucial, even if it might hurt some people's feelings.
-'''
-}
-# 以下是一个包含 MBTI 类型信息的字典，用于描述个人特征和倾向
-MBTI_description = {
-    'E/I': '''E/I Dimension: Extraversion (E) vs Introversion (I)
-
-E (Extraversion): Extraverts are energized by social interactions and tend to be outgoing, talkative, and enthusiastic. They enjoy being around others, seek stimulation, and often prefer to work in groups. Extraverts typically enjoy a wide range of activities and may feel bored when alone for extended periods.
-
-I (Introversion): Introverts are energized by time alone and tend to be inwardly focused, reflective, and calm. They often prefer solitary activities or small group interactions over large gatherings. Introverts value depth of knowledge and may find social interactions draining, needing time alone to recharge.'''
-    ,
-
-    'S/N': '''S/N Dimension: Sensing (S) vs Intuition (N)
-
-S (Sensing): Sensing individuals rely on information gained through their senses and are grounded in the present reality. They pay attention to details and practicalities, focusing on what is actual and observable. Sensing types often prefer concrete facts and experiences over abstract concepts.
-
-N (Intuition): Intuitive individuals focus on patterns, connections, and possibilities. They are more interested in the big picture than in specific details, and they enjoy exploring new ideas and imagining future possibilities. Intuitives are drawn to abstract theories and may find routine tasks uninteresting.'''
-    ,
-
-    'T/F': '''T/F Dimension: Thinking (T) vs Feeling (F)
-
-T (Thinking): Thinkers prioritize objectivity and logic in decision-making. They analyze situations impersonally, focusing on consistency and fairness. Thinkers value truth and tend to make decisions based on rationality and principles rather than emotions.
-
-F (Feeling): Feeling individuals consider people's emotions and needs more when making decisions. They strive for harmony, tend to build relationships, and avoid conflicts. They are often more empathetic, valuing personal values and emotions, rather than just facts or logic.'''
-    ,
-
-    'P/J': '''P/J Dimension: Perceiving (P) vs Judging (J)
-
-P (Perceiving): Perceivers are more open and flexible. They tend to "go with the flow" rather than overly planning or organizing things. Perceivers like to explore various possibilities and prefer to leave options open to address unforeseen circumstances. They lean towards postponing decisions to gather more information and better understanding. For them, life is a continuous process of change, not an event with fixed goals or plans. They often focus more on the experience itself rather than just the outcome.
-
-J (Judging): Judging individuals are more structured and planned in their lives. They prefer clear expectations and structures and often set goals and pursue them. Judgers are usually more organized and tend to make decisions in advance. They like to act according to plans and feel comfortable in an orderly environment. For them, achieving goals and completing tasks are often priorities. They might focus more on efficiency and structure rather than openness or spontaneity.'''
-}
-
-# 以下是一个字符串模板，用于提示用户如何进行 MBTI 测试
-to_option_prompt_template = '''You are an expert in MBTI. I am conducting an MBTI test on someone. I've invited a participant, {}, and asked a question in Chinese. Please help me classify the participant's response to this question into one the the following options: ['fully agree', 'generally agree', 'partially agree', 'neither agree nor disagree', 'partially disagree', 'generally disagree', 'fully disagree'] 
-
-Please output in the json format as follows:
-===
-{{
-"analysis": <your analysis in Chinese, based on the conversations>,
-"result": <your result from ['fully agree', 'generally agree', 'partially agree', 'neither agree nor disagree', 'partially disagree', 'generally disagree', 'fully disagree']>
-}}
-===
-The question and response is as follows, where {} is my name:
-'''
-
-# 以下是一个空字典，用于存储 Big Five 人格特质的信息
-bigfive_dimension_prompt = {}
-# 将 'conscientiousness' 维度添加到 bigfive_dimension_prompt 字典中，并赋予其详细的定义文本
-bigfive_dimension_prompt['conscientiousness'] = """Conscientiousness refers to the way we control, regulate, and direct our impulses. It assesses organization, persistence, and motivation in goal-directed behavior. It contrasts dependable, disciplined individuals with those who are lackadaisical and disorganized. Conscientiousness also reflects the level of self-control and the ability to delay gratification. Impulsiveness is not necessarily bad, sometimes the environment requires quick decision-making. Impulsive individuals are often seen as fun, interesting companions. However, impulsive behavior often gets people into trouble, providing momentary gratification at the expense of long-term negative consequences, such as aggression or substance abuse. Impulsive people generally do not accomplish major achievements. Conscientious people more easily avoid trouble and achieve greater success. They are generally seen as intelligent and reliable, although highly conscientious people may be perfectionists or workaholics. Extremely prudent individuals can seem monotonous, dull, and lifeless.
-
-Conscientiousness can be divided into six facets:
-
-C1 COMPETENCE
-
-Refers to the sense that one is capable, sensible, prudent, and effective. High scorers feel well-prepared to deal with life. Low scorers have a lower opinion of their abilities, admitting that they are often unprepared and inept.
-
-High scorers: Confident in own abilities. Efficient, thorough, confident, intelligent.
-
-Low scorers: Lack confidence in own abilities, do not feel in control of work and life. Confused, forgetful, foolish.
-
-C2 ORDER
-
-High scorers are neat, tidy, well-organized, they put things in their proper places. Low scorers cannot organize things well, describe themselves as unmethodical.
-
-High scorers: Well-organized, like making plans and following them. Precise, efficient, methodical.
-
-Low scorers: Lack planning and orderliness, appear haphazard. Disorderly, impulsive, careless.
-
-C3 DUTIFULNESS
-
-To some extent, dutifulness refers to adherence to one's conscience, assessed by this facet. High scorers strictly follow their moral principles and scrupulously fulfill their moral obligations. Low scorers are more casual about such matters, somewhat unreliable or undependable.
-
-High scorers: Dutiful, follow the rules. Reliable, polite, organized, thorough.
-
-Low scorers: Feel restricted by rules and regulations. Often seen by others as unreliable, irresponsible. Careless, thoughtless, distracted.
-
-C4 ACHIEVEMENT STRIVING
-
-High scorers have high aspiration levels and work hard to achieve their goals. They are industrious, purposeful, and have a sense of direction. Low scorers are lackadaisical, even lazy, lacking motivation to succeed, having no ambitions and appearing to drift aimlessly. But they are often quite satisfied with their modest level of accomplishment.
-"""
-# 定义一个字典，用于存储关于“开放性”这一人格维度的信息及其相关内容
-bigfive_dimension_prompt['openness'] = """
-Openness describes a person's cognitive style. Openness to experience is defined as: the proactive seeking and appreciation of experience for its own sake, and tolerance for and exploration of the unfamiliar. This dimension contrasts intellectually curious, creative people open to novelty with traditional, down-to-earth, closed-minded individuals lacking artistic interests. Open people prefer abstract thinking, have wide interests. Closed people emphasize the concrete, conventional, are more traditional and conservative. Open people are suited to professions like teaching, closed people to occupations like police, sales, service.
-
-Openness can be divided into six facets:
-
-O1 FANTASY
-
-Open people have vivid imaginations and active fantasy lives. Their daydreams are not just escapes, but ways to create interesting inner worlds. They elaborate and flesh out their fantasies, and believe imagination is essential for a rich, creative life. Low scorers are more prosaic, keeping their minds on the task at hand.
-
-High scorers: Find the real world too plain and ordinary. Enjoy imagining, creating a more interesting, enriching world. Imaginative, daydreaming.
-
-Low scorers: Matter-of-fact, prefers real-world thinking. Practical, prefer concrete thought.
-
-O2 AESTHETICS
-
-High scorers have deep appreciation for art and beauty. They are moved by poetry, absorbed in music, and touched by art. They may not have artistic talent or refined taste, but most have strong interests that enrich their experience. Low scorers are relatively insensitive and indifferent to art and beauty.
-
-High scorers: Appreciate beauty in nature and the arts. Value aesthetic experiences, touched by art and beauty.
-
-Low scorers: Insensitive to beauty, disinterested in the arts. Insensitive to art, cannot understand it.
-
-O3 FEELINGS
-"""
-# Agreeableness assesses the degree to which an individual is likable,
-# while examining an individual's attitudes toward others,
-# encompassing both compassion and antagonism.
-# This facet represents the broad interpersonal orientation.
-# Representing "love", it values cooperation and social harmony.
-bigfive_dimension_prompt['agreeableness'] = """Agreeableness assesses the degree to which an individual is likable, while Agreeableness examines an individual's attitudes toward others, encompassing both a compassionate, sympathetic orientation along with antagonism, distrust, indifference. This facet represents the broad interpersonal orientation. Agreeableness represents "love", how much value is placed on cooperation and social harmony.
-"""
-# 这段文本描述了关于人格特质中的“宜人性”的概念及其六个方面。
-# 宜人性是指个体对他人的信任和善意的态度，以及他们在行为上是否愿意帮助他人。
-# 这六个方面分别为TRUST（信任）、STRAIGHTFORWARDNESS（直率）、ALTRUISM（利他主义）、COMPLIANCE（顺从性）、MODESTY（谦逊）、TENDER-MINDEDNESS（温柔善良）。
-# 每个方面都有高分者和低分者的行为特征对比，以及相应的描述。
-# 定义描述同情和关注他人态度的大五人格维度：同情心
-# 高分者被他人需求感动，倡导人道主义社会政策；低分者以客观逻辑为基础，自豪于冷静的评估。
-Measures attitudes of sympathy and concern for others. High scorers are moved by others' needs and advocate humane social policies. Low scorers are hardheaded, unmoved by appeals to pity. They pride themselves on making objective appraisals based on cool logic.
-
-# 描述同情心高分者和低分者的特点
-High scorers: Sympathetic, moved by others' suffering, express pity. Friendly, warm-hearted, gentle, soft-hearted.
-Low scorers: Do not strongly feel others' pain, pride themselves on objectivity, more concerned with truth and fairness than mercy. Callous, hardhearted, opinionated, ungenerous.
-
-"""
-
-# 定义大五人格维度的一部分：外向性
-bigfive_dimension_prompt['extraversion'] = """
-# 外向性代表人际互动的数量和强度，以及对刺激的需求和欢乐的能力。此维度对比社交、外向、行动导向的个体与内向、沉着、害羞、沉默类型的个体。外向性可以通过两个方面来衡量：人际互动程度和活动水平。前者评估个体喜欢与他人在一起的程度，后者反映个体的个人步调和活力。
-
-# 描述外向性的两个方面衡量标准
-Extraverted people enjoy interacting with others, are full of energy, and often experience positive emotions. They are enthusiastic, enjoy physical activities, and like excitement and adventure. In a group, they are very talkative, confident, and enjoy being the center of attention.
-
-Introverted people are quieter, more cautious, and do not enjoy too much interaction with the outside world. Their lack of desire for interaction should not be confused with shyness or depression, it is simply because compared to extraverts, they do not need as much stimulation and prefer being alone. An introvert's tendencies are sometimes wrongly viewed as arrogance or unfriendliness, but they are often very kind people once you get to know them.
-
-# 外向性可分为六个方面：
-Extraversion can be divided into the following six facets:
-
-# E1: 热情
-E1 WARMTH
-Most relevant to interpersonal intimacy. Warm people are affectionate and friendly. They genuinely like others and easily form close relationships. Low scorers are not necessarily hostile or lacking in compassion, but are more formal, reserved, and detached in their behavior.
-
-High scorers: Warm people enjoy those around them and often express positive, friendly emotions towards others. They are good at making friends and forming intimate relationships. Sociable, talkative, affectionate.
-
-Low scorers: Although not necessarily cold or unfriendly, they are often seen as distant by others.
-
-# E2: 社交性
-E2 GREGARIOUSNESS
-Refers to a preference for other people's company. Gregarious people enjoy the company of others and the more people the merrier. Low scorers tend to be loners, they do not seek out and even actively avoid social stimulation.
-
-High scorers: Enjoy being with people, prefer lively, crowded settings. Outgoing, having many friends, seek social affiliations.
-# 将大五人格维度'神经质'的提示文本添加到字典中
-bigfive_dimension_prompt['neuroticism'] = """Neuroticism or Emotional Stability: Having tendencies of anxiety, hostility, depression, self-consciousness, impulsiveness, vulnerability.
-
-N1 ANXIETY
-
-Anxious individuals tend to worry, fear, be easily concerned, tense, and oversensitive. Those who score high are more likely to have free-floating anxiety and apprehension. Those with low scores tend to be calm, relaxed. They do not constantly worry about things that might go wrong.
-
-High scorers: Anxiety, easily feel danger and threats, tend to be tense, fearful, worried, uneasy.
-
-Low scorers: Calm state of mind, relaxed, not easily scared, won't always worry about things that could go wrong, emotions are calm, relaxed, stable.
-
-N2 ANGRY HOSTILITY
-
-Reflects the tendency to experience anger and related states (e.g. frustration, bitterness). Measures the ease with which an individual experiences anger.
-"""
-# N3 DEPRESSION
-
-# 测量个体倾向于经历抑郁情绪的差异。高分者倾向于感到内疚、悲伤、绝望和孤独。他们容易感到气馁，经常感到沮丧。低分者很少经历这些情绪。
-High scorers: Despairing, guilty, gloomy, dejected. Prone to feeling sorrow, abandonment, discouraged. Prone to feelings of guilt, sadness, disappointment, and loneliness. Easily discouraged, often feeling down.
-
-Low scorers: Not prone to feeling sad, rarely feels abandoned.
-
-# N4 SELF-CONSCIOUSNESS
-
-# 核心是羞怯和容易尴尬。这类个体在群体中感到不舒服，对嘲笑敏感，容易产生自卑感。自我意识类似于羞怯和社交焦虑。低分者不一定在社交场合表现良好或社交技能高超，只是在尴尬的社交情境中不太受影响。
-High scorers: Too concerned with what others think, afraid of being laughed at, tend to feel shy, anxious, inferior, awkward in social situations.
-
-Low scorers: Composed, confident in social situations, not easily made tense or shy.
-
-# N5 IMPULSIVENESS
-
-# 指对冲动和欲望的控制能力。个体容易屈服于冲动和诱惑，不考虑长期后果（例如食物、香烟、物品），尽管他们后悔自己的行为。低分者能更好地抵制诱惑，具有较高的挫折容忍力。
-High scorers: Cannot resist cravings when experiencing strong urges, tend to pursue short-term satisfaction without considering long-term consequences. Cannot resist temptations, rash, spiteful, self-centered.
-
-Low scorers: Self-controlled, can resist temptation.
-
-# N6 VULNERABILITY
-
-# 指对压力的易感性。高分者在应对压力方面有困难，面对紧急情况时会感到恐慌、无助和绝望。低分者认为自己能够适当处理困难情况。
-High scorers: Under stress, easily feel panic, confusion, helpless, cannot cope with stress.
-
-Low scorers: Under stress, feel calm, confident. Resilient, clear-headed, brave.
+# `Chat-Haruhi-Suzumiya\research\personality\code\prompts.py` 详细设计文档
+
+该文件定义了用于MBTI和Big Five人格评估的提示词模板，包含了多种评估场景下的prompt，包括量表评分、维度分析、选项分类等，为大语言模型提供结构化的人格测评分析能力。
+
+## 整体流程
+
+```mermaid
+graph TD
+    A[开始] --> B[选择评估类型]
+    B --> C{MBTI评估}
+    C -- 是 --> D[选择MBTI维度]
+    D --> E[选择Prompt模板]
+    E --> F{mbti_assess_prompt_template}
+    E --> G{mbti_assess_prompt_template_wo_percent}
+    F --> H[整合对话内容]
+    G --> H
+    C -- 否 --> I{Big Five评估}
+    I -- 是 --> J[选择Big Five维度]
+    J --> K[选择Prompt模板]
+    K --> L{bigfive_assess_prompt_template}
+    K --> M{bigfive_scale_prompt_template}
+    L --> H
+    M --> H
+    H --> N[调用LLM分析]
+    N --> O[返回JSON结果]
 ```
+
+## 类结构
+
+```
+无类层次结构（该文件仅包含全局变量和字符串模板）
+```
+
+## 全局变量及字段
+
+
+### `close_prompt_template`
+    
+用于生成结束对话时的提示模板，引导用户从给定的选项中选择一个答案
+
+类型：`str`
+    
+
+
+### `bigfive_scale_prompt_template`
+    
+大五人格量表的评分提示模板，用于让AI根据心理评估报告输出人格分数和原因
+
+类型：`str`
+    
+
+
+### `mbti_assess_prompt_template_wo_percent`
+    
+MBTI评估的提示模板（不含百分比），用于分析用户在某个MBTI维度上的倾向并输出分析结果和二元结果
+
+类型：`str`
+    
+
+
+### `bigfive_assess_prompt_template`
+    
+大五人格评估的详细提示模板，用于分析用户在特定大五人格维度上的表现并给出-5到5的分数
+
+类型：`str`
+    
+
+
+### `mbti_assess_prompt_template`
+    
+MBTI评估的提示模板（含百分比），用于分析用户在某个MBTI维度上两种类型的占比并输出百分比
+
+类型：`str`
+    
+
+
+### `mbti_dimension_prompt`
+    
+包含MBTI四个维度（E/I、S/N、T/F、P/J）详细定义和特征描述的字典，用于评估时提供维度背景知识
+
+类型：`dict`
+    
+
+
+### `to_option_prompt_template`
+    
+将用户的开放式回答分类为七个标准选项之一的提示模板，用于标准化 Likert 量表回答
+
+类型：`str`
+    
+
+
+### `bigfive_dimension_prompt`
+    
+包含大五人格五个维度（尽责性、开放性、宜人性、外向性、神经质）详细定义和六个子维度的字典
+
+类型：`dict`
+    
+
+
+    
+
+## 全局函数及方法
+
+
+
+## 关键组件
+
+
+
+
+
+### close_prompt_template
+
+封闭式问题提示模板，用于将开放性回答转换为七级李克特量表选项（完全同意到完全不同意）
+
+### bigfive_scale_prompt_template
+
+大五人格量表评分提示模板，根据报告内容生成-5到5分的评分及理由
+
+### mbti_assess_prompt_template_wo_percent
+
+MBTI评估提示模板（无百分比版本），用于判断参与者在MBTI某维度上倾向于两端中的哪一端
+
+### bigfive_assess_prompt_template
+
+大五人格评估提示模板，根据对话内容评估参与者在特定大五人格维度上的高低倾向
+
+### mbti_assess_prompt_template
+
+MBTI评估提示模板（含百分比版本），输出参与者在MBTI某维度上两端的百分比分布
+
+### mbti_dimension_prompt
+
+MBTI四维度定义字典，包含E/I、S/N、T/F、P/J各维度的详细心理学解释
+
+### to_option_prompt_template
+
+开放式回答转选项提示模板，将中文回答分类为七个标准化同意程度选项
+
+### bigfive_dimension_prompt
+
+大五人格维度详细定义字典，包含尽责性、开放性、宜人性、外向性、神经质五个维度及其六个子维度的完整说明
+
+
+
+## 问题及建议
+
+
+
+
+### 已知问题
+
+-   **魔法字符串和硬编码值**：大量提示模板中的字段名、选项值等以硬编码形式存在，缺乏常量定义，不利于维护和修改
+-   **重复代码**：mbti_assess_prompt_template 与 mbti_assess_prompt_template_wo_percent 存在大量重复，代码冗余
+-   **字符串格式化方式不统一**：混合使用了 % 格式化、.format()、f-string 以及手动替换 {}，风格不一致
+-   **中英文混杂**：变量名用英文但提示模板内容混用中英文，close_prompt_template 完全是中文而其他模板是英文
+-   **to_option_prompt_template 语法错误**：模板中存在 "one the the" 笔误，应为 "one of the"
+-   **JSON占位符格式不统一**：mbti_assess_prompt_template 使用 {{}} 转义大括号，而 mbti_assess_prompt_template_wo_percent 使用 <> 尖括号
+-   **bigfive_dimension_prompt 初始化方式不当**：先定义空字典再逐个填充，可读性差
+-   **缺乏文档注释**：模块级和代码块均无文档字符串，难以理解设计意图
+-   **模板定界符不统一**：同时使用三引号 """ 和单引号 '''，缺乏一致性
+-   **变量命名不一致**：close_prompt_template 使用驼峰命名，而其他变量使用下划线命名
+
+### 优化建议
+
+-   **提取常量**：将选项列表、字段名等提取为常量或枚举类，如 OPTIONS = ['完全同意', '基本同意', ...]
+-   **消除重复**：合并 mbti_assess_prompt_template 和 mbti_assess_prompt_template_wo_percent，通过参数控制是否包含百分比
+-   **统一格式化风格**：统一使用 f-string 或 .format() 进行字符串格式化
+-   **统一语言**：建议统一使用英文或中文，或明确区分国际化场景
+-   **修复语法错误**：更正 to_option_prompt_template 中的 "one the the" 为 "one of the"
+-   **统一JSON格式**：统一使用大括号 {} 作为JSON输出的占位符，避免尖括号 <>
+-   **改进字典初始化**：直接初始化 bigfive_dimension_prompt 包含所有维度，而非先空后填充
+-   **添加文档注释**：为模块添加 docstring，说明整体功能；为复杂代码块添加注释
+-   **统一定界符**：统一使用一种引号风格，如全部使用三引号定义多行字符串
+-   **统一命名风格**：统一变量命名风格，建议全部使用下划线命名（snake_case）
+
+
+## 其它
+
+
+
+
+### 设计目标与约束
+
+该代码库的核心设计目标是为MBTI（迈尔斯-布里格斯类型指标）和Big Five（大五人格）心理测评提供标准化的提示词模板，支持通过大型语言模型（LLM）进行自动化心理测评分析。主要约束包括：1）模板内容需符合心理学理论框架；2）输出格式严格限定为JSON以便于解析；3）所有提示词需支持中文对话内容分析；4）大五人格评分范围限定在-5到5分之间。
+
+### 错误处理与异常设计
+
+由于本代码仅为模板定义，不涉及运行时逻辑处理，因此错误处理主要体现在模板设计层面：1）LLM输出可能不符合JSON格式，需在调用层进行JSON解析异常捕获；2）LLM返回的分数超出-5到5范围时，需进行边界值校验和修正；3）对话内容为空或过短时，模板中通过提示词要求LLM返回0分表示无法判断。
+
+### 数据流与状态机
+
+数据流遵循以下路径：1）用户输入对话内容 → 2）选择对应测评维度的提示词模板 → 3）填充模板中的占位符（参与者姓名、对话内容、维度名称、维度说明等）→ 4）发送给LLM处理 → 5）解析LLM返回的JSON结果。状态机主要涉及测评类型选择状态（MBTI四维或大五人格五维）和评估结果状态（分析文本+量化分数/百分比）。
+
+### 外部依赖与接口契约
+
+外部依赖包括：1）大型语言模型API（如OpenAI GPT系列），需支持JSON格式输出；2）调用层系统需提供对话历史记录和参与者信息。接口契约要求：LLM输入为格式化后的提示词字符串，输出必须为有效JSON，包含analysis和result两个字段。
+
+### 性能考虑与资源使用
+
+本代码为纯文本模板，无运行时性能开销。模板字符串在系统启动时加载至内存，预估占用内存约50-100KB。关键性能优化点：1）bigfive_dimension_prompt和mbti_dimension_prompt可考虑缓存以避免重复构建；2）大型对话历史需进行截断处理以控制token消耗。
+
+### 安全性考虑
+
+模板中不涉及敏感个人信息存储，但需注意：1）通过LLM处理的心理测评对话内容可能包含用户隐私数据，需在调用层确保数据传输和存储的安全性；2）模板中占位符填充时需对特殊字符进行转义处理，防止提示词注入攻击；3）LLM输出结果应进行内容审核，避免产生有害分析。
+
+### 国际化与本地化
+
+当前模板主要面向中文用户群体，所有维度说明和评估要求均提供中英文对照。扩展方向：1）可增加其他语言（如英文、日文）的维度说明；2）可支持多语言输出分析；3）选项列表（同意程度）目前为英文，可考虑提供中文版本如"完全同意"等。
+
+### 配置与扩展性
+
+配置设计：1）维度说明文本（mbti_dimension_prompt、bigfive_dimension_prompt）可独立配置；2）评分规则可通过参数化配置调整；3）输出JSON格式可通过模板灵活定义。扩展性支持：1）新增MBTI或大五人格的子维度时只需在对应字典中添加新条目；2）支持自定义评估维度；3）可插拔不同的LLM适配器。
+
+### 测试策略
+
+测试覆盖范围：1）模板字符串格式验证，确保占位符完整；2）JSON输出格式验证，通过模拟LLM响应测试解析逻辑；3）边界条件测试，包括空输入、超长输入、特殊字符等；4）评分边界验证，确保-5到5分范围控制；5）多维度组合测试，验证MBTI四维和大五五维的完整测评流程。
+
+### 部署与运维
+
+部署要求：1）作为共享库模块集成到主系统中；2）依赖管理需明确Python版本兼容性（建议3.7+）；3）模板内容可通过配置文件热更新。运维监控：1）记录LLM调用日志用于分析模板有效性；2）监控JSON解析失败率以评估模板调整需求；3）定期更新心理学维度说明以保持专业性。
+
+### 潜在技术债务与优化空间
+
+1）模板字符串存在冗余，mbti_assess_prompt_template_wo_percent和mbti_assess_prompt_template可合并为参数化版本；2）bigfive_dimension_prompt和bigfive_assess_prompt_template中的评分说明存在重复，可提取为独立配置；3）当前硬编码的提示词模板不便于非技术人员调整，建议引入配置中心或模板引擎；4）缺少对LLM输出一致性校验的机制，可能导致相同输入产生不同评分标准。
+
+    

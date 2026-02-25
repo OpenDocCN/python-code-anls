@@ -1,7 +1,7 @@
 ### 人声伴奏分离批量处理， 使用UVR5模型。
 
 ### 代码来源
-```py
+```text
 https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI
 
 ```
@@ -10,7 +10,7 @@ https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI
 >UVR5模型文件 https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main/uvr5_weights
 
 ### 模型说明
-```py
+```text
 模型分为三类：
 1、保留人声：不带和声的音频选这个，对主人声保留比HP5更好。内置HP2和HP3两个模型，HP3可能轻微漏伴奏但对主人声保留比HP2稍微好一丁点；
 2、仅保留主人声：带和声的音频选这个，对主人声可能有削弱。内置HP5一个模型；
@@ -27,11 +27,11 @@ https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI
 ### 使用
 - 下载模型至 uvr5_weights
 - import process.py
-```py
+```python
 from process import uvr
 ```
 - 整理入参
-```py
+```python
 from process import uvr_prediction, uvr5_names
 import os
 import traceback, pdb
@@ -72,7 +72,7 @@ format0 = ["wav", "flac", "mp3", "m4a"]
 ```
 
 - 调用函数运行
-```py
+```python
 
 wav_input = '/media/checkpoint/speech_data/video/audio/test/voice/0003_0.00.56.1800_00.00.58.980_为了逃避狼群.wav'
 vocal_path, others_path = uvr_prediction(uvr5_names[5], wav_input,

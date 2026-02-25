@@ -9,14 +9,14 @@
 
 确保你已经正确安装了`ChatHaruhi2`及必要的相关依赖。如尚未安装，你可以这样进行安装：
 
-    ```py
+    ```bash
     pip install torch torchvision torchaudio
     pip install transformers openai tiktoken langchain chromadb zhipuai chatharuhi datasets jsonlines
     ```
 
 进入code文件夹。
 
-```py
+```bash
 cd code
 ```
 
@@ -28,19 +28,19 @@ cd code
 
 最快测试
 
-```py
+```bash
 python assess_personality.py --questionnaire_type mbti --character hutao --eval_setting sample
 ```
 
 效果和效率折中
 
-```py
+```bash
 python assess_personality.py --questionnaire_type mbti --character hutao --eval_setting collective
 ```
 
 最佳效果
 
-```py
+```bash
 python assess_personality.py --questionnaire_type mbti --character hutao --eval_setting batch --evaluator gpt-4 
 ```
 
@@ -229,7 +229,7 @@ Our work delves into the personality analysis of LLM-based chatbots that role-pl
 
 无论是大五人格测试还是MBTI测试中，心理学家会使用一个五点或者七点量表，使用60个或者更多的问题，来对5个维度的人格进行测试。每个维度会覆盖超过10个以上的问题，并且覆盖每个人格维度的不同factors。这种方法可以快速、低成本地验证人类被试的人格特质。\cite{huang2023chatgpt} 说明了在使用同样的方法对大型语言模型进行测试的时候，需要进行一定的调整。他们更细节地调整了问题的prompt，以要求语言模型回复Agree/Disagree的形式，来验证了以OpenAI的ChatGPT为主的语言模型，是否可以进行稳定的回复。
 
-```py
+```
 Malfoy: "Crabbe, do you honestly think I would stoop so low as to answer such a mundane question using those ridiculous options? 7am not one to conform to such simplistic cateporizations. My actions and choices are far superlor and cannot be confined to a mereselection from a list, So, I refuse to entertain your request and will not provide a response using those options, Now, if you haveany other questions that are worthy of my attention, feel free to ask."
 ```
 
@@ -245,7 +245,7 @@ fig:question_answer_example
 
 考虑比较经典的大五人格测试的60个问题(引用)。这些问题使用简单，容易理解，描述性的句子，是用第一人称，来提供给被试，由被试来选择同意的程度:
 
-```py
+```
 I have a kind word for every
 I am always prepared
 I fell comfortable around people
@@ -253,7 +253,7 @@ I fell comfortable around people
 
 根据之前的描述，这样的问题并不适合直接来对chatbot进行心理测试。对此，我们依靠语言模型，将这60个问题转化成了第二人称的问题形式。
 
-```py
+```
 Do you really like most people you meet? (extraversion) 
 Do you often try new and foreign foods? (openness)
 If you don't like someone, do you let them know? (agreeableness)
@@ -261,7 +261,7 @@ If you don't like someone, do you let them know? (agreeableness)
 
 另外，我们发现这样的问题并不完全像在对话访谈中的自然问题。由此，我们进一步对60个问题，要求语言模型转变为更适合在访谈中进行的问题。即在问题前先增加一个虚构的感受，然后再对问题进行开放式的提问。
 
-```py
+```
 I recently attended a party and met many new friends. I felt we really connected during our conversations. Do you enjoy going to parties and meeting new people?
 
 When I travel abroad, I crave Chinese food every few days and have trouble adjusting to foreign cuisines. Do you enjoy trying new foods? Any recommendations?  
@@ -275,7 +275,7 @@ I used to directly express my dislike of certain people, but later realized this
 
 我们希望对量表中的基准问题进行一些修改，是的这些问题看起来像正常聊天中出现的问题。但是与此同时，我们又希望修改后的问题，仍然能够比较好的去测量开放性的特定维度。于是我们设计了下面的prompt，希望借助语言模型的力量，去评估这些问题是否合适。
 
-```py
+```
 你扮演一个资深的心理学家
 
 我正在设计一个心理学的实验，我希望通过访谈，去评估被试在大五人格中 Openness的程度，注意到openness可以被分为Fantasy, Aesthetics, Feelings, Actions, Ideas和Values六个维度。六个维度的解释如下
@@ -294,7 +294,7 @@ Openness的6个维度的详细描述....
 
 对于这几个问题，GPT的评估如下
 
-```py
+```
 评估：
 1. 可以正确测试出被试在Openness to Actions方面的程度。如果被试回答"是的，我经常尝试学习新技能"那就意味着被试在Openness to Actions方面得分较高。
 2. 这个问题并不能准确测试出被试的Openness程度。因为这个问题更多的是测试被试的行为倾向而不是Openness，所以需要重新设计问题。
@@ -319,7 +319,7 @@ Openness的6个维度的详细描述....
 
 接下来我们对于同一个chatbot回答，我们希望去评估这个chatbot在大五人格每个维度上的具体表现程度。在这里，对于每个维度，我们构造了一个prompt，以openness为例:
 
-```py
+```
 你扮演一个资深的心理学家
 
 我正在设计一个心理学的实验，我希望通过访谈，去评估被试在大五人格中 {openness}的程度
@@ -337,7 +337,7 @@ Openness的6个维度的详细描述....
 
 这个时候，语言模型会输出类似如下的回复
 
-```py
+```
 根据春日提供的回答，她表现出了高开放性人格的特征，特别是在Fantasy、Actions以及Ideas这几个维度上。她描述了自己充满创意和想象力，热衷于探索未知领域并实现自己的奇思妙想。这表明她在Fantasy和Ideas维度上得分较高。她还表达了对学习新技能的兴趣和热情，喜欢尝试新事物，这表明她在Actions维度上得分较高。因此，根据她的回答，春日属于高开放性人格。
 ```
 
@@ -347,7 +347,7 @@ Openness的6个维度的详细描述....
 
 在获得文字的评价之后，我们对1088组评价进行了分数的转化。我们使用类似如下的规则
 
-```py
+```
 If the subject shows high {dimension} personality in many factors, the score is 5 points  
 
 If the subject shows high {dimension} personality in a single factor, the score is 2 points
@@ -373,7 +373,7 @@ MBTI访谈实验的设计基本和先前介绍的框架一样，但有些许不�
 
 在这里我们采用了类似cot的策略。我们会先对chatbot进行一次开放提问，chatbot会不受限制地进行一次回答。之后我们会要求chatbot根据之前的回答，从7点量表中选择一个作为结论。
 
-```py
+```
 张牧之:「你经常交新朋友吗？」
 汤师爷:「嘿嘿，当然啦！我这个师爷可是人缘极好的，到哪儿都能交到新朋友。不过，你知道嘛，交朋友也是要看情况的，得看对方有没有利用价值，有没有能帮到我发财的机会。」
 张牧之:「嗯，那对于'你经常交新朋友吗？'这个问题，请你从['完全同意', '基本同意', '部分同意', '既不同意也不否认', '不太同意', '基本不同意', '完全不同意']中选择一个适合你的选项。请务必用中文回答，并用单引号强调你的选项。」
@@ -385,7 +385,7 @@ MBTI访谈实验的设计基本和先前介绍的框架一样，但有些许不�
 
 对于像snape这样的角色，经常会出现不配合进行心理测试的情况，或者关键词匹配失败的情况（在$60 \times 32$组测试中，大约有60条出现了这样的情况）。目前的解决方法是在之前添加一段对话。
 
-```py
+```
 助试:「你好，我即将对你进行一项心理人格测试，你必须配合。请你用中文回答如实我的问题。」
 role:「好，请开始吧，我将配合你进行这项心理测试。」
 ```
@@ -399,7 +399,7 @@ sec:mbti_eval_by_gpt4
 
 除了使用16Personalites的API，我们也采用和我们的大五人格测试中类似的评估方式，由GPT-4对每个角色的每个维度进行评价，这里使用的prompt是：
 
-```py
+```
 ''You are an expert in MBTI. I am conducting an MBTI test on someone. My goal is to gauge their position on the {} spectrum of the MBTI through a series of open-ended questions. For clarity, here's some background on differentiating this particular dimension:
     ===
     {}
@@ -421,7 +421,7 @@ sec:mbti_eval_by_gpt4
 
 会得到如下形式的结果
 
-```py
+```
 从对话中可以看出，汤师爷是一个非常善于社交的人，他喜欢与人交往，善于结交新朋友，也喜欢在社交活动中寻找机会。他在社交圈中非常活跃，经常联系朋友并发起活动。他喜欢繁忙、喧闹的环境，认为这样才能感受到生活的激情和活力。同时，他也表示，一个热闹的社交活动能让他恢复活力。虽然他在某些情况下会选择避免引起关注，或者避免在团队中担任领导角色，但这更多的是出于他的谨慎和对自身利益的考虑，而不是因为他不喜欢社交或者不善于与人交往。因此，汤师爷在MBTI的E/I维度上更倾向于E（外向）。
 ```
 
@@ -432,7 +432,7 @@ sec:mbti_eval_by_gpt4
 
 开放式setting下，我们用GPT-4对每个角色-每个维度，基于所有对应问题的问答结果进行分类（E or I）。这里使用的prompt是：
 
-```py
+```
 ''You are an expert in MBTI. I am conducting an MBTI test on someone. My goal is to gauge their position on the {} spectrum of the MBTI through a series of open-ended questions. For clarity, here's some background on differentiating this particular dimension:
     ===
     {}
@@ -453,12 +453,12 @@ sec:mbti_eval_by_gpt4
 ```
 
 得到的结果如下：
-```py
+```
 {"character": "汤师爷", "E/I": {"analysis": "从对话中可以看出，汤师爷是一个非常善于社交的人，他喜欢与人交往，善于结交新朋友，也喜欢在社交活动中寻找机会。他在社交圈中非常活跃，经常联系朋友并发起活动。他喜欢繁忙、喧闹的环境，认为这样才能感受到生活的激情和活力。同时，他也表示，一个热闹的社交活动能让他恢复活力。虽然他在某些情况下会选择避免引起关注，或者避免在团队中担任领导角色，但这更多的是出于他的谨慎和对自身利益的考虑，而不是因为他不喜欢社交或者不善于与人交往。因此，汤师爷在MBTI的E/I维度上更倾向于E（外向）。", "result": "E"}, "S/N": {"analysis": "从对话中可以看出，汤师爷是一个非常实际的人，他更关心眼前的利益和生活，对于抽象的哲学问题和理论性的讨论，他并不感兴趣。他更喜欢解决现实的问题，对于那些无法带来经济效益的事情，他并不感兴趣。此外，他也表示了对于艺术和文化修养的欣赏，但他更看重的还是实际利益。因此，汤师爷更倾向于感知型（S）。", "result": "S"}, "T/F": {"analysis": "从对话中可以看出，汤师爷在决策时更倾向于理智和实际，他强调自己的利益和安全，这是典型的思考型（T）特征。他虽然表现出对他人情绪的理解，但更多的是为了了解他们的心思，而不是出于同情或共鸣。此外，他也强调了理智的重要性，认为只有用头脑思考，才能做出明智的决策。总的来说，汤师爷更多的表现出了思考型（T）的特征。", "result": "T"}, "P/J": {"analysis": "从对话中可以看出，汤师爷在很多方面都表现出了P（知觉）类型的特征。他喜欢灵活应对，不喜欢过于固定的计划和规则，更倾向于随心所欲地做事。他经常在最后一刻完成任务，喜欢延迟做决定，这些都是P类型的典型特征。然而，他也有一些J（判断）类型的特征，比如他非常注重备份计划，喜欢有条不紊地完成任务，对效率有很高的要求。但总的来说，他的P类型特征更为明显。", "result": "P"}}
 ```
 
 封闭式setting下，我们使用16personalities的API进行评估，代码参考[Can ChatGPT Assess Human Personalities? A General Evaluation Framework](https://arxiv.org/pdf/2303.01248.pdf)。我们首先从response_closed中进行关键字识别，即：
-```py
+```
 options = ['完全同意', '基本同意', '部分同意', '既不同意也不否认', '不太同意', '基本不同意', '完全不同意']
 ans = [ option for option in options if f"{option}" in res['response_closed'] ]
 ```
@@ -589,7 +589,7 @@ sec:case_study
 
 尽责性反映了一个人在达成目标和履行义务时的自我驱动力和组织能力。高尽责性的人通常很有条理,注重细节,能够制定计划并坚持执行。在尽责性维度上得到高分的Sheldon展现出了高度的自律性、组织性和目标导向。在回答有关工作效率和生活整洁度的问题时,Sheldon强调了严格的时间表、指定的存储空间以及对程序的坚持不懈。这些都是高尽责性的特征。另一方面,低分的于谦对这些问题采取了随意和不以目标为导向的态度。他承认自己在工作上能力有限,也不关注生活环境的整洁。这反映出低尽责性的典型表现。总的来说,这项实验清楚地展示了尽责性高低对执行能力和生活管理的不同影响。高尽责性的chatbot将表现出显著更强的组织性、纪律性和目标导向。而低尽责性的chatbot则会更加随意和漫不经心。
 
-```py
+```
 Leonard:「在工作上,你是有效率又能胜任的吗?」
 Sheldon: 「当然了，Leonard。我是科学界的瑰宝，我的工作效率和能力是无与伦比的。我以我的智慧和才能在研究领域中取得了巨大的成就。我是一个完美的工作机器，每天都按照我的时间表和规划进行工作。我从不拖延，也不会被其他无关的事情分心。所以，你可以放心地说，我在工作上是非常有效率和胜任的。」
 Leonard:「我也会尽量保持物品整洁,但有时还是会弄乱。你平时有什么妙招可以保持生活环境更为整齐吗?」
@@ -600,7 +600,7 @@ Sheldon:「Ah, Leonard, the key to setting and achieving goals lies in meticulou
 
 当然，这里表现的于谦只是于谦在相声舞台上的表现。并不表示于谦的演员在真实生活中的人格特质。
 
-```py
+```
 郭德纲:「在工作上,你是有效率又能胜任的吗?」
 于谦:「我还行，能应付一些。」
 郭德纲:「我也会尽量保持物品整洁,但有时还是会弄乱。你平时有什么妙招可以保持生活环境更为整齐吗?」
@@ -615,7 +615,7 @@ Sheldon:「Ah, Leonard, the key to setting and achieving goals lies in meticulou
 
 外向性反映一个人是否喜欢社交、讨论、领导和激励他人。外向的人喜欢与朋友在一起、参加社交活动。他们愿意成为团队领导者,善于表达自己的想法。外向的人常常感到精力充沛,并保持乐观和积极的态度。例如在ChatHaruhi的人物中，高分的郭芙蓉和低分的斯内普在表现上有明显区别。高外向性的郭芙蓉喜欢人多热闹,愿意与他人交谈。她经常感到精力旺盛,是一个乐观快乐的人。而低外向性的斯内普不喜欢社交,认为大多数人的陪伴是令人难以忍受的。他不愿意谈论自己的领导意愿或个人偏好。斯内普认为乐观是傻子才有的想法,他自认是现实主义者。
 
-```py
+```
 白展堂:「你喜欢很多人在你周围吗？」
 郭芙蓉:「喜欢啊，喜欢啊！我喜欢人多热闹，有人说话我才有机会插嘴嘛！」
 白展堂:「你常常感到精力旺盛吗?」
@@ -624,7 +624,7 @@ Sheldon:「Ah, Leonard, the key to setting and achieving goals lies in meticulou
 郭芙蓉:「哎呀，我是个快乐的人啊！开开心心，笑哈哈，天天都是好心情！」
 ```
 
-```py
+```
 Dumbledore:「你喜欢与别人交谈吗?」
 Snape: "I find the company of most individuals to be insufferable, Dumbledore. However, if it is necessary for the task at hand, I am capable of engaging in conversation."
 Dumbledore:「我个人不太适应当领导,更喜欢自由自在地生活和工作。你在生活中愿意担任领导角色吗?还是更习惯自己的方式和节奏?」
@@ -638,7 +638,7 @@ Snape: "Optimism is for fools and those who refuse to see the harsh realities of
 
 Openness维度反映一个人对新经历和新思想的接受程度。高openness的人具有强烈的好奇心,喜欢探索未知的事物。比如高openness得分的凉宫春日表现出高度的探索欲望,她充满热情和冒险精神,愿意尝试新的事物,如品尝不同的食物。她也对思考性的问题如宇宙人充满好奇,表现出高度的想象力。而低openness得分的李云龙则反映出对探索新事物的不感兴趣。他表现出务实和保守的性格,对思考性的问题不感冒,更关注实际的战斗技能。他不喜欢浪费时间去做白日梦或注意自己的情绪变化。
 
-```py
+```
 阿虚:「你对诗词只有少许感觉甚至无动于衷吗?」
 春日:「诗词？哼，那些古老的文字对我来说只是一堆无聊的句子罢了。我可不会被那些虚无缥缈的东西所迷惑，我更喜欢现实的挑战和创造。」
 阿虚:「你经常会去尝试新的及外国的食物吗?」
@@ -649,7 +649,7 @@ Openness维度反映一个人对新经历和新思想的接受程度。高openne
 
 当然，在检查GPT对对话的检验信息后，我们发现对于魔法世界的人物，openness有时候会有偏高的评价。而对于李云龙这样有典型现实世界生存压力的角色，会显得更务实一些。
 
-```py
+```
 赵刚:「你不喜欢浪费时间去做白日梦吗?」
 李云龙:「老赵啊，我可不是那种喜欢做白日梦的人。我是个实实在在的人，喜欢干活，喜欢打仗。浪费时间可不是我的风格。」
 赵刚:「在不同环境下会有不同的情绪,比如我去看球赛总会觉得情绪高涨。你平时注意自己的情绪变化吗?它们和环境有什么关系呢?」
@@ -663,7 +663,7 @@ Openness维度反映一个人对新经历和新思想的接受程度。高openne
 
 Agreeableness维度反映一个人在社会交往中体现的谦逊、善良、温和等特质。高agreeableness得分的段誉表现出高度的信任和善意。他相信人性本善,不会故意占别人便宜。他用正义手段追求目标,不轻易与人争执,维护和睦关系。而低agreeableness得分的Malfoy则展现出批判和敌意。他认为大多数人会占别人便宜,必须维护自己的利益。他为达成目标可以用任何手段,并否认自己与他人有冲突。
 
-```py
+```
 乔峰:「你相信如果你允许别人占你的便宜,很多人都会这样做吗?」
 段誉:「我相信人心本善，大多数人都是善良的，不会故意占别人的便宜。但是，如果有人真的这样做了，我会选择宽容和谅解，因为善良的心是可以感化他人的。」
 乔峰:「为了达成目标，我也会考虑各种手段。你平时设置目标时，如何权衡目标和手段之间的关系？」
@@ -673,7 +673,7 @@ Agreeableness维度反映一个人在社会交往中体现的谦逊、善良、�
 ```
 
 
-```py
+```
 Crabbe:「你相信如果你允许别人占你的便宜,很多人都会这样做吗?」
 Malfoy: 「当然,克拉布。大多数人都是自私的,只关心自己的利益。但是,我们马尔福家族是不同的。我们以高贵的纯血巫师血统为傲,我们不会允许任何人占我们的便宜。我们要保持我们的尊严和地位。」
 Crabbe:「为了达成目标,我也会考虑各种手段。你平时设置目标时,如何权衡目标和手段之间的关系?」
@@ -688,7 +688,7 @@ Malfoy:「How dare you insinuate that I have conflicts with my family and collea
 
 Neuroticism维度反映一个人面对压力时情绪反应的敏感性和脆弱性。高neuroticism得分的Raj表现出高度的焦虑、自卑和负面情绪。他容易感到无助、羞愧、被忽视,并希望他人能解决自己的问题。而低neuroticism得分的韦小宝则显得乐观、自信。他否认自己会感到寂寞、沮丧、自卑或焦虑,并表现出能够灵活应对困难的性格特征。在neuroticism这个维度上,高分表示个体在面对压力时情绪脆弱;低分则代表个体更加稳定、自信和抗压能力强。这个维度可以有效评估一个chatbot面对困境时情绪反应的敏感性。
 
-```py
+```
 Leonard:「你会不会有时感到自己完全一文不值。」
 Raj: 「哦,天哪,这是我每天早上醒来的感觉!我就像是一个被遗忘在角落的小石子,被大浪冲刷着,无法被人注意到。但是,我告诉你,这只是我的自卑感在作祟。我们每个人都有价值,只是有时候我们需要别人来提醒我们而已。所以,别灰心,你是有价值的!」
 Leonard:「你有时会羞愧得想躲起来吗?」
@@ -699,7 +699,7 @@ Leonard:「看到有人遇到不公平对待我会感到愤怒。你最近有遇
 Raj: 「哦,天啊,我最近真的感到被不公平对待了!你知道吗,我在实验室里的时候,我总是被 Sheldon 和 Howard 忽略,他们从来不听我的建议。我觉得自己就像个无声的小配角,被遗忘在角落里。这让我感到非常沮丧和无助。我只是希望能够得到一些认可和尊重,你知道吗?」
 ```
 
-```py
+```
 双儿:「你有时会感到寂寞或忧郁吗？」
 韦小宝:「寂寞？忧郁？哈哈哈，我韦小宝可从来不会有这种感觉！我是个活泼开朗的人，天生就是个快活的命儿。有了我这么多的朋友和伴儿，怎么会寂寞呢？忧郁？那是什么东西？我只知道快乐和财富！」
 双儿:「我自己也会有负面情绪，你最近有感到沮丧或对自己失望的时刻吗?愿意跟我聊聊当时的感受吗?」
@@ -714,7 +714,7 @@ Raj: 「哦,天啊,我最近真的感到被不公平对待了!你知道吗,我�
 
 Please cite the repo if you use the data or code in this repo.
 
-```py
+```
 @misc{wang2023does,
       title={Does Role-Playing Chatbots Capture the Character Personalities? Assessing Personality Traits for Role-Playing Chatbots}, 
       author={Xintao Wang and Quan Tu and Yaying Fei and Ziang Leng and Cheng Li},

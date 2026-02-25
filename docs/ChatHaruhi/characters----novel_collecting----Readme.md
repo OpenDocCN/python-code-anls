@@ -88,7 +88,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 1. 配置OpenAI Key
 
-   ```py
+   ```python
    import os
    
    key = 'sk-VvF4' # edit here
@@ -96,7 +96,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 2. 指定下载小说 wget后面的网址以及文件路径
 
-   ```py
+   ```python
    !wget https://raw.githubusercontent.com/LC1332/Prophet-Andrew-Ng/main/langchain/%E5%B0%84%E9%9B%95%E8%8B%B1%E9%9B%84%E4%BC%A0.txt
    
    input_name = '/content/射雕英雄传.txt'
@@ -104,7 +104,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 3. 指定保存位置
 
-   ```py
+   ```python
    # mount google drive
    from google.colab import drive
    drive.mount('/content/drive')
@@ -115,7 +115,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 4. 运行至notebook最后一个单元
 
-   ```py
+   ```python
    import os
    import json
    from tqdm import tqdm
@@ -134,7 +134,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 1. 必须配置保存路径以及抽取后路径
 
-   ```py
+   ```python
    # 储存txt和jsonl的文件夹路径。如需修改，请与下方自动化循环保持一致
    
    save_folder_path =  "/content/drive/MyDrive/reorganized_story_shediaoyingxiongzhuan"
@@ -145,7 +145,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 2. 可选择性配置（一般来说不用改）
 
-   ```py
+   ```python
    # 故事名字，默认为_raw之前的名字
    story_name_en = os.path.basename(folder_path).split("_")[0]
    
@@ -165,13 +165,13 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 3. 运行至保存代码部分
 
-   ```py
+   ```markdown
    # 运行到此处，txt和jsonl文件已保存在/content/drive/MyDrive/reorganized_story_{story_name_en}下
    ```
 
 如果重新从原小说抽取，请将
 
-```py
+```python
 # 如果你要想从content重新切分，请在开头运行以下代码
 
 !wget https://raw.githubusercontent.com/LC1332/Prophet-Andrew-Ng/main/langchain/%E7%AC%91%E5%82%B2%E6%B1%9F%E6%B9%96.txt
@@ -179,7 +179,7 @@ chatbot的部分不需要提取，当然，反正小说都抽取了，可以顺�
 
 切分代码首先运行，随后运行
 
-```py
+```python
 # 手动导入ID，继续向下运行以测试，最后根据ID循环
 raw_text = chunk_text[ id ]
 
@@ -197,7 +197,7 @@ unique_chunk_sum = []
 
 1. 配置一些参数
 
-   ```py
+   ```python
    # 参数设置
    
    # 支持跨越多少行寻找目标角色，也即控制段内行间距不超过该值
@@ -219,7 +219,7 @@ unique_chunk_sum = []
 
 2. 运行至notebook最后一个单元
 
-   ```py
+   ```python
    for role_cur_name in role_extract :
      chat_ids, previous_scene_ids = output_scene_chat_id(data, role_cur_name)
      chat_ids_in_chunk, chat_id2previous_scene_id = divide_chats2chunks(chat_ids, previous_scene_ids)
@@ -229,7 +229,7 @@ unique_chunk_sum = []
 
 3. 从保存/content/{role_cur_name}_text.zip中下载
 
-   ```py
+   ```
    Zipped folder saved to /content/郭靖_text.zip
    Zipped folder saved to /content/欧阳锋_text.zip
    ```
@@ -254,7 +254,7 @@ unique_chunk_sum = []
 
 如果你是pip install的代码应该是这样
 
-```py
+```python
 from chatharuhi import ChatHaruhi
 
 chatbot = ChatHaruhi( role_from_hf = 'chengli-thu/linghuchong', \
