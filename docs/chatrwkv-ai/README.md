@@ -1,20 +1,24 @@
 # ChatRWKV 源码解析
 
-# ChatRWKV (pronounced as "RwaKuv", from 4 major params: R W K V)
+## RWKV homepage: https://www.rwkv.com
 
-> RWKV homepage: https://www.rwkv.com/ https://wiki.rwkv.com/
+RWKV-7 code: https://github.com/BlinkDL/RWKV-LM/tree/main/RWKV-v7
 
-ChatRWKV is like ChatGPT but powered by my RWKV (100% RNN) language model, which is the only RNN (as of now) that can match transformers in quality and scaling, while being faster and saves VRAM. Training sponsored by Stability EleutherAI :)
+ChatRWKV is like ChatGPT but powered by my RWKV (100% RNN) language model, which is the only RNN (as of now) that can match transformers in quality and scaling, while being faster and saves VRAM.
 
-Our latest version is **RWKV-6**, which is easily Mamba level, and simpler ;) https://twitter.com/BlinkDL_AI/status/1732791817073229881 https://twitter.com/BlinkDL_AI/status/1713967928209752128 (Preview models: https://huggingface.co/BlinkDL/temp )
+Our latest version is **RWKV-7** https://arxiv.org/abs/2503.14456 (Preview models: https://huggingface.co/BlinkDL/temp )
 
-**RWKV-5 World v2 1.5B** Demo: https://huggingface.co/spaces/BlinkDL/RWKV-Gradio-1
+Gradio Demo 1: https://huggingface.co/spaces/BlinkDL/RWKV-Gradio-1
 
-**RWKV-5 World v2 3B** Demo: https://huggingface.co/spaces/BlinkDL/RWKV-Gradio-2
-
-![RWKV-v5-benchmark-1](RWKV-v5-benchmark-1.png)
+Gradio Demo 2: https://huggingface.co/spaces/BlinkDL/RWKV-Gradio-2
 
 **RWKV-LM main repo**: https://github.com/BlinkDL/RWKV-LM (explanation, fine-tuning, training, etc.)
+
+Chat Demo for developers: https://github.com/BlinkDL/ChatRWKV/blob/main/API_DEMO_CHAT.py
+
+**Efficient inference project**: https://github.com/BlinkDL/Albatross
+
+**RWKV APP**: https://github.com/RWKV-APP/RWKV_APP (local inference for Android / iOS)
 
 ## RWKV Discord: https://discord.gg/bDSBUMeFpc (7k+ members)
 
@@ -24,12 +28,14 @@ Our latest version is **RWKV-6**, which is easily Mamba level, and simpler ;) ht
 
 **Raw cutting-edge RWKV weights:** https://huggingface.co/BlinkDL
 
+**GGUF:** https://huggingface.co/collections/shoumenchougou/rwkv7-gxx-gguf
+
 **HF-compatible RWKV weights:** https://huggingface.co/RWKV
 
 Use v2/convert_model.py to convert a model for a strategy, for faster loading & saves CPU RAM.
 
 Note RWKV_CUDA_ON will build a CUDA kernel (much faster & saves VRAM). Here is how to build it ("pip install ninja" first):
-```py
+```
 # How to build in Linux: set these and run v2/chat.py
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
@@ -38,21 +44,15 @@ Install VS2022 build tools (https://aka.ms/vs/17/release/vs_BuildTools.exe selec
 ```
 **RWKV pip package**: https://pypi.org/project/rwkv/ **(please always check for latest version and upgrade)**
 
-**nanoRWKV**: https://github.com/BlinkDL/nanoRWKV (does not require custom CUDA kernel to train, works for any GPU/CPU)
+https://github.com/cgisky1980/ai00_rwkv_server Fastest GPU inference API with vulkan (good for nvidia/amd/intel)
 
-https://github.com/cgisky1980/ai00_rwkv_server Fastest GPU inference API with vulkan (good for nvidia/amd/intel), supports rwkv5
+https://github.com/cryscan/web-rwkv backend for ai00_rwkv_server
 
-https://github.com/cryscan/web-rwkv backend for ai00_rwkv_server, supports rwkv5
+https://github.com/saharNooby/rwkv.cpp Fast CPU/cuBLAS/CLBlast inference: int4/int8/fp16/fp32
 
-https://github.com/saharNooby/rwkv.cpp Fast CPU/cuBLAS/CLBlast inference: int4/int8/fp16/fp32, supports rwkv5
-
-https://github.com/daquexian/faster-rwkv supports rwkv5
-
-https://github.com/mlc-ai/mlc-llm/pull/1275 supports rwkv5
+https://github.com/JL-er/RWKV-PEFT lora/pissa/Qlora/Qpissa/state tuning
 
 https://github.com/RWKV/RWKV-infctx-trainer Infctx trainer
-
-https://github.com/Blealtan/RWKV-LM-LoRA LoRA finetuning
 
 **World demo script:** https://github.com/BlinkDL/ChatRWKV/blob/main/API_DEMO_WORLD.py
 
@@ -87,7 +87,7 @@ https://github.com/josStorer/RWKV-Runner cool GUI
 More RWKV projects: https://github.com/search?o=desc&q=rwkv&s=updated&type=Repositories
 
 ChatRWKV v2: with "stream" and "split" strategies, and INT8. 3G VRAM is enough to run RWKV 14B :) https://github.com/BlinkDL/ChatRWKV/tree/main/v2
-```py
+```python
 os.environ["RWKV_JIT_ON"] = '1'
 os.environ["RWKV_CUDA_ON"] = '0' # if '1' then use CUDA kernel for seq mode (much faster)
 from rwkv.model import RWKV                         # pip install rwkv
@@ -112,7 +112,7 @@ When you build a RWKV chatbot, always check the text corresponding to the state,
 **(For v4-raven models, use Bob/Alice. For v4/v5/v6-world models, use User/Assistant)**
 
 2. The best chat format (check whether your text is of this format):
-```Bob: xxxxxxxxxxxxxxxxxx\n\nAlice: xxxxxxxxxxxxx\n\nBob: xxxxxxxxxxxxxxxx\n\nAlice:```py
+```Bob: xxxxxxxxxxxxxxxxxx\n\nAlice: xxxxxxxxxxxxx\n\nBob: xxxxxxxxxxxxxxxx\n\nAlice:```
 
 * There should not be any space after the final "Alice:". The generation result will have a space in the beginning, and you can simply strip it.
 * You can use \n in xxxxx, but avoid \n\n. So simply do ```xxxxx = xxxxx.strip().replace('\r\n','\n').replace('\n\n','\n')```
