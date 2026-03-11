@@ -1,6 +1,5 @@
 # GraphRAG 源码解析
 
-👉 [Use the GraphRAG Accelerator solution](https://github.com/Azure-Samples/graphrag-accelerator) <br/>
 👉 [Microsoft Research Blog Post](https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/)<br/>
 👉 [Read the docs](https://microsoft.github.io/graphrag)<br/>
 👉 [GraphRAG Arxiv](https://arxiv.org/pdf/2404.16130)
@@ -24,11 +23,11 @@
 
 The GraphRAG project is a data pipeline and transformation suite that is designed to extract meaningful, structured data from unstructured text using the power of LLMs.
 
-To learn more about GraphRAG and how it can be used to enhance your LLMs ability to reason about your private data, please visit the <a href="https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/" target="_blank">Microsoft Research Blog Post.</a>
+To learn more about GraphRAG and how it can be used to enhance your LLM's ability to reason about your private data, please visit the <a href="https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/" target="_blank">Microsoft Research Blog Post.</a>
 
 ## Quickstart
 
-To get started with the GraphRAG system we recommend trying the [Solution Accelerator](https://github.com/Azure-Samples/graphrag-accelerator) package. This provides a user-friendly end-to-end experience with Azure resources.
+To get started with the GraphRAG system we recommend trying the [command line quickstart](https://microsoft.github.io/graphrag/get_started/).
 
 ## Repository Guidance
 
@@ -45,7 +44,13 @@ This repository presents a methodology for using knowledge graph memory structur
 ## Prompt Tuning
 
 Using _GraphRAG_ with your data out of the box may not yield the best possible results.
-We strongly recommend to fine-tune your prompts following the [Prompt Tuning Guide](https://microsoft.github.io/graphrag/posts/prompt_tuning/overview/) in our documentation.
+We strongly recommend to fine-tune your prompts following the [Prompt Tuning Guide](https://microsoft.github.io/graphrag/prompt_tuning/overview/) in our documentation.
+
+## Versioning
+
+Please see the [breaking changes](./breaking-changes.md) document for notes on our approach to versioning the project.
+
+*Always run `graphrag init --root [path] --force` between minor version bumps to ensure you have the latest config format. Run the provided migration notebook between major version bumps if you want to avoid re-indexing prior datasets. Note that this will overwrite your configuration and prompts, so backup if necessary.*
 
 ## Responsible AI FAQ
 
