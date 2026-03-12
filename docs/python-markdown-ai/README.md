@@ -1,7 +1,4 @@
-# PythonMarkdown 源码解析
-
-[Python-Markdown][]
-===================
+# Python-Markdown 源码解析
 
 [![Build Status][build-button]][build]
 [![Coverage Status][codecov-button]][codecov]
@@ -10,8 +7,8 @@
 [![BSD License][bsdlicense-button]][bsdlicense]
 [![Code of Conduct][codeofconduct-button]][Code of Conduct]
 
-[build-button]: https://github.com/Python-Markdown/markdown/workflows/CI/badge.svg?event=push
-[build]: https://github.com/Python-Markdown/markdown/actions?query=workflow%3ACI+event%3Apush
+[build-button]: https://github.com/Python-Markdown/markdown/actions/workflows/tox.yml/badge.svg
+[build]: https://github.com/Python-Markdown/markdown/actions/workflows/tox.yml
 [codecov-button]: https://codecov.io/gh/Python-Markdown/markdown/branch/master/graph/badge.svg
 [codecov]: https://codecov.io/gh/Python-Markdown/markdown
 [mdversion-button]: https://img.shields.io/pypi/v/Markdown.svg
@@ -36,10 +33,10 @@ supported by the [Available Extensions][].
 Documentation
 -------------
 
-```py
+```bash
 pip install markdown
 ```
-```py
+```python
 import markdown
 html = markdown.markdown(your_text_string)
 ```

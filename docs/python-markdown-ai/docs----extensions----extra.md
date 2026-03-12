@@ -24,7 +24,7 @@ supported extensions are included in the standard Markdown library.
 
 From the Python interpreter:
 
-```py
+```pycon
 >>> import markdown
 >>> html = markdown.markdown(text, extensions=['extra'])
 ```
@@ -33,7 +33,7 @@ To pass configuration options to the extensions included with Extra, they must b
 underlying extension identified as well. In that way Extra will have access to the options and can pass them on to
 the appropriate underlying extension.
 
-```py
+```python
 config = {
     'extra': {
         'footnotes': {

@@ -25,7 +25,7 @@ keys to the substitution strings.
 For example, one might use the following configuration to get correct quotes for
 the German language:
 
-```py
+```python
 extension_configs = {
     'smarty': {
         'substitutions': {
@@ -71,7 +71,7 @@ Option                | Default value | Description
 
 A trivial example:
 
-```py
+```python
 markdown.markdown(some_text, extensions=['smarty'])
 ```
 

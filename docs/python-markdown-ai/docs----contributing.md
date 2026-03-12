@@ -23,7 +23,7 @@ The [Python-Markdown/markdown] project is organized as follows:
 
 * Branch `master` should generally be stable and release-ready at all times.
 * Version branches should be used for bug-fixes back-ported to the most recent
-  PATCH release.
+  MICRO release.
 * No other branches should be created. Any other branches which exist are
   preserved for historical reasons only.
 
@@ -140,7 +140,7 @@ distinguish itself as a continuation line. The closing parenthesis, bracket or
 brace should be on a line by itself and should line up under the first character
 of the line that starts the multi-line construct.
 
-```py
+```python
 my_list = [
     1, 2, 3,
     4, 5, 6,
@@ -155,7 +155,7 @@ When the conditional part of an `if`-statement is long enough to require that it
 be written across multiple lines, extra indentation should be included on the
 conditional continuation line.
 
-```py
+```python
 if (this_is_one_thing
         and that_is_another_thing):
     do_something()
@@ -186,13 +186,13 @@ documentation.
 
 Headers should use the hash style. For example:
 
-```py
+```md
 ## Some important topic
 ```
 
 The underline style should not be used. Don't do this:
 
-```py
+```md
 Some important topic
 ====================
 ```
@@ -202,7 +202,7 @@ Some important topic
 Links should always use the reference style, with the referenced hyperlinks kept
 at the end of the document.
 
-```py
+```md
 Here is a link to [some other thing][other-thing].
 
 More text...
@@ -217,7 +217,7 @@ you should use a relative link, and link to the `.md` suffix. If applicable, it
 is preferred that the link includes a hash fragment pointing to the specific
 section of the page. For example:
 
-```py
+```md
 [authentication]: reference.md#Markdown
 ```
 
@@ -231,7 +231,7 @@ converted into regular links which point to the built HTML pages.
 If you want to draw attention to a note or warning, use the syntax defined in
 Python-Markdown's [Admonition Extension]:
 
-```py
+```md
 !!! note
 
     This is the content of the note.
@@ -256,8 +256,8 @@ that version, or is otherwise expressly deemed appropriate by the project
 maintainers.
 
 The current changelog should only document the changes for one MAJOR release and
-its various MINOR and PATCH releases (see [Versions](#versions) for an
-explanation of MAJOR, MINOR, and PATCH releases). Older versions from previous
+its various MINOR and MICRO releases (see [Versions](#versions) for an
+explanation of MAJOR, MINOR, and MICRO releases). Older versions from previous
 series of releases can be found in the archive at `docs/change_log/` and may
 follow a different format. Note that the archived changelogs are not in the site
 navigation and are only linked from the [Previous
@@ -290,7 +290,7 @@ environment], which isolates any experimental code from the general system. To
 create a virtual environment, use the following command from the root of the
 local working copy of your GitHub fork:
 
-```py
+```sh
 virtualenv venv
 ```
 
@@ -302,13 +302,13 @@ very reason.
 On Posix systems (Linux, BSD, MacOS, etc.), use the following command to
 activate the environment:
 
-```py
+```sh
 source venv/bin/activate
 ```
 
 On Windows, use this command instead:
 
-```py
+```sh
 venv/Scripts/activate
 ```
 
@@ -318,7 +318,7 @@ To be able to run the Markdown library directly while working on it, install the
 working copy into the environment in [Development Mode] after activating the
 virtual environment for the first time:
 
-```py
+```sh
 pip install -e .
 ```
 
@@ -327,46 +327,46 @@ environment.
 
 You can run the command line script with the following command:
 
-```py
+```sh
 python -m markdown
 ```
 
 Before building the documentation for the first time, you will need to install
 some optional dependencies with the command:
 
-```py
+```sh
 pip install -e .[docs]
 ```
 
 To build the documentation and serve it locally on a development server, run:
 
-```py
+```sh
 mkdocs serve
 ```
 
 Then point your browser at `http://127.0.0.1:8000/`. For a complete list of
 options available, view MkDocs' help with the command:
 
-```py
+```sh
 mkdocs --help
 ```
 
 Before running tests for the first time, you will need to install some optional
 dependencies with the command:
 
-```py
+```sh
 pip install -e .[testing]
 ```
 
 And you can directly run the tests with:
 
-```py
+```sh
 python -m unittest discover tests
 ```
 
 To get a coverage report after running the tests, use these commands instead:
 
-```py
+```sh
 coverage run --source=markdown -m unittest discover tests
 coverage report --show-missing
 ```
@@ -389,7 +389,7 @@ tests for the continuous integration server to run when a pull request is
 submitted, for more advanced changes, you may want to run those tests locally.
 To do so, simply install tox:
 
-```py
+```sh
 pip install tox
 ```
 
@@ -416,22 +416,23 @@ with no arguments. See help (`tox -h`) for more options.
 
 ## Versions
 
-Python-Markdown follows [Semantic Versioning] and uses the
-`MAJOR.MINOR.PATCH[.dev#|a#|b#|rc#]` format for identifying releases. The status
-of the `master` branch should always be identified in the `__version_info__`
-tuple defined in [`markdown/__meta__.py`][markdown/__meta__.py]. The contents of
-that tuple will automatically be converted into a normalized version which
-conforms to [PEP 440]. Each time the version is changed, the continuous
-integration server will run a test to ensure that the current version is in a
-valid normalized format.
+Python-Markdown follows the [Python Version Specification] (originally defined
+in [PEP 440]) and uses the `MAJOR.MINOR.MICRO[.dev#|a#|b#|rc#]` format for
+identifying releases. The status of the `master` branch should always be
+identified in the `__version_info__` tuple defined in[`markdown/__meta__.py`]
+[markdown/__meta__.py]. The contents of that tuple will automatically be
+converted into a normalized version string which conforms to the
+[Python Version Specification]. Each time the version is changed, the
+continuous integration server will run a test to ensure that the current
+version is in a valid normalized format.
 
 ### Version Status
 
 A MAJOR version is in development status when the MINOR version is `0`, the
-PATCH version is `0`, and the version includes a `dev` segment.
+MICRO version is `0`, and the version includes a `dev` segment.
 
 A MINOR version is in development status when the MINOR version is not `0`, the
-PATCH version is `0`, and the version includes a `dev` segment.
+MICRO version is `0`, and the version includes a `dev` segment.
 
 At all other times, the code is considered stable and release-ready.
 
@@ -446,7 +447,7 @@ failed prior to the change.
 
 New features and backward incompatible changes may only be merged to the
 `master` branch when the MAJOR and/or MINOR version is in development status
-pursuant to [Semantic Versioning].
+pursuant to the [Python Version Specification].
 
 A separate commit to the `master` branch should be made to bump up the MAJOR
 and/or MINOR version and set development status. Only then will any pull
@@ -459,7 +460,7 @@ request back-porting the fix made against that branch. The version branch should
 be named with the most recently released MINOR version. For example, if the
 `master` branch is at `3.1.dev0` and the most recent MINOR release was `3.0.4`,
 then the version branch would be named `3.0` and any releases from that branch
-would increment the PATCH version only (`3.0.5`, `3.0.6`...).
+would increment the MICRO version only (`3.0.5`, `3.0.6`...).
 
 ## Release Process
 
@@ -474,24 +475,37 @@ following steps:
 
 3. Update the version defined in [`markdown/__meta__.py`][markdown/__meta__.py].
 
-4. Build a local copy of the documentation, browse through the pages and
+4. Build a local copy of the documentation and browse through the pages to
    confirm that no obvious issues exist with the documentation.
 
-5. Create a pull request with a commit message in the following format:
+5. Create a pull request labeled `release`{ .label .release } with a commit
+   message in the following format:
 
         Bump version to X.X.X
 
+    !!! note 
+
+        For the checks to run properly the `release`{ .label .release } label
+        must be set on GitHub before creating the pull request. If the label
+        is added to the pull request later, additional changes will need to
+        be pushed to the pull request for the checks to acknowledge the
+        label.The relevant check verifies that the version defined in the
+        code matches the latest version in the changelog and that the
+        changelog no longer lists an `unreleased` entry. This check is
+        necessary to ensure deployment will not fail later. 
+
 6. After all checks have passed, merge the pull request.
 
-7. Create a git tag with the new version as the tag name and push to the
-   [Python-Markdown/markdown] repository. The new tag should trigger a GitHub
-   workflow which will automatically deploy the release to PyPI and update the
-   documentation.
+7. Create a git tag with the new version as the tag name (in the format X.X.X
+   with no prefixes or suffixes) and push to the [Python-Markdown/markdown] 
+   repository. The new tag should trigger a GitHub workflow which will
+   automatically deploy the release to PyPI and update the documentation.
 
     In the event that the deployment fails, the following steps can be taken to
     deploy manually:
 
-    - Deploy the release to [PyPI] with the command `make deploy`.
+    - Deploy the release to [PyPI] with the command `make deploy` (a valid
+      authentication token will need to be provided).
 
     - Deploy an update to the documentation using [MkDocs]. The following example
       assumes that local clones of the [Python-Markdown/markdown] and
@@ -504,7 +518,7 @@ following steps:
 
 ## Issue and Pull Request Labels
 
-Below are the labels used to track and manages issues and pull requests. The
+Below are the labels used to track and manage issues and pull requests. The
 labels are loosely grouped by their purpose, but it is not necessary for every
 issue to have a label from every group, and an issue may have more than one
 label from the same group.
@@ -551,6 +565,10 @@ label from the same group.
 | `approved`{ .label .approved }        | The pull request is ready to be merged.              |
 | `rejected`{ .label .rejected }        | The pull request is rejected for the stated reasons. |
 
+One additional label exists named `release`{ .label .release }. This label should only be
+assigned to pull requests which bump the version. See the [Release Process](#release-process)
+for details.
+
 [Python-Markdown Organization]: https://github.com/Python-Markdown
 [Python-Markdown Code of Conduct]: https://github.com/Python-Markdown/markdown/blob/master/CODE_OF_CONDUCT.md
 [Python-Markdown/markdown]: https://github.com/Python-Markdown/markdown
@@ -582,8 +600,8 @@ label from the same group.
 [tox]: https://tox.readthedocs.io/en/latest/
 [aspell]: http://aspell.net/
 [test tools]: test_tools.md
-[Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[markdown/__meta__.py]: https://github.com/Python-Markdown/markdown/blob/master/markdown/__meta__.py#L29
+[Python Version Specification]: https://packaging.python.org/en/latest/specifications/version-specifiers/
+[markdown/__meta__.py]: https://github.com/Python-Markdown/markdown/blob/master/markdown/__meta__.py#L31
 [PEP 440]: https://www.python.org/dev/peps/pep-0440/
 [PyPI]: https://pypi.org/project/Markdown/
 [Python-Markdown/Python-Markdown.github.io]: https://github.com/Python-Markdown/Python-Markdown.github.io
@@ -596,41 +614,46 @@ label from the same group.
         font-weight: 600;
         line-height: 15px;
         display: inline-block;
-        padding: 4px 6px;
+        padding: 0 8px;
+        margin: 4px 0;
+        border-radius: 999px;
     }
     code.bug {
-        background-color: #c45b46;
+        background-color: #c45b46 !important;
     }
     code.feature {
-        background-color: #7b17d8;
+        background-color: #7b17d8 !important;
         color: #ffffff;
     }
     code.support {
-        background-color: #efbe62;
+        background-color: #efbe62 !important;
     }
     code.process {
-        background-color: #eec9ff;
+        background-color: #eec9ff !important;
     }
     code.core {
-        background-color: #0b02e1;
+        background-color: #0b02e1 !important;
         color: #ffffff;
     }
     code.extension {
-        background-color: #709ad8;
+        background-color: #709ad8 !important;
     }
     code.docs {
-        background-color: #b2ffeb;
+        background-color: #b2ffeb !important;
     }
     code.approved {
-        background-color: #beed6d;
+        background-color: #beed6d !important;
     }
     code.low {
-        background-color: #dddddd;
+        background-color: #dddddd !important;
     }
     code.pending {
-        background-color: #f0f49a;
+        background-color: #f0f49a !important;
     }
     code.rejected {
-        background-color: #f7c7be;
+        background-color: #f7c7be !important;
+    }
+    code.release {
+        background-color: #d4c5f9 !important;
     }
 </style>

@@ -21,7 +21,7 @@ Abbreviations are defined using the syntax established in
 
 Thus, the following text (taken from the above referenced PHP documentation):
 
-```py
+```md
 The HTML specification
 is maintained by the W3C.
 
@@ -31,10 +31,14 @@ is maintained by the W3C.
 
 will be rendered as:
 
-```py
+```html
 <p>The <abbr title="Hyper Text Markup Language">HTML</abbr> specification
 is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.</p>
 ```
+
+The backslash (`\`) is not permitted in an abbreviation. Any abbreviation
+definitions which include one or more backslashes between the square brackets
+will not be recognized as an abbreviation definition.
 
 Usage
 -----
@@ -42,10 +46,25 @@ Usage
 See [Extensions](index.md) for general extension usage. Use `abbr` as the name
 of the extension.
 
-This extension does not accept any special configuration options.
+The following options are provided to configure the output:
+
+* **`glossary`**:
+    A dictionary where the `key` is the abbreviation and the `value` is the definition.
 
 A trivial example:
 
-```py
+```python
 markdown.markdown(some_text, extensions=['abbr'])
+```
+
+Disabling Abbreviations
+-----------------------
+
+When using the `glossary` option, there may be times when you need to turn off
+a specific abbreviation. To do this, set the abbreviation to `''` or `""`.
+
+```md
+The HTML abbreviation is disabled on this page.
+
+*[HTML]: ''
 ```

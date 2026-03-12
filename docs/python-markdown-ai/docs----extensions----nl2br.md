@@ -14,7 +14,7 @@ hard breaks; like StackOverflow and [GitHub][] flavored Markdown do.
 Example
 -------
 
-```py
+```pycon
 >>> import markdown
 >>> text = """
 ... Line 1
@@ -36,6 +36,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```py
+```python
 markdown.markdown(some_text, extensions=['nl2br'])
 ```

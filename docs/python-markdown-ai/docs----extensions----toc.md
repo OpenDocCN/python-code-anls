@@ -18,7 +18,7 @@ By default, all headers will automatically have unique `id` attributes
 generated based upon the text of the header. Note this example, in which all
 three headers would have the same `id`:
 
-```py
+```md
 #Header
 #Header
 #Header
@@ -26,7 +26,7 @@ three headers would have the same `id`:
 
 Results in:
 
-```py
+```html
 <h1 id="header">Header</h1>
 <h1 id="header_1">Header</h1>
 <h1 id="header_2">Header</h1>
@@ -36,7 +36,7 @@ Place a marker in the document where you would like the Table of Contents to
 appear. Then, a nested list of all the headers in the document will replace the
 marker. The marker defaults to `[TOC]` so the following document:
 
-```py
+```md
 [TOC]
 
 # Header 1
@@ -46,13 +46,15 @@ marker. The marker defaults to `[TOC]` so the following document:
 
 would generate the following output:
 
-```py
+```html
 <div class="toc">
   <ul>
-    <li><a href="#header-1">Header 1</a></li>
+    <li>
+      <a href="#header-1">Header 1</a>
       <ul>
         <li><a href="#header-2">Header 2</a></li>
       </ul>
+    </li>
   </ul>
 </div>
 <h1 id="header-1">Header 1</h1>
@@ -64,7 +66,7 @@ Table of Contents is available as an attribute (`toc`) on the Markdown class.
 This allows one to insert the Table of Contents elsewhere in their page
 template. For example:
 
-```py
+```pycon
 >>> md = markdown.Markdown(extensions=['toc'])
 >>> html = md.convert(text)
 >>> page = render_some_template(context={'body': html, 'toc': md.toc})
@@ -74,12 +76,14 @@ The `toc_tokens` attribute is also available on the Markdown class and contains
 a nested list of dict objects. For example, the above document would result in
 the following object at `md.toc_tokens`:
 
-```py
+```python
 [
     {
         'level': 1,
         'id': 'header-1',
         'name': 'Header 1',
+        'html': 'Header 1',
+        'data-toc-label': '',
         'children': [
             {'level': 2, 'id': 'header-2', 'name': 'Header 2', 'children':[]}
         ]
@@ -90,6 +94,11 @@ the following object at `md.toc_tokens`:
 Note that the `level` refers to the `hn` level. In other words, `<h1>` is level
 `1` and `<h2>` is level `2`, etc. Be aware that improperly nested levels in the
 input may result in odd nesting of the output.
+
+`name` is the sanitized value which would also be used as a label for the HTML
+version of the Table of Contents. `html` contains the fully rendered HTML
+content of the heading and has not been sanitized in any way. This may be used
+with your own custom sanitation to create custom table of contents.
 
 ### Custom Labels
 
@@ -102,7 +111,7 @@ For example, the following Markdown:
 
 [Attribute Lists Extension]: attr_list.md
 
-```py
+```md
 [TOC]
 
 # Functions
@@ -111,13 +120,15 @@ For example, the following Markdown:
 ```
 would generate the following output:
 
-```py
+```html
 <div class="toc">
   <ul>
-    <li><a href="#functions">Functions</a></li>
+    <li>
+      <a href="#functions">Functions</a>
       <ul>
         <li><a href="#markdown">markdown.markdown</a></li>
       </ul>
+    </li>
   </ul>
 </div>
 <h1 id="functions">Functions</h1>
@@ -130,6 +141,10 @@ the HTML header element. Also note that the ID was manually defined in the
 attribute list to provide a cleaner URL when linking to the header. If the ID is
 not manually defined, it is always derived from the text of the header, never
 from the `data-toc-label` attribute.
+
+The value of the `data-toc-label` attribute is sanitized and stripped of any HTML
+tags. However, `toc_tokens` will contain the raw content under
+`data-toc-label`.
 
 Usage
 -----
@@ -239,6 +254,6 @@ The following options are provided to configure the output:
 
 A trivial example:
 
-```py
+```python
 markdown.markdown(some_text, extensions=['toc'])
 ```

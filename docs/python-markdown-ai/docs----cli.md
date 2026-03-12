@@ -12,11 +12,13 @@ Generally, you will want to have the Markdown library fully installed on your
 system to run the command line script. See the
 [Installation instructions](install.md) for details.
 
+## Basic Usage
+
 Python-Markdown's command line script takes advantage of Python's `-m` flag.
 Therefore, assuming the python executable is on your system path, use the
 following format:
 
-```py
+```bash
 python -m markdown [options] [args]
 ```
 
@@ -24,28 +26,146 @@ That will run the module as a script with the options and arguments provided.
 
 At its most basic usage, one would simply pass in a file name as the only argument:
 
-```py
+```bash
 python -m markdown input_file.txt
 ```
 
-Piping input and output (on `STDIN` and `STDOUT`) is fully supported as well.
+Use the `--help` option for a list of all available options and arguments:
+
+```bash
+python -m markdown --help
+```
+
+!!! warning
+
+    The Python-Markdown library does ***not*** sanitize its HTML output. If
+    you are processing Markdown input from an untrusted source, it is your
+    responsibility to ensure that it is properly sanitized. For more
+    information see [Sanitizing HTML Output](sanitization.md).
+
+## Piping Input and Output
+
+Piping input and output (on `STDIN` and `STDOUT`) is fully supported.
 For example:
 
-```py
+```bash
 echo "Some **Markdown** text." | python -m markdown > output.html
 ```
 
-Use the `--help` option for a list all available options and arguments:
-
-```py
-python -m markdown --help
+The above command would generate a file named `output.html` with the following content:
+```html
+<p>Some <strong>Markdown</strong> Text.</p>
 ```
+
+As Python-Markdown only ever outputs HTML fragments (no `<html>`, `<head>`,
+and `<body>` tags), it is generally expected that the command line interface
+will always be used to pipe output to a templating engine. In the event that
+no additional content is needed and the output only needs to be wrapped in
+otherwise empty `<html>`, `<head>`, and `<body>` tags, 
+[JustHTML](https://emilstenstrom.github.io/justhtml/) can do that with with
+a single command:
+
+```bash
+echo "Some **Markdown** text." | python -m markdown | justhtml - --fragment > output.html
+```
+
+The above command would generate a file named `output.html` with the following content:
+
+```html
+<html>
+  <head></head>
+  <body>
+    <p>Some <strong>Markdown</strong> Text.</p>
+  </body>
+</html>
+```
+
+If you don't need or want JustHTML's HTML sanitation, you can disable it with the
+`--unsafe` flag, although that is not recommended. See JustHTML's 
+[Command Line Interface](https://emilstenstrom.github.io/justhtml/cli.html)
+documentation for details.
+
+## Using Extensions
+
+To load a Python-Markdown extension from the command line use the `-x`
+(or `--extension`) option. The extension module must be on your `PYTHONPATH`
+(see the [Extension API](extensions/api.md) for details). The extension can
+then be invoked by the name assigned to an entry point or using Python's dot
+notation to point to an extension
+
+For example, to load an extension with the assigned entry point name `myext`,
+run the following command:
+
+```bash
+python -m markdown -x myext input.txt
+```
+
+And to load an extension with Python's dot notation:
+
+```bash
+python -m markdown -x path.to.module:MyExtClass input.txt
+```
+
+To load multiple extensions, specify an `-x` option for each extension:
+
+```bash
+python -m markdown -x myext -x path.to.module:MyExtClass input.txt
+```
+
+If the extension supports configuration options (see the documentation for the
+extension you are using to determine what settings it supports, if any), you
+can pass them in as well:
+
+```bash
+python -m markdown -x myext -c config.yml input.txt
+```
+
+The `-c` (or `--extension_configs`) option accepts a file name. The file must be
+in either the [YAML] or [JSON] format and contain YAML or JSON data that would
+map to a Python Dictionary in the format required by the
+[`extension_configs`][ec] keyword of the `markdown.Markdown` class. Therefore,
+the file `config.yaml` referenced in the above example might look like this:
+
+```yaml
+myext:
+    option1: 'value1'
+    option2: True
+```
+
+Similarly, a JSON configuration file might look like this:
+
+```json
+{
+  "myext":
+  {
+    "option1": "value1",
+    "option2": "value2"
+  }
+}
+```
+
+Note that while the `--extension_configs` option does specify the
+`myext` extension, you still need to load the extension with the `-x` option,
+or the configuration for that extension will be ignored. Further, if an
+extension requires a value that cannot be parsed in JSON (for example a
+reference to a function), one has to use a YAML configuration file.
+
+The `--extension_configs` option will only support YAML configuration files if
+[PyYAML] is installed on your system. JSON should work with no additional
+dependencies. The format of your configuration file is automatically detected.
+
+[ec]: reference.md#extension_configs
+[YAML]: https://yaml.org/
+[JSON]: https://json.org/
+[PyYAML]: https://pyyaml.org/
+[2.5 release notes]: change_log/release-2.5.md
+
+## Using the `markdown_py` Command
 
 If you don't want to call the python executable directly (using the `-m` flag),
 follow the instructions below to use a wrapper script:
 
-Setup
------
+### Setup `markdown_py`
 
 Upon installation, the `markdown_py` script will have been copied to
 your Python "Scripts" directory. Different systems require different methods to
@@ -91,99 +211,22 @@ path.
     is suggested that you create a symbolic link to `markdown_py` with your
     preferred name.
 
-Usage
------
+### Using `markdown_py`
 
 To use `markdown_py` from the command line, run it as
 
-```py
+```bash
 markdown_py input_file.txt
 ```
 
 or
 
-```py
+```bash
 markdown_py input_file.txt > output_file.html
 ```
 
 For a complete list of options, run
 
-```py
+```bash
 markdown_py --help
 ```
-
-Using Extensions
-----------------
-
-To load a Python-Markdown extension from the command line use the `-x`
-(or `--extension`) option. The extension module must be on your `PYTHONPATH`
-(see the [Extension API](extensions/api.md) for details). The extension can
-then be invoked by the name assigned to an entry point or using Python's dot
-notation to point to an extension
-
-For example, to load an extension with the assigned entry point name `myext`,
-run the following command:
-
-```py
-python -m markdown -x myext input.txt
-```
-
-And to load an extension with Python's dot notation:
-
-```py
-python -m markdown -x path.to.module:MyExtClass input.txt
-```
-
-To load multiple extensions, specify an `-x` option for each extension:
-
-```py
-python -m markdown -x myext -x path.to.module:MyExtClass input.txt
-```
-
-If the extension supports configuration options (see the documentation for the
-extension you are using to determine what settings it supports, if any), you
-can pass them in as well:
-
-```py
-python -m markdown -x myext -c config.yml input.txt
-```
-
-The `-c` (or `--extension_configs`) option accepts a file name. The file must be
-in either the [YAML] or [JSON] format and contain YAML or JSON data that would
-map to a Python Dictionary in the format required by the
-[`extension_configs`][ec] keyword of the `markdown.Markdown` class. Therefore,
-the file `config.yaml` referenced in the above example might look like this:
-
-```py
-myext:
-    option1: 'value1'
-    option2: True
-```
-
-Similarly, a JSON configuration file might look like this:
-
-```py
-{
-  "myext":
-  {
-    "option1": "value1",
-    "option2": "value2"
-  }
-}
-```
-
-Note that while the `--extension_configs` option does specify the
-`myext` extension, you still need to load the extension with the `-x` option,
-or the configuration for that extension will be ignored. Further, if an
-extension requires a value that cannot be parsed in JSON (for example a
-reference to a function), one has to use a YAML configuration file.
-
-The `--extension_configs` option will only support YAML configuration files if
-[PyYAML] is installed on your system. JSON should work with no additional
-dependencies. The format of your configuration file is automatically detected.
-
-[ec]: reference.md#extension_configs
-[YAML]: https://yaml.org/
-[JSON]: https://json.org/
-[PyYAML]: https://pyyaml.org/
-[2.5 release notes]: change_log/release-2.5.md

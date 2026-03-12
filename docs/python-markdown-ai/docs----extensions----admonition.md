@@ -17,7 +17,7 @@ Syntax
 
 Admonitions are created using the following syntax:
 
-```py
+```md
 !!! type "optional explicit title within double quotes"
     Any number of other indented markdown elements.
 
@@ -27,14 +27,14 @@ Admonitions are created using the following syntax:
 `type` will be used as the CSS class name and as default title. It must be a
 single word. So, for instance:
 
-```py
+```md
 !!! note
     You should note that the title will be automatically capitalized.
 ```
 
 will render:
 
-```py
+```html
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You should note that the title will be automatically capitalized.</p>
@@ -43,14 +43,14 @@ will render:
 
 Optionally, you can use custom titles. For instance:
 
-```py
+```md
 !!! danger "Don't try this at home"
     ...
 ```
 
 will render:
 
-```py
+```html
 <div class="admonition danger">
 <p class="admonition-title">Don't try this at home</p>
 <p>...</p>
@@ -59,14 +59,14 @@ will render:
 
 If you don't want a title, use a blank string `""`:
 
-```py
+```md
 !!! important ""
     This is an admonition box without a title.
 ```
 
 results in:
 
-```py
+```html
 <div class="admonition important">
 <p>This is an admonition box without a title.</p>
 </div>
@@ -75,14 +75,14 @@ results in:
 You can also provide additional CSS class names separated by spaces. The first
 class should be the "type." For example:
 
-```py
+```md
 !!! danger highlight blink "Don't try this at home"
     ...
 ```
 
 will render:
 
-```py
+```html
 <div class="admonition danger highlight blink">
 <p class="admonition-title">Don't try this at home</p>
 <p>...</p>
@@ -110,6 +110,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```py
+```python
 markdown.markdown(some_text, extensions=['admonition'])
 ```
