@@ -1,45 +1,66 @@
 # LLM4Decompile 源码解析
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/albertan017/LLM4Decompile/blob/main/samples/logo-dark.png">
+    <img alt="LLM4Decompile" src="https://github.com/albertan017/LLM4Decompile/blob/main/samples/logo-light.png" width=55%>
+  </picture>
+</p>
+
 <p align="left">
-    📊&nbsp;<a href="#evaluation-results">Results</a>
+    📊&nbsp;<a href="#evaluation">Results</a>
     | 🤗&nbsp;<a href="#models">Models</a>
     | 🚀&nbsp;<a href="#quick-start">Quick Start</a>
     | 📚&nbsp;<a href="#humaneval-decompile">HumanEval-Decompile</a>
     | 📎&nbsp;<a href="#citation">Citation</a>
     | 📝&nbsp;<a href="https://arxiv.org/abs/2403.05286">Paper</a>
+    | 🖥️&nbsp;<a href="https://colab.research.google.com/drive/1X5TuUKuNuksGJZz6Cc83KKI0ATBP9q7r?usp=sharing">Colab</a>
+    | ▶️&nbsp;<a href="https://www.youtube.com/watch?v=x7knF3Z1yLk">YouTube</a>
 </p>
 
 Reverse Engineering: Decompiling Binary Code with Large Language Models
 
+[![GitHub Tread](https://trendshift.io/api/badge/repositories/8664)](https://trendshift.io/repositories/8664)
+
 ## Updates
-* [2023-05-13]: Release [V1.5](https://huggingface.co/LLM4Binary/llm4decompile-6.7b-v1.5) series. V1.5 are trained with a larger dataset (15B tokens) and a maximum token **length of 4,096**, with remarkable  performance (up to **100% improvement**) compared to the previous model.
-* [2023-03-16]: Add [llm4decompile-6.7b-uo](https://huggingface.co/arise-sustech/llm4decompile-6.7b-uo) model which is trained without prior knowledge of the optimization levels (O0~O3), the average re-executability is around 0.219, performs the best in our models.
+* [2025-10-04]: Release SK²Decompile: LLM-based Two-Phase Binary Decompilation from Skeleton to Skin. Phase 1 Structure Recovery (Skeleton): Transform binary/pseudo-code into obfuscated intermediate representations 🤗 [HF Link](https://huggingface.co/LLM4Binary/sk2decompile-struct-6.7b). Phase 2 Identifier Naming (Skin): Generate human-readable source code with meaningful identifiers 🤗 [HF Link](https://huggingface.co/LLM4Binary/sk2decompile-ident-6.7).
+* [2025-05-20]: Release [decompile-bench](https://huggingface.co/collections/LLM4Binary/decompile-bench-68259091c8d49d0ebd5efda9), contains two million binary-source function pairs for training, and 70K function pairs for evaluation. Please refer to the [decompile-bench](https://github.com/albertan017/LLM4Decompile/tree/main/decompile-bench) folder for details.
+* [2024-10-17]: Release [decompile-ghidra-100k](https://huggingface.co/datasets/LLM4Binary/decompile-ghidra-100k), a subset of 100k training samples (25k per optimization level). We provide a [training script](https://github.com/albertan017/LLM4Decompile/blob/main/train/README.md) that runs in ~3.5 hours on a single A100 40G GPU. It achieves a 0.26 re-executability rate, with a total cost of under $20 for quick replication of LLM4Decompile.
+* [2024-09-26]: Update a [Colab notebook](https://colab.research.google.com/drive/1X5TuUKuNuksGJZz6Cc83KKI0ATBP9q7r?usp=sharing) to demonstrate the usage of the LLM4Decompile model, including examples for the LLM4Decompile-End and LLM4Decompile-Ref models.
+* [2024-09-23]: Release [LLM4Decompile-9B-v2](https://huggingface.co/LLM4Binary/llm4decompile-9b-v2), fine-tuned based on [Yi-Coder-9B](https://huggingface.co/01-ai/Yi-Coder-9B), achieved a re-executability rate of **0.6494** on the Decompile benchmark.
+* [2024-06-19]: Release [V2](https://huggingface.co/LLM4Binary/llm4decompile-6.7b-v2) series (LLM4Decompile-Ref). V2 (1.3B-22B), building upon **Ghidra**, are trained on 2 billion tokens to **refine** the decompiled pseudo-code from Ghidra. The 22B-V2 version outperforms the 6.7B-V1.5 by an additional 40.1%. Please check the [ghidra folder](https://github.com/albertan017/LLM4Decompile/tree/main/ghidra) for details.
+* [2024-05-13]: Release [V1.5](https://huggingface.co/LLM4Binary/llm4decompile-6.7b-v1.5) series (LLM4Decompile-End, directly decompile binary using LLM). V1.5 are trained with a larger dataset (15B tokens) and a maximum token **length of 4,096**, with remarkable  performance (over **100% improvement**) compared to the previous model.
+* [2024-03-16]: Add [llm4decompile-6.7b-uo](https://huggingface.co/arise-sustech/llm4decompile-6.7b-uo) model which is trained without prior knowledge of the optimization levels (O0~O3), the average re-executability is around 0.219, performs the best in our models.
 
 ## About
 * **LLM4Decompile** is the pioneering open-source large language model dedicated to decompilation. Its current version supports decompiling Linux x86_64 binaries, ranging from GCC's O0 to O3 optimization levels, into human-readable C source code. Our team is committed to expanding this tool's capabilities, with ongoing efforts to incorporate a broader range of architectures and configurations.
-* **HumanEval-Decompile** is the first decompilation benchmark that focuses on assessing the re-executability aspects of decompiled code. It is the C language adaptation of the HumanEval dataset and provides a suite of C solutions and assertions in evaluating the practical utility of decompiled code.
+* **LLM4Decompile-End** focuses on decompiling the binary directly. **LLM4Decompile-Ref** refines the pseudo-code decompiled by Ghidra.
 
+## Evaluation
 
-## Evaluation Results
-### Metrics
-* **Re-executability** evaluates whether the decompiled code can execute properly and pass all the predefined test cases.
-Re-executability serves as critical indicator in validating the effectiveness of a decompilation process. Re-executability provides critical measure of semantic correctness. By re-compiling the decompiled output and running the test cases, we assess if the decompilation preserved the program logic and behavior.
-
-### Benchmarks
-* **HumanEval-Decompile** A collection of 164 functions that exclusively rely on **standard** C libraries.
-* **ExeBench** A collection of 2,621 functions drawn from **real** projects, each utilizing user-defined functions, structures, and macros.
-
-
+### Framework
 <p align="center">
-<img src="https://github.com/albertan017/LLM4Decompile/blob/main/samples/pipeline.png" alt="image" width="400" height="auto">
+<img src="https://github.com/albertan017/LLM4Decompile/blob/main/samples/compile-decompile.png" alt="image" width="400" height="auto">
 </p>
 
-Figure 1 presents the steps involved in our decompilation evaluation. First, the source code (denoted as src) is compiled by the GCC compiler with specific parameters, such as optimization levels, to produce the executable binary. This binary is then disassembled into assembly language (asm) using the objdump tool. The assembly instructions are subsequently decompiled to reconstruct the source code in a format that's readable to humans (noted as src'). To assess the quality of the decompiled code (src'), it is tested for its functionality through test assertions (re-executability).
+During compilation, the Preprocessor processes the source code (SRC) to eliminate comments and expand macros or includes. The cleaned code is then forwarded to the Compiler, which converts it into assembly code (ASM). This ASM is transformed into binary code (0s and 1s) by the Assembler. The Linker finalizes the process by linking function calls to create an executable file. Decompilation, on the other hand, involves converting binary code back into a source file. LLMs, being trained on text, lack the ability to process binary data directly. Therefore, binaries must be disassembled by ```Objdump``` into assembly language (ASM) first. It should be noted that binary and disassembled ASM are equivalent, they can be interconverted, and thus we refer to them interchangeably. Finally, the loss is computed between the decompiled code and source code to guide the training. To assess the quality of the decompiled code (SRC'), it is tested for its functionality through test assertions (re-executability).
+
+### Metrics
+* **Re-executability** evaluates whether the decompiled code can execute properly and pass all the predefined test cases.
+
+### Benchmarks
+* **HumanEval-Decompile** A collection of 164 C functions that exclusively rely on **standard** C libraries.
+* **ExeBench** A collection of 2,621 functions drawn from **real** projects, each utilizing user-defined functions, structures, and macros.
+
 
 ### Results
 
 <p align="center">
-<img src="https://github.com/albertan017/LLM4Decompile/blob/main/samples/results_v1.5.png" alt="results" width="800" height="auto">
+<img src="https://github.com/albertan017/LLM4Decompile/blob/main/samples/results_end_final.png" alt="results" width="800" height="auto">
+</p>
+
+<p align="center">
+<img src="https://github.com/albertan017/LLM4Decompile/blob/main/samples/results_refine_final.png" alt="image" width="800" height="auto">
 </p>
 
 ## Models
@@ -47,30 +68,38 @@ Our LLM4Decompile includes models with sizes between 1.3 billion and 33 billion 
 
 | Model                 | Checkpoint                                                        | Size | Re-executability       | Note |
 |-----------------------|-------------------------------------------------------------------|------|---------------------|----------------------|
-| llm4decompile-1.3b     | 🤗 [HF Link](https://huggingface.co/arise-sustech/llm4decompile-1.3b)     | 1.3B | 10.6%   |-|
-| llm4decompile-6.7b     | 🤗 [HF Link](https://huggingface.co/arise-sustech/llm4decompile-6.7b)     | 6.7B | 21.4%   |-|
-| llm4decompile-33b      | 🤗 [HF Link](https://huggingface.co/arise-sustech/llm4decompile-33b)      | 33B  | 21.5%   |-|
-| llm4decompile-6.7b-nsp | 🤗 [HF Link](https://huggingface.co/arise-sustech/llm4decompile-6.7b-nsp) | 6.7B | 20.9%   | Note 1 |
-| llm4decompile-6.7b-uo  | 🤗 [HF Link](https://huggingface.co/arise-sustech/llm4decompile-6.7b-uo)  | 6.7B | 21.9%   | Note 2 |
-| **llm4decompile-1.3b-v1.5**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-1.3b-v1.5)   | 1.3B | **29.7%**   | Note 3 |
-| **llm4decompile-6.7b-v1.5**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-6.7b-v1.5)   | 6.7B | **47.7%**   | Note 3 |
+| **llm4decompile-1.3b-v1.5**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-1.3b-v1.5)   | 1.3B | **27.3%**   | Note 3 |
+| **llm4decompile-6.7b-v1.5**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-6.7b-v1.5)   | 6.7B | **45.4%**   | Note 3 |
+| **llm4decompile-1.3b-v2**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-1.3b-v2)   | 1.3B | **46.0%**   | Note 4 |
+| **llm4decompile-6.7b-v2**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-6.7b-v2)   | 6.7B | **52.7%**   | Note 4 |
+| **llm4decompile-9b-v2**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-9b-v2)   | 9B | **64.9%**  | Note 4 |
+| **llm4decompile-22b-v2**| 🤗 [HF Link](https://huggingface.co/LLM4Binary/llm4decompile-22b-v2)   | 22B | **63.6%**   | Note 4 |
 
+Note 3: V1.5 series are trained with a larger dataset (15B tokens) and a maximum token size of 4,096, with remarkable performance (over 100% improvement) compared to the previous model.
 
-Note 1: The NSP model is trained with assembly code, the average re-executability is around 0.17.
-
-Note 2: The unified optimization (UO) model is trained without prior knowledge of the optimization levels (O0~O3), the average re-executability is around 0.21. The pre-processing of the UO model is slightly different (no prior knowledge of the On), please check the [model page](https://huggingface.co/arise-sustech/llm4decompile-6.7b-uo#3-how-to-use).
-
-Note 3: V1.5 series are trained with a larger dataset (15B tokens) and a maximum token size of 4,096, with remarkable performance (up to 100% improvement) compared to the previous model.
+Note 4: V2 series are built upon **Ghidra** and trained on 2 billion tokens to **refine** the decompiled pseudo-code from Ghidra. Check [ghidra folder](https://github.com/albertan017/LLM4Decompile/tree/main/ghidra) for details.
 
 ## Quick Start
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1X5TuUKuNuksGJZz6Cc83KKI0ATBP9q7r?usp=sharing)
+
+**Setup:** Please use the script below to install the necessary environment.
+```
+git clone https://github.com/albertan017/LLM4Decompile.git
+cd LLM4Decompile
+conda create -n 'llm4decompile' python=3.9 -y
+conda activate llm4decompile
+pip install -r requirements.txt
+```
+
 Here is an example of how to use our model (Revised for V1.5. For previous models, please check the corresponding model page at HF).
-Note: **Replace** func0 with the function name you want to decompile.
+Note: **Replace the "func0" with the function name you want to decompile**.
 
 **Preprocessing:** Compile the C code into binary, and disassemble the binary into assembly instructions.
-```py
+```python
 import subprocess
 import os
-
+func_name = 'func0'
 OPT = ["O0", "O1", "O2", "O3"]
 fileName = 'samples/sample' #'path/to/file'
 for opt_state in OPT:
@@ -84,9 +113,9 @@ for opt_state in OPT:
     input_asm = ''
     with open(output_file+'.s') as f:#asm file
         asm= f.read()
-        if '<'+'func0'+'>:' not in asm: #IMPORTANT replace func0 with the function name
+        if '<'+func_name+'>:' not in asm: #IMPORTANT replace func0 with the function name
             raise ValueError("compile fails")
-        asm = '<'+'func0'+'>:' + asm.split('<'+'func0'+'>:')[-1].split('\n\n')[0] #IMPORTANT replace func0 with the function name
+        asm = '<'+func_name+'>:' + asm.split('<'+func_name+'>:')[-1].split('\n\n')[0] #IMPORTANT replace func0 with the function name
         asm_clean = ""
         asm_sp = asm.split("\n")
         for tmp in asm_sp:
@@ -111,7 +140,7 @@ Assembly instructions should be in the format:
 <FUNCTION_NAME>:\nOPERATIONS\nOPERATIONS\n
 
 Typical assembly instructions may look like this:
-```py
+```
 <func0>:
 endbr64
 lea    (%rdi,%rsi,1),%eax
@@ -120,7 +149,7 @@ retq
 
 
 **Decompilation:** Use LLM4Decompile to translate the assembly instructions into C:
-```py
+```python
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
@@ -142,31 +171,30 @@ print(f'original function:\n{func}')# Note we only decompile one function, where
 print(f'decompiled function:\n{c_func_decompile}')
 ```
 
+### Docker setup
+
+```
+# build docker
+docker build -t llm4decompile .
+
+# run docker with GPU
+docker run --gpus all -it --name llm4decompile llm4decompile /bin/bash
+
+# run demo.py (choose a model suitable for your resources before running)
+cd ghidra
+python demo.py
+```
+
 ## HumanEval-Decompile
-Data are stored in ``llm4decompile/decompile-eval/decompile-eval.json``, using JSON list format. There are 164*4 (O0, O1, O2, O3) samples, each with five keys:
+Data are stored in ``llm4decompile/decompile-eval/decompile-eval-executable-gcc-obj.json``, using JSON list format. There are 164*4 (O0, O1, O2, O3) samples, each with five keys:
 
 *   ``task_id``: indicates the ID of the problem.
 *   ``type``: the optimization stage, is one of [O0, O1, O2, O3].
 *   ``c_func``: C solution for HumanEval problem. 
 *   ``c_test``: C test assertions.
-*   ``input_asm_prompt``: assembly instructions with prompts, can be derived as in our [preprocessing example](https://github.com/albertan017/LLM4Decompile/blob/main/README.md#3-how-to-use-the-model).
+*   ``input_asm_prompt``: assembly instructions with prompts, can be derived as in our [preprocessing example](https://github.com/albertan017/LLM4Decompile?tab=readme-ov-file#quick-start).
 
-To run the evaluation on a single GPU and single process:
-```py
-cd LLM4Decompile
-python ./evaluation/run_evaluation_llm4decompile_singleGPU.py
-```
-
-To run the evaluation using TGI (10x faster, support multiple GPUs and multi-process):
-First, please install the text-generation-inference following the official [link](https://github.com/huggingface/text-generation-inference)
-```py
-git clone https://github.com/albertan017/LLM4Decompile.git
-cd LLM4Decompile
-pip install -r requirements.txt
-
-# Before running the evaluation script, please update the model_path to your local model path.
-bash ./scripts/run_evaluation_llm4decompile.sh
-```
+Please check the [evaluation scripts](https://github.com/albertan017/LLM4Decompile/tree/main/evaluation).
 
 ## On Going
 * Larger training dataset with the cleaning process. (done:2024.05.13)
@@ -178,7 +206,7 @@ bash ./scripts/run_evaluation_llm4decompile.sh
 This code repository is licensed under the MIT and DeepSeek License.
 
 ## Citation
-```py
+```
 @misc{tan2024llm4decompile,
       title={LLM4Decompile: Decompiling Binary Code with Large Language Models}, 
       author={Hanzhuo Tan and Qi Luo and Jing Li and Yuqun Zhang},
