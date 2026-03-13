@@ -1,200 +1,487 @@
-# `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_vertex_sequence.h`
 
-```py
-//----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.4
-// Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
-//
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
-//
-//----------------------------------------------------------------------------
-// Contact: mcseem@antigrain.com
-//          mcseemagg@yahoo.com
-//          http://www.antigrain.com
-//----------------------------------------------------------------------------
-//
-// vertex_sequence container and vertex_dist struct
-//
-//----------------------------------------------------------------------------
-#ifndef AGG_VERTEX_SEQUENCE_INCLUDED
-#define AGG_VERTEX_SEQUENCE_INCLUDED
+# `matplotlib\extern\agg24-svn\include\agg_vertex_sequence.h` 详细设计文档
 
-#include "agg_basics.h"
-#include "agg_array.h"
-#include "agg_math.h"
+This code defines a template class `vertex_sequence` for managing a sequence of vertices, with methods to add, modify, and close the sequence. It also includes a `vertex_dist` struct for storing vertex positions and distances, and a `vertex_dist_cmd` struct for storing additional command information.
 
-namespace agg
+## 整体流程
+
+```mermaid
+graph TD
+    A[Start] --> B[Create vertex_sequence instance]
+    B --> C[Add vertices to sequence]
+    C --> D[Modify last vertex if needed]
+    D --> E[Close sequence if needed]
+    E --> F[End]
+```
+
+## 类结构
+
+```
+agg::vertex_sequence (Template class)
+├── agg::pod_bvector (Base class)
+│   ├── add (Method)
+│   ├── remove_last (Method)
+│   ├── size (Method)
+│   └── ...
+├── agg::vertex_dist (Struct)
+│   ├── x (Field)
+│   ├── y (Field)
+│   ├── dist (Field)
+│   └── ...
+└── agg::vertex_dist_cmd (Struct)
+    ├── cmd (Field)
+    └── ... 
+```
+
+## 全局变量及字段
+
+
+### `EPSILON`
+    
+A small value used for floating-point comparisons.
+
+类型：`double`
+    
+
+
+### `vertex_dist_epsilon`
+    
+A small value used for calculating distances between vertices in vertex_dist and vertex_dist_cmd structures.
+
+类型：`double`
+    
+
+
+### `vertex_sequence.val`
+    
+Reference to the value to be added to the vertex sequence.
+
+类型：`const T&`
+    
+
+
+### `pod_bvector.size`
+    
+The current size of the pod_bvector.
+
+类型：`unsigned`
+    
+
+
+### `vertex_dist.x`
+    
+The x-coordinate of the vertex.
+
+类型：`double`
+    
+
+
+### `vertex_dist.y`
+    
+The y-coordinate of the vertex.
+
+类型：`double`
+    
+
+
+### `vertex_dist.dist`
+    
+The distance to the next vertex.
+
+类型：`double`
+    
+
+
+### `vertex_dist_cmd.cmd`
+    
+An additional command value associated with the vertex.
+
+类型：`unsigned`
+    
+    
+
+## 全局函数及方法
+
+
+### calc_distance
+
+计算两个点之间的距离。
+
+参数：
+
+- `x1`：`double`，第一个点的 x 坐标
+- `y1`：`double`，第一个点的 y 坐标
+- `x2`：`double`，第二个点的 x 坐标
+- `y2`：`double`，第二个点的 y 坐标
+
+返回值：`double`，两个点之间的距离
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Calculate distance}
+B --> C[End]
+```
+
+#### 带注释源码
+
+```cpp
+double calc_distance(double x1, double y1, double x2, double y2)
 {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+```
 
-    //----------------------------------------------------------vertex_sequence
-    // Modified agg::pod_bvector. The data is interpreted as a sequence 
-    // of vertices. It means that the type T must expose:
-    //
-    // bool T::operator() (const T& val)
-    // 
-    // that is called every time new vertex is being added. The main purpose
-    // of this operator is the possibility to calculate some values during 
-    // adding and to return true if the vertex fits some criteria or false if
-    // it doesn't. In the last case the new vertex is not added. 
-    // 
-    // The simple example is filtering coinciding vertices with calculation 
-    // of the distance between the current and previous ones:
-    //
-    //    struct vertex_dist
-    //    {
-    //        double   x;
-    //        double   y;
-    //        double   dist;
-    //
-    //        vertex_dist() {}
-    //        vertex_dist(double x_, double y_) :
-    //            x(x_),
-    //            y(y_),
-    //            dist(0.0)
-    //        {
-    //        }
-    //
-    //        bool operator () (const vertex_dist& val)
-    //        {
-    //            return (dist = calc_distance(x, y, val.x, val.y)) > EPSILON;
-    //        }
-    //    };
-    //
-    // Function close() calls this operator and removes the last vertex if 
-    // necessary.
-    //------------------------------------------------------------------------
-    template<class T, unsigned S=6> 
-    class vertex_sequence : public pod_bvector<T, S>
+
+
+### vertex_sequence.add
+
+This function adds a new vertex to the vertex sequence. It checks if the new vertex is within a certain distance from the previous vertex and removes the previous vertex if it is not, ensuring that the vertices are not coinciding.
+
+参数：
+
+- `val`：`const T&`，The vertex to be added to the sequence.
+
+返回值：`void`，No return value.
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B[Check size > 1]
+    B -- Yes --> C[Check if val fits criteria]
+    C -- Yes --> D[Add val]
+    C -- No --> E[Remove last vertex]
+    E --> D
+    D --> F[End]
+    B -- No --> F
+```
+
+#### 带注释源码
+
+```cpp
+template<class T, unsigned S> 
+void vertex_sequence<T, S>::add(const T& val)
+{
+    if(base_type::size() > 1)
     {
-    public:
-        typedef pod_bvector<T, S> base_type;
-
-        // 添加一个新顶点到顶点序列中
-        void add(const T& val);
-        
-        // 修改最后一个顶点的数值
-        void modify_last(const T& val);
-        
-        // 根据标志决定是否关闭顶点序列，可能会移除最后一个顶点
-        void close(bool remove_flag);
-    };
-
-
-
-    //------------------------------------------------------------------------
-    template<class T, unsigned S> 
-    void vertex_sequence<T, S>::add(const T& val)
-    {
-        // 如果顶点序列中有多于一个顶点
-        if(base_type::size() > 1)
+        if(!(*this)[base_type::size() - 2]((*this)[base_type::size() - 1])) 
         {
-            // 检查最后两个顶点是否满足特定条件，如果不满足则移除倒数第二个顶点
-            if(!(*this)[base_type::size() - 2]((*this)[base_type::size() - 1])) 
-            {
-                base_type::remove_last();
-            }
+            base_type::remove_last();
         }
-        // 将新的值添加到顶点序列中
-        base_type::add(val);
     }
+    base_type::add(val);
+}
+``` 
 
 
-    //------------------------------------------------------------------------
-    template<class T, unsigned S> 
-    void vertex_sequence<T, S>::modify_last(const T& val)
+
+### vertex_sequence.modify_last
+
+修改序列中的最后一个顶点。
+
+参数：
+
+- `val`：`const T&`，要修改为的顶点值
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B[Remove last vertex]
+    B --> C[Add new value]
+    C --> D[End]
+```
+
+#### 带注释源码
+
+```cpp
+template<class T, unsigned S> 
+void vertex_sequence<T, S>::modify_last(const T& val)
+{
+    base_type::remove_last(); // 移除最后一个顶点
+    add(val); // 添加新的顶点
+}
+```
+
+
+
+### vertex_sequence.close
+
+This function closes the vertex sequence by removing vertices that do not meet certain criteria, based on the operator defined for the vertex type.
+
+参数：
+
+- `closed`：`bool`，Indicates whether the vertex sequence should be closed. If true, the function will also remove vertices that do not connect to the first vertex.
+
+返回值：`void`，No return value. The vertex sequence is modified in place.
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B[Check if size > 1]
+    B -->|Yes| C[Check if last two vertices match]
+    C -->|Yes| D[Remove last vertex]
+    C -->|No| E[End]
+    B -->|No| F[Add new vertex]
+    F --> G[End]
+```
+
+#### 带注释源码
+
+```cpp
+template<class T, unsigned S> 
+void vertex_sequence<T, S>::close(bool closed)
+{
+    while(base_type::size() > 1)
     {
-        // 移除最后一个顶点
+        if((*this)[base_type::size() - 2]((*this)[base_type::size() - 1])) break;
+        T t = (*this)[base_type::size() - 1];
         base_type::remove_last();
-        // 添加新的顶点值到顶点序列中
-        add(val);
+        modify_last(t);
     }
 
-
-
-    //------------------------------------------------------------------------
-    template<class T, unsigned S> 
-    void vertex_sequence<T, S>::close(bool closed)
+    if(closed)
     {
-        // 当顶点序列中的顶点数大于1时执行循环
         while(base_type::size() > 1)
         {
-            // 检查倒数第二个顶点和最后一个顶点是否满足特定条件，如果满足则退出循环
-            if((*this)[base_type::size() - 2]((*this)[base_type::size() - 1])) break;
-            // 将最后一个顶点保存到临时变量t中
-            T t = (*this)[base_type::size() - 1];
-            // 移除最后一个顶点
+            if((*this)[base_type::size() - 1]((*this)[0])) break;
             base_type::remove_last();
-            // 修改最后一个顶点为临时变量t的值
-            modify_last(t);
-        }
-
-        // 如果需要闭合多边形
-        if(closed)
-        {
-            // 当顶点序列中的顶点数大于1时执行循环
-            while(base_type::size() > 1)
-            {
-                // 检查最后一个顶点和第一个顶点是否满足特定条件，如果满足则退出循环
-                if((*this)[base_type::size() - 1]((*this)[0])) break;
-                // 移除最后一个顶点
-                base_type::remove_last();
-            }
         }
     }
-
-
-    //-------------------------------------------------------------vertex_dist
-    // 顶点(x, y)，同时保存到下一个顶点的距离。如果多边形闭合，则最后一个顶点到第一个顶点的距离为dist，
-    // 如果是折线则为0.0。
-    struct vertex_dist
-    {
-        double   x;    // x坐标
-        double   y;    // y坐标
-        double   dist; // 到下一个顶点的距离
-
-        vertex_dist() {} // 默认构造函数
-
-        // 带参数的构造函数，初始化x、y坐标和距离dist
-        vertex_dist(double x_, double y_) :
-            x(x_),
-            y(y_),
-            dist(0.0)
-        {
-        }
-
-        // 重载函数调用操作符，计算当前顶点到另一个顶点的距离，并根据计算结果返回布尔值
-        bool operator () (const vertex_dist& val)
-        {
-            // 计算当前顶点到val顶点的距离
-            bool ret = (dist = calc_distance(x, y, val.x, val.y)) > vertex_dist_epsilon;
-            // 如果距离小于等于vertex_dist_epsilon，则将dist设置为1.0 / vertex_dist_epsilon
-            if(!ret) dist = 1.0 / vertex_dist_epsilon;
-            return ret; // 返回计算结果
-        }
-    };
-
-
-
-    //--------------------------------------------------------vertex_dist_cmd
-    // 与上述结构相同，但增加了额外的“command”值
-    struct vertex_dist_cmd : public vertex_dist
-    {
-        unsigned cmd; // 额外的命令值
-
-        vertex_dist_cmd() {} // 默认构造函数
-
-        // 带参数的构造函数，初始化x、y坐标、距离dist和命令值cmd
-        vertex_dist_cmd(double x_, double y_, unsigned cmd_) :
-            vertex_dist(x_, y_),
-            cmd(cmd_)
-        {
-        }
-    };
 }
-// 结束一个条件编译指令块，对应于 #ifdef 或 #ifndef，用于结束预处理器条件指令的作用域
-#endif
-// 结束条件编译指令，对应于 #ifdef 或 #ifndef，指示条件编译指令的结束
 ```
+
+
+
+### vertex_sequence.add
+
+This method adds a new vertex to the vertex sequence. It checks if the new vertex fits certain criteria based on the previous vertex using the operator() of the vertex type. If the vertex does not fit the criteria, it is not added to the sequence.
+
+参数：
+
+- `val`：`const T&`，The vertex to be added to the sequence.
+
+返回值：`void`，No return value.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Check size > 1?}
+B -- Yes --> C{Check fit criteria?}
+C -- Yes --> D[Add vertex]
+C -- No --> E[Remove last vertex]
+D --> F[End]
+E --> F
+```
+
+#### 带注释源码
+
+```cpp
+template<class T, unsigned S> 
+void vertex_sequence<T, S>::add(const T& val)
+{
+    if(base_type::size() > 1)
+    {
+        if(!(*this)[base_type::size() - 2]((*this)[base_type::size() - 1])) 
+        {
+            base_type::remove_last();
+        }
+    }
+    base_type::add(val);
+}
+``` 
+
+
+
+### pod_bvector.remove_last
+
+移除 pod_bvector 容器中的最后一个元素。
+
+参数：
+
+- 无
+
+返回值：`void`，无返回值
+
+#### 流程图
+
+```mermaid
+graph LR
+A[开始] --> B{容器是否为空?}
+B -- 是 --> C[结束]
+B -- 否 --> D[移除最后一个元素]
+D --> E[结束]
+```
+
+#### 带注释源码
+
+```cpp
+    //------------------------------------------------------------------------
+    template<class T, unsigned S> 
+    void pod_bvector<T, S>::remove_last()
+    {
+        if (!this->size()) return;
+
+        this->size() -= 1;
+    }
+```
+
+
+
+### vertex_dist::operator()
+
+This function calculates the distance between two vertices and determines if the distance is greater than a specified epsilon value.
+
+参数：
+
+- `val`：`const vertex_dist&`，The next vertex to calculate the distance with.
+
+返回值：`bool`，Returns true if the distance between the vertices is greater than `vertex_dist_epsilon`, otherwise false.
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B[Calculate distance]
+    B --> C[Is distance > EPSILON?]
+    C -- Yes --> D[Set dist to 1/EPSILON]
+    C -- No --> E[Set dist to 0.0]
+    E --> F[Return true]
+    F --> G[End]
+    D --> G
+```
+
+#### 带注释源码
+
+```cpp
+bool operator () (const vertex_dist& val)
+{
+    bool ret = (dist = calc_distance(x, y, val.x, val.y)) > vertex_dist_epsilon;
+    if(!ret) dist = 1.0 / vertex_dist_epsilon;
+    return ret;
+}
+``` 
+
+
+
+### vertex_dist_cmd.operator()
+
+This function is an overloaded operator for the `vertex_dist_cmd` struct. It calculates the distance between two vertices and returns a boolean indicating whether the distance is greater than a specified epsilon value.
+
+参数：
+
+- `val`：`const vertex_dist&`，The vertex to which the distance is calculated.
+
+返回值：`bool`，Returns `true` if the distance between the vertices is greater than `vertex_dist_epsilon`, otherwise `false`.
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B[Calculate distance]
+    B --> C[Is distance > EPSILON?]
+    C -- Yes --> D[Set dist to 1/EPSILON]
+    C -- No --> E[Set dist to 0.0]
+    E --> F[Return true]
+    D --> F
+    F --> G[End]
+```
+
+#### 带注释源码
+
+```cpp
+bool operator () (const vertex_dist& val)
+{
+    bool ret = (dist = calc_distance(x, y, val.x, val.y)) > vertex_dist_epsilon;
+    if(!ret) dist = 1.0 / vertex_dist_epsilon;
+    return ret;
+}
+```
+
+
+## 关键组件
+
+
+### 张量索引与惰性加载
+
+张量索引与惰性加载是代码中用于高效处理和存储大量数据的关键组件。它允许在需要时才计算或加载数据，从而减少内存消耗和提高性能。
+
+### 反量化支持
+
+反量化支持是代码中用于处理和转换数据的关键组件。它允许将量化数据转换回原始数据，以便进行进一步处理或分析。
+
+### 量化策略
+
+量化策略是代码中用于优化数据存储和计算的关键组件。它通过减少数据精度来减少内存消耗和提高计算速度。
+
+## 问题及建议
+
+
+### 已知问题
+
+-   **模板参数S的默认值**：`vertex_sequence`类模板的参数`S`有一个默认值6，这可能不是所有情况下都合适。如果默认值太小，可能会导致频繁的内存分配和复制操作；如果太大，可能会浪费内存。应该根据预期的使用场景来调整默认值。
+-   **`add`方法的性能**：`add`方法在添加新顶点之前会检查最后一个顶点，这可能导致不必要的性能开销，尤其是在顶点序列很长时。可以考虑优化这个检查逻辑，例如通过维护一个额外的标志来指示是否需要检查。
+-   **`close`方法的性能**：`close`方法在关闭顶点序列时会进行多次迭代和删除操作，这可能会影响性能。可以考虑使用更高效的数据结构或算法来优化这个过程。
+-   **`vertex_dist`和`vertex_dist_cmd`的`dist`计算**：`vertex_dist`和`vertex_dist_cmd`中的`dist`计算可能会因为除以一个非常小的数（`vertex_dist_epsilon`）而导致精度问题。应该确保`EPSILON`值足够小，同时避免除以零的情况。
+
+### 优化建议
+
+-   **动态调整模板参数S**：提供一个方法来动态调整`vertex_sequence`的模板参数`S`，以便根据实际使用情况优化内存使用。
+-   **优化`add`方法**：在`add`方法中，如果不需要检查最后一个顶点，则可以跳过这个检查，以提高性能。
+-   **优化`close`方法**：考虑使用更高效的数据结构，如链表，来优化`close`方法中的迭代和删除操作。
+-   **改进`dist`计算**：确保`EPSILON`值足够小，并且在进行除法操作之前检查除数不为零，以避免精度问题。
+-   **文档和注释**：代码中缺少详细的文档和注释，这可能会使得理解和维护代码变得更加困难。应该添加必要的文档和注释来提高代码的可读性和可维护性。
+
+
+## 其它
+
+
+### 设计目标与约束
+
+- 设计目标：
+  - 提供一个灵活的容器来存储顶点序列。
+  - 支持在添加新顶点时进行过滤和计算。
+  - 支持修改最后一个顶点。
+  - 支持关闭顶点序列，移除不符合条件的顶点。
+
+- 约束：
+  - 顶点类型 `T` 必须支持 `operator()` 用于过滤和计算。
+  - 使用模板以支持不同类型的顶点。
+
+### 错误处理与异常设计
+
+- 错误处理：
+  - 如果顶点类型 `T` 不支持 `operator()`，则容器无法正常工作。
+  - 如果尝试添加不符合条件的顶点，则该顶点将被忽略。
+
+- 异常设计：
+  - 没有使用异常处理机制，因为错误通常可以通过返回值或状态来处理。
+
+### 数据流与状态机
+
+- 数据流：
+  - 顶点数据通过 `add` 方法添加到容器中。
+  - `modify_last` 方法用于修改最后一个顶点。
+  - `close` 方法用于关闭顶点序列，移除不符合条件的顶点。
+
+- 状态机：
+  - 没有明确的状态机，因为操作是线性的，没有复杂的状态转换。
+
+### 外部依赖与接口契约
+
+- 外部依赖：
+  - `agg_basics.h`：提供基本类型和宏定义。
+  - `agg_array.h`：提供数组操作。
+  - `agg_math.h`：提供数学函数。
+
+- 接口契约：
+  - `vertex_sequence` 类的 `add`、`modify_last` 和 `close` 方法必须由顶点类型 `T` 支持的 `operator()` 来实现。
+  - `vertex_dist` 和 `vertex_dist_cmd` 结构体必须实现 `operator()` 用于过滤和计算。
+
+    

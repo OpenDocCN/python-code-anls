@@ -1,60 +1,247 @@
-# `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\image_zcoord.py`
 
-```py
-"""
-==================================
-Modifying the coordinate formatter
-==================================
+# `matplotlib\galleries\examples\images_contours_and_fields\image_zcoord.py` 详细设计文档
 
-Modify the coordinate formatter to report the image "z" value of the nearest
-pixel given x and y.  This functionality is built in by default; this example
-just showcases how to customize the `~.axes.Axes.format_coord` function.
-"""
+该代码演示了如何自定义matplotlib中axes的format_coord函数，使其在鼠标悬停时能够显示图像的x、y坐标以及对应最近像素的z值（数据矩阵中的值），从而提供更丰富的交互式数据探索体验。
 
-import matplotlib.pyplot as plt
-import numpy as np
+## 整体流程
 
-# Fixing random state for reproducibility
-np.random.seed(19680801)
+```mermaid
+graph TD
+A[开始] --> B[导入matplotlib.pyplot和numpy]
+B --> C[设置随机种子19680801]
+C --> D[生成5x3随机数据矩阵X]
+D --> E[创建figure和axes对象]
+E --> F[使用imshow显示矩阵X为图像]
+F --> G[定义format_coord函数]
+G --> H[将format_coord赋值给ax.format_coord]
+H --> I[调用plt.show显示图形]
+I --> J[结束]
 
-# Generate a 5x3 matrix of random numbers scaled by 10
-X = 10*np.random.rand(5, 3)
+subgraph format_coord函数流程
+K[format_coord(x, y)被调用] --> L[将x,y四舍五入为col,row]
+L --> M[获取矩阵形状nrows,ncols]
+M --> N{边界检查: 0<=col<ncols且0<=row<nrows}
+N -- 是 --> O[获取z=X[row,col]]
+O --> P[返回格式化的字符串'x=..., y=..., z=...']
+N -- 否 --> Q[返回格式化的字符串'x=..., y=...']
+end
+```
 
-# Create a figure and axis
-fig, ax = plt.subplots()
-# Display the matrix as an image
-ax.imshow(X)
+## 类结构
 
-# Define a function to format the coordinate display
+```
+该代码为脚本形式，无类层次结构
+主要组成部分：
+├── 全局变量
+│   └── X (numpy.ndarray): 5x3随机数据矩阵
+├── 模块导入
+│   ├── matplotlib.pyplot (plt)
+│   └── numpy (np)
+└── 函数定义
+    └── format_coord (自定义坐标格式化函数)
+```
+
+## 全局变量及字段
+
+
+### `X`
+    
+5x3的随机浮点数矩阵，值为0-10之间，用于显示为图像
+
+类型：`numpy.ndarray`
+    
+
+
+    
+
+## 全局函数及方法
+
+
+
+### format_coord
+
+自定义坐标格式化函数，用于在鼠标悬停时显示坐标和对应像素值。当鼠标在图像上移动时，该函数被调用，将鼠标位置转换为行列索引，并检索对应的像素值(z值)，最终返回格式化的字符串供matplotlib显示。
+
+参数：
+
+- `x`：`float`，鼠标位置的x坐标
+- `y`：`float`，鼠标位置的y坐标
+
+返回值：`str`，格式化的坐标字符串，包含x、y坐标以及可选的z值（像素值）
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始: format_coord] --> B[将x四舍五入为col]
+    B --> C[将y四舍五入为row]
+    C --> D[获取图像形状 nrows, ncols]
+    E{检查索引有效性<br/>0 <= col < ncols<br/>且 0 <= row < nrows} -->|是| F[获取像素值 z = X[row, col]]
+    E -->|否| G[返回不含z的格式字符串]
+    F --> H[返回含z的格式字符串<br/>f'x={x:1.4f}, y={y:1.4f}, z={z:1.4f}']
+    G --> I[结束]
+    H --> I
+```
+
+#### 带注释源码
+
+```python
 def format_coord(x, y):
-    # Round the coordinates to get the nearest integer indices
+    """
+    自定义坐标格式化函数，用于在鼠标悬停时显示坐标和对应像素值
+    
+    参数:
+        x: 鼠标位置的x坐标（浮点数）
+        y: 鼠标位置的y坐标（浮点数）
+    
+    返回:
+        格式化的字符串，包含坐标和可选的像素值
+    """
+    # 将x坐标四舍五入获取列索引
     col = round(x)
+    # 将y坐标四舍五入获取行索引
     row = round(y)
-    # Get the dimensions of the matrix
+    # 获取图像的形状（行数、列数）
     nrows, ncols = X.shape
-    # Check if the rounded indices are within bounds
+    
+    # 检查索引是否在有效图像范围内
     if 0 <= col < ncols and 0 <= row < nrows:
-        # Get the value from matrix X at the rounded indices
+        # 索引有效，获取对应位置的像素值（z值）
         z = X[row, col]
-        # Return formatted string with coordinates and matrix value
+        # 返回包含x、y、z的完整格式字符串，保留4位小数
         return f'x={x:1.4f}, y={y:1.4f}, z={z:1.4f}'
     else:
-        # Return formatted string with coordinates only if out of bounds
+        # 索引超出图像范围，返回仅包含x、y的格式字符串
         return f'x={x:1.4f}, y={y:1.4f}'
-
-# Assign the custom format_coord function to the axes object
-ax.format_coord = format_coord
-
-# Display the plot
-plt.show()
-
-# %%
-#
-# .. admonition:: References
-#
-#    The use of the following functions, methods, classes and modules is shown
-#    in this example:
-#
-#    - `matplotlib.axes.Axes.format_coord`
-#    - `matplotlib.axes.Axes.imshow`
 ```
+
+#### 关键组件信息
+
+| 组件名称 | 一句话描述 |
+|---------|-----------|
+| `X` | 全局图像数据数组，存储用于显示的随机像素值 |
+| `fig, ax` | matplotlib的Figure和Axes对象，用于承载图像和交互 |
+| `ax.imshow(X)` | 在Axes上显示图像的核心方法 |
+| `ax.format_coord` | Axes属性，用于自定义鼠标悬停时的坐标显示格式 |
+
+#### 潜在技术债务与优化空间
+
+1. **硬编码依赖全局变量**：函数直接使用全局变量`X`，缺乏灵活性和可测试性，建议将`X`作为参数传入或使用闭包/类封装
+2. **索引边界使用round()**：使用`round()`进行索引计算可能产生偏差，考虑使用`int(x + 0.5)`或`int(np.floor(x + 0.5))`以保持一致性
+3. **缺少类型注解**：函数参数和返回值缺少类型注解，不利于IDE自动补全和静态分析
+4. **未处理NaN/Inf值**：当像素值为NaN或Inf时，格式化字符串可能显示异常，应增加相应处理
+
+#### 其它项目
+
+**设计目标与约束**：
+- 目标：在matplotlib图像上自定义鼠标悬停显示的信息
+- 约束：必须与matplotlib的`format_coord`方法签名兼容
+
+**错误处理与异常设计**：
+- 通过边界检查防止索引越界，使用条件判断而非异常捕获来处理无效坐标
+- 当坐标超出图像范围时，返回简化格式的字符串而非报错
+
+**数据流与状态机**：
+- 数据流：鼠标事件 → format_coord → 格式化字符串 → matplotlib状态栏显示
+- 状态机：无效坐标状态 → 有效坐标状态
+
+**外部依赖与接口契约**：
+- 依赖：`matplotlib.pyplot`、`numpy`
+- 接口契约：函数必须接受`(x, y)`两个float参数，返回str类型
+
+## 关键组件
+
+
+
+
+### 张量索引与数据访问
+
+代码中的X是一个5x3的numpy随机数组，通过row和col索引直接访问z = X[row, col]来获取对应像素点的值，实现了基于坐标的精确数据访问。
+
+### 坐标转换与最近像素匹配
+
+format_coord函数接收浮点数坐标(x, y)，通过round()函数将其转换为最近的整数索引(col, row)，实现了鼠标位置到像素位置的映射，用于显示最近像素的数值。
+
+### 坐标边界检查
+
+在format_coord函数中实现了边界验证逻辑：if 0 <= col < ncols and 0 <= row < nrows，确保索引在有效范围内，防止数组越界异常。
+
+### 自定义格式化函数赋值
+
+通过ax.format_coord = format_coord将自定义函数直接赋值给Axes对象的format_coord方法，替换了默认的坐标显示行为，实现了自定义的坐标格式化逻辑。
+
+
+## 问题及建议
+
+
+
+
+
+### 已知问题
+
+- **全局变量依赖**：`format_coord` 函数直接引用外部全局变量 `X`，降低了函数的可重用性和测试性，不符合函数式编程的纯函数原则。
+- **索引顺序错误**：在 imshow 显示的图像中，x 对应列索引（col），y 对应行索引（row），因此访问像素值应使用 `X[col, row]` 而非 `X[row, col]`，当前实现可能导致数据展示错误。
+- **round() 的边界问题**：使用 `round()` 函数当坐标为负数时可能产生意外结果，例如 `round(-0.5)` 的行为在不同 Python 版本中可能不一致。
+- **未使用的变量**：变量 `fig` 被创建但未使用，造成资源浪费。
+- **缺乏类型注解**：函数参数和返回值缺少类型提示，降低了代码的可读性和 IDE 支持。
+
+### 优化建议
+
+- **封装为类或使用闭包**：将 `X` 通过闭包或类的方式传递给 `format_coord`，增强函数独立性。
+- **修正索引顺序**：将 `z = X[row, col]` 改为 `z = X[col, row]` 以正确获取像素值。
+- **使用 int() 替代 round()**：使用 `int(x + 0.5)` 或 `int(np.floor(x + 0.5))` 处理正数坐标，或使用 `np.clip` 确保索引在有效范围内。
+- **添加类型注解**：为函数参数和返回值添加类型提示，提升代码可维护性。
+- **删除未使用变量**：移除未使用的 `fig` 变量或将其用于其他有意义的操作。
+
+
+
+## 其它
+
+
+
+
+### 设计目标与约束
+
+本示例的设计目标是演示如何自定义matplotlib Axes的format_coord方法，使其在鼠标悬停时显示对应像素位置的图像z值。约束条件包括：1) 仅支持2D数组图像；2) 坐标必须转换为整数索引；3) 仅处理数组范围内的有效像素。
+
+### 错误处理与异常设计
+
+代码主要通过边界检查处理错误：使用`0 <= col < ncols`和`0 <= row < nrows`判断索引是否在有效范围内。如果索引超出范围，函数返回不包含z值的格式字符串，避免索引越界异常。numpy数组访问会自动抛出IndexError，但边界检查防止了这种情况发生。
+
+### 数据流与状态机
+
+数据流：numpy数组X → imshow渲染 → 鼠标移动事件 → format_coord调用 → 坐标四舍五入 → 数组索引 → z值获取 → 格式化字符串返回。状态机主要涉及鼠标位置状态：悬停位置坐标(x, y)经round转换为离散索引(row, col)，再查询数组获取z值。
+
+### 外部依赖与接口契约
+
+主要依赖：matplotlib.pyplot（图形显示）、numpy（数值计算）。接口契约：format_coord函数接受浮点数坐标(x, y)，返回格式化字符串；ax.format_coord属性被替换为自定义函数；imshow接受2D数组参数。
+
+### 性能考虑
+
+当前实现使用round()进行坐标取整，性能较好。对于超大图像，可考虑使用scipy.ndimage.map_coordinates进行插值采样，但会增加复杂度。事件处理函数应保持轻量以保证响应性。
+
+### 安全性考虑
+
+代码不涉及用户输入处理或外部数据加载，无明显安全风险。唯一风险是如果X数组来自不可信来源，需确保数据合法性。
+
+### 可维护性与可扩展性
+
+可扩展方向：1) 支持多通道图像显示RGB值；2) 添加坐标网格系统转换；3) 支持不同插值方法。当前实现代码简洁，但可提取为可复用的函数或类，便于在其他项目中引用。
+
+### 测试策略
+
+建议测试用例：1) 正常坐标在图像范围内；2) 坐标在图像边界上；3) 坐标超出图像范围；4) 不同形状数组（正方形、矩形）；5) 不同数据类型（整数、浮点数）。
+
+### 版本兼容性
+
+代码使用matplotlib和numpy的公共API，兼容版本：matplotlib 3.1+、numpy 1.16+。imshow的origin参数默认'upper'，需注意与坐标系统的配合。
+
+### 配置管理
+
+无外部配置文件，所有参数硬编码。X数组通过np.random.seed固定随机种子保证可复现性。可考虑将format_coord函数参数化，支持自定义格式字符串模板。
+
+### 命名规范与代码风格
+
+遵循PEP8命名规范，函数名format_coord为matplotlib指定接口名称。变量名X为图像数据约定俗成的名称。注释采用docstring格式，符合matplotlib示例文档要求。
+
+    

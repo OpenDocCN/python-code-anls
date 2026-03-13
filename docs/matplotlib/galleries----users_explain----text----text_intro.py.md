@@ -1,450 +1,811 @@
-# `D:\src\scipysrc\matplotlib\galleries\users_explain\text\text_intro.py`
 
-```py
-"""
-==================
-Text in Matplotlib
-==================
+# `matplotlib\galleries\users_explain\text\text_intro.py` 详细设计文档
 
-Introduction to plotting and working with text in Matplotlib.
+This code demonstrates the usage of Matplotlib's text support, including adding text, annotations, labels, and titles to plots, as well as customizing text properties and rendering mathematical expressions.
 
-Matplotlib has extensive text support, including support for
-mathematical expressions, truetype support for raster and
-vector outputs, newline separated text with arbitrary
-rotations, and Unicode support.
+## 整体流程
 
-Because it embeds fonts directly in output documents, e.g., for postscript
-or PDF, what you see on the screen is what you get in the hardcopy.
-`FreeType <https://www.freetype.org/>`_ support
-produces very nice, antialiased fonts, that look good even at small
-raster sizes.  Matplotlib includes its own
-:mod:`matplotlib.font_manager` (thanks to Paul Barrett), which
-implements a cross platform, `W3C <https://www.w3.org/>`_
-compliant font finding algorithm.
+```mermaid
+graph TD
+    A[Start] --> B[Import matplotlib.pyplot and numpy]
+    B --> C[Create a figure and an axes]
+    C --> D[Set titles for the figure and the subplot]
+    D --> E[Set x and y-axis labels]
+    E --> F[Set x and y-axis limits]
+    F --> G[Add text at an arbitrary location with style and bbox]
+    G --> H[Add a mathematical expression as text]
+    H --> I[Add Unicode text]
+    I --> J[Add colored text in axes coords]
+    J --> K[Plot a point and add an annotation]
+    K --> L[Show the plot]
+    L --> M[End]
+```
 
-The user has a great deal of control over text properties (font size, font
-weight, text location and color, etc.) with sensible defaults set in
-the :ref:`rc file <customizing>`.
-And significantly, for those interested in mathematical
-or scientific figures, Matplotlib implements a large number of TeX
-math symbols and commands, supporting :ref:`mathematical expressions
-<mathtext>` anywhere in your figure.
+## 类结构
+
+```
+matplotlib.pyplot (模块)
+├── figure() (函数)
+│   ├── add_subplot() (函数)
+│   ├── subplots_adjust() (函数)
+│   └── suptitle() (函数)
+│       └── set_title() (函数)
+├── text() (函数)
+│   ├── annotate() (函数)
+│   └── figtext() (函数)
+├── axis() (函数)
+│   ├── set_xlabel() (函数)
+│   ├── set_ylabel() (函数)
+│   └── set_title() (函数)
+└── show() (函数)
+```
+
+## 全局变量及字段
 
 
-Basic text commands
-===================
+### `fig`
+    
+The main figure object containing all the plot elements.
 
-The following commands are used to create text in the implicit and explicit
-interfaces (see :ref:`api_interfaces` for an explanation of the tradeoffs):
+类型：`matplotlib.figure.Figure`
+    
 
-=================== =================== ======================================
-implicit API        explicit API        description
-=================== =================== ======================================
-`~.pyplot.text`     `~.Axes.text`       Add text at an arbitrary location of
-                                        the `~matplotlib.axes.Axes`.
 
-`~.pyplot.annotate` `~.Axes.annotate`   Add an annotation, with an optional
-                                        arrow, at an arbitrary location of the
-                                        `~matplotlib.axes.Axes`.
+### `ax`
+    
+The axes object where the plot is drawn.
 
-`~.pyplot.xlabel`   `~.Axes.set_xlabel` Add a label to the
-                                        `~matplotlib.axes.Axes`\\'s x-axis.
+类型：`matplotlib.axes._subplots.AxesSubplot`
+    
 
-`~.pyplot.ylabel`   `~.Axes.set_ylabel` Add a label to the
-                                        `~matplotlib.axes.Axes`\\'s y-axis.
 
-`~.pyplot.title`    `~.Axes.set_title`  Add a title to the
-                                        `~matplotlib.axes.Axes`.
+### `x1`
+    
+An array of x values for the plot.
 
-`~.pyplot.figtext`  `~.Figure.text`     Add text at an arbitrary location of
-                                        the `.Figure`.
+类型：`numpy.ndarray`
+    
 
-`~.pyplot.suptitle` `~.Figure.suptitle` Add a title to the `.Figure`.
-=================== =================== ======================================
 
-All of these functions create and return a `.Text` instance, which can be
-configured with a variety of font and other properties.  The example below
-shows all of these commands in action, and more detail is provided in the
-sections that follow.
+### `y1`
+    
+An array of y values for the plot.
 
-"""
+类型：`numpy.ndarray`
+    
 
+
+### `font`
+    
+Font properties for customizing text appearance.
+
+类型：`matplotlib.font_manager.FontProperties`
+    
+
+
+### `base`
+    
+The base datetime object for generating time data.
+
+类型：`datetime.datetime`
+    
+
+
+### `time`
+    
+A list of datetime objects representing time values for the plot.
+
+类型：`list`
+    
+
+
+### `matplotlib.pyplot.figure`
+    
+The main figure object containing all the plot elements.
+
+类型：`matplotlib.figure.Figure`
+    
+
+
+### `matplotlib.pyplot.text`
+    
+The text object for adding text to the figure.
+
+类型：`matplotlib.text.Text`
+    
+
+
+### `matplotlib.pyplot.axis`
+    
+The axis object for managing the axes of the plot.
+
+类型：`matplotlib.axis.Axis`
+    
+
+
+### `matplotlib.pyplot.show`
+    
+A method to display the plot.
+
+类型：`None`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.figure`
+    
+The main figure object containing all the plot elements.
+
+类型：`matplotlib.figure.Figure`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.text`
+    
+The text object for adding text to the figure.
+
+类型：`matplotlib.text.Text`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.axis`
+    
+The axis object for managing the axes of the plot.
+
+类型：`matplotlib.axis.Axis`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.show`
+    
+A method to display the plot.
+
+类型：`None`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.figure`
+    
+The main figure object containing all the plot elements.
+
+类型：`matplotlib.figure.Figure`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.text`
+    
+The text object for adding text to the figure.
+
+类型：`matplotlib.text.Text`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.axis`
+    
+The axis object for managing the axes of the plot.
+
+类型：`matplotlib.axis.Axis`
+    
+
+
+### `matplotlib.pyplot.figure.Figure.show`
+    
+A method to display the plot.
+
+类型：`None`
+    
+    
+
+## 全局函数及方法
+
+
+### formatoddticks
+
+Format odd tick positions.
+
+参数：
+
+- `x`：`float`，The tick value.
+- `pos`：`int`，The position of the tick.
+
+返回值：`str`，The formatted tick label.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is x odd?}
+B -- Yes --> C[Format as "x:1.2f"}
+B -- No --> D[Return empty string]
+C --> E[End]
+D --> E
+```
+
+#### 带注释源码
+
+```python
+def formatoddticks(x, pos):
+    """Format odd tick positions."""
+    if x % 2:
+        return f'{x:1.2f}'
+    else:
+        return ''
+``` 
+
+
+
+### `plt.figure()`
+
+`plt.figure()` 是 Matplotlib 库中用于创建一个图形窗口的函数。
+
+参数：
+
+- `figsize`：`tuple`，图形的宽度和高度，单位为英寸。
+- `dpi`：`int`，图形的分辨率，单位为点每英寸。
+- `facecolor`：`color`，图形窗口的背景颜色。
+- `edgecolor`：`color`，图形窗口的边缘颜色。
+- `frameon`：`bool`，是否显示图形窗口的边框。
+- `num`：`int`，图形的编号。
+- `clear`：`bool`，是否清除图形窗口中的所有内容。
+- `figclass`：`class`，图形窗口的类。
+
+返回值：`Figure`，图形对象。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[plt.figure()] --> B{创建图形窗口}
+B --> C[返回 Figure 对象]
+```
+
+#### 带注释源码
+
+```python
 import matplotlib.pyplot as plt
-import matplotlib  # 导入matplotlib库
 
-fig = plt.figure()  # 创建一个新的Figure对象
-ax = fig.add_subplot()  # 在Figure对象上添加一个子图
-fig.subplots_adjust(top=0.85)  # 调整子图在Figure中的位置，使顶部留出空间
+fig = plt.figure(figsize=(8, 6), dpi=100, facecolor='white', edgecolor='black', frameon=True, num=1, clear=False, figclass=plt.Figure)
+```
 
-# 设置Figure的总标题和子图的标题
+
+
+### matplotlib.pyplot.add_subplot
+
+`matplotlib.pyplot.add_subplot` 是一个用于创建子图的函数。
+
+参数：
+
+- `nrows`：`int`，子图行数。
+- `ncols`：`int`，子图列数。
+- `sharex`：`bool`，是否共享x轴。
+- `sharey`：`bool`，是否共享y轴。
+- `fig`：`matplotlib.figure.Figure`，父图对象。
+
+返回值：`matplotlib.axes.Axes`，子图对象。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Create figure}
+B --> C{Create subplot}
+C --> D[End]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+```
+
+
+
+### `subplots_adjust`
+
+调整子图参数。
+
+参数：
+
+- `left`：`float`，子图左侧的填充比例，默认为0.125。
+- `right`：`float`，子图右侧的填充比例，默认为0.9。
+- `top`：`float`，子图顶部的填充比例，默认为0.9。
+- `bottom`：`float`，子图底部的填充比例，默认为0.1。
+- `wspace`：`float`，子图之间的水平间距比例，默认为0.2。
+- `hspace`：`float`，子图之间的垂直间距比例，默认为0.2。
+
+返回值：`None`
+
+#### 流程图
+
+```mermaid
+graph LR
+A[开始] --> B{调用subplots_adjust()}
+B --> C[设置left参数]
+C --> D[设置right参数]
+D --> E[设置top参数]
+E --> F[设置bottom参数]
+F --> G[设置wspace参数]
+G --> H[设置hspace参数]
+H --> I[结束]
+```
+
+#### 带注释源码
+
+```python
+fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1, wspace=0.2, hspace=0.2)
+```
+
+
+
+### `.Figure.suptitle`
+
+`suptitle` 方法用于在 Matplotlib 图形中添加一个标题。
+
+参数：
+
+- `title`：`str`，标题文本。
+- `fontsize`：`int` 或 `float`，标题字体大小。
+- `fontweight`：`str`，标题字体粗细，例如 'normal' 或 'bold'。
+
+返回值：`matplotlib.text.Text`，返回一个 Text 实例，可以配置标题的各种属性。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[开始] --> B{调用 .Figure.suptitle()}
+B --> C[设置参数]
+C --> D{返回 Text 实例}
+D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
 fig.suptitle('bold figure suptitle', fontsize=14, fontweight='bold')
-ax.set_title('axes title')  # 设置子图的标题
+```
 
-ax.set_xlabel('xlabel')  # 设置子图的x轴标签
-ax.set_ylabel('ylabel')  # 设置子图的y轴标签
 
-# 设置x和y轴的显示范围为[0, 10]，而不是默认的[0, 1]
+
+
+### matplotlib.pyplot.set_title
+
+Set the title of the current axes.
+
+#### 描述
+
+`set_title` 方法用于设置当前轴（Axes）的标题。标题可以包含文本、数学表达式、特殊字符等。
+
+#### 参数
+
+- `title`：`str`，标题文本。
+- `loc`：`str`，标题的位置，默认为 'center'。
+- `pad`：`float`，标题与轴边缘的距离，默认为 5。
+- `fontsize`：`float`，标题的字体大小，默认为 10。
+- `fontweight`：`str`，标题的字体粗细，默认为 'normal'。
+- `color`：`str`，标题的颜色，默认为 'black'。
+- `verticalalignment`：`str`，标题的垂直对齐方式，默认为 'bottom'。
+- `horizontalalignment`：`str`，标题的水平对齐方式，默认为 'left'。
+- `transform`：`matplotlib.transforms.Transform`，标题的变换，默认为轴的变换。
+
+#### 返回值
+
+无。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Set title}
+B --> C[End]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.set_title('Axes title')
+plt.show()
+```
+
+
+
+### `matplotlib.pyplot.text`
+
+`matplotlib.pyplot.text` 是一个函数，用于在 Matplotlib 图形中添加文本。
+
+参数：
+
+- `x`：`float`，文本的 x 坐标。
+- `y`：`float`，文本的 y 坐标。
+- `s`：`str`，要显示的文本。
+- `fontdict`：`dict`，文本的字体属性，如字体大小、字体样式等。
+- `transform`：`Transform`，文本的坐标转换，默认为轴的坐标。
+- `bbox`：`dict`，文本的边框属性，如边框颜色、边框宽度等。
+
+返回值：`Text`，文本对象。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is x and y valid?}
+B -- Yes --> C[Create Text object]
+B -- No --> D[Error]
+C --> E[Add Text to Axes]
+E --> F[End]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.text(3, 8, 'boxed italics text in data coords', style='italic',
+        bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})
+plt.show()
+```
+
+
+
+### `.annotate`
+
+`.annotate` 方法用于在 `~matplotlib.axes.Axes` 对象上添加一个带有可选箭头的注释。
+
+参数：
+
+- `xy`：`tuple`，指定注释的坐标，格式为 `(x, y)`。
+- `xytext`：`tuple`，指定注释文本的坐标，格式为 `(x, y)`。
+- `arrowprops`：`dict`，指定箭头属性，例如箭头颜色、箭头大小等。
+
+返回值：`Text` 实例，表示注释文本。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[开始] --> B{指定坐标}
+B --> C{指定文本坐标}
+C --> D{指定箭头属性}
+D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.annotate('annotate', xy=(2, 1), xytext=(3, 4),
+            arrowprops=dict(facecolor='black', shrink=0.05))
+plt.show()
+``` 
+
+
+
+### figtext
+
+Add text at an arbitrary location of the `.Figure`.
+
+参数：
+
+-  `x`：`float`，The x location of the text in figure coordinates.
+-  `y`：`float`，The y location of the text in figure coordinates.
+-  `s`：`str`，The string to be displayed.
+-  `fontsize`：`float`，The font size of the text.
+-  `color`：`str`，The color of the text.
+-  `verticalalignment`：`str`，The vertical alignment of the text.
+-  `horizontalalignment`：`str`，The horizontal alignment of the text.
+-  `transform`：`matplotlib.transforms.Transform`，The transform to use for the text.
+-  `bbox`：`dict`，The bounding box of the text.
+
+返回值：`matplotlib.text.Text`，The text object.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[figtext] --> B{参数}
+B --> C{x}
+B --> D{y}
+B --> E{s}
+B --> F{fontsize}
+B --> G{color}
+B --> H{verticalalignment}
+B --> I{horizontalalignment}
+B --> J{transform}
+B --> K{bbox}
+C --> L[执行]
+D --> L
+E --> L
+F --> L
+G --> L
+H --> L
+I --> L
+J --> L
+K --> L
+L --> M[返回 Text 对象]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot()
+fig.subplots_adjust(top=0.85)
+
+# Set titles for the figure and the subplot respectively
+fig.suptitle('bold figure suptitle', fontsize=14, fontweight='bold')
+ax.set_title('axes title')
+
+ax.set_xlabel('xlabel')
+ax.set_ylabel('ylabel')
+
+# Set both x- and y-axis limits to [0, 10] instead of default [0, 1]
 ax.axis([0, 10, 0, 10])
 
-# 在数据坐标系中添加带有样式和边框的斜体文本
 ax.text(3, 8, 'boxed italics text in data coords', style='italic',
         bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})
 
-# 在子图中添加带有数学公式的文本
 ax.text(2, 6, r'an equation: $E=mc^2$', fontsize=15)
 
-# 在子图中添加包含Unicode字符的文本
 ax.text(3, 2, 'Unicode: Institut für Festkörperphysik')
 
-# 在轴坐标系中指定位置添加带颜色的文本
 ax.text(0.95, 0.01, 'colored text in axes coords',
         verticalalignment='bottom', horizontalalignment='right',
         transform=ax.transAxes,
         color='green', fontsize=15)
 
-# 在子图中绘制一个圆点
 ax.plot([2], [1], 'o')
-
-# 在子图中添加注释，包括箭头的样式设置
 ax.annotate('annotate', xy=(2, 1), xytext=(3, 4),
             arrowprops=dict(facecolor='black', shrink=0.05))
 
-plt.show()  # 显示绘制的图形
-
-
-
-# Labels for x- and y-axis
-# ========================
-#
-# 通过 `~matplotlib.axes.Axes.set_xlabel` 和 `~matplotlib.axes.Axes.set_ylabel` 方法，
-# 可以简单地指定x轴和y轴的标签。
-
-
-
-# The x- and y-labels are automatically placed so that they clear the x- and
-# y-ticklabels.  Compare the plot below with that above, and note the y-label
-# is to the left of the one above.
-
-
-
-# If you want to move the labels, you can specify the *labelpad* keyword
-# argument, where the value is points (1/72", the same unit used to specify
-# fontsizes).
-
-
-
-# Or, the labels accept all the `.Text` keyword arguments, including
-# *position*, via which we can manually specify the label positions.  Here we
-# put the xlabel to the far left of the axis.  Note, that the y-coordinate of
-# this position has no effect - to adjust the y-position we need to use the
-# *labelpad* keyword argument.
-
-
-
-# All the labelling in this tutorial can be changed by manipulating the
-# `matplotlib.font_manager.FontProperties` method, or by named keyword
-# arguments to `~matplotlib.axes.Axes.set_xlabel`
-# 导入 FontProperties 类从 matplotlib.font_manager 模块
-from matplotlib.font_manager import FontProperties
-
-# 创建 FontProperties 对象
-font = FontProperties()
-
-# 设置字体族为 serif
-font.set_family('serif')
-
-# 设置字体名称为 'Times New Roman'
-font.set_name('Times New Roman')
-
-# 设置字体样式为斜体
-font.set_style('italic')
-
-# 创建一个新的图形对象和一个轴对象
-fig, ax = plt.subplots(figsize=(5, 3))
-
-# 调整子图的底部边距和左侧边距
-fig.subplots_adjust(bottom=0.15, left=0.2)
-
-# 在轴上绘制 x1 对应的数据 y1
-ax.plot(x1, y1)
-
-# 设置 x 轴标签文本和字体大小、粗细
-ax.set_xlabel('Time [s]', fontsize='large', fontweight='bold')
-
-# 设置 y 轴标签文本和使用自定义的字体属性
-ax.set_ylabel('Damped oscillation [V]', fontproperties=font)
-
-# 显示图形
 plt.show()
-
-# %%
-# 最后，我们可以在所有文本对象中使用本地 TeX 渲染，并且可以有多行文本：
-
-# 创建一个新的图形对象和一个轴对象
-fig, ax = plt.subplots(figsize=(5, 3))
-
-# 调整子图的底部边距和左侧边距
-fig.subplots_adjust(bottom=0.2, left=0.2)
-
-# 在轴上绘制 x1 对应的数据的累积和
-ax.plot(x1, np.cumsum(y1**2))
-
-# 设置 x 轴标签文本，包含多行文本
-ax.set_xlabel('Time [s] \n This was a long experiment')
-
-# 设置 y 轴标签文本，使用 LaTeX 公式
-ax.set_ylabel(r'$\int\ Y^2\ dt\ \ [V^2 s]$')
-
-# 显示图形
-plt.show()
-
-# %%
-# 标题
-# ======
-#
-# 子图标题的设置方式与标签类似，但有一个 *loc* 关键字参数可以改变位置和对齐方式，默认为 ``loc=center``。
-
-# 创建包含 3 个子图的图形对象和轴对象数组
-fig, axs = plt.subplots(3, 1, figsize=(5, 6), tight_layout=True)
-
-# 不同的子图标题位置
-locs = ['center', 'left', 'right']
-for ax, loc in zip(axs, locs):
-    # 在每个子图上绘制 x1 对应的数据 y1
-    ax.plot(x1, y1)
-    # 设置子图标题，并指定位置和对齐方式
-    ax.set_title('Title with loc at '+loc, loc=loc)
-
-# 显示图形
-plt.show()
-
-# %%
-# 标题的垂直间距由 :rc:`axes.titlepad` 控制。
-# 将其设置为不同的值可以移动标题的位置。
-
-# 创建一个新的图形对象和一个轴对象
-fig, ax = plt.subplots(figsize=(5, 3))
-
-# 调整子图的顶部边距
-fig.subplots_adjust(top=0.8)
-
-# 在轴上绘制 x1 对应的数据 y1
-ax.plot(x1, y1)
-
-# 设置标题文本和标题偏移量
-ax.set_title('Vertically offset title', pad=30)
-
-# 显示图形
-plt.show()
-
-# %%
-# 刻度和刻度标签
-# ====================
-#
-# 放置刻度和刻度标签是制作图形的一个非常棘手的部分。
-# Matplotlib 尽力自动完成任务，但也提供了一个非常灵活的框架来确定刻度位置和标签。
-
-# 创建包含 2 个子图的图形对象和轴对象数组
-fig, axs = plt.subplots(2, 1, figsize=(5, 3), tight_layout=True)
-
-# 在第一个子图上绘制 x1 对应的数据 y1
-axs[0].plot(x1, y1)
-
-# 在第二个子图上绘制 x1 对应的数据 y1
-axs[1].plot(x1, y1)
-
-# 设置第二个子图 x 轴的刻度位置
-axs[1].xaxis.set_ticks(np.arange(0., 8.1, 2.))
-
-# 显示图形
-plt.show()
-
-# %%
-# 当然，我们可以事后修复这个问题，但这突显了一个
-# weakness of hard-coding the ticks.  This example also changes the format
-# of the ticks:
-# 创建一个包含两个子图的画布，每个子图为1行2列，尺寸为5x3，紧凑布局
-fig, axs = plt.subplots(2, 1, figsize=(5, 3), tight_layout=True)
-# 在第一个子图上绘制 x1 vs y1 的图像
-axs[0].plot(x1, y1)
-# 在第二个子图上绘制 x1 vs y1 的图像
-axs[1].plot(x1, y1)
-# 使用 np.arange 创建一个从 0 到 8.1（不包括）的数组，步长为2
-ticks = np.arange(0., 8.1, 2.)
-# 使用列表推导式生成所有刻度标签的列表，保留两位小数
-tickla = [f'{tick:1.2f}' for tick in ticks]
-# 设置第二个子图的 x 轴刻度位置
-axs[1].xaxis.set_ticks(ticks)
-# 设置第二个子图的 x 轴刻度标签
-axs[1].xaxis.set_ticklabels(tickla)
-# 设置第二个子图的 x 轴限制与第一个子图相同
-axs[1].set_xlim(axs[0].get_xlim())
-# 显示图形
-plt.show()
-
-# %%
-# Tick Locators and Formatters
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# Instead of making a list of all the ticklabels, we could have
-# used `matplotlib.ticker.StrMethodFormatter` (new-style ``str.format()``
-# format string) or `matplotlib.ticker.FormatStrFormatter` (old-style '%'
-# format string) and passed it to the ``ax.xaxis``.  A
-# `matplotlib.ticker.StrMethodFormatter` can also be created by passing a
-# ``str`` without having to explicitly create the formatter.
-
-# 创建一个包含两个子图的画布，每个子图为1行2列，尺寸为5x3，紧凑布局
-fig, axs = plt.subplots(2, 1, figsize=(5, 3), tight_layout=True)
-# 在第一个子图上绘制 x1 vs y1 的图像
-axs[0].plot(x1, y1)
-# 在第二个子图上绘制 x1 vs y1 的图像
-axs[1].plot(x1, y1)
-# 使用 np.arange 创建一个从 0 到 8.1（不包括）的数组，步长为2
-ticks = np.arange(0., 8.1, 2.)
-# 设置第二个子图的 x 轴刻度位置
-axs[1].xaxis.set_ticks(ticks)
-# 设置第二个子图的 x 轴主要格式化字符串为 '{x:1.1f}'
-axs[1].xaxis.set_major_formatter('{x:1.1f}')
-# 设置第二个子图的 x 轴限制与第一个子图相同
-axs[1].set_xlim(axs[0].get_xlim())
-# 显示图形
-plt.show()
-
-# %%
-# And of course we could have used a non-default locator to set the
-# tick locations.  Note we still pass in the tick values, but the
-# x-limit fix used above is *not* needed.
-
-# 创建一个包含两个子图的画布，每个子图为1行2列，尺寸为5x3，紧凑布局
-fig, axs = plt.subplots(2, 1, figsize=(5, 3), tight_layout=True)
-# 在第一个子图上绘制 x1 vs y1 的图像
-axs[0].plot(x1, y1)
-# 在第二个子图上绘制 x1 vs y1 的图像
-axs[1].plot(x1, y1)
-# 使用 matplotlib.ticker.FixedLocator 创建一个固定刻度位置的定位器对象
-locator = matplotlib.ticker.FixedLocator(ticks)
-# 设置第二个子图的 x 轴主要定位器
-axs[1].xaxis.set_major_locator(locator)
-# 设置第二个子图的 x 轴主要格式化字符串为 '±{x}°'
-axs[1].xaxis.set_major_formatter('±{x}°')
-# 显示图形
-plt.show()
-
-# %%
-# The default formatter is the `matplotlib.ticker.MaxNLocator` called as
-# ``ticker.MaxNLocator(self, nbins='auto', steps=[1, 2, 2.5, 5, 10])``
-# The *steps* keyword contains a list of multiples that can be used for
-# tick values.  i.e. in this case, 2, 4, 6 would be acceptable ticks,
-# as would 20, 40, 60 or 0.2, 0.4, 0.6. However, 3, 6, 9 would not be
-# acceptable because 3 doesn't appear in the list of steps.
-#
-# ``nbins=auto`` uses an algorithm to determine how many ticks will
-# be acceptable based on how long the axis is.  The fontsize of the
-# ticklabel is taken into account, but the length of the tick string
-# is not (because it's not yet known.)  In the bottom row, the
-# ticklabels are quite large, so we set ``nbins=4`` to make the
-# labels fit in the right-hand plot.
-
-# 创建一个包含四个子图的画布，每个子图为2行2列，尺寸为8x5，紧凑布局
-fig, axs = plt.subplots(2, 2, figsize=(8, 5), tight_layout=True)
-# 对所有子图循环，每个子图绘制 x1*10 vs y1 的图像
-for n, ax in enumerate(axs.flat):
-    ax.plot(x1*10., y1)
-# 使用 matplotlib.ticker.FormatStrFormatter 创建一个格式化字符串格式化器
-formatter = matplotlib.ticker.FormatStrFormatter('%1.1f')
-# 使用 matplotlib.ticker.MaxNLocator 创建一个最大数量定位器，nbins 设置为 'auto'，步长设置为 [1, 4, 10]
-locator = matplotlib.ticker.MaxNLocator(nbins='auto', steps=[1, 4, 10])
-# 设置第一个子图右边的 x 轴主要定位器和主要格式化器
-axs[0, 1].xaxis.set_major_locator(locator)
-axs[0, 1].xaxis.set_major_formatter(formatter)
-
-# 使用 matplotlib.ticker.AutoLocator 创建一个自动定位器
-locator = matplotlib.ticker.AutoLocator()
-# 设置第二行第一列子图的 x 轴主要格式化字符串为 '%1.5f'
-axs[1, 0].xaxis.set_major_formatter('%1.5f')
-# 设置第二行第一列子图的 x 轴主要定位器
-axs[1, 0].xaxis.set_major_locator(locator)
-
-# 使用 matplotlib.ticker.FormatStrFormatter 创建一个格式化字符串格式化器
-formatter = matplotlib.ticker.FormatStrFormatter('%1.5f')
-locator = matplotlib.ticker.MaxNLocator(nbins=4)
-# 创建一个最大刻度定位器对象，指定刻度的数量为4个
-
-axs[1, 1].xaxis.set_major_formatter(formatter)
-# 设置子图 axs[1, 1] 的 x 轴主要刻度的格式化方式为预先定义的 formatter
-
-axs[1, 1].xaxis.set_major_locator(locator)
-# 设置子图 axs[1, 1] 的 x 轴主要刻度的定位器为之前创建的 locator
-
-plt.show()
-# 显示图形
-
-# %%
-# 最后，我们可以使用 `matplotlib.ticker.FuncFormatter` 来指定格式化函数。
-# 此外，类似于 `matplotlib.ticker.StrMethodFormatter`，传递一个函数将自动创建一个 `matplotlib.ticker.FuncFormatter`。
-
-def formatoddticks(x, pos):
-    """格式化奇数位置的刻度。"""
-    if x % 2:
-        return f'{x:1.2f}'  # 返回保留两位小数的格式化字符串
-    else:
-        return ''  # 返回空字符串，即偶数位置的刻度不显示
-
-fig, ax = plt.subplots(figsize=(5, 3), tight_layout=True)
-ax.plot(x1, y1)
-locator = matplotlib.ticker.MaxNLocator(nbins=6)
-ax.xaxis.set_major_formatter(formatoddticks)
-ax.xaxis.set_major_locator(locator)
-# 创建新的图形和子图，绘制数据，并设置 x 轴的主要定位器和格式化器
-
-plt.show()
-
-# %%
-# 日期刻度
-# ^^^^^^^^^
-#
-# Matplotlib 可以接受 `datetime.datetime` 和 `numpy.datetime64` 对象作为绘图参数。
-# 日期和时间需要特殊的格式化，通常需要手动干预。为了帮助这一点，日期有特殊的定位器和格式化器，
-# 在 `matplotlib.dates` 模块中定义。
-#
-# 以下是一个简单的例子。注意如何旋转刻度标签，以防止它们互相重叠。
-
-import datetime
-
-fig, ax = plt.subplots(figsize=(5, 3), tight_layout=True)
-base = datetime.datetime(2017, 1, 1, 0, 0, 1)
-time = [base + datetime.timedelta(days=x) for x in range(len(x1))]
-
-ax.plot(time, y1)
-ax.tick_params(axis='x', rotation=70)
-# 创建新的图形和子图，绘制时间数据，并旋转 x 轴的刻度标签
-
-plt.show()
-
-# %%
-# 我们可以向 `matplotlib.dates.DateFormatter` 传递格式。还要注意，29日和下个月非常接近。
-# 我们可以使用 `.dates.DayLocator` 类修复这个问题，它允许我们指定要使用的月份中的日期列表。
-# 类似的格式化器在 `matplotlib.dates` 模块中列出。
-
-import matplotlib.dates as mdates
-
-locator = mdates.DayLocator(bymonthday=[1, 15])
-formatter = mdates.DateFormatter('%b %d')
-
-fig, ax = plt.subplots(figsize=(5, 3), tight_layout=True)
-ax.xaxis.set_major_locator(locator)
-ax.xaxis.set_major_formatter(formatter)
-ax.plot(time, y1)
-ax.tick_params(axis='x', rotation=70)
-# 创建新的图形和子图，设置 x 轴的主要定位器和格式化器，并绘制时间数据
-
-plt.show()
-
-# %%
-# 图例和注释
-# =======================
-#
-# - 图例: :ref:`legend_guide`
-# - 注释: :ref:`annotations`
-#
 ```
+
+
+
+### matplotlib.pyplot.axis
+
+matplotlib.pyplot.axis 是一个用于设置轴的限制和刻度的函数。
+
+参数：
+
+- `*xlim`：`[min, max]`，指定 x 轴的显示范围。
+- `*ylim`：`[min, max]`，指定 y 轴的显示范围。
+- `*xlim_mode`：`'auto'` 或 `'linear'`，指定 x 轴的显示模式。
+- `*ylim_mode`：`'auto'` 或 `'linear'`，指定 y 轴的显示模式。
+- `*xlabel`：`str`，指定 x 轴标签。
+- `*ylabel`：`str`，指定 y 轴标签。
+- `*title`：`str`，指定图表标题。
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[matplotlib.pyplot.axis] --> B{设置轴限制和刻度}
+B --> C[完成]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot()
+fig.subplots_adjust(top=0.85)
+
+# Set titles for the figure and the subplot respectively
+fig.suptitle('bold figure suptitle', fontsize=14, fontweight='bold')
+ax.set_title('axes title')
+
+ax.set_xlabel('xlabel')
+ax.set_ylabel('ylabel')
+
+# Set both x- and y-axis limits to [0, 10] instead of default [0, 1]
+ax.axis([0, 10, 0, 10])
+
+ax.text(3, 8, 'boxed italics text in data coords', style='italic',
+        bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})
+
+ax.text(2, 6, r'an equation: $E=mc^2$', fontsize=15)
+
+ax.text(3, 2, 'Unicode: Institut für Festkörperphysik')
+
+ax.text(0.95, 0.01, 'colored text in axes coords',
+        verticalalignment='bottom', horizontalalignment='right',
+        transform=ax.transAxes,
+        color='green', fontsize=15)
+
+ax.plot([2], [1], 'o')
+ax.annotate('annotate', xy=(2, 1), xytext=(3, 4),
+            arrowprops=dict(facecolor='black', shrink=0.05))
+
+plt.show()
+```
+
+
+
+### matplotlib.pyplot.set_xlabel
+
+Set the label for the x-axis of the current axes.
+
+描述：
+
+该函数用于设置当前轴（Axes）的x轴标签。
+
+参数：
+
+- `xlabel`：`str`，x轴标签的文本。
+
+返回值：`None`
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Set xlabel?}
+B -- Yes --> C[Set xlabel]
+C --> D[End]
+B -- No --> E[End]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.set_xlabel('xlabel')
+```
+
+
+
+### matplotlib.pyplot.set_ylabel
+
+Set the label for the y-axis of the current axes.
+
+描述：
+
+该函数用于设置当前轴（Axes）的y轴标签。
+
+参数：
+
+- `label`：`str`，y轴标签的文本内容。
+
+返回值：`None`
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Set y-axis label?}
+B -- Yes --> C[Set label]
+B -- No --> D[End]
+C --> E[End]
+```
+
+#### 带注释源码
+
+```python
+def set_ylabel(self, label):
+    """
+    Set the label for the y-axis of the current axes.
+
+    Parameters
+    ----------
+    label : str
+        The text of the y-axis label.
+
+    Returns
+    -------
+    None
+    """
+    self._yaxis.label.set_text(label)
+``` 
+
+
+
+### plt.show()
+
+显示matplotlib图形。
+
+参数：
+
+- 无
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[开始] --> B{调用plt.show()}
+B --> C[结束]
+```
+
+#### 带注释源码
+
+```python
+import matplotlib.pyplot as plt
+
+# ... (前面的代码)
+
+plt.show()  # 显示图形
+``` 
+
+
+## 关键组件
+
+
+### 张量索引与惰性加载
+
+张量索引与惰性加载是用于高效处理大型数据集的关键组件。它允许在数据未完全加载到内存之前，通过索引来访问数据的一部分，从而减少内存消耗并提高处理速度。
+
+### 反量化支持
+
+反量化支持是用于优化模型性能的关键组件。它通过将量化后的模型转换为原始精度，以便进行反向传播和训练，从而实现模型训练的准确性。
+
+### 量化策略
+
+量化策略是用于优化模型性能的关键组件。它通过将模型的权重和激活值从浮点数转换为低精度整数，从而减少模型的大小和计算量，提高模型的运行效率。
+
+
+
+## 问题及建议
+
+
+### 已知问题
+
+- **代码结构复杂度**：代码中包含大量的注释和文档，这可能会使得代码的可读性和维护性降低。建议将文档和代码分离，使用专门的文档工具来管理文档。
+- **重复代码**：在多个地方使用了相同的代码片段，如设置轴标签和标题。这可能导致维护成本增加，建议使用函数或类来封装这些重复的代码。
+- **全局变量**：代码中使用了全局变量，这可能导致代码难以理解和维护。建议使用局部变量或参数传递来避免全局变量的使用。
+- **异常处理**：代码中没有明显的异常处理机制。建议添加异常处理来提高代码的健壮性。
+
+### 优化建议
+
+- **重构代码结构**：将文档和代码分离，使用专门的文档工具来管理文档，提高代码的可读性和维护性。
+- **封装重复代码**：使用函数或类来封装重复的代码，减少代码冗余，提高代码的可维护性。
+- **避免全局变量**：使用局部变量或参数传递来避免全局变量的使用，提高代码的可读性和可维护性。
+- **添加异常处理**：添加异常处理来提高代码的健壮性，确保在出现错误时程序能够优雅地处理异常。
+- **代码注释**：对代码进行适当的注释，提高代码的可读性。
+- **代码格式化**：使用代码格式化工具来统一代码风格，提高代码的可读性。
+- **单元测试**：编写单元测试来验证代码的正确性，提高代码的质量。
+
+## 其它
+
+
+### 设计目标与约束
+
+- 设计目标：提供对文本的灵活控制，包括字体、大小、颜色、位置等。
+- 约束：保持与Matplotlib的现有API兼容性，确保良好的性能和可扩展性。
+
+### 错误处理与异常设计
+
+- 错误处理：捕获并处理可能发生的异常，如无效的字体路径、格式错误等。
+- 异常设计：定义清晰的异常类型和错误消息，以便用户能够理解问题并采取相应的措施。
+
+### 数据流与状态机
+
+- 数据流：文本数据通过API传递到matplotlib对象，然后渲染到图形中。
+- 状态机：文本对象在创建后可以配置其属性，如位置、字体等，并在图形更新时保持这些属性。
+
+### 外部依赖与接口契约
+
+- 外部依赖：依赖于matplotlib库和其相关模块，如`matplotlib.font_manager`。
+- 接口契约：定义了文本对象的API，包括创建、配置和渲染文本的方法。
+
+
+    

@@ -1,239 +1,276 @@
-# `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tricontour.py`
 
-```py
-# 导入NumPy库，并使用别名np
-import numpy as np
+# `matplotlib\lib\matplotlib\tri\_tricontour.py` 详细设计文档
 
-# 从matplotlib库中导入_docstring模块
-from matplotlib import _docstring
+This code defines a class `TriContourSet` for creating and storing a set of contour lines or filled regions for a triangular grid. It also includes functions `tricontour` and `tricontourf` for drawing contour lines and filled regions on an unstructured triangular grid, respectively.
 
-# 从matplotlib.contour模块中导入ContourSet类
-from matplotlib.contour import ContourSet
+## 整体流程
 
-# 从matplotlib.tri._triangulation模块中导入Triangulation类
-from matplotlib.tri._triangulation import Triangulation
+```mermaid
+graph TD
+    A[开始] --> B[创建 TriContourSet 实例]
+    B --> C{处理参数}
+    C --> D[生成 TriContourGenerator]
+    D --> E{绘制轮廓线或填充区域}
+    E --> F[结束]
+```
 
-# 使用_docstring.dedent_interpd修饰器处理文档字符串的缩进
-@_docstring.dedent_interpd
-# 定义TriContourSet类，继承自ContourSet类
-class TriContourSet(ContourSet):
+## 类结构
+
+```
+TriContourSet (类)
+├── _process_args (方法)
+│   ├── _contour_args (方法)
+│   └── _process_contour_level_args (方法)
+└── tricontour (函数)
+    └── tricontourf (函数)
+```
+
+## 全局变量及字段
+
+
+### `_tri`
+    
+Module containing TriContourGenerator class
+
+类型：`module`
+    
+
+
+### `_docstring`
+    
+Module containing docstring processing functions
+
+类型：`module`
+    
+
+
+### `_tricontour_doc`
+    
+Docstring template for tricontour function
+
+类型：`str`
+    
+
+
+### `_docstring.interpd`
+    
+Function for processing docstrings
+
+类型：`function`
+    
+
+
+### `_docstring.Substitution`
+    
+Function for substituting parameters in docstrings
+
+类型：`function`
+    
+
+
+### `TriContourSet.ax`
+    
+Axes object on which the contour set is drawn
+
+类型：`Axes`
+    
+
+
+### `TriContourSet._contour_generator`
+    
+Generator for contour lines or filled regions
+
+类型：`TriContourGenerator`
+    
+
+
+### `TriContourSet._mins`
+    
+Minimum values of x and y coordinates
+
+类型：`list`
+    
+
+
+### `TriContourSet._maxs`
+    
+Maximum values of x and y coordinates
+
+类型：`list`
+    
+
+
+### `TriContourSet.levels`
+    
+Levels at which contour lines are drawn
+
+类型：`int or array-like`
+    
+
+
+### `TriContourSet.zmin`
+    
+Minimum value of z data
+
+类型：`float`
+    
+
+
+### `TriContourSet.zmax`
+    
+Maximum value of z data
+
+类型：`float`
+    
+
+
+### `TriContourSet.logscale`
+    
+Whether to use logarithmic scale for z data
+
+类型：`bool`
+    
+
+
+### `TriContourSet.filled`
+    
+Whether to draw filled contour regions
+
+类型：`bool`
+    
+
+
+### `TriContourSet.cmap`
+    
+Colormap for coloring contour lines or filled regions
+
+类型：`Colormap`
+    
+
+
+### `TriContourSet.norm`
+    
+Normalization for colormap
+
+类型：`Normalize`
+    
+
+
+### `TriContourSet.vmin`
+    
+Minimum value for colormap scaling
+
+类型：`float`
+    
+
+
+### `TriContourSet.vmax`
+    
+Maximum value for colormap scaling
+
+类型：`float`
+    
+
+
+### `TriContourSet.origin`
+    
+Orientation and position of z data
+
+类型：`str`
+    
+
+
+### `TriContourSet.extent`
+    
+Outer pixel boundaries for z data
+
+类型：`tuple`
+    
+
+
+### `TriContourSet.locator`
+    
+Locator for determining contour levels
+
+类型：`Locator`
+    
+
+
+### `TriContourSet.extend`
+    
+How to handle values outside the levels range
+
+类型：`str`
+    
+
+
+### `TriContourSet.xunits`
+    
+Override axis units for x data
+
+类型：`ConversionInterface`
+    
+
+
+### `TriContourSet.yunits`
+    
+Override axis units for y data
+
+类型：`ConversionInterface`
+    
+
+
+### `TriContourSet.antialiased`
+    
+Enable antialiasing for contour lines
+
+类型：`bool`
+    
+    
+
+## 全局函数及方法
+
+
+### tricontour
+
+tricontour 函数用于在二维三角形网格上绘制等高线。
+
+参数：
+
+- `ax`：`matplotlib.axes.Axes`，绘图轴对象。
+- `*args`：传递给 TriContourSet 的参数。
+- `**kwargs`：传递给 TriContourSet 的关键字参数。
+
+返回值：`matplotlib.tri.TriContourSet`，等高线集对象。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Pass arguments to TriContourSet}
+B --> C{Create TriContourSet}
+C --> D[Return TriContourSet]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```python
+@_docstring.interpd
+def tricontour(ax, *args, **kwargs):
     """
-    Create and store a set of contour lines or filled regions for
-    a triangular grid.
+    %(_tricontour_doc)s
 
-    This class is typically not instantiated directly by the user but by
-    `~.Axes.tricontour` and `~.Axes.tricontourf`.
+    linewidths : float or array-like, default: :rc:`contour.linewidth`
+        The line width of the contour lines.
 
-    %(contour_set_attributes)s
-    """
+        If a number, all levels will be plotted with this linewidth.
 
-    # 构造函数，初始化TriContourSet对象
-    def __init__(self, ax, *args, **kwargs):
-        """
-        Draw triangular grid contour lines or filled regions,
-        depending on whether keyword arg *filled* is False
-        (default) or True.
+        If a sequence, the levels in ascending order will be plotted with
+        the linewidths in the order specified.
 
-        The first argument of the initializer must be an `~.axes.Axes`
-        object.  The remaining arguments and keyword arguments
-        are described in the docstring of `~.Axes.tricontour`.
-        """
-        # 调用父类ContourSet的构造函数进行初始化
-        super().__init__(ax, *args, **kwargs)
+        If None, this falls back to :rc:`lines.linewidth`.
 
-    # 内部方法，用于处理参数
-    def _process_args(self, *args, **kwargs):
-        """
-        Process args and kwargs.
-        """
-        # 如果第一个参数是TriContourSet对象
-        if isinstance(args[0], TriContourSet):
-            # 从args[0]获取_contour_generator对象，并赋值给C
-            C = args[0]._contour_generator
-            # 如果self.levels为None，则从args[0]继承levels属性
-            if self.levels is None:
-                self.levels = args[0].levels
-            # 继承args[0]的zmin和zmax属性
-            self.zmin = args[0].zmin
-            self.zmax = args[0].zmax
-            self._mins = args[0]._mins
-            self._maxs = args[0]._maxs
-        else:
-            # 导入matplotlib._tri模块
-            from matplotlib import _tri
-            # 使用_contour_args方法处理args和kwargs，获取tri和z
-            tri, z = self._contour_args(args, kwargs)
-            # 创建_tri.TriContourGenerator对象C
-            C = _tri.TriContourGenerator(tri.get_cpp_triangulation(), z)
-            # 设置self._mins和self._maxs属性
-            self._mins = [tri.x.min(), tri.y.min()]
-            self._maxs = [tri.x.max(), tri.y.max()]
-
-        # 将C赋值给self._contour_generator属性，并返回kwargs
-        self._contour_generator = C
-        return kwargs
-    # 定义一个方法 _contour_args，接收参数 args 和 kwargs
-    def _contour_args(self, args, kwargs):
-        # 调用 Triangulation 类的 get_from_args_and_kwargs 方法，获取三角化对象 tri 和更新后的 args 和 kwargs
-        tri, args, kwargs = Triangulation.get_from_args_and_kwargs(*args,
-                                                                   **kwargs)
-        # 从 args 中获取 z，并将剩余的参数重新赋值给 args
-        z, *args = args
-        # 将 z 转换为 MaskedArray 类型
-        z = np.ma.asarray(z)
-        # 检查 z 的形状是否与三角化对象 tri 的 x 和 y 数组长度相同，如果不同则引发 ValueError 异常
-        if z.shape != tri.x.shape:
-            raise ValueError('z array must have same length as triangulation x'
-                             ' and y arrays')
-
-        # 只需检查包含在三角化中的点的 z 值是否有限
-        z_check = z[np.unique(tri.get_masked_triangles())]
-        # 如果 z_check 包含掩码值，则引发 ValueError 异常
-        if np.ma.is_masked(z_check):
-            raise ValueError('z must not contain masked points within the '
-                             'triangulation')
-        # 如果 z_check 中存在非有限值，则引发 ValueError 异常
-        if not np.isfinite(z_check).all():
-            raise ValueError('z array must not contain non-finite values '
-                             'within the triangulation')
-
-        # 将 z 中的无效数据掩码化
-        z = np.ma.masked_invalid(z, copy=False)
-        # 计算 z_check 中的最大值，并赋值给 self.zmax
-        self.zmax = float(z_check.max())
-        # 计算 z_check 中的最小值，并赋值给 self.zmin
-        self.zmin = float(z_check.min())
-        # 如果使用对数尺度并且 self.zmin 小于等于 0，则根据填充状态选择对应的错误信息函数，并引发 ValueError 异常
-        if self.logscale and self.zmin <= 0:
-            func = 'contourf' if self.filled else 'contour'
-            raise ValueError(f'Cannot {func} log of negative values.')
-        # 处理轮廓等级的参数，并根据 z 的数据类型进行处理
-        self._process_contour_level_args(args, z.dtype)
-        # 返回包含 tri 和 z 的元组
-        return (tri, z)
-_docstring.interpd.update(_tricontour_doc="""
-Draw contour %(type)s on an unstructured triangular grid.
-
-Call signatures::
-
-    %(func)s(triangulation, z, [levels], ...)
-    %(func)s(x, y, z, [levels], *, [triangles=triangles], [mask=mask], ...)
-
-The triangular grid can be specified either by passing a `.Triangulation`
-object as the first parameter, or by passing the points *x*, *y* and
-optionally the *triangles* and a *mask*. See `.Triangulation` for an
-explanation of these parameters. If neither of *triangulation* or
-*triangles* are given, the triangulation is calculated on the fly.
-
-It is possible to pass *triangles* positionally, i.e.
-``%(func)s(x, y, triangles, z, ...)``. However, this is discouraged. For more
-clarity, pass *triangles* via keyword argument.
-
-Parameters
-----------
-triangulation : `.Triangulation`, optional
-    An already created triangular grid.
-
-x, y, triangles, mask
-    Parameters defining the triangular grid. See `.Triangulation`.
-    This is mutually exclusive with specifying *triangulation*.
-
-z : array-like
-    The height values over which the contour is drawn.  Color-mapping is
-    controlled by *cmap*, *norm*, *vmin*, and *vmax*.
-
-    .. note::
-        All values in *z* must be finite. Hence, nan and inf values must
-        either be removed or `~.Triangulation.set_mask` be used.
-
-levels : int or array-like, optional
-    Determines the number and positions of the contour lines / regions.
-
-    If an int *n*, use `~matplotlib.ticker.MaxNLocator`, which tries to
-    automatically choose no more than *n+1* "nice" contour levels between
-    between minimum and maximum numeric values of *Z*.
-
-    If array-like, draw contour lines at the specified levels.  The values must
-    be in increasing order.
-
-Returns
--------
-`~matplotlib.tri.TriContourSet`
-
-Other Parameters
-----------------
-colors : :mpltype:`color` or list of :mpltype:`color`, optional
-    The colors of the levels, i.e., the contour %(type)s.
-
-    The sequence is cycled for the levels in ascending order. If the sequence
-    is shorter than the number of levels, it is repeated.
-
-    As a shortcut, single color strings may be used in place of one-element
-    lists, i.e. ``'red'`` instead of ``['red']`` to color all levels with the
-    same color. This shortcut does only work for color strings, not for other
-    ways of specifying colors.
-
-    By default (value *None*), the colormap specified by *cmap* will be used.
-
-alpha : float, default: 1
-    The alpha blending value, between 0 (transparent) and 1 (opaque).
-
-%(cmap_doc)s
-
-    This parameter is ignored if *colors* is set.
-
-%(norm_doc)s
-
-    This parameter is ignored if *colors* is set.
-
-%(vmin_vmax_doc)s
-
-    If *vmin* or *vmax* are not given, the default color scaling is based on
-    *levels*.
-
-    This parameter is ignored if *colors* is set.
-
-origin : {*None*, 'upper', 'lower', 'image'}, default: None
-    Determines the orientation and exact position of *z* by specifying the
-"""
-    position of ``z[0, 0]``.  This is only relevant, if *X*, *Y* are not given.
-
-    - *None*: ``z[0, 0]`` is at X=0, Y=0 in the lower left corner.
-    - 'lower': ``z[0, 0]`` is at X=0.5, Y=0.5 in the lower left corner.
-    - 'upper': ``z[0, 0]`` is at X=N+0.5, Y=0.5 in the upper left corner.
-    - 'image': Use the value from :rc:`image.origin`.
-# extent : (x0, x1, y0, y1), optional
-# 如果 origin 不是 None，则 extent 被解释为 `.imshow` 中的内容：它给出外部像素边界。
-# 在这种情况下，z[0, 0] 的位置是像素中心，而不是角落。
-# 如果 origin 是 None，则 (x0, y0) 是 z[0, 0] 的位置，(x1, y1) 是 z[-1, -1] 的位置。
-
-# locator : ticker.Locator subclass, optional
-# 如果没有显式指定 levels，locator 用于确定等高线的级别。
-# 默认为 `~.ticker.MaxNLocator`。
-
-# extend : {'neither', 'both', 'min', 'max'}, default: 'neither'
-# 确定超出 levels 范围的值的着色方式。
-
-# 如果是 'neither'，超出 levels 范围的值不着色。
-# 如果是 'min'、'max' 或 'both'，分别着色低于、高于或低于和高于 levels 范围的值。
-# 小于 ``min(levels)`` 和大于 ``max(levels)`` 的值被映射到 `.Colormap` 的 under/over 值。
-# 注意，大多数 colormap 默认情况下不具有这些专门的颜色，因此 over 和 under 值是 colormap 的边缘值。
-# 可以使用 `.Colormap.set_under` 和 `.Colormap.set_over` 显式设置这些值。
-
-# .. note::
-#    如果更改其 colormap 的属性，现有的 `.TriContourSet` 不会收到通知。
-#    因此，在修改 colormap 后需要显式调用 `.ContourSet.changed()`。
-#    如果将颜色条分配给 `.TriContourSet`，则可以省略显式调用，因为它在内部调用 `.ContourSet.changed()`。
-
-# xunits, yunits : registered units, optional
-# 通过指定 `matplotlib.units.ConversionInterface` 的实例来覆盖轴单位。
-
-# antialiased : bool, optional
-# 启用抗锯齿功能，覆盖默认设置。
-# 对于填充的等高线，默认为 True。
-# 对于线条等高线，它从 :rc:`lines.antialiased` 获取。
-    # 设置默认的线型样式为None，可选值包括'solid', 'dashed', 'dashdot', 'dotted'，如果未指定则使用'solid'，
-    # 除非所有线条都是单色的，此时负轮廓将使用rc配置中的'contour.negative_linestyle'设置。
     linestyles : {*None*, 'solid', 'dashed', 'dashdot', 'dotted'}, optional
         If *linestyles* is *None*, the default is 'solid' unless the lines are
         monochrome.  In that case, negative contours will take their linestyle
@@ -243,42 +280,409 @@ origin : {*None*, 'upper', 'lower', 'image'}, default: None
         set of linestyles to be used. If this iterable is shorter than the
         number of contour levels it will be repeated as necessary.
     """
-    # 将'filled'关键字参数设为False
     kwargs['filled'] = False
-    # 使用TriContourSet类创建等高线图对象，传入参数ax, *args和**kwargs
     return TriContourSet(ax, *args, **kwargs)
-# 应用函数装饰器，将 tricontourf 函数的文档字符串中的 %(_tricontour_doc)s 替换为 tricontourf 类型的文档内容
+```
+
+
+
+### tricontour
+
+Draw contour lines on an unstructured triangular grid.
+
+参数：
+
+- `ax`：`Axes`，The axes on which to draw the contour lines.
+- `*args`：Variable length argument list. The remaining arguments and keyword arguments are described in the docstring of `~.Axes.tricontour`.
+- `**kwargs`：Keyword arguments. The keyword arguments are described in the docstring of `~.Axes.tricontour`.
+
+返回值：`TriContourSet`，A TriContourSet object representing the contour lines on the triangular grid.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is filled?}
+B -- No --> C[Process args and kwargs]
+B -- Yes --> D[Process args and kwargs]
+C --> E[Draw contour lines]
+D --> E
+E --> F[End]
+```
+
+#### 带注释源码
+
+```python
+@_docstring.Substitution(func='tricontour', type='lines')
+@_docstring.interpd
+def tricontour(ax, *args, **kwargs):
+    """
+    %(_tricontour_doc)s
+
+    linewidths : float or array-like, default: :rc:`contour.linewidth`
+        The line width of the contour lines.
+
+        If a number, all levels will be plotted with this linewidth.
+
+        If a sequence, the levels in ascending order will be plotted with
+        the linewidths in the order specified.
+
+        If None, this falls back to :rc:`lines.linewidth`.
+
+    linestyles : {*None*, 'solid', 'dashed', 'dashdot', 'dotted'}, optional
+        If *linestyles* is *None*, the default is 'solid' unless the lines are
+        monochrome.  In that case, negative contours will take their linestyle
+        from :rc:`contour.negative_linestyle` setting.
+
+        *linestyles* can also be an iterable of the above strings specifying a
+        set of linestyles to be used. If this iterable is shorter than the
+        number of contour levels it will be repeated as necessary.
+    """
+    kwargs['filled'] = False
+    return TriContourSet(ax, *args, **kwargs)
+```
+
+
+### tricontourf
+
+Draw filled regions on an unstructured triangular grid.
+
+参数：
+
+- `ax`：`Axes`，The axes on which to draw the filled regions.
+- `*args`：Variable length argument list. The remaining arguments and keyword arguments are described in the docstring of `~.Axes.tricontourf`.
+- `**kwargs`：Keyword arguments. The keyword arguments are described in the docstring of `~.Axes.tricontourf`.
+
+返回值：`TriContourSet`，A TriContourSet object representing the filled regions on the triangular grid.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is filled?}
+B -- Yes --> C[Process args and kwargs]
+C --> D[Draw filled regions]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```python
 @_docstring.Substitution(func='tricontourf', type='regions')
-# 应用函数装饰器，用于处理文档字符串的缩进
-@_docstring.dedent_interpd
+@_docstring.interpd
 def tricontourf(ax, *args, **kwargs):
     """
     %(_tricontour_doc)s
-    描述：用于在三角形网格上填充等高线图。
 
-    参数：
-    ax : Axes
-        绘图所用的轴对象。
-    *args
-        传递给 TriContourSet 的位置参数。
-    **kwargs
-        传递给 TriContourSet 的关键字参数。
-
-    可选参数：
     hatches : list[str], optional
-        用于填充区域的交叉图案列表。
-        如果为 None，则填充区域不添加任何图案。
+        A list of crosshatch patterns to use on the filled areas.
+        If None, no hatching will be added to the contour.
 
-    注意事项
+    Notes
     -----
-    `.tricontourf` 方法用于填充闭合于顶部的间隔；也就是说，对于边界 *z1* 和 *z2*，填充的区域是::
+    `.tricontourf` fills intervals that are closed at the top; that is, for
+    boundaries *z1* and *z2*, the filled region is::
 
         z1 < Z <= z2
 
-    最低的间隔是两侧都闭合的（即包括最低值）。
+    except for the lowest interval, which is closed on both sides (i.e. it
+    includes the lowest value).
     """
-    # 设置 filled 参数为 True，表示要进行填充操作
     kwargs['filled'] = True
-    # 返回 TriContourSet 对象，用于绘制填充的等高线图
     return TriContourSet(ax, *args, **kwargs)
 ```
+
+
+### TriContourSet.__init__
+
+This method initializes a TriContourSet object, which is used to create and store a set of contour lines or filled regions for a triangular grid.
+
+参数：
+
+- `ax`：`Axes`，The `Axes` object on which the contour lines or filled regions will be drawn.
+- `*args`：Variable length argument list. The remaining arguments and keyword arguments are described in the docstring of `~.Axes.tricontour`.
+- `**kwargs`：Keyword argument dictionary. The remaining arguments and keyword arguments are described in the docstring of `~.Axes.tricontour`.
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is filled?}
+B -- Yes --> C[Set filled to True]
+B -- No --> D[Set filled to False]
+C --> E[Call super().__init__ with ax, *args, **kwargs]
+D --> E
+E --> F[End]
+```
+
+#### 带注释源码
+
+```python
+def __init__(self, ax, *args, **kwargs):
+    """
+    Draw triangular grid contour lines or filled regions,
+    depending on whether keyword arg *filled* is False
+    (default) or True.
+
+    The first argument of the initializer must be an `~.axes.Axes`
+    object.  The remaining arguments and keyword arguments
+    are described in the docstring of `~.Axes.tricontour`.
+    """
+    super().__init__(ax, *args, **kwargs)
+```
+
+
+
+### TriContourSet._process_args
+
+Process args and kwargs.
+
+参数：
+
+- `args`：`tuple`，The positional arguments passed to the function.
+- `kwargs`：`dict`，The keyword arguments passed to the function.
+
+返回值：`dict`，The processed keyword arguments.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is args[0] a TriContourSet?}
+B -- Yes --> C[Set levels, zmin, zmax, mins, maxs from args[0]]
+B -- No --> D[Get tri and z from _contour_args]
+D --> E[Create TriContourGenerator with tri and z]
+E --> F[Set _contour_generator to C]
+F --> G[Return kwargs]
+G --> H[End]
+```
+
+#### 带注释源码
+
+```python
+def _process_args(self, *args, **kwargs):
+    """
+    Process args and kwargs.
+    """
+    if isinstance(args[0], TriContourSet):
+        C = args[0]._contour_generator
+        if self.levels is None:
+            self.levels = args[0].levels
+        self.zmin = args[0].zmin
+        self.zmax = args[0].zmax
+        self._mins = args[0]._mins
+        self._maxs = args[0]._maxs
+    else:
+        from matplotlib import _tri
+        tri, z = self._contour_args(args, kwargs)
+        C = _tri.TriContourGenerator(tri.get_cpp_triangulation(), z)
+        self._mins = [tri.x.min(), tri.y.min()]
+        self._maxs = [tri.x.max(), tri.y.max()]
+
+    self._contour_generator = C
+    return kwargs
+```
+
+
+
+### TriContourSet._contour_args
+
+This method processes the arguments for contouring on a triangular grid.
+
+参数：
+
+- `args`：`tuple`，The positional arguments for the contouring operation.
+- `kwargs`：`dict`，The keyword arguments for the contouring operation.
+
+返回值：`tuple`，A tuple containing the `Triangulation` object and the `z` values.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is args[0] a TriContourSet?}
+B -- Yes --> C[Set levels, zmin, zmax, mins, maxs]
+B -- No --> D[Get Triangulation and z from args and kwargs]
+D --> E[Check z array shape]
+E -- Same shape? --> F[Check z values]
+F -- All finite? --> G[Create TriContourGenerator]
+F -- Not all finite? --> H[Error: Non-finite values in z]
+G --> I[Set zmax, zmin]
+I --> J[Return (tri, z)]
+C --> J
+H --> J
+```
+
+#### 带注释源码
+
+```python
+def _contour_args(self, args, kwargs):
+    tri, args, kwargs = Triangulation.get_from_args_and_kwargs(*args,
+                                                                   **kwargs)
+    z, *args = args
+    z = np.ma.asarray(z)
+    if z.shape != tri.x.shape:
+        raise ValueError('z array must have same length as triangulation x'
+                         ' and y arrays')
+
+    # z values must be finite, only need to check points that are included
+    # in the triangulation.
+    z_check = z[np.unique(tri.get_masked_triangles())]
+    if np.ma.is_masked(z_check):
+        raise ValueError('z must not contain masked points within the '
+                         'triangulation')
+    if not np.isfinite(z_check).all():
+        raise ValueError('z array must not contain non-finite values '
+                         'within the triangulation')
+
+    z = np.ma.masked_invalid(z, copy=False)
+    self.zmax = float(z_check.max())
+    self.zmin = float(z_check.min())
+    if self.logscale and self.zmin <= 0:
+        func = 'contourf' if self.filled else 'contour'
+        raise ValueError(f'Cannot TriContourSet._contour_args log of negative values.')
+    self._process_contour_level_args(args, z.dtype)
+    return (tri, z)
+```
+
+
+
+### TriContourSet._process_contour_level_args
+
+This method processes the contour level arguments for a triangular grid contour set.
+
+参数：
+
+- `args`：`tuple`，The positional arguments passed to the method.
+- `dtype`：`numpy.dtype`，The data type of the `z` array.
+
+返回值：`None`，This method does not return a value.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B[Check if levels is None]
+B -->|Yes| C[Set levels from args[0]]
+B -->|No| D[Process levels]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```python
+def _process_contour_level_args(self, *args, **kwargs):
+    """
+    Process the contour level arguments for the triangular grid contour set.
+
+    Parameters
+    ----------
+    args : tuple
+        The positional arguments passed to the method.
+    dtype : numpy.dtype
+        The data type of the `z` array.
+
+    Returns
+    -------
+    None
+    """
+    # Check if levels is None
+    if self.levels is None:
+        # Set levels from args[0]
+        self.levels = args[0].levels
+    else:
+        # Process levels
+        # (Implementation details are not shown as they are not provided in the given code snippet)
+        pass
+```
+
+
+## 关键组件
+
+
+### 张量索引与惰性加载
+
+张量索引与惰性加载是用于处理和访问大型数据集的关键组件，它允许在数据被实际需要时才进行加载，从而减少内存消耗和提高性能。
+
+### 反量化支持
+
+反量化支持是用于将量化后的数据转换回原始数据类型的关键组件，它确保了量化过程不会丢失重要的数据信息。
+
+### 量化策略
+
+量化策略是用于将数据从高精度转换为低精度表示的关键组件，它有助于减少模型大小和提高推理速度，但可能会牺牲一些精度。
+
+
+
+
+## 问题及建议
+
+
+### 已知问题
+
+-   **文档注释不完整**：代码中的文档字符串（docstrings）虽然提供了函数的基本描述，但缺乏详细的参数说明和返回值描述，这可能会给使用者带来困惑。
+-   **代码重复**：`tricontour` 和 `tricontourf` 函数都调用了 `TriContourSet` 类，但它们只是改变了 `filled` 参数的值。这种重复可能导致维护困难。
+-   **异常处理不足**：代码中没有对输入参数进行充分的异常处理，例如，没有检查 `z` 数组是否与 `triangulation` 的维度匹配。
+
+### 优化建议
+
+-   **完善文档注释**：为每个函数和类提供详细的文档注释，包括参数的详细说明、返回值的描述、可能的异常情况以及示例代码。
+-   **减少代码重复**：将 `tricontour` 和 `tricontourf` 函数中的 `filled` 参数设置逻辑提取出来，作为一个单独的函数或方法，以减少代码重复。
+-   **增强异常处理**：在函数中添加必要的异常处理，确保输入参数的有效性，并在出现错误时提供清晰的错误信息。
+-   **代码重构**：考虑将 `TriContourSet` 类中的逻辑进一步分解，以提高代码的可读性和可维护性。
+-   **性能优化**：对于处理大型数据集的情况，考虑优化 `TriContourSet` 类中的数据处理逻辑，以提高性能。
+
+
+## 其它
+
+
+### 设计目标与约束
+
+- 设计目标：
+  - 提供一个用于在三角形网格上绘制等高线或填充区域的类。
+  - 允许用户通过多种方式指定三角形网格，包括使用`Triangulation`对象或通过点坐标。
+  - 支持自定义等高线级别和颜色映射。
+  - 提供与`Axes.tricontour`和`Axes.tricontourf`兼容的接口。
+
+- 约束：
+  - 必须使用NumPy数组处理数据。
+  - 必须使用Matplotlib库进行绘图。
+  - 必须遵循Matplotlib的文档字符串约定。
+
+### 错误处理与异常设计
+
+- 错误处理：
+  - 如果`z`数组中的值不是有限的，将引发`ValueError`。
+  - 如果`z`数组中的值不在三角形网格内，将引发`ValueError`。
+  - 如果`z`数组中的值包含非有限值，将引发`ValueError`。
+
+- 异常设计：
+  - 使用`ValueError`来处理输入数据错误。
+  - 使用`TypeError`来处理类型不匹配的错误。
+
+### 数据流与状态机
+
+- 数据流：
+  - 用户输入三角形网格和高度值。
+  - 系统处理输入并生成等高线或填充区域。
+  - 系统将结果绘制到图上。
+
+- 状态机：
+  - 初始化状态：创建`TriContourSet`对象。
+  - 处理输入状态：处理用户输入的三角形网格和高度值。
+  - 绘制状态：将等高线或填充区域绘制到图上。
+
+### 外部依赖与接口契约
+
+- 外部依赖：
+  - NumPy：用于处理数组数据。
+  - Matplotlib：用于绘图。
+
+- 接口契约：
+  - `TriContourSet`类必须遵循Matplotlib的文档字符串约定。
+  - `tricontour`和`tricontourf`函数必须遵循Matplotlib的文档字符串约定。
+  - `TriContourSet`类必须能够处理来自`Axes.tricontour`和`Axes.tricontourf`的输入。
+
+    

@@ -1,288 +1,554 @@
-# `D:\src\scipysrc\matplotlib\src\_c_internal_utils.cpp`
 
-```py
-/* Python.h 必须在任何系统头文件之前包含，
-   以确保可见性宏被正确设置。 */
-#include <Python.h>
-#include <stdexcept>
+# `matplotlib\src\_c_internal_utils.cpp` 详细设计文档
 
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-// 用于最新的 HiDPI API 支持的 Windows 10。
-#define WINVER 0x0A00
-#define _WIN32_WINNT 0x0A00
-#endif
+This Python module provides utility functions for checking display validity, managing Windows-specific process settings, and interacting with the Windows user interface.
 
-#include <pybind11/pybind11.h>
+## 整体流程
 
-#ifdef __linux__
-#include <dlfcn.h>
-#endif
+```mermaid
+graph TD
+    A[Start] --> B[Check display validity]
+    B --> |X11| C[Check X11 display]
+    B --> |Wayland| D[Check Wayland display]
+    C --> E[Return True if valid]
+    D --> E[Return True if valid]
+    E --> F[Check for Windows-specific features]
+    F --> |Windows| G[Get Current Process App User Model ID]
+    F --> |Windows| H[Set Current Process App User Model ID]
+    F --> |Windows| I[Get Foreground Window]
+    F --> |Windows| J[Set Foreground Window]
+    F --> |Windows| K[Set Process DPI Awareness]
+    G --> L[Return App User Model ID]
+    H --> M[Set App User Model ID]
+    I --> N[Return Foreground Window Handle]
+    J --> O[Set Foreground Window Handle]
+    K --> P[Set Process DPI Awareness]
+    P --> Q[End]
+```
 
-#ifdef _WIN32
-#include <Objbase.h>
-#include <Shobjidl.h>
-#include <Windows.h>
-// 非 Windows 系统下不使用的宏。
-#define UNUSED_ON_NON_WINDOWS(x) x
-#else
-#define UNUSED_ON_NON_WINDOWS Py_UNUSED
-#endif
+## 类结构
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+```
+mpl_xdisplay_is_valid
+mpl_display_is_valid
+mpl_GetCurrentProcessExplicitAppUserModelID
+mpl_SetCurrentProcessExplicitAppUserModelID
+mpl_GetForegroundWindow
+mpl_SetForegroundWindow
+mpl_SetProcessDpiAwareness_max
+```
 
-// 检查当前环境中是否可以有效显示图形界面。
+## 全局变量及字段
+
+
+### `appid`
+    
+Pointer to a wide character string that contains the application user model ID for the current process on Windows.
+
+类型：`wchar_t*`
+    
+
+
+### `display`
+    
+Pointer to a Display structure that contains information about an X11 display.
+
+类型：`struct Display*`
+    
+
+
+### `hwnd`
+    
+Handle to a window on Windows.
+
+类型：`HWND`
+    
+
+
+### `libX11`
+    
+Pointer to a dynamically loaded library containing the X11 library.
+
+类型：`void*`
+    
+
+
+### `libwayland_client`
+    
+Pointer to a dynamically loaded library containing the Wayland client library.
+
+类型：`void*`
+    
+
+
+### `user32`
+    
+Handle to the user32.dll module on Windows, which contains various Windows API functions.
+
+类型：`HMODULE`
+    
+
+
+### `mpl_SetCurrentProcessExplicitAppUserModelID.appid`
+    
+The application user model ID to set for the current process on Windows.
+
+类型：`wchar_t*`
+    
+
+
+### `mpl_SetForegroundWindow.hwnd`
+    
+The handle to the window to set as the foreground window on Windows.
+
+类型：`HWND`
+    
+    
+
+## 全局函数及方法
+
+
+### mpl_xdisplay_is_valid
+
+Check whether the current X11 display is valid.
+
+参数：
+
+- 无
+
+返回值：`bool`，If the current X11 display is valid, returns `true`; otherwise, returns `false`.
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B{Check $DISPLAY is set?}
+    B -- Yes --> C[Open X11 display]
+    B -- No --> D[Return false]
+    C --> E{Is XOpenDisplay successful?}
+    E -- Yes --> F[Close display and return true]
+    E -- No --> D
+    F --> G[Close display]
+    D --> H[Return false]
+    H --> I[End]
+```
+
+#### 带注释源码
+
+```cpp
 static bool
-mpl_display_is_valid(void)
+mpl_xdisplay_is_valid(void)
 {
 #ifdef __linux__
     void* libX11;
-    // getenv 的检查是多余的，但可以提高性能，因为比 dlopen() 要快得多。
+    // The getenv check is redundant but helps performance as it is much faster
+    // than dlopen().
     if (getenv("DISPLAY")
         && (libX11 = dlopen("libX11.so.6", RTLD_LAZY))) {
-        typedef struct Display* (*XOpenDisplay_t)(char const*);
-        typedef int (*XCloseDisplay_t)(struct Display*);
-        struct Display* display = NULL;
-        // 尝试从动态链接库中加载并调用 XOpenDisplay 和 XCloseDisplay 函数。
-        XOpenDisplay_t XOpenDisplay = (XOpenDisplay_t)dlsym(libX11, "XOpenDisplay");
-        XCloseDisplay_t XCloseDisplay = (XCloseDisplay_t)dlsym(libX11, "XCloseDisplay");
+        struct Display* display = nullptr;
+        auto XOpenDisplay = (struct Display* (*)(char const*))
+            dlsym(libX11, "XOpenDisplay");
+        auto XCloseDisplay = (int (*)(struct Display*))
+            dlsym(libX11, "XCloseDisplay");
         if (XOpenDisplay && XCloseDisplay
-                && (display = XOpenDisplay(NULL))) {
+                && (display = XOpenDisplay(nullptr))) {
             XCloseDisplay(display);
         }
-        // 关闭动态链接库 libX11。
         if (dlclose(libX11)) {
             throw std::runtime_error(dlerror());
         }
-        // 如果成功打开了显示器，返回 true。
         if (display) {
             return true;
         }
     }
-    void* libwayland_client;
-    // 检查环境变量 WAYLAND_DISPLAY 是否设置，并尝试加载 libwayland-client.so.0。
-    if (getenv("WAYLAND_DISPLAY")
-        && (libwayland_client = dlopen("libwayland-client.so.0", RTLD_LAZY))) {
-        typedef struct wl_display* (*wl_display_connect_t)(char const*);
-        typedef void (*wl_display_disconnect_t)(struct wl_display*);
-        struct wl_display* display = NULL;
-        // 尝试从 libwayland-client.so.0 中加载并调用 wl_display_connect 和 wl_display_disconnect 函数。
-        wl_display_connect_t wl_display_connect =
-            (wl_display_connect_t)dlsym(libwayland_client, "wl_display_connect");
-        wl_display_disconnect_t wl_display_disconnect =
-            (wl_display_disconnect_t)dlsym(libwayland_client, "wl_display_disconnect");
-        if (wl_display_connect && wl_display_disconnect
-                && (display = wl_display_connect(NULL))) {
-            wl_display_disconnect(display);
-        }
-        // 关闭动态链接库 libwayland-client.so.0。
-        if (dlclose(libwayland_client)) {
-            throw std::runtime_error(dlerror());
-        }
-        // 如果成功连接了显示器，返回 true。
-        if (display) {
-            return true;
-        }
-    }
-    // 默认情况下返回 false。
     return false;
 #else
-    // 在非 Linux 系统下，始终返回 true。
     return true;
 #endif
 }
+```
 
-// 获取当前进程的应用程序用户模型 ID。
+
+
+### mpl_display_is_valid
+
+Check whether the current X11 or Wayland display is valid.
+
+参数：
+
+- 无
+
+返回值：`bool`，If the display is valid, returns `true`; otherwise, returns `false`.
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[Start] --> B[Check if Linux]
+    B -->|Yes| C[Check X11 display]
+    B -->|No| D[Check Wayland display]
+    C -->|Success| E[Return true]
+    C -->|Failure| F[Return false]
+    D -->|Success| E
+    D -->|Failure| F
+    F --> G[End]
+    E --> G
+```
+
+#### 带注释源码
+
+```cpp
+static bool mpl_display_is_valid(void)
+{
+#ifdef __linux__
+    if (mpl_xdisplay_is_valid()) {
+        return true;
+    }
+    void* libwayland_client;
+    if (getenv("WAYLAND_DISPLAY")
+        && (libwayland_client = dlopen("libwayland-client.so.0", RTLD_LAZY))) {
+        struct wl_display* display = nullptr;
+        auto wl_display_connect = (struct wl_display* (*)(char const*))
+            dlsym(libwayland_client, "wl_display_connect");
+        auto wl_display_disconnect = (void (*)(struct wl_display*))
+            dlsym(libwayland_client, "wl_display_disconnect");
+        if (wl_display_connect && wl_display_disconnect
+                && (display = wl_display_connect(nullptr))) {
+            wl_display_disconnect(display);
+        }
+        if (dlclose(libwayland_client)) {
+            throw std::runtime_error(dlerror());
+        }
+        if (display) {
+            return true;
+        }
+    }
+    return false;
+#else
+    return true;
+#endif
+}
+```
+
+
+
+### mpl_GetCurrentProcessExplicitAppUserModelID
+
+Wrapper for Windows's GetCurrentProcessExplicitAppUserModelID.
+
+参数：
+
+- `appid`：`wchar_t*`，The application user model ID to set for the current process.
+
+返回值：`py::object`，The application user model ID as a Python object.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is Windows?}
+B -- Yes --> C[Call GetCurrentProcessExplicitAppUserModelID]
+B -- No --> D[Return None]
+C --> E[Check HRESULT]
+E -- Failed --> F[Set error and throw]
+E -- Succeeded --> G[Convert to Python object]
+G --> H[Free memory]
+H --> I[Return object]
+```
+
+#### 带注释源码
+
+```cpp
 static py::object
 mpl_GetCurrentProcessExplicitAppUserModelID(void)
 {
 #ifdef _WIN32
     wchar_t* appid = NULL;
-    // 获取当前进程的应用程序用户模型 ID，并检查返回状态。
     HRESULT hr = GetCurrentProcessExplicitAppUserModelID(&appid);
     if (FAILED(hr)) {
         PyErr_SetFromWindowsErr(hr);
         throw py::error_already_set();
     }
-    // 将 wchar_t* 转换为 Python 字符串对象。
     auto py_appid = py::cast(appid);
-    // 释放从 GetCurrentProcessExplicitAppUserModelID 中分配的内存。
     CoTaskMemFree(appid);
     return py_appid;
 #else
-    // 在非 Windows 系统下，返回 None。
     return py::none();
 #endif
 }
+```
 
-// 设置当前进程的应用程序用户模型 ID。
-static void
-mpl_SetCurrentProcessExplicitAppUserModelID(const wchar_t* UNUSED_ON_NON_WINDOWS(appid))
+
+### mpl_SetCurrentProcessExplicitAppUserModelID
+
+Wrapper for Windows's SetCurrentProcessExplicitAppUserModelID.
+
+参数：
+
+- `appid`：`const wchar_t*`，The application user model ID to set for the current process.
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is Windows Platform?}
+B -- Yes --> C[SetCurrentProcessExplicitAppUserModelID(appid)]
+B -- No --> D[Do nothing]
+C --> E[Check for failure]
+E -- Yes --> F[Set error and throw exception]
+E -- No --> G[End]
+D --> G
+```
+
+#### 带注释源码
+
+```cpp
+static void mpl_SetCurrentProcessExplicitAppUserModelID(const wchar_t* UNUSED_ON_NON_WINDOWS(appid))
 {
 #ifdef _WIN32
-    // Windows 下设置当前进程的应用程序用户模型 ID。
-    // 这里可以添加相应的 Windows 特定实现代码。
-#endif
-}
-    # 调用 Windows API 设置当前进程的显式应用用户模型ID
     HRESULT hr = SetCurrentProcessExplicitAppUserModelID(appid);
-    # 检查操作结果，如果失败，则根据错误码设置 Python 异常
     if (FAILED(hr)) {
         PyErr_SetFromWindowsErr(hr);
-        # 抛出 Python 异常给上层调用者
         throw py::error_already_set();
     }
 #endif
 }
+```
 
-// 返回当前前台窗口的句柄对象，仅在 Windows 平台下有效
+
+
+### mpl_GetForegroundWindow
+
+Wrapper for Windows' GetForegroundWindow.
+
+参数：
+
+- hwnd：`py::capsule`，The handle to the window to be activated and given focus.
+
+返回值：`py::object`，The window handle if successful, otherwise `py::none()`.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is Windows Platform?}
+B -- Yes --> C[GetForegroundWindow]
+B -- No --> D[Return None]
+C --> E[Return HWND]
+E --> F[End]
+D --> F
+```
+
+#### 带注释源码
+
+```cpp
 static py::object
 mpl_GetForegroundWindow(void)
 {
 #ifdef _WIN32
-  // 获取当前前台窗口的句柄
   if (HWND hwnd = GetForegroundWindow()) {
-    // 将句柄封装成 Python Capsule 对象并返回
     return py::capsule(hwnd, "HWND");
   } else {
-    // 如果未获取到前台窗口句柄，返回 Python 的 None 对象
     return py::none();
   }
 #else
-  // 在非 Windows 平台下，返回 Python 的 None 对象
   return py::none();
 #endif
 }
+```
 
-// 设置指定窗口为前台窗口，仅在 Windows 平台下有效
+
+
+### mpl_SetForegroundWindow
+
+Wrapper for Windows' SetForegroundWindow.
+
+参数：
+
+- hwnd：`py::capsule`，The handle to the window to be activated and given keyboard focus.
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Check Platform}
+B -- Windows --> C[Check HWND Type]
+C -- HWND -> D[SetForegroundWindow]
+C -- Not HWND --> E[Throw Error]
+D --> F[Check Success]
+F -- Success --> G[Return]
+F -- Failure --> H[Throw Error]
+E --> I[Throw Error]
+G --> J[End]
+H --> J
+I --> J
+```
+
+#### 带注释源码
+
+```cpp
 static void
 mpl_SetForegroundWindow(py::capsule UNUSED_ON_NON_WINDOWS(handle_p))
 {
 #ifdef _WIN32
-    // 检查传入的 handle_p 是否为 HWND 类型的 Capsule
-    if (handle_p.name() != "HWND") {
-        // 若不是，则抛出运行时错误
+    if (strcmp(handle_p.name(), "HWND") != 0) {
         throw std::runtime_error("Handle must be a value returned from Win32_GetForegroundWindow");
     }
-    // 将 Capsule 中的指针转换为 HWND 类型
     HWND handle = static_cast<HWND>(handle_p.get_pointer());
-    // 尝试设置指定窗口为前台窗口，若失败则抛出运行时错误
     if (!SetForegroundWindow(handle)) {
         throw std::runtime_error("Error setting window");
     }
 #endif
 }
+```
 
-// 设置进程 DPI 感知性的最大值，仅在 Windows 平台下有效
+
+
+### mpl_SetProcessDpiAwareness_max
+
+Set Windows' process DPI awareness to best option available.
+
+参数：
+
+- 无
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B[Check for DPI Awareness Contexts]
+B -->|Yes| C[Set DPI Awareness Context]
+B -->|No| D[Set Process DPI Aware]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```cpp
 static void
 mpl_SetProcessDpiAwareness_max(void)
 {
 #ifdef _WIN32
 #ifdef _DPI_AWARENESS_CONTEXTS_
-    // 这些函数和选项是在较新的 Windows 10 更新中添加的，因此需要动态加载
-    typedef BOOL (WINAPI *IsValidDpiAwarenessContext_t)(DPI_AWARENESS_CONTEXT);
-    typedef BOOL (WINAPI *SetProcessDpiAwarenessContext_t)(DPI_AWARENESS_CONTEXT);
-
-    // 加载 user32.dll 动态链接库
+    // These functions and options were added in later Windows 10 updates, so
+    // must be loaded dynamically.
     HMODULE user32 = LoadLibrary("user32.dll");
-    // 获取 IsValidDpiAwarenessContext 函数指针
-    IsValidDpiAwarenessContext_t IsValidDpiAwarenessContextPtr =
-        (IsValidDpiAwarenessContext_t)GetProcAddress(
-            user32, "IsValidDpiAwarenessContext");
-    // 获取 SetProcessDpiAwarenessContext 函数指针
-    SetProcessDpiAwarenessContext_t SetProcessDpiAwarenessContextPtr =
-        (SetProcessDpiAwarenessContext_t)GetProcAddress(
-            user32, "SetProcessDpiAwarenessContext");
-    // 定义 DPI 感知性的上下文数组
+    auto IsValidDpiAwarenessContext = (BOOL (WINAPI *)(DPI_AWARENESS_CONTEXT))
+        GetProcAddress(user32, "IsValidDpiAwarenessContext");
+    auto SetProcessDpiAwarenessContext = (BOOL (WINAPI *)(DPI_AWARENESS_CONTEXT))
+        GetProcAddress(user32, "SetProcessDpiAwarenessContext");
     DPI_AWARENESS_CONTEXT ctxs[3] = {
         DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,  // Win10 Creators Update
         DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE,     // Win10
         DPI_AWARENESS_CONTEXT_SYSTEM_AWARE};         // Win10
-    // 如果函数指针有效，则尝试设置进程的 DPI 感知性
-    if (IsValidDpiAwarenessContextPtr != NULL
-            && SetProcessDpiAwarenessContextPtr != NULL) {
-        for (int i = 0; i < sizeof(ctxs) / sizeof(DPI_AWARENESS_CONTEXT); ++i) {
-            if (IsValidDpiAwarenessContextPtr(ctxs[i])) {
-                SetProcessDpiAwarenessContextPtr(ctxs[i]);
+    if (IsValidDpiAwarenessContext && SetProcessDpiAwarenessContext) {
+        for (size_t i = 0; i < sizeof(ctxs) / sizeof(DPI_AWARENESS_CONTEXT); ++i) {
+            if (IsValidDpiAwarenessContext(ctxs[i])) {
+                SetProcessDpiAwarenessContext(ctxs[i]);
                 break;
             }
         }
     } else {
-        // 若无法动态加载，回退至 SetProcessDPIAware 函数（Vista 后的 Windows 版本支持）
+        // Added in Windows Vista.
         SetProcessDPIAware();
     }
-    // 释放 user32.dll 动态链接库
     FreeLibrary(user32);
 #else
-    // 若不支持 _DPI_AWARENESS_CONTEXTS_，则回退至 SetProcessDPIAware 函数（Vista 后的 Windows 版本支持）
+    // Added in Windows Vista.
     SetProcessDPIAware();
 #endif
 #endif
 }
-
-// 定义模块的入口点，为 Python 提供接口函数
-PYBIND11_MODULE(_c_internal_utils, m)
-{
-    // 绑定函数 display_is_valid 到 Python 中的 mpl_display_is_valid 函数
-    m.def(
-        "display_is_valid", &mpl_display_is_valid,
-        R"""(        --
-        检查当前 X11 或 Wayland 显示是否有效。
-
-        在 Linux 中，如果 $DISPLAY 设置并且 XOpenDisplay(NULL) 成功，或者 $WAYLAND_DISPLAY 设置并且 wl_display_connect(NULL) 成功，则返回 True。
-
-        在其他平台上，始终返回 True。)""");
-    // 绑定函数 Win32_GetCurrentProcessExplicitAppUserModelID 到 Python 中的 mpl_GetCurrentProcessExplicitAppUserModelID 函数
-    m.def(
-        "Win32_GetCurrentProcessExplicitAppUserModelID",
-        &mpl_GetCurrentProcessExplicitAppUserModelID,
-        R"""(        --
-        Windows GetCurrentProcessExplicitAppUserModelID 的包装器。
-
-        在非 Windows 平台上，始终返回 None。)""");
-}
-    m.def(
-        "Win32_SetCurrentProcessExplicitAppUserModelID",
-        &mpl_SetCurrentProcessExplicitAppUserModelID,
-        "appid"_a, py::pos_only(),
-        R"""(
-        Wrapper for Windows's SetCurrentProcessExplicitAppUserModelID.
-
-        On non-Windows platforms, does nothing.
-        )"""
-    );
-    m.def(
-        "Win32_GetForegroundWindow", &mpl_GetForegroundWindow,
-        R"""(
-        Wrapper for Windows' GetForegroundWindow.
-
-        On non-Windows platforms, always returns None.
-        )"""
-    );
-    m.def(
-        "Win32_SetForegroundWindow", &mpl_SetForegroundWindow,
-        "hwnd"_a,
-        R"""(
-        Wrapper for Windows' SetForegroundWindow.
-
-        On non-Windows platforms, does nothing.
-        )"""
-    );
-    m.def(
-        "Win32_SetProcessDpiAwareness_max", &mpl_SetProcessDpiAwareness_max,
-        R"""(
-        Set Windows' process DPI awareness to best option available.
-
-        On non-Windows platforms, does nothing.
-        )"""
-    );
-
-
-这些注释解释了每个函数在代码中的作用和行为。每个注释都描述了函数的功能及其在非Windows平台上的行为。
-}
-
-
-
-# 这行代码是一个单独的右花括号 '}'，用于结束一个代码块或函数的定义
 ```
+
+
+## 关键组件
+
+
+### 张量索引与惰性加载
+
+张量索引与惰性加载是代码中处理数据结构的核心组件，它允许对大型数据集进行高效访问，同时延迟计算，以节省内存和计算资源。
+
+### 反量化支持
+
+反量化支持是代码中用于处理数值类型转换的组件，它能够将量化后的数据转换回原始精度，确保数据在处理过程中的准确性。
+
+### 量化策略
+
+量化策略是代码中用于优化数据存储和计算效率的组件，它通过减少数据精度来减少内存使用和加速计算过程。
+
+
+
+## 问题及建议
+
+
+### 已知问题
+
+-   **跨平台兼容性**：代码主要针对Windows平台进行优化，对于Linux和其它平台的支持较为有限，例如在Linux平台上对X11和Wayland显示的检查。
+-   **异常处理**：代码中使用了`throw`语句来抛出异常，但没有提供详细的异常处理逻辑，这可能导致调用者难以理解错误原因。
+-   **全局变量和函数**：代码中使用了全局变量和函数，这可能导致代码难以维护和测试。
+-   **代码注释**：代码注释较少，对于理解代码逻辑和功能有一定难度。
+
+### 优化建议
+
+-   **增强跨平台兼容性**：考虑为Linux和其它平台提供更全面的显示检查支持，例如增加对其他图形界面的支持。
+-   **改进异常处理**：提供更详细的异常信息，例如错误代码和错误描述，以便调用者更好地处理异常。
+-   **减少全局变量和函数的使用**：将全局变量和函数封装到类中，提高代码的可维护性和可测试性。
+-   **增加代码注释**：为代码添加详细的注释，解释代码逻辑和功能，提高代码的可读性。
+-   **代码重构**：对代码进行重构，提高代码的模块化和可复用性。
+-   **性能优化**：对代码进行性能优化，例如减少不必要的系统调用和动态库加载。
+
+
+## 其它
+
+
+### 设计目标与约束
+
+- 设计目标：
+  - 提供跨平台的显示和窗口管理功能。
+  - 为Python绑定提供Windows特定的API。
+  - 确保代码在多种操作系统上具有良好的兼容性。
+
+- 约束：
+  - 代码必须与Python 3兼容。
+  - 代码必须能够在Windows和Linux操作系统上编译和运行。
+  - 代码应尽可能简洁，避免不必要的复杂性。
+
+### 错误处理与异常设计
+
+- 错误处理：
+  - 使用`std::runtime_error`来处理系统调用失败。
+  - 使用`PyErr_SetFromWindowsErr`将Windows错误转换为Python异常。
+  - 使用`py::error_already_set`来设置Python异常。
+
+- 异常设计：
+  - 异常设计应确保所有可能的错误情况都能被捕获和处理。
+  - 异常应提供足够的信息，以便调用者能够了解错误的原因。
+
+### 数据流与状态机
+
+- 数据流：
+  - 数据流从用户调用Python绑定开始，通过C++代码处理，最终返回到Python调用者。
+
+- 状态机：
+  - 代码中没有明显的状态机，但函数调用和条件语句确保了代码的有序执行。
+
+### 外部依赖与接口契约
+
+- 外部依赖：
+  - 依赖于Python和pybind11库。
+  - 依赖于Windows API和Linux的系统调用。
+
+- 接口契约：
+  - 提供的函数和模块应遵循Python的API规范。
+  - 函数应提供清晰的文档字符串，说明其功能和参数。
+  - 函数应处理所有可能的错误情况，并抛出相应的异常。
+
+
+    

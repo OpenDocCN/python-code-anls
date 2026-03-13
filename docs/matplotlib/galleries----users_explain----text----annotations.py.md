@@ -1,667 +1,765 @@
-# `D:\src\scipysrc\matplotlib\galleries\users_explain\text\annotations.py`
 
-```py
-r"""
-.. redirect-from:: /gallery/userdemo/annotate_simple01
-.. redirect-from:: /gallery/userdemo/annotate_simple02
-.. redirect-from:: /gallery/userdemo/annotate_simple03
-.. redirect-from:: /gallery/userdemo/annotate_simple04
-.. redirect-from:: /gallery/userdemo/anchored_box04
-.. redirect-from:: /gallery/userdemo/annotate_simple_coord01
-.. redirect-from:: /gallery/userdemo/annotate_simple_coord02
-.. redirect-from:: /gallery/userdemo/annotate_simple_coord03
-.. redirect-from:: /gallery/userdemo/connect_simple01
-.. redirect-from:: /tutorials/text/annotations
-
-.. _annotations:
-
-Annotations
-===========
-
-Annotations are graphical elements, often pieces of text, that explain, add
-context to, or otherwise highlight some portion of the visualized data.
-`~.Axes.annotate` supports a number of coordinate systems for flexibly
-positioning data and annotations relative to each other and a variety of
-options of for styling the text. Axes.annotate also provides an optional arrow
-from the text to the data and this arrow can be styled in various ways.
-`~.Axes.text` can also be used for simple text annotation, but does not
-provide as much flexibility in positioning and styling as `~.Axes.annotate`.
-
-.. contents:: Table of Contents
-   :depth: 3
-"""
-# %%
-# .. _annotations-tutorial:
-#
-# Basic annotation
-# ----------------
-#
-# In an annotation, there are two points to consider: the location of the data
-# being annotated *xy* and the location of the annotation text *xytext*.  Both
-# of these arguments are ``(x, y)`` tuples:
-
-# 导入matplotlib.pyplot和numpy库
-import matplotlib.pyplot as plt
-import numpy as np
-
-# 创建一个3x3尺寸的图形对象和对应的轴对象
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 创建数据
-t = np.arange(0.0, 5.0, 0.01)
-s = np.cos(2*np.pi*t)
-
-# 绘制数据曲线
-line, = ax.plot(t, s, lw=2)
-
-# 在图上添加注释，'local max'是注释文本，xy=(2, 1)是箭头的位置，xytext=(3, 1.5)是文本的位置
-ax.annotate('local max', xy=(2, 1), xytext=(3, 1.5),
-            arrowprops=dict(facecolor='black', shrink=0.05))
-
-# 设置y轴的范围
-ax.set_ylim(-2, 2)
-
-# %%
-# In this example, both the *xy* (arrow tip) and *xytext* locations
-# (text location) are in data coordinates.  There are a variety of other
-# coordinate systems one can choose -- you can specify the coordinate
-# system of *xy* and *xytext* with one of the following strings for
-# *xycoords* and *textcoords* (default is 'data')
-#
-# ==================  ========================================================
-# argument            coordinate system
-# ==================  ========================================================
-# 'figure points'     points from the lower left corner of the figure
-# 'figure pixels'     pixels from the lower left corner of the figure
-# 'figure fraction'   (0, 0) is lower left of figure and (1, 1) is upper right
-# 'axes points'       points from lower left corner of the Axes
-# 'axes pixels'       pixels from lower left corner of the Axes
-# 'axes fraction'     (0, 0) is lower left of Axes and (1, 1) is upper right
-# 'data'              use the axes data coordinate system
-# ==================  ========================================================
-#
-# The following strings are also valid arguments for *textcoords*
-#
-# ==================  ========================================================
-# argument            coordinate system
-# ==================  ========================================================
-# 'offset points'     以点为单位的偏移量，相对于xy值
-# 'offset pixels'     以像素为单位的偏移量，相对于xy值
-# ==================  ========================================================
-#
-# 对于物理坐标系统（点或像素），原点位于图形或Axes的左下角。点是
-# `排版点 <https://en.wikipedia.org/wiki/Point_(typography)>`_
-# 这意味着它们是一个物理单位，等于1/72英寸。点和像素在 :ref:`transforms-fig-scale-dpi` 中有更详细的讨论。
-#
-# .. _annotation-data:
-#
-# 标注数据
-# ^^^^^^^^^^^^^^^
-#
-# 本示例将文本坐标放置在分数轴坐标中：
-
-fig, ax = plt.subplots(figsize=(3, 3))
-
-t = np.arange(0.0, 5.0, 0.01)
-s = np.cos(2*np.pi*t)
-line, = ax.plot(t, s, lw=2)
-
-ax.annotate('local max', xy=(2, 1), xycoords='data',
-            xytext=(0.01, .99), textcoords='axes fraction',
-            va='top', ha='left',
-            arrowprops=dict(facecolor='black', shrink=0.05))
-ax.set_ylim(-2, 2)
-
-# %%
-#
-# 标注一个Artist
-# ^^^^^^^^^^^^^^^^^^^^
-#
-# 通过将Artist实例作为*xycoords*传入，可以相对于该Artist实例定位标注。
-# 这时，*xy*被解释为Artist边界框的分数。
-
-import matplotlib.patches as mpatches
-
-fig, ax = plt.subplots(figsize=(3, 3))
-arr = mpatches.FancyArrowPatch((1.25, 1.5), (1.75, 1.5),
-                               arrowstyle='->,head_width=.15', mutation_scale=20)
-ax.add_patch(arr)
-ax.annotate("label", (.5, .5), xycoords=arr, ha='center', va='bottom')
-ax.set(xlim=(1, 2), ylim=(1, 2))
-
-# %%
-# 这里的标注位置是相对于箭头左下角的(.5, .5)，并且在垂直和水平方向上都基于该位置。
-# 垂直方向上，底部对齐到参考点，使标签位于线的上方。有关链式标注Artist的示例，请参见
-# :ref:`Artist section <artist_annotation_coord>` 的
-# :ref:`annotating_coordinate_systems`。
-#
-#
-# .. _annotation-with-arrow:
-#
-# 使用箭头标注
-# ^^^^^^^^^^^^^^^^^^^^^^
-#
-# 可以通过在可选关键字参数*arrowprops*中提供箭头属性字典来启用从文本到标注点的箭头绘制。
-#
-# ==================== =====================================================
-# *arrowprops* 键      描述
-# ==================== =====================================================
-# width                箭头的宽度，以点为单位
-# frac                 箭头长度中箭头头部所占的比例
-# headwidth            箭头头部在点中的基宽度
-# shrink               将箭头的尖端和基部移动到标注点和文本的一定百分比处
-#
-# **kwargs           any key for :class:`matplotlib.patches.Polygon`,
-#                      e.g., ``facecolor``
-# ==================== =====================================================
-#
-# In the example below, the *xy* point is in the data coordinate system
-# since *xycoords* defaults to 'data'. For a polar Axes, this is in
-# (theta, radius) space. The text in this example is placed in the
-# fractional figure coordinate system. :class:`matplotlib.text.Text`
-# keyword arguments like *horizontalalignment*, *verticalalignment* and
-# *fontsize* are passed from `~matplotlib.axes.Axes.annotate` to the
-# ``Text`` instance.
-
-fig = plt.figure()
-ax = fig.add_subplot(projection='polar')
-r = np.arange(0, 1, 0.001)
-theta = 2 * 2*np.pi * r
-line, = ax.plot(theta, r, color='#ee8d18', lw=3)
-
-ind = 800
-thisr, thistheta = r[ind], theta[ind]
-ax.plot([thistheta], [thisr], 'o')
-ax.annotate('a polar annotation',
-            xy=(thistheta, thisr),  # theta, radius
-            xytext=(0.05, 0.05),    # fraction, fraction
-            textcoords='figure fraction',
-            arrowprops=dict(facecolor='black', shrink=0.05),
-            horizontalalignment='left',
-            verticalalignment='bottom')
-
-# %%
-# For more on plotting with arrows, see :ref:`annotation_with_custom_arrow`
-#
-# .. _annotations-offset-text:
-#
-# Placing text annotations relative to data
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# Annotations can be positioned at a relative offset to the *xy* input to
-# annotation by setting the *textcoords* keyword argument to ``'offset points'``
-# or ``'offset pixels'``.
-
-fig, ax = plt.subplots(figsize=(3, 3))
-x = [1, 3, 5, 7, 9]
-y = [2, 4, 6, 8, 10]
-annotations = ["A", "B", "C", "D", "E"]
-ax.scatter(x, y, s=20)
-
-for xi, yi, text in zip(x, y, annotations):
-    ax.annotate(text,
-                xy=(xi, yi), xycoords='data',  # position of the point to annotate
-                xytext=(1.5, 1.5), textcoords='offset points')  # offset of the annotation text
-
-# %%
-# The annotations are offset 1.5 points (1.5*1/72 inches) from the *xy* values.
-#
-# .. _plotting-guide-annotation:
-#
-# Advanced annotation
-# -------------------
-#
-# We recommend reading :ref:`annotations-tutorial`, :func:`~matplotlib.pyplot.text`
-# and :func:`~matplotlib.pyplot.annotate` before reading this section.
-#
-# Annotating with boxed text
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# `~.Axes.text` takes a *bbox* keyword argument, which draws a box around the
-# text:
-
-fig, ax = plt.subplots(figsize=(5, 5))
-t = ax.text(0.5, 0.5, "Direction",
-            ha="center", va="center", rotation=45, size=15,
-            bbox=dict(boxstyle="rarrow,pad=0.3",
-                      fc="lightblue", ec="steelblue", lw=2))
-
-# %%
-# The arguments are the name of the box style with its attributes as
-# keyword arguments. Currently, following box styles are implemented:
-#
-# ==========   ==============   ==========================
-# Class        Name             Attrs
-# ==========   ==============   ==========================
-# Circle       ``circle``       pad=0.3
-# 创建一个新的图形对象和一个包含单个子图的轴对象
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 在轴上添加文本，位于坐标 (0.5, 0.5)，文本内容为 "Test"，字体大小为 30，垂直居中、水平居中对齐，
-# 旋转角度为 30 度，文本周围有一个自定义风格的框（boxstyle），透明度为 0.2
-ax.text(0.5, 0.5, "Test", size=30, va="center", ha="center", rotation=30,
-        bbox=dict(boxstyle=custom_box_style, alpha=0.2))
-# %%
-# The arrow is drawn as follows:
-#
-# 1. A path connecting the two points is created, as specified by the
-#    *connectionstyle* parameter.
-# 2. The path is clipped to avoid patches *patchA* and *patchB*, if these are
-#    set.
-# 3. The path is further shrunk by *shrinkA* and *shrinkB* (in pixels).
-# 4. The path is transmuted to an arrow patch, as specified by the *arrowstyle*
-#    parameter.
-#
-# .. figure:: /gallery/userdemo/images/sphx_glr_annotate_explain_001.png
-#    :target: /gallery/userdemo/annotate_explain.html
-#    :align: center
-#
-# The creation of the connecting path between two points is controlled by
-# ``connectionstyle`` key and the following styles are available:
-#
-# ==========   =============================================
-# Name         Attrs
-# ==========   =============================================
-# ``angle``    angleA=90,angleB=0,rad=0.0
-# ``angle3``   angleA=90,angleB=0
-# ``arc``      angleA=0,angleB=0,armA=None,armB=None,rad=0.0
-# ``arc3``     rad=0.0
-# ``bar``      armA=0.0,armB=0.0,fraction=0.3,angle=None
-# ==========   =============================================
-#
-# Note that "3" in ``angle3`` and ``arc3`` is meant to indicate that the
-# resulting path is a quadratic spline segment (three control
-# points). As will be discussed below, some arrow style options can only
-# be used when the connecting path is a quadratic spline.
-#
-# The behavior of each connection style is (limitedly) demonstrated in the
-# example below. (Warning: The behavior of the ``bar`` style is currently not
-# well-defined and may be changed in the future).
-#
-# .. figure:: /gallery/userdemo/images/sphx_glr_connectionstyle_demo_001.png
-#    :target: /gallery/userdemo/connectionstyle_demo.html
-#    :align: center
-#
-# The connecting path (after clipping and shrinking) is then mutated to
-# an arrow patch, according to the given ``arrowstyle``:
-#
-# ==========   =============================================
-# Name         Attrs
-# ==========   =============================================
-# ``-``        None
-# ``->``       head_length=0.4,head_width=0.2
-# ``-[``       widthB=1.0,lengthB=0.2,angleB=None
-# ``|-|``      widthA=1.0,widthB=1.0
-# ``-|>``      head_length=0.4,head_width=0.2
-# ``<-``       head_length=0.4,head_width=0.2
-# ``<->``      head_length=0.4,head_width=0.2
-# ``<|-``      head_length=0.4,head_width=0.2
-# ``<|-|>``    head_length=0.4,head_width=0.2
-# ``fancy``    head_length=0.4,head_width=0.4,tail_width=0.4
-# ``simple``   head_length=0.5,head_width=0.5,tail_width=0.2
-# ``wedge``    tail_width=0.3,shrink_factor=0.5
-# ==========   =============================================
-#
-# .. figure:: /gallery/text_labels_and_annotations/images/sphx_glr_fancyarrow_demo_001.png
-#    :target: /gallery/text_labels_and_annotations/fancyarrow_demo.html
-#    :align: center
-# 创建一个新的 Figure 对象，并返回包含的 Axes 对象
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 在 Axes 对象上添加注释文本 "Test"，指定文本的数据坐标为 (0.2, 0.2)
-# 文本的位置坐标为数据坐标系，文本显示位置为 (0.8, 0.8) 数据坐标系
-# 设置文本大小为 20，垂直对齐方式为居中，水平对齐方式为居中
-# 设置箭头属性，箭头风格为 "simple"，连接风格为 "arc3,rad=-0.2"
-ax.annotate("Test",
-            xy=(0.2, 0.2), xycoords='data',
-            xytext=(0.8, 0.8), textcoords='data',
-            size=20, va="center", ha="center",
-            arrowprops=dict(arrowstyle="simple",
-                            connectionstyle="arc3,rad=-0.2"))
-
-# %%
-# 与 `~.Axes.text` 类似，可以使用 *bbox* 参数绘制文本周围的框
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 在 Axes 对象上添加注释文本 "Test"
-# 设置文本的数据坐标为 (0.2, 0.2)，文本位置坐标为 (0.8, 0.8) 数据坐标系
-# 设置文本大小为 20，垂直对齐方式为居中，水平对齐方式为居中
-# 设置文本框的风格为 "round4"，填充颜色为白色
-# 设置箭头属性，箭头风格为 "-|>"，连接风格为 "arc3,rad=-0.2"，箭头填充颜色为白色
-ann = ax.annotate("Test",
-                  xy=(0.2, 0.2), xycoords='data',
-                  xytext=(0.8, 0.8), textcoords='data',
-                  size=20, va="center", ha="center",
-                  bbox=dict(boxstyle="round4", fc="w"),
-                  arrowprops=dict(arrowstyle="-|>",
-                                  connectionstyle="arc3,rad=-0.2",
-                                  fc="w"))
-
-# %%
-# 默认情况下，起始点设置为文本范围的中心。可以使用 ``relpos`` 键值调整起始点位置
-# ``relpos`` 的值被归一化到文本的范围。例如，(0, 0) 表示左下角，(1, 1) 表示右上角
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 在 Axes 对象上添加注释文本 "Test"
-# 设置文本的数据坐标为 (0.2, 0.2)，文本位置坐标为 (0.8, 0.8) 数据坐标系
-# 设置文本大小为 20，垂直对齐方式为居中，水平对齐方式为居中
-# 设置文本框的风格为 "round4"，填充颜色为白色
-# 设置箭头属性，箭头风格为 "-|>"，连接风格为 "arc3,rad=0.2"，箭头填充颜色为白色
-# 设置相对位置参数为 (0., 0.)
-ann = ax.annotate("Test",
-                  xy=(0.2, 0.2), xycoords='data',
-                  xytext=(0.8, 0.8), textcoords='data',
-                  size=20, va="center", ha="center",
-                  bbox=dict(boxstyle="round4", fc="w"),
-                  arrowprops=dict(arrowstyle="-|>",
-                                  connectionstyle="arc3,rad=0.2",
-                                  relpos=(0., 0.),
-                                  fc="w"))
-
-# 在 Axes 对象上添加另一个注释文本 "Test"
-# 设置文本的数据坐标为 (0.2, 0.2)，文本位置坐标为 (0.8, 0.8) 数据坐标系
-# 设置文本大小为 20，垂直对齐方式为居中，水平对齐方式为居中
-# 设置文本框的风格为 "round4"，填充颜色为白色
-# 设置箭头属性，箭头风格为 "-|>"，连接风格为 "arc3,rad=-0.2"，箭头填充颜色为白色
-# 设置相对位置参数为 (1., 0.)
-ann = ax.annotate("Test",
-                  xy=(0.2, 0.2), xycoords='data',
-                  xytext=(0.8, 0.8), textcoords='data',
-                  size=20, va="center", ha="center",
-                  bbox=dict(boxstyle="round4", fc="w"),
-                  arrowprops=dict(arrowstyle="-|>",
-                                  connectionstyle="arc3,rad=-0.2",
-                                  relpos=(1., 0.),
-                                  fc="w"))
-
-# %%
-# 在 Axes 的锚定位置放置 Artist
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# 有些类型的 Artist 可以放置在 Axes 的锚定位置上。一个常见的例子是图例（legend）。
-# 可以通过使用 `.OffsetBox` 类创建这种类型的 Artist。在 :mod:`matplotlib.offsetbox` 和
-# :mod:`mpl_toolkits.axes_grid1.anchored_artists` 中有几个预定义的类可用。
-
-# 导入 AnchoredText 类
-from matplotlib.offsetbox import AnchoredText
-
-# 创建一个新的 Figure 对象，并返回包含的 Axes 对象
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 创建一个锚定文本的对象，文本内容为 "Figure 1a"
-# 设置字体大小为 15，显示边框，锚定位置为左上角
-at = AnchoredText("Figure 1a",
-                  prop=dict(size=15), frameon=True, loc='upper left')
-at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
-ax.add_artist(at)
-
-
-# 设置 AnnotationBbox 的边框样式为圆形，并指定 padding 和 rounding 大小
-at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
-# 将 AnnotationBbox 添加到当前 Axes 中
-ax.add_artist(at)
-
-
-
-# %%
-# *loc* 关键字的含义与 legend 命令中的含义相同。
-#
-# 当艺术家（或艺术家集合）的大小在创建时以像素大小为已知时，可以简单地应用。
-# 例如，如果要绘制一个固定大小为 20 像素 x 20 像素的圆（半径为 10 像素），
-# 可以利用 `~mpl_toolkits.axes_grid1.anchored_artists.AnchoredDrawingArea`。
-# 实例是根据绘图区域的大小（以像素为单位）创建的，可以向绘图区域添加任意艺术家。
-# 注意，添加到绘图区域的艺术家的范围与绘图区域本身的放置无关，只有初始大小很重要。
-#
-# 添加到绘图区域的艺术家不应设置转换（它将被覆盖），这些艺术家的尺寸被解释为像素坐标，
-# 即上面示例中圆的半径分别为 10 像素和 5 像素。
-from matplotlib.patches import Circle
-from mpl_toolkits.axes_grid1.anchored_artists import AnchoredDrawingArea
-
-fig, ax = plt.subplots(figsize=(3, 3))
-# 创建一个 AnchoredDrawingArea 实例，大小为 40 像素 x 20 像素，位于坐标 (0, 0)
-# loc='upper right' 表示将其放置在 Axes 的右上角
-# pad=0. 表示不添加额外的内边距，frameon=False 表示不显示边框
-ada = AnchoredDrawingArea(40, 20, 0, 0,
-                          loc='upper right', pad=0., frameon=False)
-# 在 ada 中心绘制一个半径为 10 像素的圆，位置为 (10, 10)
-p1 = Circle((10, 10), 10)
-ada.drawing_area.add_artist(p1)
-# 在 ada 中心绘制一个半径为 5 像素、填充颜色为红色的圆，位置为 (30, 10)
-p2 = Circle((30, 10), 5, fc="r")
-ada.drawing_area.add_artist(p2)
-# 将 ada 添加到当前 Axes 中
-ax.add_artist(ada)
-
-
-
-# %%
-# 有时，您希望您的艺术家与数据坐标（或画布像素以外的坐标）一起缩放。
-# 您可以使用 `~mpl_toolkits.axes_grid1.anchored_artists.AnchoredAuxTransformBox` 类。
-# 这与 `~mpl_toolkits.axes_grid1.anchored_artists.AnchoredDrawingArea` 类似，
-# 但艺术家的范围是在绘制时根据指定的转换确定的。
-#
-# 下面示例中的椭圆将在数据坐标中具有宽度和高度分别为 0.1 和 0.4，并在 Axes 视图限制更改时自动缩放。
-from matplotlib.patches import Ellipse
-from mpl_toolkits.axes_grid1.anchored_artists import AnchoredAuxTransformBox
-
-fig, ax = plt.subplots(figsize=(3, 3))
-# 创建一个 AnchoredAuxTransformBox 实例，其转换为 ax.transData，位于 'upper left'
-box = AnchoredAuxTransformBox(ax.transData, loc='upper left')
-# 在 box 中心绘制一个在数据坐标中宽度为 0.1，高度为 0.4，角度为 30 度的椭圆
-el = Ellipse((0, 0), width=0.1, height=0.4, angle=30)  # 在数据坐标中！
-box.drawing_area.add_artist(el)
-# 将 box 添加到当前 Axes 中
-ax.add_artist(box)
-
-
-
-# %%
-# 相对于父 Axes 或锚点定位艺术家的另一种方法是通过 `.AnchoredOffsetbox` 的 *bbox_to_anchor* 参数。
-# 此艺术家随后可以使用 `.HPacker` 和 `.VPacker` 自动相对于另一个艺术家定位。
-from matplotlib.offsetbox import (AnchoredOffsetbox, DrawingArea, HPacker,
-                                  TextArea)
-
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 创建一个 TextArea 实例，内容为 " Test: "，文本属性设置为黑色
-box1 = TextArea(" Test: ", textprops=dict(color="k"))
-# 创建一个 DrawingArea 实例，大小为 60 像素 x 20 像素，位于坐标 (0, 0)
-box2 = DrawingArea(60, 20, 0, 0)
-
-# 在坐标 (10, 10) 处绘制一个宽度为 16，高度为 5，角度为 30 度，填充颜色为红色的椭圆
-el1 = Ellipse((10, 10), width=16, height=5, angle=30, fc="r")
-# 创建一个椭圆对象 `el2`，位于坐标 (30, 10)，宽度为 16，高度为 5，角度为 170 度，填充颜色为绿色 ("g")
-el2 = Ellipse((30, 10), width=16, height=5, angle=170, fc="g")
-# 创建一个椭圆对象 `el3`，位于坐标 (50, 10)，宽度为 16，高度为 5，角度为 230 度，填充颜色为蓝色 ("b")
-el3 = Ellipse((50, 10), width=16, height=5, angle=230, fc="b")
-# 将 `el1` 添加到 `box2` 容器中作为一个艺术元素
-box2.add_artist(el1)
-# 将 `el2` 添加到 `box2` 容器中作为一个艺术元素
-box2.add_artist(el2)
-# 将 `el3` 添加到 `box2` 容器中作为一个艺术元素
-box2.add_artist(el3)
-
-# 创建一个水平排列器 `box`，包含 `box1` 和 `box2` 两个子元素，居中对齐，内部填充为 0，子元素间距为 5
-box = HPacker(children=[box1, box2],
-              align="center",
-              pad=0, sep=5)
-
-# 创建一个带有偏移的容器 `anchored_box`，位于左下角，包含 `box` 作为子元素，无内边距，有边框，
-# 边界框锚点在 Axes 坐标系中的 (0., 1.02) 处，使用当前坐标变换 `ax.transAxes`
-anchored_box = AnchoredOffsetbox(loc='lower left',
-                                 child=box, pad=0.,
-                                 frameon=True,
-                                 bbox_to_anchor=(0., 1.02),
-                                 bbox_transform=ax.transAxes,
-                                 borderpad=0.,)
-
-# 将 `anchored_box` 添加到图形 `ax` 上作为一个艺术元素
-ax.add_artist(anchored_box)
-# 调整子图的顶部边界，使其位置为 0.8
-fig.subplots_adjust(top=0.8)
-
-# %%
-# 注意，与 `.Legend` 不同，这里的 ``bbox_transform`` 默认设置为 `.IdentityTransform`
-#
-# .. _annotating_coordinate_systems:
-#
-# 注释的坐标系统
-# ----------------------------------
-#
-# Matplotlib 注释支持几种类型的坐标系统。:ref:`annotations-tutorial` 中的示例使用了 `data` 坐标系统；
-# 其他一些高级选项包括：
-#
-# `.Transform` 实例
-# ^^^^^^^^^^^^^^^^^^^^^
-#
-# 转换将坐标映射到不同的坐标系统，通常是显示坐标系统。详细解释请参见 :ref:`transforms_tutorial`。
-# 这里使用 Transform 对象来识别相应点的坐标系统。例如，`Axes.transAxes` 转换将注释相对于 Axes 坐标定位；
-# 因此使用它等同于将坐标系统设置为 "axes fraction":
-
-fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
-# 在 `ax1` 上注释文字 "Test"，坐标为 (0.2, 0.2)，坐标系统为 `ax1.transAxes`
-ax1.annotate("Test", xy=(0.2, 0.2), xycoords=ax1.transAxes)
-# 在 `ax2` 上注释文字 "Test"，坐标为 (0.2, 0.2)，坐标系统为 "axes fraction"
-ax2.annotate("Test", xy=(0.2, 0.2), xycoords="axes fraction")
-
-# %%
-# 另一个常用的 `.Transform` 实例是 `Axes.transData`。该转换是 Axes 中绘制数据的坐标系统。在这个例子中，
-# 它用于在两个 Axes 中的相关数据点之间绘制箭头。我们传递了一个空文本，因为在这种情况下，注释连接数据点。
-
-x = np.linspace(-1, 1)
-
-fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
-ax1.plot(x, -x**3)
-ax2.plot(x, -3*x**2)
-# 在 `ax2` 上使用 `ax1.transData` 和 `ax2.transData` 绘制箭头
-ax2.annotate("",
-             xy=(0, 0), xycoords=ax1.transData,
-             xytext=(0, 0), textcoords=ax2.transData,
-             arrowprops=dict(arrowstyle="<->"))
-
-# %%
-# .. _artist_annotation_coord:
-#
-# `.Artist` 实例
-# ^^^^^^^^^^^^^^^^^^
-#
-# *xy* 值（或 *xytext*）被解释为艺术元素边界框 (bbox) 的分数坐标：
-
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(3, 3))
-# 在 `ax` 上注释文字 "Test 1"，坐标为 (0.5, 0.5)，坐标系统为 "data"，垂直对齐方式为中心，水平对齐方式为中心，
-# 使用圆形风格的边界框，填充颜色为白色 ("w")
-an1 = ax.annotate("Test 1",
-                  xy=(0.5, 0.5), xycoords="data",
-                  va="center", ha="center",
-                  bbox=dict(boxstyle="round", fc="w"))
-an2 = ax.annotate("Test 2",
-                  xy=(1, 0.5), xycoords=an1,  # (1, 0.5) of an1's bbox
-                  xytext=(30, 0), textcoords="offset points",
-                  va="center", ha="left",
-                  bbox=dict(boxstyle="round", fc="w"),
-                  arrowprops=dict(arrowstyle="->"))
-
-# %%
-# 确保在绘制 *an2* 之前确定坐标艺术家（例如此例中的 *an1*）的范围。
-# 通常意味着 *an2* 需要在 *an1* 之后绘制。所有边界框的基类是 `.BboxBase`。
-
-# Callable that returns `.Transform` of `.BboxBase`
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# 返回 `.Transform` 或 `.BboxBase` 的可调用对象。例如，`.Artist.get_window_extent`
-# 的返回值是一个边界框（bbox），因此这个方法等同于将艺术家作为参数传递：
-
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(3, 3))
-an1 = ax.annotate("Test 1",
-                  xy=(0.5, 0.5), xycoords="data",
-                  va="center", ha="center",
-                  bbox=dict(boxstyle="round", fc="w"))
-
-an2 = ax.annotate("Test 2",
-                  xy=(1, 0.5), xycoords=an1.get_window_extent,
-                  xytext=(30, 0), textcoords="offset points",
-                  va="center", ha="left",
-                  bbox=dict(boxstyle="round", fc="w"),
-                  arrowprops=dict(arrowstyle="->"))
-
-# %%
-# `.Artist.get_window_extent` 是 Axes 对象的边界框，因此与设置坐标系为轴分数相同：
-
-fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
-
-an1 = ax1.annotate("Test1", xy=(0.5, 0.5), xycoords="axes fraction")
-an2 = ax2.annotate("Test 2", xy=(0.5, 0.5), xycoords=ax2.get_window_extent)
-
-# %%
-# Blended coordinate specification
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-# 混合的坐标规范对 -- 第一个为 x 坐标，第二个为 y 坐标。例如，x=0.5 是数据坐标，
-# y=1 是归一化轴坐标：
-
-fig, ax = plt.subplots(figsize=(3, 3))
-ax.annotate("Test", xy=(0.5, 1), xycoords=("data", "axes fraction"))
-ax.axvline(x=.5, color='lightgray')
-ax.set(xlim=(0, 2), ylim=(1, 2))
-
-# %%
-# 任何支持的坐标系统都可以在混合规范中使用。例如，文本 "Anchored to 1 & 2"
-# 是相对于两个 `.Text` 艺术家定位的：
-
-fig, ax = plt.subplots(figsize=(3, 3))
-
-t1 = ax.text(0.05, .05, "Text 1", va='bottom', ha='left')
-t2 = ax.text(0.90, .90, "Text 2", ha='right')
-t3 = ax.annotate("Anchored to 1 & 2", xy=(0, 0), xycoords=(t1, t2),
-                 va='bottom', color='tab:orange',)
-
-# %%
-# `.text.OffsetFrom`
-# ^^^^^^^^^^^^^^^^^^
-#
-# 有时，您希望注释相对于某个点或艺术家的某些 "偏移点"，而不是从注释点。`.text.OffsetFrom`
-# 是这种情况的帮助器。
-# 导入 matplotlib 中的 OffsetFrom 类
-from matplotlib.text import OffsetFrom
-
-# 创建一个新的图形和一个子图，并指定子图的大小为 3x3 英寸
-fig, ax = plt.subplots(figsize=(3, 3))
-
-# 在子图 ax 上创建一个注释对象 an1，注释内容为 "Test 1"，位置为 (0.5, 0.5)，使用数据坐标系
-an1 = ax.annotate("Test 1", xy=(0.5, 0.5), xycoords="data",
-                  va="center", ha="center",
-                  bbox=dict(boxstyle="round", fc="w"))
-
-# 创建一个 OffsetFrom 对象 offset_from，用于指定 an2 的文本位置的偏移量
-offset_from = OffsetFrom(an1, (0.5, 0))
-
-# 在子图 ax 上创建另一个注释对象 an2，注释内容为 "Test 2"，位置为 (0.1, 0.1)，使用数据坐标系
-# xytext 指定文本的偏移量为 (0, -10) 点，相对于 an1 的位置
-# textcoords 使用 offset_from 对象作为文本的坐标系，即基于 an1 的位置偏移
-# va 垂直对齐方式为顶部，ha 水平对齐方式为居中
-# bbox 指定注释框的样式为圆角矩形，填充颜色为白色
-# arrowprops 指定箭头样式为 "->"
-an2 = ax.annotate("Test 2", xy=(0.1, 0.1), xycoords="data",
-                  xytext=(0, -10), textcoords=offset_from,
-                  va="top", ha="center",
-                  bbox=dict(boxstyle="round", fc="w"),
-                  arrowprops=dict(arrowstyle="->"))
-
-
-
-# 导入 matplotlib 中的 ConnectionPatch 类
-from matplotlib.patches import ConnectionPatch
-
-# 创建一个包含两个子图的新图形 fig，子图分别为 ax1 和 ax2，大小为 6x3 英寸
-fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
-
-# 定义连接点的坐标 xy，用于连接两个子图的数据坐标
-xy = (0.3, 0.2)
-
-# 创建一个 ConnectionPatch 对象 con，连接点 A 在 ax1 的数据坐标系中，连接点 B 也在 ax2 的数据坐标系中
-con = ConnectionPatch(xyA=xy, coordsA=ax1.transData,
-                      xyB=xy, coordsB=ax2.transData)
-
-# 将 ConnectionPatch 对象添加到图形 fig 上
-fig.add_artist(con)
+# `matplotlib\galleries\users_explain\text\annotations.py` 详细设计文档
+
+这是matplotlib的注释(Annotations)教程文档，通过大量示例代码演示如何使用ax.annotate()、ax.text()等方法创建带箭头或不带箭头的文本注释，支持多种坐标系统（data、axes fraction、figure fraction等），以及自定义框样式、箭头样式和连接样式的高级用法。
+
+## 整体流程
+
+```mermaid
+graph TD
+    A[开始] --> B[导入必要的库]
+    B --> C[基础注释示例]
+    C --> D[数据注释示例]
+    D --> E[Artist注释示例]
+    E --> F[带箭头注释示例]
+    F --> G[相对偏移注释示例]
+    G --> H[高级注释-带框文本]
+    H --> I[自定义框样式-函数方式]
+    I --> J[自定义框样式-类方式]
+    J --> K[自定义箭头样式]
+    K --> L[锚定Artist定位]
+    L --> M[使用Artist作为注释]
+    M --> N[坐标系统详解]
+    N --> O[ConnectionPatch连接]
+    O --> P[结束]
 ```
+
+## 类结构
+
+```
+源代码文件（文档教程类）
+├── 导入模块
+│   ├── matplotlib.pyplot (plt)
+│   ├── numpy (np)
+│   ├── matplotlib.patches (mpatches, BoxStyle, Circle, Ellipse, ConnectionPatch, Annulus)
+│   ├── matplotlib.path (Path)
+│   ├── matplotlib.offsetbox (AnchoredText, DrawingArea, HPacker, TextArea, AnchoredOffsetbox, AnnotationBbox, OffsetImage)
+│   └── mpl_toolkits.axes_grid1.anchored_artists (AnchoredDrawingArea, AnchoredAuxTransformBox)
+├── 顶层函数
+│   ├── custom_box_style (自定义框样式函数)
+│   └── demo_con_style (连接样式演示函数)
+└── 顶层类
+    └── MyStyle (自定义BoxStyle类)
+```
+
+## 全局变量及字段
+
+
+### `fig`
+    
+matplotlib的Figure对象，表示整个图形窗口
+
+类型：`Figure`
+    
+
+
+### `ax`
+    
+matplotlib的Axes对象，表示一个坐标轴子图
+
+类型：`Axes`
+    
+
+
+### `ax1`
+    
+matplotlib的Axes对象，表示第一个坐标轴子图
+
+类型：`Axes`
+    
+
+
+### `ax2`
+    
+matplotlib的Axes对象，表示第二个坐标轴子图
+
+类型：`Axes`
+    
+
+
+### `t`
+    
+时间数组，由np.arange生成，用于表示时间序列
+
+类型：`ndarray`
+    
+
+
+### `s`
+    
+余弦信号数组，通过np.cos计算得到
+
+类型：`ndarray`
+    
+
+
+### `line`
+    
+matplotlib的Line2D对象，表示plot方法绘制的线条
+
+类型：`Line2D`
+    
+
+
+### `arr`
+    
+matplotlib的FancyArrowPatch对象，表示带样式的箭头
+
+类型：`FancyArrowPatch`
+    
+
+
+### `annotations`
+    
+注释文本列表，包含需要标注的字符串
+
+类型：`list`
+    
+
+
+### `x`
+    
+散点图的x坐标列表
+
+类型：`list`
+    
+
+
+### `y`
+    
+散点图的y坐标列表
+
+类型：`list`
+    
+
+
+### `r`
+    
+极坐标中的半径数组
+
+类型：`ndarray`
+    
+
+
+### `theta`
+    
+极坐标中的角度数组
+
+类型：`ndarray`
+    
+
+
+### `ind`
+    
+索引值，用于访问数组中的特定元素
+
+类型：`int`
+    
+
+
+### `thisr`
+    
+特定点的半径坐标
+
+类型：`float`
+    
+
+
+### `thistheta`
+    
+特定点的角度坐标
+
+类型：`float`
+    
+
+
+### `el`
+    
+matplotlib的Ellipse对象，表示椭圆形状
+
+类型：`Ellipse`
+    
+
+
+### `p1`
+    
+matplotlib的Circle对象，表示圆形绘制元素
+
+类型：`Circle`
+    
+
+
+### `p2`
+    
+matplotlib的Circle对象，表示第二个圆形绘制元素
+
+类型：`Circle`
+    
+
+
+### `box1`
+    
+matplotlib的TextArea对象，用于包含文本的容器
+
+类型：`TextArea`
+    
+
+
+### `box2`
+    
+matplotlib的DrawingArea对象，用于包含图形元素的容器
+
+类型：`DrawingArea`
+    
+
+
+### `box`
+    
+matplotlib的HPacker对象，用于水平排列子元素
+
+类型：`HPacker`
+    
+
+
+### `anchored_box`
+    
+matplotlib的AnchoredOffsetbox对象，表示锚定的偏移框
+
+类型：`AnchoredOffsetbox`
+    
+
+
+### `text`
+    
+matplotlib的Text对象，表示文本绘制元素
+
+类型：`Text`
+    
+
+
+### `da`
+    
+matplotlib的DrawingArea对象，用于绘制区域
+
+类型：`DrawingArea`
+    
+
+
+### `annulus`
+    
+matplotlib的Annulus对象，表示圆环形状
+
+类型：`Annulus`
+    
+
+
+### `ab1`
+    
+matplotlib的AnnotationBbox对象，表示注解框
+
+类型：`AnnotationBbox`
+    
+
+
+### `ab2`
+    
+matplotlib的AnnotationBbox对象，表示第二个注解框
+
+类型：`AnnotationBbox`
+    
+
+
+### `im`
+    
+matplotlib的OffsetImage对象，表示带偏移的图像
+
+类型：`OffsetImage`
+    
+
+
+### `con`
+    
+matplotlib的ConnectionPatch对象，用于连接两个坐标点
+
+类型：`ConnectionPatch`
+    
+
+
+### `xy`
+    
+连接点坐标元组
+
+类型：`tuple`
+    
+
+
+### `t1`
+    
+matplotlib的Text对象，表示第一个文本元素
+
+类型：`Text`
+    
+
+
+### `t2`
+    
+matplotlib的Text对象，表示第二个文本元素
+
+类型：`Text`
+    
+
+
+### `t3`
+    
+matplotlib的Text对象，表示第三个文本元素
+
+类型：`Text`
+    
+
+
+### `an1`
+    
+matplotlib的Annotation对象，表示第一个注解
+
+类型：`Annotation`
+    
+
+
+### `an2`
+    
+matplotlib的Annotation对象，表示第二个注解
+
+类型：`Annotation`
+    
+
+
+### `offset_from`
+    
+matplotlib的OffsetFrom对象，用于计算偏移量
+
+类型：`OffsetFrom`
+    
+
+
+### `box`
+    
+matplotlib的AnchoredAuxTransformBox对象，表示带辅助变换的锚定框
+
+类型：`AnchoredAuxTransformBox`
+    
+
+
+### `MyStyle.pad`
+    
+框的内边距
+
+类型：`float`
+    
+    
+
+## 全局函数及方法
+
+
+
+### `custom_box_style`
+
+该函数是一个自定义框样式生成函数，用于在matplotlib的文本注释框周围创建带有左侧箭头形状的自定义路径。它接收盒子的位置、尺寸和突变大小作为参数，通过计算内边距并生成包含箭头特征的Path对象来实现自定义框样式。
+
+参数：
+
+- `x0`：`float`，盒子左下角的x坐标
+- `y0`：`float`，盒子左下角的y坐标
+- `width`：`float`，盒子的宽度
+- `height`：`float`，盒子的高度
+- `mutation_size`：`float`，突变参考比例，通常为文本字体大小
+
+返回值：`Path`，返回一个matplotlib路径对象，表示带有左侧箭头形状的闭合框路径
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始 custom_box_style] --> B[设置内边距系数 mypad=0.3]
+    B --> C[计算实际内边距 pad = mutation_size * mypad]
+    C --> D[计算带内边距的宽度 width = width + 2 * pad]
+    D --> E[计算带内边距的高度 height = height + 2 * pad]
+    E --> F[调整盒子边界 x0, y0 = x0 - pad, y0 - pad]
+    F --> G[计算右上角坐标 x1 = x0 + width, y1 = y0 + height]
+    G --> H[构建路径顶点列表]
+    H --> I[创建闭合Path对象]
+    I --> J[返回Path]
+```
+
+#### 带注释源码
+
+```python
+def custom_box_style(x0, y0, width, height, mutation_size):
+    """
+    Given the location and size of the box, return the path of the box around it.
+
+    Rotation is automatically taken care of.
+
+    Parameters
+    ----------
+    x0, y0, width, height : float
+       Box location and size.
+    mutation_size : float
+        Mutation reference scale, typically the text font size.
+    """
+    # 定义内边距系数，用于根据mutation_size计算实际内边距
+    mypad = 0.3
+    # 根据字体大小计算实际的内边距像素值
+    pad = mutation_size * mypad
+    
+    # 将内边距应用到宽度和高度（两侧各加一个pad）
+    width = width + 2 * pad
+    height = height + 2 * pad
+    
+    # 调整盒子左下角坐标，考虑内边距偏移
+    x0, y0 = x0 - pad, y0 - pad
+    # 计算盒子右上角坐标
+    x1, y1 = x0 + width, y0 + height
+    
+    # 返回新的路径对象
+    # 路径包含：左下角->右下角->右上角->左上角->左侧箭头点->左下角（闭合）
+    # 箭头点位于左侧边界中点，向左突出一个pad的距离
+    return Path([(x0, y0), (x1, y0), (x1, y1), (x0, y1),
+                 (x0-pad, (y0+y1)/2), (x0, y0), (x0, y0)],
+                closed=True)
+```
+
+
+
+### `demo_con_style`
+
+该函数是一个演示函数，用于在给定的Axes上可视化不同的连接样式（ConnectionStyle）。它绘制两个点之间的连线，并使用不同的连接样式参数来展示各种箭头连接效果。
+
+参数：
+
+- `ax`：`matplotlib.axes.Axes`，Matplotlib的Axes对象，用于绘制连接样式演示的画布
+- `connectionstyle`：`str`，连接样式的字符串描述，指定要演示的连接类型及其参数（如"arc3,rad=0.3"、"angle3,angleA=90,angleB=0"等）
+
+返回值：`None`，该函数不返回任何值，仅执行图形绘制操作
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始 demo_con_style] --> B[定义坐标点 x1=0.3, y1=0.2, x2=0.8, y2=0.6]
+    B --> C[在Axes上绘制两个坐标点]
+    C --> D[调用ax.annotate创建带箭头的注释]
+    D --> E[arrowprops参数设置: arrowstyle, color, shrinkA/B, patchA/B, connectionstyle]
+    E --> F[在Axes左上角显示connectionstyle文本]
+    F --> G[设置Axes的坐标轴范围和属性]
+    G --> H[结束]
+```
+
+#### 带注释源码
+
+```python
+def demo_con_style(ax, connectionstyle):
+    """
+    演示不同的连接样式（ConnectionStyle）在注释箭头中的应用。
+    
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        要绘制演示的Axes对象。
+    connectionstyle : str
+        连接样式的字符串描述，格式为"样式名,参数1=值1,参数2=值2"。
+        例如："arc3,rad=0.3"表示使用弧形连接样式，弧度为0.3。
+    """
+    # 定义起始点和结束点的坐标
+    x1, y1 = 0.3, 0.2
+    x2, y2 = 0.8, 0.6
+
+    # 在Axes上绘制起始点和结束点（用"."表示）
+    ax.plot([x1, x2], [y1, y2], ".")
+
+    # 使用annotate方法创建带箭头的注释
+    # xy: 箭头指向的坐标点（数据坐标）
+    # xytext: 文本所在的坐标点（数据坐标）
+    # arrowprops: 箭头属性字典
+    ax.annotate("",
+                xy=(x1, y1), xycoords='data',
+                xytext=(x2, y2), textcoords='data',
+                arrowprops=dict(arrowstyle="->", color="0.5",
+                                shrinkA=5, shrinkB=5,
+                                patchA=None, patchB=None,
+                                connectionstyle=connectionstyle,
+                                ),
+                )
+
+    # 在Axes的左上角（0.05, 0.95）显示连接样式的名称
+    # 使用换行符美化显示格式
+    ax.text(.05, .95, connectionstyle.replace(",", ",\n"),
+            transform=ax.transAxes, ha="left", va="top")
+
+    # 设置Axes的显示属性：
+    # xlim, ylim: 坐标轴范围
+    # xticks, yticks: 刻度（设为空列表隐藏刻度）
+    # aspect: 纵横比
+    ax.set(xlim=(0, 1), ylim=(0, 1.25), xticks=[], yticks=[], aspect=1.25)
+```
+
+
+
+
+### MyStyle.__init__
+
+MyStyle类的初始化方法，用于创建一个自定义的方框样式对象，并设置内边距参数。
+
+参数：
+
+- `pad`：`float`，默认值0.3，方框的内边距大小（以突变大小的倍数表示）
+
+返回值：`None`，无返回值（构造函数）
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始 __init__] --> B[接收 pad 参数<br/>类型: float<br/>默认值: 0.3]
+    B --> C[将 pad 赋值给实例属性 self.pad]
+    C --> D[调用父类初始化方法<br/>super().__init__()]
+    D --> E[结束 __init__<br/>返回 None]
+```
+
+#### 带注释源码
+
+```python
+def __init__(self, pad=0.3):
+    """
+    The arguments must be floats and have default values.
+
+    Parameters
+    ----------
+    pad : float
+        amount of padding
+    """
+    # 将传入的 pad 参数存储为实例属性，供后续 __call__ 方法使用
+    self.pad = pad
+    # 调用父类 BoxStyle 的初始化方法，确保继承链正确初始化
+    super().__init__()
+```
+
+
+
+### MyStyle.__call__
+
+该方法是 `MyStyle` 类的可调用接口（`__call__` 方法），用于根据给定的盒子位置和尺寸生成带填充（padding）的路径（Path）对象，支持自动处理旋转。
+
+参数：
+
+- `x0`：`float`，盒子的左下角 x 坐标
+- `y0`：`float`，盒子的左下角 y 坐标
+- `width`：`float`，盒子的宽度
+- `height`：`float`，盒子的高度
+- `mutation_size`：`float`，突变参考尺度，通常为文本字体大小
+
+返回值：`Path`，返回围绕盒子的路径对象，包含带箭头的矩形边界
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始 __call__] --> B[计算填充值: pad = mutation_size × self.pad]
+    B --> C[计算带填充的宽度和高度: width + 2×pad, height + 2×pad]
+    C --> D[调整盒子边界: x0-pad, y0-pad]
+    D --> E[计算右上角坐标: x1, y1]
+    E --> F[构建路径顶点列表]
+    F --> G[创建 Path 对象并返回]
+    
+    subgraph 路径顶点
+    F --> F1[(x0, y0) - 左下角]
+    F --> F2[(x1, y0) - 右下角]
+    F --> F3[(x1, y1) - 右上角]
+    F --> F4[(x0, y1) - 左上角]
+    F --> F5[(x0-pad, (y0+y1)/2) - 箭头尖端]
+    F --> F6[(x0, y0) - 闭合点]
+    end
+```
+
+#### 带注释源码
+
+```python
+def __call__(self, x0, y0, width, height, mutation_size):
+    """
+    Given the location and size of the box, return the path of the box around it.
+
+    Rotation is automatically taken care of.
+
+    Parameters
+    ----------
+    x0, y0, width, height : float
+        Box location and size.
+    mutation_size : float
+        Reference scale for the mutation, typically the text font size.
+    """
+    # 计算填充值：根据突变大小（字体尺寸）和实例的 pad 比例计算实际填充量
+    pad = mutation_size * self.pad
+    
+    # 宽度和高度加上双向填充（左右/上下各加 pad）
+    width = width + 2 * pad
+    height = height + 2 * pad
+    
+    # 调整盒子边界：向左下角扩展 pad 距离
+    x0, y0 = x0 - pad, y0 - pad
+    
+    # 计算右上角坐标
+    x1, y1 = x0 + width, y0 + height
+    
+    # 返回新路径：包含矩形四个顶点 + 左侧箭头尖端 + 起点闭合
+    # 顶点顺序：左下 → 右下 → 右上 → 左上 → 箭头尖端 → 左下（闭合）
+    return Path([(x0, y0), (x1, y0), (x1, y1), (x0, y1),
+                 (x0-pad, (y0+y1)/2), (x0, y0), (x0, y0)],
+                closed=True)
+```
+
+## 关键组件
+
+
+
+
+### ax.annotate()
+
+核心注解方法，支持多种坐标系统定位数据和注解文本，可选箭头连接注解与数据点，支持丰富的文本样式和箭头样式配置。
+
+### ax.text()
+
+简单文本放置方法，支持bbox参数绘制文本框，但定位和样式灵活性不如annotate。
+
+### 坐标系统（xycoords/textcoords）
+
+支持data、axes fraction、figure fraction、offset points、offset pixels、figure points、figure pixels等多种坐标系统，以及Transform实例、Artist实例、混合坐标规范。
+
+### arrowprops
+
+箭头属性字典，控制箭头宽度、头部比例、收缩百分比等，可使用Polygon的关键参数如facecolor。
+
+### BoxStyle._style_list
+
+预定义框样式集合，包含Circle、DArrow、Ellipse、LArrow、RArrow、Round、Round4、Roundtooth、Sawtooth、Square等，支持自定义函数或类实现。
+
+### ConnectionStyle
+
+连接样式类，控制两点之间路径创建方式，支持angle、angle3、arc、arc3、bar等样式。
+
+### ArrowStyle
+
+箭头样式类，将连接路径转换为箭头补丁，支持-、->、-[、|-|、-|>、<-、<->、<|-、<|-|>、fancy、simple、wedge等样式。
+
+### AnchoredText
+
+matplotlib.offsetbox模块中的锚定文本类，可将文本放置在Axes的固定位置，支持frameon、loc、pad等参数。
+
+### AnchoredDrawingArea
+
+固定像素大小的绘图区域，可添加任意艺术家对象，常用于绘制固定尺寸的图形如圆形。
+
+### AnchoredAuxTransformBox
+
+支持数据坐标转换的锚定框，艺术家extent在绘制时根据指定变换确定，随Axes视图限制自动缩放。
+
+### AnnotationBbox
+
+使用OffsetBox容器艺术家作为注解，支持与其他注解方法相同的坐标系统定位，可包含复杂图形。
+
+### ConnectionPatch
+
+无文本的注解连接器，用于连接不同Axes中的数据点，添加到figure层面确保绘制在其他Axes之上。
+
+### custom_box_style()
+
+自定义框样式函数示例，接收盒子的位置和大小以及突变参考尺度，返回Path定义框的形状。
+
+### MyStyle
+
+实现__call__方法的自定义框样式类，可注册到BoxStyle._style_list使用字符串调用，支持旋转自动处理。
+
+### OffsetFrom
+
+matplotlib.text模块中的偏移辅助类，用于创建相对于某个点或艺术家的偏移坐标。
+
+### 混合坐标规范（Blended coordinates）
+
+支持x和y使用不同坐标系统的混合规范，如x使用data坐标，y使用axes fraction。
+
+### Transform实例
+
+transAxes将注解相对于Axes坐标定位，transData使用Axes的数据坐标系统，其他Transform可映射到不同坐标系统。
+
+
+
+## 问题及建议
+
+
+
+
+### 已知问题
+
+- **私有API直接操作**：`BoxStyle._style_list["angled"] = MyStyle` 直接修改了私有字典，这种做法依赖于内部实现细节，未来版本可能发生变化，且官方注释明确说明"this registration relies on internal APIs and is therefore not officially supported"。
+- **临时状态管理**：使用 `del BoxStyle._style_list["angled"]` 来清理注册的样式，如果代码执行过程中出现异常，清理代码可能不会执行，导致状态残留。
+- **魔法数字和硬编码值**：代码中多处使用硬编码的数值如 `0.3`、`0.05`、`0.01` 等magic numbers，缺乏常量定义，降低了可读性和可维护性。
+- **重复的图形创建模式**：大量重复的 `fig, ax = plt.subplots(figsize=(3, 3))` 代码，可以抽取为工具函数减少冗余。
+- **作用域问题**：在 `demo_con_style` 函数定义后，在后续代码块中被调用，这种跨代码块的函数调用在文档编译环境中可能存在执行顺序问题。
+- **内嵌示例代码**：注释掉的 `.. plot::` 代码块中的 `arrowprops` 字典包含中文键名 `"1. connect with connectionstyle"`，虽然被注释不会执行，但若将来启用会导致错误。
+
+### 优化建议
+
+- **官方API替代方案**：对于自定义BoxStyle，建议通过官方文档记录的类继承方式实现，而非直接操作内部字典，或等待官方提供公开的注册接口。
+- **上下文管理器模式**：使用 `try/finally` 确保自定义样式的注册和清理一定执行，或实现为上下文管理器。
+- **提取配置常量**：将常用的数值（如图形尺寸、缩放因子、颜色值等）提取为模块级常量或配置文件。
+- **代码复用**：将重复的 `plt.subplots()` 调用封装为工厂函数，例如 `create_figure(ax_size=(3, 3))`。
+- **删除或修复内嵌示例**：移除被注释的包含中文键名的代码块，或修正为英文键名以避免潜在的错误。
+- **模块化组织**：将复杂示例中的 `demo_con_style` 等辅助函数集中放置在文档开头或单独模块，提高代码组织清晰度。
+
+
+## 其它
+
+
+
+
+
+### 设计目标与约束
+
+本代码是matplotlib官方文档的注释教程模块，旨在展示matplotlib注释系统的完整功能。主要设计目标包括：1）提供清晰的注释功能演示用例；2）展示多种坐标系统使用方法；3）演示自定义箭头和框样式的实现方式；4）作为文档教程供用户学习参考。约束方面，代码需要保持与matplotlib现有API的兼容性，并遵循Sphinx文档规范。
+
+### 错误处理与异常设计
+
+代码主要包含文档字符串和示例代码两大部分。文档部分通过reStructuredText的.. redirect-from::指令处理过时URL的重定向。示例代码中的异常处理主要依赖matplotlib自身的异常抛出机制，例如当用户传入不支持的坐标系统字符串时会触发相应异常。代码中包含参数验证说明，如BoxStyle类的pad参数必须是浮点数类型。
+
+### 数据流与状态机
+
+整体代码流程遵循"导入模块→创建画布→绘制基础元素→添加注释元素→设置属性→显示图形"的基本模式。注释对象的数据流主要涉及：1）xy和xytext坐标数据；2）坐标系统转换器（xycoords、textcoords）；3）箭头属性（arrowprops）；4）样式属性（boxstyle、connectionstyle）。状态转换主要体现在坐标系统的解析过程：从字符串标识（如'data'、'axes fraction'）到Transform对象的转换。
+
+### 外部依赖与接口契约
+
+核心依赖包括：matplotlib库（pyplot、patches、path、text、offsetbox模块）、numpy数学库、mpl_toolkits.axes_grid1工具包。接口契约方面：annotate()方法接受xy、xytext、xycoords、textcoords、arrowprops等参数；text()方法支持bbox参数用于框样式；BoxStyle类需实现__call__方法返回Path对象；自定义框样式函数签名必须为(x0, y0, width, height, mutation_size)形式。
+
+### 性能考虑与优化空间
+
+代码主要用于文档演示，性能不是首要考量。但存在以下优化空间：1）重复创建相同的图形对象可考虑缓存；2）自定义框样式函数可以预计算部分几何结果；3）ArrowStyle和ConnectionStyle的组合使用可预先验证兼容性。在实际应用中使用时，对于大量注释场景建议预先定义样式对象而非每次创建新实例。
+
+### 安全性与输入验证
+
+代码主要面向文档展示，安全性风险较低。输入验证主要集中在：1）坐标参数必须是数值类型或符合坐标系统规范的字符串；2）样式参数需符合对应类的接口要求；3）ArrowStyle参数需与ConnectionStyle兼容（如fancy等样式需要arc3/angle3连接方式）。建议在实际应用中增加参数类型检查和边界值验证。
+
+### 可扩展性设计
+
+代码展示了良好的可扩展性设计：1）BoxStyle._style_list字典支持运行时注册自定义框样式；2）ConnectionStyle和ArrowStyle均可通过继承进行扩展；3）支持通过Transform对象实现自定义坐标系统；4）AnnotationBbox支持任意OffsetBox子类的组合使用。扩展时需遵循现有接口规范并注意与现有系统的兼容性。
+
+### 测试覆盖与验证
+
+代码本身为文档教程，测试主要通过Sphinx的plot directive执行。验证方式包括：1）代码示例能否成功执行无报错；2）生成的图形是否符合预期；3）文档链接是否有效。建议在实际项目中为自定义样式类编写单元测试，验证Path对象的closed属性和顶点顺序是否正确。
+
+### 版本兼容性与迁移
+
+代码基于matplotlib当前版本编写，使用了AnchoredAuxTransformBox、AnnotationBbox等较新API。需注意：1）BoxStyle._style_list的直接操作依赖内部API，后续版本可能有变化；2）部分连接样式（如bar）的行为未明确定义，可能在未来版本调整；3）某些ArrowStyle与ConnectionStyle的组合限制需关注版本更新说明。迁移时应测试自定义样式在新版本中的兼容性。
+
+### 图形渲染与输出
+
+代码生成的图形输出格式由matplotlib后端决定，默认支持PNG、PDF、SVG等格式。关键渲染参数包括：1）figsize控制画布尺寸；2）layout='compressed'优化布局空间；3）aspect参数控制坐标轴比例。渲染过程中涉及的变换流程：坐标转换→路径裁剪→路径收缩→箭头变形→最终绘制。
+
+
+    

@@ -1,55 +1,276 @@
-# `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\voxels_torus.py`
 
-```py
-"""
-=======================================================
-3D voxel / volumetric plot with cylindrical coordinates
-=======================================================
+# `matplotlib\galleries\examples\mplot3d\voxels_torus.py` 详细设计文档
 
-Demonstrates using the *x*, *y*, *z* parameters of `.Axes3D.voxels`.
-"""
+这是一个matplotlib 3D体素绘图的示例脚本，演示了如何使用圆柱坐标系创建体积数据可视化，通过np.mgrid生成网格数据，定义一个扭曲的圆环体（torus）形状，并使用HSV颜色空间为其着色，最后通过voxels方法渲染到3D坐标系中。
 
-# 导入需要的库
-import matplotlib.pyplot as plt
-import numpy as np
+## 整体流程
 
-import matplotlib.colors
-
-# 定义函数，用于计算坐标轴中间点
-def midpoints(x):
-    sl = ()
-    for i in range(x.ndim):
-        x = (x[sl + np.index_exp[:-1]] + x[sl + np.index_exp[1:]]) / 2.0
-        sl += np.index_exp[:]
-    return x
-
-# 准备一些坐标，并为每个坐标附加 RGB 值
-r, theta, z = np.mgrid[0:1:11j, 0:np.pi*2:25j, -0.5:0.5:11j]
-x = r*np.cos(theta)
-y = r*np.sin(theta)
-
-# 计算中间点的坐标
-rc, thetac, zc = midpoints(r), midpoints(theta), midpoints(z)
-
-# 定义一个不规则的环面团，位于 [0.7, *, 0] 附近
-sphere = (rc - 0.7)**2 + (zc + 0.2*np.cos(thetac*2))**2 < 0.2**2
-
-# 合并颜色组件
-hsv = np.zeros(sphere.shape + (3,))
-hsv[..., 0] = thetac / (np.pi*2)
-hsv[..., 1] = rc
-hsv[..., 2] = zc + 0.5
-colors = matplotlib.colors.hsv_to_rgb(hsv)
-
-# 创建 3D 图形并添加子图
-ax = plt.figure().add_subplot(projection='3d')
-
-# 使用 voxels 方法绘制体素图
-ax.voxels(x, y, z, sphere,
-          facecolors=colors,  # 设置面颜色
-          edgecolors=np.clip(2*colors - 0.5, 0, 1),  # 设置边颜色，使之更亮
-          linewidth=0.5)  # 设置边宽
-
-# 显示图形
-plt.show()
+```mermaid
+graph TD
+    A[开始] --> B[导入库: matplotlib.pyplot, numpy, matplotlib.colors]
+    B --> C[定义midpoints函数: 计算数组相邻元素的中点]
+    C --> D[生成圆柱坐标网格: r, theta, z使用np.mgrid]
+    D --> E[转换为笛卡尔坐标: x = r*cos(θ), y = r*sin(θ)]
+    E --> F[计算坐标中点: rc, thetac, zc使用midpoints函数]
+    F --> G[定义扭曲圆环体: sphere布尔数组]
+    G --> H[创建HSV颜色数组: 根据theta和z计算颜色]
+    H --> I[HSV转RGB: 使用hsv_to_rgb转换颜色]
+    I --> J[创建3D坐标轴: plt.figure().add_subplot]
+    J --> K[调用voxels方法绘制体素]
+    K --> L[调用plt.show()显示图像]
 ```
+
+## 类结构
+
+```
+脚本文件 (非面向对象)
+└── midpoints 函数 (辅助函数)
+```
+
+## 全局变量及字段
+
+
+### `r`
+    
+圆柱坐标径向距离网格
+
+类型：`ndarray`
+    
+
+
+### `theta`
+    
+圆柱坐标角度网格
+
+类型：`ndarray`
+    
+
+
+### `z`
+    
+圆柱坐标高度网格
+
+类型：`ndarray`
+    
+
+
+### `x`
+    
+笛卡尔坐标X轴
+
+类型：`ndarray`
+    
+
+
+### `y`
+    
+笛卡尔坐标Y轴
+
+类型：`ndarray`
+    
+
+
+### `rc`
+    
+r的中点数组
+
+类型：`ndarray`
+    
+
+
+### `thetac`
+    
+theta的中点数组
+
+类型：`ndarray`
+    
+
+
+### `zc`
+    
+z的中点数组
+
+类型：`ndarray`
+    
+
+
+### `sphere`
+    
+布尔数组,定义圆环体形状
+
+类型：`ndarray`
+    
+
+
+### `hsv`
+    
+HSV颜色数组
+
+类型：`ndarray`
+    
+
+
+### `colors`
+    
+RGB颜色数组
+
+类型：`ndarray`
+    
+
+
+### `ax`
+    
+3D坐标系对象
+
+类型：`Axes3D`
+    
+
+
+    
+
+## 全局函数及方法
+
+
+
+### `midpoints`
+
+计算数组相邻元素的中点，通过对每个维度的相邻元素求平均值来实现，常用于3D voxel绘图中的坐标转换。
+
+参数：
+- `x`：`numpy.ndarray`，输入的多维数组
+
+返回值：`numpy.ndarray`，返回与输入数组维度相同的数组，但每个维度的元素数量减少1个（因为是计算中点）
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[初始化空元组 sl = ()]
+    B --> C{遍历维度 i < x.ndim}
+    C -->|是| D[计算当前维度相邻元素的中点]
+    D --> E[使用 np.index_exp[:-1] 和 np.index_exp[1:] 获取相邻元素]
+    E --> F[计算平均值: (x[sl + np.index_exp[:-1]] + x[sl + np.index_exp[1:]]) / 2.0]
+    F --> G[更新切片 sl += np.index_exp[:]]
+    G --> C
+    C -->|否| H[返回计算后的数组 x]
+    H --> I[结束]
+```
+
+#### 带注释源码
+
+```python
+def midpoints(x):
+    """
+    计算数组相邻元素的中点
+    
+    参数:
+        x: numpy.ndarray - 输入的多维数组
+    
+    返回:
+        numpy.ndarray - 每个维度元素数量减1的中点数组
+    """
+    # 初始化空元组，用于存储切片
+    sl = ()
+    
+    # 遍历数组的每个维度
+    for i in range(x.ndim):
+        # 使用np.index_exp构建索引:
+        # np.index_exp[:-1] 生成切片 (slice(None), ..., slice(None, -1))
+        # np.index_exp[1:] 生成切片 (slice(None), ..., slice(1, None))
+        # 通过将相邻元素相加并除以2来计算中点
+        x = (x[sl + np.index_exp[:-1]] + x[sl + np.index_exp[1:]]) / 2.0
+        
+        # 更新切片元组，添加当前维度的完整切片
+        sl += np.index_exp[:]
+    
+    return x
+```
+
+## 关键组件
+
+
+
+
+### midpoints 函数
+
+计算数组相邻元素的中点值，用于将坐标数组转换为单元格的中心点坐标
+
+### 坐标生成模块
+
+使用 np.mgrid 生成柱面坐标系下的网格，并转换为笛卡尔坐标 (x, y, z)
+
+### 球体/圆环几何定义
+
+使用数学公式 (rc - 0.7)² + (zc + 0.2*cos(2*thetac))² < 0.2² 定义一个围绕 [0.7, *, 0] 的 wobble 圆环体
+
+### 颜色映射系统
+
+将 HSV 颜色空间转换为 RGB 颜色空间，其中色调由 theta 角度决定，饱和度由 r 半径决定，亮度由 z 坐标决定
+
+### 3D Voxel 渲染引擎
+
+调用 matplotlib 的 Axes3D.voxels 方法绘制体素图，包含面颜色和边缘颜色（通过 clip 函数增强亮度）
+
+
+## 问题及建议
+
+
+
+
+
+### 已知问题
+
+- **魔法数字和硬编码值**：代码中多处使用硬编码数值（如 `11j`、`25j`、`0.7`、`0.2`、`0.5`、`2`、`-0.5` 等），缺乏配置参数，导致代码难以调整和复用
+- **midpoints 函数实现不清晰**：`midpoints` 函数使用 `sl = ()` 和循环中动态拼接 `np.index_exp[:]` 的方式实现，逻辑复杂且难以理解，不易维护
+- **缺乏类型注解**：所有函数和变量均无类型注解，降低了代码的可读性和 IDE 支持
+- **变量命名不够直观**：`rc`, `thetac`, `zc`, `sphere` 等缩写命名缺乏明确语义，需要结合上下文才能理解
+- **全局作用域代码过多**：所有逻辑都暴露在全局作用域中，未封装成可复用的函数或类，难以作为模块被其他代码引用
+- **错误处理缺失**：代码未考虑边界情况（如空数组、无效参数等），缺乏异常处理机制
+- **重复计算**：`edgecolors` 中的 `2*colors - 0.5` 表达式与 `colors` 计算有潜在关联，可能存在计算优化空间
+
+### 优化建议
+
+- **提取配置参数**：将硬编码的网格数量、颜色参数、几何参数提取为常量或配置字典，提高代码可调性
+- **重构 midpoints 函数**：使用更直观的向量化方式实现中点计算，如利用 `np.diff` 或直接切片操作
+- **添加类型注解**：为函数参数和返回值添加类型提示，提升代码可读性
+- **优化变量命名**：使用更描述性的变量名，如 `r_center` 替代 `rc`，`theta_center` 替代 `thetac`
+- **封装为可复用模块**：将核心功能封装为函数或类，提供参数化接口，便于复用
+- **添加输入验证**：对关键参数（如网格维度、颜色范围）进行有效性检查
+- **分离计算与渲染**：将数据准备过程和绘图过程分离，便于单元测试和逻辑验证
+
+
+
+## 其它
+
+
+
+
+### 设计目标与约束
+
+本代码旨在演示如何使用matplotlib的`Axes3D.voxels`方法在三维空间中绘制体素图，核心目标是以圆柱坐标系为基础，构建并渲染一个具有视觉吸引力的扭曲环面体。约束条件包括：依赖matplotlib 3.0+版本支持voxels方法，需要numpy进行数值计算，图形渲染受限于matplotlib的3D绘图能力。
+
+### 错误处理与异常设计
+
+代码主要依赖numpy数组操作和matplotlib渲染，未显式实现异常处理机制。潜在异常场景包括：1) numpy数组维度不匹配时会导致索引错误；2) 当sphere布尔数组形状与x/y/z坐标网格不一致时，voxels方法将抛出ValueError；3) 若matplotlib.colors.hsv_to_rgb接收到超出[0,1]范围的输入，可能产生未定义行为。建议添加参数校验逻辑，确保输入数组形状兼容，并使用np.clip等函数对颜色分量进行边界约束。
+
+### 数据流与状态机
+
+数据流遵循以下路径：首先通过`np.mgrid`生成三维坐标网格(r, theta, z)，经坐标变换得到笛卡尔坐标(x, y, z)；随后`midpoints`函数计算各维度的中点值用于几何计算；接着通过布尔条件判断构建sphere体积数据；同时基于中点坐标计算HSV颜色分量并转换为RGB；最终将几何数据与颜色数据传递至`ax.voxels()`完成渲染。状态机表现为线性流程：数据准备 → 几何计算 → 颜色计算 → 渲染执行 → 显示。
+
+### 外部依赖与接口契约
+
+核心依赖包括：matplotlib.pyplot（图形创建与显示）、matplotlib.colors（HSV到RGB颜色空间转换）、numpy（数值计算与数组操作）。接口契约方面：`midpoints(x)`函数接受任意维度numpy数组，返回每维度中点值构成的数组；`ax.voxels(x, y, z, voxels, facecolors, edgecolors, linewidth)`方法要求x/y/z坐标数组维度一致，voxels为布尔数组且形状与坐标网格匹配，facecolors和edgecolors为RGB颜色数组且最后一维长度为3。
+
+### 性能考虑与优化空间
+
+当前实现存在以下优化潜力：1) `midpoints`函数采用Python循环遍历维度，对于大规模数组效率较低，可考虑使用numpy卷积或scipy.ndimage.uniform_filter替代；2) 重复计算的`np.index_exp[:]`可通过预计算减少开销；3) 颜色转换可考虑向量化操作批量处理；4) 对于大型体素数据集，建议使用更高效的渲染引擎或分块渲染策略。当前代码规模较小，性能瓶颈不明显，但面向大规模数据时应重点优化。
+
+### 可测试性设计
+
+代码缺乏单元测试覆盖。建议为`midpoints`函数编写测试用例，验证边界条件（如单元素数组、空数组）及输出正确性；颜色转换逻辑可分离为独立函数便于隔离测试；坐标生成与渲染逻辑解耦，增强模块可测试性。当前作为演示代码，测试优先级较低，但若要发展为可复用库则需补充完整测试套件。
+
+### 可维护性与扩展性
+
+代码以脚本形式呈现，未采用面向对象封装，扩展性受限。建议将体素生成逻辑封装为函数，参数化环面体几何参数（主半径、管半径、扭曲系数等）；颜色映射策略可抽象为可插拔的配色器；当前硬编码的参数（0.7、0.2、0.5等）应提取为配置常量或函数参数，提升代码可读性与可维护性。
+
+    

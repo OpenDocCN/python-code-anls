@@ -1,79 +1,407 @@
-# `D:\src\scipysrc\matplotlib\lib\matplotlib\cm.py`
 
-```py
-"""
-Builtin colormaps, colormap handling utilities, and the `ScalarMappable` mixin.
+# `matplotlib\lib\matplotlib\cm.py` 详细设计文档
 
-.. seealso::
+This code defines a registry for colormaps used in Matplotlib, providing functionality to register, retrieve, and manage colormaps.
 
-  :doc:`/gallery/color/colormap_reference` for a list of builtin colormaps.
+## 整体流程
 
-  :ref:`colormap-manipulation` for examples of how to make
-  colormaps.
+```mermaid
+graph TD
+    A[开始] --> B[生成 cmap_registry]
+    B --> C[注册内置 colormaps]
+    C --> D[处理别名和反转 cmap]
+    D --> E[注册多变量 cmap]
+    E --> F[注册双变量 cmap]
+    F --> G[创建全局变量]
+    G --> H[结束]
+```
 
-  :ref:`colormaps` an in-depth discussion of choosing
-  colormaps.
+## 类结构
 
-  :ref:`colormapnorms` for more details about data normalization.
-"""
+```
+ColormapRegistry (类)
+├── _gen_cmap_registry (函数)
+├── register (方法)
+├── unregister (方法)
+└── get_cmap (方法)
+```
 
-# 导入必要的模块和库
-from collections.abc import Mapping  # 导入 Mapping 类，用于创建映射类型的对象
-import functools  # 导入 functools 模块，用于高阶函数和函数工具
-
-import numpy as np  # 导入 numpy 库，并用 np 别名表示
-from numpy import ma  # 从 numpy 导入 ma 模块，用于掩码数组的处理
-
-import matplotlib as mpl  # 导入 matplotlib 库，并用 mpl 别名表示
-from matplotlib import _api, colors, cbook, scale  # 导入 matplotlib 中的一些模块和类
-from matplotlib._cm import datad  # 导入 matplotlib._cm 模块中的 datad 对象
-from matplotlib._cm_listed import cmaps as cmaps_listed  # 导入 matplotlib._cm_listed 中的 cmaps_listed 对象
+## 全局变量及字段
 
 
-_LUTSIZE = mpl.rcParams['image.lut']  # 从 matplotlib 的全局配置中获取图像颜色表的大小
+### `_LUTSIZE`
+    
+The size of the lookup table for colormaps.
 
+类型：`int`
+    
+
+
+### `_colormaps`
+    
+The global registry of colormaps.
+
+类型：`ColormapRegistry`
+    
+
+
+### `_multivar_colormaps`
+    
+The global registry of multivar colormaps.
+
+类型：`ColormapRegistry`
+    
+
+
+### `_bivar_colormaps`
+    
+The global registry of bivar colormaps.
+
+类型：`ColormapRegistry`
+    
+
+
+### `{'name': 'ColormapRegistry', 'fields': ['_cmaps', '_builtin_cmaps'], 'methods': ['__init__', '__getitem__', '__iter__', '__len__', '__str__', '__call__', 'register', 'unregister', 'get_cmap']}._cmaps`
+    
+The internal dictionary of colormaps in the ColormapRegistry class.
+
+类型：`dict`
+    
+
+
+### `{'name': 'ColormapRegistry', 'fields': ['_cmaps', '_builtin_cmaps'], 'methods': ['__init__', '__getitem__', '__iter__', '__len__', '__str__', '__call__', 'register', 'unregister', 'get_cmap']}._builtin_cmaps`
+    
+The tuple of built-in colormaps in the ColormapRegistry class.
+
+类型：`tuple`
+    
+
+
+### `ColormapRegistry._cmaps`
+    
+The internal dictionary of colormaps in the ColormapRegistry class.
+
+类型：`dict`
+    
+
+
+### `ColormapRegistry._builtin_cmaps`
+    
+The tuple of built-in colormaps in the ColormapRegistry class.
+
+类型：`tuple`
+    
+    
+
+## 全局函数及方法
+
+
+### `_gen_cmap_registry`
+
+Generate a dict mapping standard colormap names to standard colormaps, as well as the reversed colormaps.
+
+参数：
+
+- 无
+
+返回值：`dict`，A dictionary mapping standard colormap names to standard colormaps, including reversed colormaps.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B[Initialize cmap_d with cmaps_listed]
+B --> C[Iterate over datad]
+C -->|If 'red' in spec| D[Create LinearSegmentedColormap]
+C -->|If 'listed' in spec| E[Create ListedColormap]
+C -->|Else| F[Create LinearSegmentedColormap from_list]
+D --> G[Assign to cmap_d[name]]
+E --> G
+F --> G
+G --> H[Register aliases for gray and grey]
+H --> I[Generate reversed cmaps]
+I --> J[Return cmap_d]
+J --> K[End]
+```
+
+#### 带注释源码
+
+```python
 def _gen_cmap_registry():
     """
     Generate a dict mapping standard colormap names to standard colormaps, as
     well as the reversed colormaps.
     """
-    # 创建一个空字典，将已列出的标准色彩映射对象添加进去
     cmap_d = {**cmaps_listed}
-    
-    # 遍历 datad.items() 中的每一项，创建颜色映射对象并加入 cmap_d 字典中
     for name, spec in datad.items():
-        cmap_d[name] = (
-            # 如果 spec 中包含 'red' 键，创建线性分段的颜色映射对象
+        cmap_d[name] = (  # Precache the cmaps at a fixed lutsize..
             colors.LinearSegmentedColormap(name, spec, _LUTSIZE)
             if 'red' in spec else
-            # 如果 spec 中包含 'listed' 键，创建列出颜色的颜色映射对象
             colors.ListedColormap(spec['listed'], name)
             if 'listed' in spec else
-            # 否则，创建基于列表的颜色映射对象
-            colors.LinearSegmentedColormap.from_list(name, spec, _LUTSIZE)
-        )
+            colors.LinearSegmentedColormap.from_list(name, spec, _LUTSIZE))
 
-    # 注册灰度别名映射
+    # Register colormap aliases for gray and grey.
     aliases = {
+        # alias -> original name
         'grey': 'gray',
         'gist_grey': 'gist_gray',
         'gist_yerg': 'gist_yarg',
         'Grays': 'Greys',
     }
     for alias, original_name in aliases.items():
-        # 复制原始颜色映射对象，并设置别名
         cmap = cmap_d[original_name].copy()
         cmap.name = alias
         cmap_d[alias] = cmap
 
-    # 生成反转的颜色映射对象
+    # Generate reversed cmaps.
     for cmap in list(cmap_d.values()):
-        rmap = cmap.reversed()  # 创建颜色映射对象的反转版本
-        cmap_d[rmap.name] = rmap  # 将反转的映射对象加入 cmap_d 字典中
+        rmap = cmap.reversed()
+        cmap_d[rmap.name] = rmap
+    return cmap_d
+```
 
-    return cmap_d  # 返回包含所有颜色映射对象的字典
 
 
+### ColormapRegistry.register
+
+该函数用于注册一个新的颜色映射表（colormap）到Matplotlib的colormap注册表中。
+
+参数：
+
+- `cmap`：`matplotlib.colors.Colormap`，要注册的颜色映射表实例。
+- `name`：`str`，可选，新颜色映射表的名称。如果未提供，则使用`cmap.name`。
+- `force`：`bool`，默认为`False`。如果为`False`，则如果尝试覆盖已注册的名称，将引发`ValueError`。如果为`True`，则支持覆盖除内置颜色映射表之外的其他已注册颜色映射表。
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+graph LR
+A[开始] --> B{检查 cmap 类型}
+B -->|是| C[检查 cmap.name 和 name]
+C -->|不同| D[注册 cmap]
+D --> E[结束]
+C -->|相同| F{force 是否为 True?}
+F -->|是| G[覆盖 cmap]
+G --> E
+F -->|否| H[抛出 ValueError]
+H --> E
+```
+
+#### 带注释源码
+
+```python
+def register(self, cmap, *, name=None, force=False):
+    """
+    Register a new colormap.
+
+    The colormap name can then be used as a string argument to any ``cmap`` parameter in Matplotlib. It is also available in ``pyplot.get_cmap``.
+
+    The colormap registry stores a copy of the given colormap, so that
+    future changes to the original colormap instance do not affect the
+    registered colormap. Think of this as the registry taking a snapshot
+    of the colormap at registration.
+
+    Parameters
+    ----------
+    cmap : matplotlib.colors.Colormap
+        The colormap to register.
+
+    name : str, optional
+        The name for the colormap. If not given, ``cmap.name`` is used.
+
+    force : bool, default: False
+        If False, a ValueError is raised if trying to overwrite an already
+        registered name. True supports overwriting registered colormaps
+        other than the builtin colormaps.
+
+    """
+    _api.check_isinstance(colors.Colormap, cmap=cmap)
+
+    name = name or cmap.name
+    if name in self:
+        if not force:
+            # don't allow registering an already existing cmap
+            # unless explicitly asked to
+            raise ValueError(
+                f'A colormap named "{name}" is already registered.')
+        elif name in self._builtin_cmaps:
+            # We don't allow overriding a builtin.
+            raise ValueError("Re-registering the builtin cmap "
+                             f"{name!r} is not allowed.")
+
+        # Warn that we are updating an already existing colormap
+        _api.warn_external(f"Overwriting the cmap {name!r} "
+                           "that was already in the registry.")
+
+    self._cmaps[name] = cmap.copy()
+    # Someone may set the extremes of a builtin colormap and want to register it
+    # with a different name for future lookups. The object would still have the
+    # builtin name, so we should update it to the registered name
+    if self._cmaps[name].name != name:
+        self._cmaps[name].name = name
+``` 
+
+
+
+### unregister
+
+Remove a colormap from the registry.
+
+参数：
+
+- `name`：`str`，The name of the colormap to be removed.
+
+返回值：`None`，No return value.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B[Check if name is in _builtin_cmaps]
+B -->|Yes| C[Error: Cannot unregister builtin colormap]
+B -->|No| D[Remove name from _cmaps]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```python
+def unregister(self, name):
+    """
+    Remove a colormap from the registry.
+
+    You cannot remove built-in colormaps.
+
+    If the named colormap is not registered, returns with no error, raises
+    if you try to de-register a default colormap.
+
+    .. warning::
+
+        Colormap names are currently a shared namespace that may be used
+        by multiple packages. Use `unregister` only if you know you
+        have registered that name before. In particular, do not
+        unregister just in case to clean the name before registering a
+        new colormap.
+
+    Parameters
+    ----------
+    name : str
+        The name of the colormap to be removed.
+
+    Raises
+    ------
+    ValueError
+        If you try to remove a default built-in colormap.
+    """
+    if name in self._builtin_cmaps:
+        raise ValueError(f"cannot unregister {name!r} which is a builtin "
+                         "colormap.")
+    self._cmaps.pop(name, None)
+```
+
+
+
+### get_cmap
+
+Return a color map specified through *cmap*.
+
+参数：
+
+-  `cmap`：`str` 或 `~matplotlib.colors.Colormap` 或 `None`，指定颜色映射的字符串、颜色映射实例或 `None`。
+
+返回值：`~matplotlib.colors.Colormap`，返回指定的颜色映射。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is cmap None?}
+B -- Yes --> C[Return default cmap]
+B -- No --> D{Is cmap a Colormap?}
+D -- Yes --> E[Return cmap]
+D -- No --> F{Is cmap a string?}
+F -- Yes --> G[Get cmap from registry]
+F -- No --> H[Error: Invalid cmap type]
+G -- Success --> E
+G -- Failure --> H
+E --> I[End]
+```
+
+#### 带注释源码
+
+```python
+def get_cmap(self, cmap):
+    """
+    Return a color map specified through *cmap*.
+
+    Parameters
+    ----------
+    cmap : str or ~matplotlib.colors.Colormap or None
+        - if a ~matplotlib.colors.Colormap, return it
+        - if a string, look it up in mpl.colormaps
+        - if None, return the Colormap defined in :rc:`image.cmap`
+
+    Returns
+    -------
+    ~matplotlib.colors.Colormap
+    """
+    # get the default color map
+    if cmap is None:
+        return self[mpl.rcParams["image.cmap"]]
+
+    # if the user passed in a Colormap, simply return it
+    if isinstance(cmap, colors.Colormap):
+        return cmap
+    if isinstance(cmap, str):
+        _api.check_in_list(sorted(_colormaps), cmap=cmap)
+        # otherwise, it must be a string so look it up
+        return self[cmap]
+    raise TypeError(
+        'get_cmap expects None or an instance of a str or Colormap. '
+        f'you passed {cmap!r} of type {type(cmap)}'
+    )
+```
+
+
+
+### ColormapRegistry.__init__
+
+This method initializes the `ColormapRegistry` class, which is a container for colormaps known to Matplotlib by name.
+
+参数：
+
+- `cmaps`：`Mapping`，A mapping of colormap names to colormap objects.
+
+返回值：无
+
+#### 流程图
+
+```mermaid
+classDiagram
+    ColormapRegistry <|-- Mapping
+    ColormapRegistry {
+        _cmaps
+        _builtin_cmaps
+    }
+    ColormapRegistry {
+        +__init__(cmaps: Mapping)
+        +__getitem__(item: Any) -> Colormap
+        +__iter__() -> Iterator[Colormap]
+        +__len__() -> int
+        +__str__() -> str
+        +__call__() -> List[str]
+        +register(cmap: Colormap, name: Optional[str], force: bool) -> None
+        +unregister(name: str) -> None
+        +get_cmap(cmap: Any) -> Colormap
+    }
+```
+
+#### 带注释源码
+
+```python
 class ColormapRegistry(Mapping):
     r"""
     Container for colormaps that are known to Matplotlib by name.
@@ -86,9 +414,6 @@ class ColormapRegistry(Mapping):
         import matplotlib as mpl
         cmap = mpl.colormaps['viridis']
 
-    Returned `.Colormap`\s are copies, so that their modification does not
-    change the global definition of the colormap.
-
     Additional colormaps can be added via `.ColormapRegistry.register`::
 
         mpl.colormaps.register(my_colormap)
@@ -98,507 +423,452 @@ class ColormapRegistry(Mapping):
         from matplotlib import colormaps
         list(colormaps)
     """
-    
+
     def __init__(self, cmaps):
-        self._cmaps = cmaps  # 初始化注册的颜色映射字典
-        self._builtin_cmaps = tuple(cmaps)  # 将所有已注册的颜色映射名称转为元组保存
+        self._cmaps = cmaps
+        self._builtin_cmaps = tuple(cmaps)
+```
 
-    def __getitem__(self, item):
-        try:
-            return self._cmaps[item].copy()  # 返回指定名称的颜色映射对象的副本
-        except KeyError:
-            raise KeyError(f"{item!r} is not a known colormap name") from None
 
-    def __iter__(self):
-        return iter(self._cmaps)  # 返回颜色映射字典的迭代器
 
-    def __len__(self):
-        return len(self._cmaps)  # 返回颜色映射字典的长度
-    def __str__(self):
-        # 返回 ColormapRegistry 的字符串表示形式，列出所有注册的颜色映射名字
-        return ('ColormapRegistry; available colormaps:\n' +
-                ', '.join(f"'{name}'" for name in self))
+### ColormapRegistry.__getitem__
 
-    def __call__(self):
-        """
-        Return a list of the registered colormap names.
+This method is used to retrieve a colormap from the `ColormapRegistry` instance by its name.
 
-        This exists only for backward-compatibility in `.pyplot` which had a
-        ``plt.colormaps()`` method. The recommended way to get this list is
-        now ``list(colormaps)``.
-        """
-        # 返回一个包含所有已注册颜色映射名字的列表
-        return list(self)
+参数：
 
-    def register(self, cmap, *, name=None, force=False):
-        """
-        Register a new colormap.
+- `item`：`str`，The name of the colormap to retrieve.
 
-        The colormap name can then be used as a string argument to any ``cmap``
-        parameter in Matplotlib. It is also available in ``pyplot.get_cmap``.
+返回值：`Colormap`，A copy of the colormap with the specified name.
 
-        The colormap registry stores a copy of the given colormap, so that
-        future changes to the original colormap instance do not affect the
-        registered colormap. Think of this as the registry taking a snapshot
-        of the colormap at registration.
+#### 流程图
 
-        Parameters
-        ----------
-        cmap : matplotlib.colors.Colormap
-            The colormap to register.
+```mermaid
+graph LR
+A[Start] --> B{Is item a string?}
+B -- Yes --> C[Get colormap from _cmaps using item]
+B -- No --> D[Error: item is not a string]
+C --> E[Return the copied colormap]
+E --> F[End]
+D --> F
+```
 
-        name : str, optional
-            The name for the colormap. If not given, ``cmap.name`` is used.
+#### 带注释源码
 
-        force : bool, default: False
-            If False, a ValueError is raised if trying to overwrite an already
-            registered name. True supports overwriting registered colormaps
-            other than the builtin colormaps.
-        """
-        # 检查传入的 cmap 是否为 matplotlib.colors.Colormap 的实例
-        _api.check_isinstance(colors.Colormap, cmap=cmap)
+```python
+def __getitem__(self, item):
+    cmap = _api.getitem_checked(self._cmaps, colormap=item, _error_cls=KeyError)
+    return cmap.copy()
+```
 
-        # 如果未提供 name 参数，则使用 cmap 的默认名字
-        name = name or cmap.name
-        # 如果 name 已经存在于注册表中
-        if name in self:
-            # 如果 force 参数为 False，则不允许覆盖已经存在的 colormap
-            if not force:
-                raise ValueError(
-                    f'A colormap named "{name}" is already registered.')
-            # 如果 force 为 True 且 name 是内置 colormap 的名字，则不允许覆盖
-            elif name in self._builtin_cmaps:
-                raise ValueError("Re-registering the builtin cmap "
-                                 f"{name!r} is not allowed.")
 
-            # 发出警告，表明正在覆盖已经存在的 colormap
-            _api.warn_external(f"Overwriting the cmap {name!r} "
-                               "that was already in the registry.")
 
-        # 在注册表中存储给定 colormap 的副本
-        self._cmaps[name] = cmap.copy()
-        # 如果注册的 colormap 的名字与原始的不同，更新注册的 colormap 的名字
-        if self._cmaps[name].name != name:
-            self._cmaps[name].name = name
-    def unregister(self, name):
-        """
-        Remove a colormap from the registry.
+### ColormapRegistry.__iter__
 
-        You cannot remove built-in colormaps.
+This method returns an iterator over the registered colormaps.
 
-        If the named colormap is not registered, returns with no error, raises
-        if you try to de-register a default colormap.
+参数：
 
-        .. warning::
+- 无
 
-            Colormap names are currently a shared namespace that may be used
-            by multiple packages. Use `unregister` only if you know you
-            have registered that name before. In particular, do not
-            unregister just in case to clean the name before registering a
-            new colormap.
+返回值：`iterable`，An iterable containing the registered colormaps.
 
-        Parameters
-        ----------
-        name : str
-            The name of the colormap to be removed.
+#### 流程图
 
-        Raises
-        ------
-        ValueError
-            If you try to remove a default built-in colormap.
-        """
-        # Check if the colormap name is in the list of built-in colormaps
-        if name in self._builtin_cmaps:
-            # Raise an error if trying to unregister a built-in colormap
-            raise ValueError(f"cannot unregister {name!r} which is a builtin "
-                             "colormap.")
-        # Remove the colormap from the colormap registry
-        self._cmaps.pop(name, None)
+```mermaid
+graph LR
+A[Start] --> B{Is there a next colormap?}
+B -- Yes --> C[Return next colormap]
+B -- No --> D[End]
+C --> B
+```
 
-    def get_cmap(self, cmap):
-        """
-        Return a color map specified through *cmap*.
+#### 带注释源码
 
-        Parameters
-        ----------
-        cmap : str or `~matplotlib.colors.Colormap` or None
+```python
+def __iter__(self):
+    return iter(self._cmaps)
+```
 
-            - if a `.Colormap`, return it
-            - if a string, look it up in ``mpl.colormaps``
-            - if None, return the Colormap defined in :rc:`image.cmap`
 
-        Returns
-        -------
-        Colormap
-        """
-        # get the default color map
-        if cmap is None:
-            # Return the default colormap defined in matplotlib configuration
-            return self[mpl.rcParams["image.cmap"]]
 
-        # if the user passed in a Colormap, simply return it
-        if isinstance(cmap, colors.Colormap):
-            # Return the passed colormap object
-            return cmap
-        if isinstance(cmap, str):
-            # Ensure the colormap name is in the list of available colormaps
-            _api.check_in_list(sorted(_colormaps), cmap=cmap)
-            # otherwise, it must be a string so look it up
-            return self[cmap]
-        # Raise a type error if the input is not None, Colormap, or str
-        raise TypeError(
-            'get_cmap expects None or an instance of a str or Colormap . ' +
-            f'you passed {cmap!r} of type {type(cmap)}'
-        )
-# 创建颜色映射注册表实例，并更新全局作用域
-_colormaps = ColormapRegistry(_gen_cmap_registry())
-globals().update(_colormaps)
+### ColormapRegistry.__len__
 
-# 这是 pyplot.get_cmap() 的精确副本。在 3.9 版本中被移除，但导致更多用户问题，因此在 3.9.1 版本中重新添加，
-# 并延长了两个额外的小版本的弃用周期。
-@_api.deprecated(
-    '3.7',
-    removal='3.11',
-    alternative="``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()``"
-                " or ``pyplot.get_cmap()``"
-    )
-def get_cmap(name=None, lut=None):
+返回注册到ColormapRegistry中的colormap数量。
+
+参数：
+
+- 无
+
+返回值：
+
+- `int`，注册的colormap数量
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is _cmaps empty?}
+B -- Yes --> C[Return 0]
+B -- No --> D[Return len(_cmaps)]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```python
+def __len__(self):
+    return len(self._cmaps)
+```
+
+
+
+### ColormapRegistry.__str__
+
+This method returns a string representation of the `ColormapRegistry` object, listing all available colormaps.
+
+参数：
+
+- 无
+
+返回值：`str`，返回一个包含所有可用着色图的字符串。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is there any colormap in the registry?}
+B --> |Yes| C[Return string representation of all colormaps]
+B --> |No| D[End]
+C --> E[End]
+```
+
+#### 带注释源码
+
+```python
+def __str__(self):
+    return ('ColormapRegistry; available colormaps:\n' +
+            ', '.join(f"'{name}'" for name in self))
+```
+
+
+
+### ColormapRegistry.__call__
+
+Return a list of the registered colormap names.
+
+参数：
+
+- 无
+
+返回值：`list`，返回一个包含所有注册的彩图名称的列表
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Is there any registered colormap?}
+B -- Yes --> C[Return list of registered colormaps]
+B -- No --> D[End]
+```
+
+#### 带注释源码
+
+```python
+def __call__(self):
     """
-    获取一个颜色映射实例，默认情况下使用 rc 参数值（如果 name 为 None）。
+    Return a list of the registered colormap names.
+
+    This exists only for backward-compatibility in `.pyplot` which had a
+    ``plt.colormaps()`` method. The recommended way to get this list is
+    now ``list(colormaps)``.
+    """
+    return list(self)
+```
+
+
+
+### ColormapRegistry.register
+
+This method registers a new colormap in the `ColormapRegistry`.
+
+参数：
+
+- `cmap`：`matplotlib.colors.Colormap`，The colormap to register.
+- `name`：`str`，optional，The name for the colormap. If not given, `cmap.name` is used.
+- `force`：`bool`，default: False，If False, a ValueError is raised if trying to overwrite an already registered name. True supports overwriting registered colormaps other than the builtin colormaps.
+
+返回值：`None`，No return value, the colormap is registered in the registry.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B{Check cmap type}
+B -->|Is cmap a Colormap?| C[Register cmap]
+B -->|Is cmap a string?| D[Get cmap from registry]
+C --> E[Copy cmap]
+E --> F[Register cmap with name]
+F --> G[End]
+D -->|Cmap found?| F
+D -->|Cmap not found| H[Error: Cmap not found]
+H --> G
+```
+
+#### 带注释源码
+
+```python
+def register(self, cmap, *, name=None, force=False):
+    """
+    Register a new colormap.
+
+    The colormap name can then be used as a string argument to any ``cmap`` parameter in Matplotlib. It is also available in ``pyplot.get_cmap``.
+
+    The colormap registry stores a copy of the given colormap, so that
+    future changes to the original colormap instance do not affect the
+    registered colormap. Think of this as the registry taking a snapshot
+    of the colormap at registration.
 
     Parameters
     ----------
-    name : `~matplotlib.colors.Colormap` or str or None, default: None
-        如果是 `.Colormap` 实例，则返回该实例。否则，是 Matplotlib 中已知的颜色映射名称，
-        将由 *lut* 重新采样。默认为 None，意味着使用 :rc:`image.cmap`。
-    lut : int or None, default: None
-        如果 *name* 不是 Colormap 实例且 *lut* 不为 None，则颜色映射将重新采样为 *lut* 个条目的查找表。
+    cmap : matplotlib.colors.Colormap
+        The colormap to register.
+
+    name : str, optional
+        The name for the colormap. If not given, ``cmap.name`` is used.
+
+    force : bool, default: False
+        If False, a ValueError is raised if trying to overwrite an already
+        registered name. True supports overwriting registered colormaps
+        other than the builtin colormaps.
+    """
+    _api.check_isinstance(colors.Colormap, cmap=cmap)
+
+    name = name or cmap.name
+    if name in self:
+        if not force:
+            # don't allow registering an already existing cmap
+            # unless explicitly asked to
+            raise ValueError(
+                f'A colormap named "{name}" is already registered.')
+        elif name in self._builtin_cmaps:
+            # We don't allow overriding a builtin.
+            raise ValueError("Re-registering the builtin cmap "
+                             f"{name!r} is not allowed.")
+
+        # Warn that we are updating an already existing colormap
+        _api.warn_external(f"Overwriting the cmap {name!r} "
+                           "that was already in the registry.")
+
+    self._cmaps[name] = cmap.copy()
+    # Someone may set the extremes of a builtin colormap and want to register it
+    # with a different name for future lookups. The object would still have the
+    # builtin name, so we should update it to the registered name
+    if self._cmaps[name].name != name:
+        self._cmaps[name].name = name
+``` 
+
+
+
+### ColormapRegistry.unregister
+
+Remove a colormap from the registry.
+
+参数：
+
+- `name`：`str`，The name of the colormap to be removed.
+
+返回值：`None`，No return value.
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Start] --> B[Check if name is in _builtin_cmaps]
+B -->|Yes| C[Error: Cannot unregister builtin colormap]
+B -->|No| D[Remove name from _cmaps]
+D --> E[End]
+```
+
+#### 带注释源码
+
+```python
+def unregister(self, name):
+    """
+    Remove a colormap from the registry.
+
+    You cannot remove built-in colormaps.
+
+    If the named colormap is not registered, returns with no error, raises
+    if you try to de-register a default colormap.
+
+    .. warning::
+
+        Colormap names are currently a shared namespace that may be used
+        by multiple packages. Use `unregister` only if you know you
+        have registered that name before. In particular, do not
+        unregister just in case to clean the name before registering a
+        new colormap.
+
+    Parameters
+    ----------
+    name : str
+        The name of the colormap to be removed.
+
+    Raises
+    ------
+    ValueError
+        If you try to remove a default built-in colormap.
+    """
+    if name in self._builtin_cmaps:
+        raise ValueError(f"cannot unregister {name!r} which is a builtin "
+                         "colormap.")
+    self._cmaps.pop(name, None)
+```
+
+
+
+### ColormapRegistry.get_cmap
+
+Return a color map specified through *cmap*.
+
+参数：
+
+- `cmap`：`str` 或 `~matplotlib.colors.Colormap` 或 `None`，指定颜色映射的字符串或颜色映射实例，或 `None` 以获取默认颜色映射。
+
+返回值：`Colormap`，返回指定的颜色映射。
+
+#### 流程图
+
+```mermaid
+graph LR
+A[Input] --> B{Is cmap None?}
+B -- Yes --> C[Return default cmap]
+B -- No --> D{Is cmap a Colormap?}
+D -- Yes --> E[Return cmap]
+D -- No --> F{Is cmap a string?}
+F -- Yes --> G[Get cmap from registry]
+F -- No --> H[Error]
+G --> E
+```
+
+#### 带注释源码
+
+```python
+def get_cmap(self, cmap):
+    """
+    Return a color map specified through *cmap*.
+
+    Parameters
+    ----------
+    cmap : str or ~matplotlib.colors.Colormap or None
+        - if a `.Colormap`, return it
+        - if a string, look it up in ``mpl.colormaps``
+        - if None, return the Colormap defined in :rc:`image.cmap`
 
     Returns
     -------
     Colormap
     """
-    if name is None:
-        name = mpl.rcParams['image.cmap']
-    if isinstance(name, colors.Colormap):
-        return name
-    _api.check_in_list(sorted(_colormaps), name=name)
-    if lut is None:
-        return _colormaps[name]
-    else:
-        return _colormaps[name].resampled(lut)
+    # get the default color map
+    if cmap is None:
+        return self[mpl.rcParams["image.cmap"]]
 
-
-def _auto_norm_from_scale(scale_cls):
-    """
-    根据 *scale_cls* 自动生成一个规范化类。
-
-    与 `.colors.make_norm_from_scale` 的不同点在于：
-
-    - 本函数不是一个类装饰器，而是直接返回一个规范化类（就像装饰 `.Normalize` 一样）。
-    - 如果支持这样的参数，自动构建的尺度将自动使用 ``nonpositive="mask"`` 来解决标准尺度
-      （使用 "clip"）和规范化（使用 "mask"）之间默认设置的差异。
-
-    注意，``make_norm_from_scale`` 会缓存生成的规范化类（而不是实例），并在后续调用中重用它们。
-    例如，``type(_auto_norm_from_scale("log")) == LogNorm``。
-    """
-    # 尝试构建一个实例，以验证是否支持 ``nonpositive="mask"``。
-    try:
-        norm = colors.make_norm_from_scale(
-            functools.partial(scale_cls, nonpositive="mask"))(
-            colors.Normalize)()
-    except TypeError:
-        norm = colors.make_norm_from_scale(scale_cls)(
-            colors.Normalize)()
-    return type(norm)
-
-
-class ScalarMappable:
-    """
-    一个混合类，用于将标量数据映射到 RGBA 颜色。
-
-    ScalarMappable 在返回给定颜色映射的 RGBA 颜色之前应用数据规范化。
-    """
-    def __init__(self, norm=None, cmap=None):
-        """
-        Parameters
-        ----------
-        norm : `.Normalize` (or subclass thereof) or str or None
-            The normalizing object which scales data, typically into the
-            interval ``[0, 1]``.
-            If a `str`, a `.Normalize` subclass is dynamically generated based
-            on the scale with the corresponding name.
-            If *None*, *norm* defaults to a *colors.Normalize* object which
-            initializes its scaling based on the first data processed.
-        cmap : str or `~matplotlib.colors.Colormap`
-            The colormap used to map normalized data values to RGBA colors.
-        """
-        # 初始化函数，设置对象的初始状态
-        self._A = None
-        self._norm = None  # So that the setter knows we're initializing.
-        self.set_norm(norm)  # 设置标准化对象的方法
-        self.cmap = None  # So that the setter knows we're initializing.
-        self.set_cmap(cmap)  # 设置颜色映射对象的方法
-        #: The last colorbar associated with this ScalarMappable. May be None.
-        self.colorbar = None  # 与此ScalarMappable关联的最后一个colorbar，可能为None
-        self.callbacks = cbook.CallbackRegistry(signals=["changed"])  # 回调函数注册表，监听"changed"信号
-
-    def _scale_norm(self, norm, vmin, vmax):
-        """
-        Helper for initial scaling.
-
-        Used by public functions that create a ScalarMappable and support
-        parameters *vmin*, *vmax* and *norm*. This makes sure that a *norm*
-        will take precedence over *vmin*, *vmax*.
-
-        Note that this method does not set the norm.
-        """
-        # 初始标准化的辅助函数，处理参数的初始缩放
-        if vmin is not None or vmax is not None:
-            self.set_clim(vmin, vmax)  # 设置颜色映射对象的数据范围
-            if isinstance(norm, colors.Normalize):
-                raise ValueError(
-                    "Passing a Normalize instance simultaneously with "
-                    "vmin/vmax is not supported.  Please pass vmin/vmax "
-                    "directly to the norm when creating it.")
-        
-        # 始终解析自动缩放，确保有具体的限制而不是推迟到绘制时处理
-        self.autoscale_None()
-
-    def set_array(self, A):
-        """
-        Set the value array from array-like *A*.
-
-        Parameters
-        ----------
-        A : array-like or None
-            The values that are mapped to colors.
-
-            The base class `.ScalarMappable` does not make any assumptions on
-            the dimensionality and shape of the value array *A*.
-        """
-        # 从类似数组A中设置值数组
-        if A is None:
-            self._A = None
-            return
-        
-        A = cbook.safe_masked_invalid(A, copy=True)  # 处理可能的无效数据和掩码
-        if not np.can_cast(A.dtype, float, "same_kind"):
-            raise TypeError(f"Image data of dtype {A.dtype} cannot be "
-                            "converted to float")  # 如果数据类型不能转换为float，抛出类型错误
-        
-        self._A = A
-        if not self.norm.scaled():
-            self.norm.autoscale_None(A)  # 如果标准化对象未缩放，则根据数据自动缩放
-    def get_array(self):
-        """
-        Return the array of values, that are mapped to colors.
-
-        The base class `.ScalarMappable` does not make any assumptions on
-        the dimensionality and shape of the array.
-        """
-        # 返回与颜色映射相关联的数值数组
-        return self._A
-
-    def get_cmap(self):
-        """Return the `.Colormap` instance."""
-        # 返回当前的颜色映射对象 `.Colormap` 的实例
-        return self.cmap
-
-    def get_clim(self):
-        """
-        Return the values (min, max) that are mapped to the colormap limits.
-        """
-        # 返回映射到颜色映射限制的值 (min, max)
-        return self.norm.vmin, self.norm.vmax
-
-    def set_clim(self, vmin=None, vmax=None):
-        """
-        Set the norm limits for image scaling.
-
-        Parameters
-        ----------
-        vmin, vmax : float
-             The limits.
-
-             The limits may also be passed as a tuple (*vmin*, *vmax*) as a
-             single positional argument.
-
-             .. ACCEPTS: (vmin: float, vmax: float)
-        """
-        # 如果更新了规范的限制，则通过附加到规范的回调调用 self.changed()
-        if vmax is None:
-            try:
-                vmin, vmax = vmin
-            except (TypeError, ValueError):
-                pass
-        if vmin is not None:
-            # 设置规范的最小值，对传入的 vmin 进行边界值处理
-            self.norm.vmin = colors._sanitize_extrema(vmin)
-        if vmax is not None:
-            # 设置规范的最大值，对传入的 vmax 进行边界值处理
-            self.norm.vmax = colors._sanitize_extrema(vmax)
-
-    def get_alpha(self):
-        """
-        Returns
-        -------
-        float
-            Always returns 1.
-        """
-        # 返回固定值 1，这个方法可以被 Artist 子类重写
-        return 1.
-
-    def set_cmap(self, cmap):
-        """
-        Set the colormap for luminance data.
-
-        Parameters
-        ----------
-        cmap : `.Colormap` or str or None
-        """
-        # 检查是否处于初始化阶段
-        in_init = self.cmap is None
-
-        # 确保传入的 cmap 是有效的颜色映射对象 `.Colormap`，并设置为当前对象的颜色映射
-        self.cmap = _ensure_cmap(cmap)
-        if not in_init:
-            self.changed()  # 事情还没有正确设置。
-
-    @property
-    def norm(self):
-        # 返回规范化对象 self._norm
-        return self._norm
-
-    @norm.setter
-    def norm(self, norm):
-        # 检查 norm 参数是否为 Normalize 类型、字符串类型、或者 None
-        _api.check_isinstance((colors.Normalize, str, None), norm=norm)
-        if norm is None:
-            # 如果 norm 为 None，则创建一个默认的 Normalize 实例
-            norm = colors.Normalize()
-        elif isinstance(norm, str):
-            try:
-                # 尝试从映射中获取对应的缩放类
-                scale_cls = scale._scale_mapping[norm]
-            except KeyError:
-                # 如果找不到对应的缩放类，则抛出异常
-                raise ValueError(
-                    "Invalid norm str name; the following values are "
-                    f"supported: {', '.join(scale._scale_mapping)}"
-                ) from None
-            # 根据缩放类创建自动规范化实例
-            norm = _auto_norm_from_scale(scale_cls)()
-
-        if norm is self.norm:
-            # 如果传入的 norm 与当前的 self.norm 相同，则不进行更新
-            # 我们不需要更新任何内容
-            return
-
-        in_init = self.norm is None
-        # 如果不是在初始化阶段，则断开当前的回调并连接到新的 norm
-        if not in_init:
-            self.norm.callbacks.disconnect(self._id_norm)
-        # 更新 self._norm 为新的 norm
-        self._norm = norm
-        # 连接到新的 norm 的 'changed' 信号的回调
-        self._id_norm = self.norm.callbacks.connect('changed',
-                                                    self.changed)
-        # 如果不是在初始化阶段，则调用 self.changed() 方法
-        if not in_init:
-            self.changed()
-
-    def set_norm(self, norm):
-        """
-        设置规范化实例。
-
-        Parameters
-        ----------
-        norm : `.Normalize` or str or None
-
-        Notes
-        -----
-        如果有任何色条使用此规范化的映射对象，设置映射对象的规范化会将色条上的规范化、定位器和格式化器重置为默认值。
-        """
-        self.norm = norm
-
-    def autoscale(self):
-        """
-        根据当前数组自动调整规范化实例上的标量限制。
-        """
-        if self._A is None:
-            # 如果 self._A 为 None，则抛出类型错误
-            raise TypeError('You must first set_array for mappable')
-        # 如果规范化实例的限制更新，则通过连接到规范化实例的回调调用 self.changed()
-        self.norm.autoscale(self._A)
-
-    def autoscale_None(self):
-        """
-        根据当前数组自动调整规范化实例上的标量限制，仅更改为 None 的限制。
-        """
-        if self._A is None:
-            # 如果 self._A 为 None，则抛出类型错误
-            raise TypeError('You must first set_array for mappable')
-        # 如果规范化实例的限制更新，则通过连接到规范化实例的回调调用 self.changed()
-        self.norm.autoscale_None(self._A)
-
-    def changed(self):
-        """
-        每当映射对象更改时调用此方法，通知所有回调监听器 'changed' 信号。
-        """
-        # 处理所有 'changed' 信号的回调
-        self.callbacks.process('changed', self)
-        # 设置 stale 标志为 True，表示需要更新
-        self.stale = True
-# 更新 matplotlib 文档字符串插值字典，以便应用于所有相关方法
-mpl._docstring.interpd.update(
-    cmap_doc="""\
-cmap : str or `~matplotlib.colors.Colormap`, default: :rc:`image.cmap`
-    用于将标量数据映射到颜色的 Colormap 实例或已注册的颜色映射名称。
-""",
-    norm_doc="""\
-norm : str or `~matplotlib.colors.Normalize`, optional
-    在使用 *cmap* 映射到颜色之前，用于将标量数据缩放到 [0, 1] 范围的归一化方法。默认情况下，使用线性缩放，
-    将最小值映射为 0，最大值映射为 1。
-
-    如果提供，可以是以下之一：
-
-    - `.Normalize` 实例或其子类之一（参见 :ref:`colormapnorms`）。
-    - 缩放名称，例如 "linear"、"log"、"symlog"、"logit" 等。要获取可用缩放的列表，请调用 `matplotlib.scale.get_scale_names()`。
-      在这种情况下，会动态生成并实例化适当的 `.Normalize` 子类。
-""",
-    vmin_vmax_doc="""\
-vmin, vmax : float, optional
-    在使用标量数据且没有显式 *norm* 时，*vmin* 和 *vmax* 定义颜色映射的数据范围。
-    默认情况下，颜色映射涵盖提供数据的完整值范围。当给定 *norm* 实例时使用 *vmin*/*vmax* 会引发错误
-    （但使用 `str` 类型的 *norm* 名称和 *vmin*/*vmax* 一起使用是可以接受的）。
-""",
-)
-
-
-def _ensure_cmap(cmap):
-    """
-    确保我们有一个 `.Colormap` 对象。
-
-    用于内部使用以保持错误的类型稳定性。
-
-    Parameters
-    ----------
-    cmap : None, str, Colormap
-        - 如果是 `Colormap`，则返回它
-        - 如果是字符串，则在 mpl.colormaps 中查找
-        - 如果为 None，则在 mpl.colormaps 中查找默认颜色映射
-
-    Returns
-    -------
-    Colormap
-        返回一个 `.Colormap` 对象
-    """
+    # if the user passed in a Colormap, simply return it
     if isinstance(cmap, colors.Colormap):
         return cmap
-    cmap_name = cmap if cmap is not None else mpl.rcParams["image.cmap"]
-    # 使用 check_in_list 来确保内部使用时引发的异常的类型稳定性（ValueError vs KeyError）
-    if cmap_name not in _colormaps:
-        _api.check_in_list(sorted(_colormaps), cmap=cmap_name)
-    return mpl.colormaps[cmap_name]
+    if isinstance(cmap, str):
+        _api.check_in_list(sorted(_colormaps), cmap=cmap)
+        # otherwise, it must be a string so look it up
+        return self[cmap]
+    raise TypeError(
+        'get_cmap expects None or an instance of a str or Colormap . ' +
+        f'you passed {cmap!r} of type {type(cmap)}'
+    )
 ```
+
+
+## 关键组件
+
+
+### 张量索引与惰性加载
+
+张量索引与惰性加载是代码中处理数据的一种方式，它允许在需要时才计算或加载数据，从而提高效率。
+
+### 反量化支持
+
+反量化支持是代码中实现的一种功能，它允许对量化后的数据进行反量化处理，以便进行进一步的分析或处理。
+
+### 量化策略
+
+量化策略是代码中用于优化数据表示和存储的一种方法，它通过减少数据精度来减少内存使用和计算时间。
+
+
+
+## 问题及建议
+
+
+### 已知问题
+
+-   **全局变量和函数的访问控制**：代码中使用了 `# TODO make this warn on access` 注释，表明全局变量 `_ScalarMappable` 的访问可能存在问题，但没有具体说明如何警告或处理。这可能导致代码的可维护性和安全性问题。
+-   **潜在的性能问题**：`_gen_cmap_registry` 函数中，对于每个颜色映射，都创建了新的 `Colormap` 实例，这可能会消耗大量内存，尤其是在有大量颜色映射的情况下。
+-   **代码重复**：`_gen_cmap_registry` 函数中，对于灰度颜色映射的别名处理是重复的，这可能导致维护困难。
+
+### 优化建议
+
+-   **改进全局变量和函数的访问控制**：应该明确如何警告或处理对 `_ScalarMappable` 的访问，例如通过日志记录或抛出异常。
+-   **优化颜色映射的生成**：考虑使用更高效的数据结构或算法来存储和访问颜色映射，以减少内存消耗和提高性能。
+-   **减少代码重复**：将灰度颜色映射的别名处理逻辑提取到一个单独的函数中，以减少代码重复并提高可维护性。
+-   **文档和注释**：增加对代码中关键部分的文档和注释，以提高代码的可读性和可维护性。
+-   **异常处理**：在代码中添加适当的异常处理，以处理潜在的错误情况，例如无效的颜色映射名称或类型。
+-   **单元测试**：编写单元测试来验证代码的功能和性能，以确保代码的正确性和稳定性。
+
+
+## 其它
+
+
+### 设计目标与约束
+
+- 设计目标：
+  - 提供一个统一的接口来访问和注册Matplotlib中的颜色映射。
+  - 允许用户通过名称轻松获取预定义的颜色映射。
+  - 允许用户注册自定义颜色映射，以便在Matplotlib中使用。
+  - 保证颜色映射的注册和访问是线程安全的。
+- 约束：
+  - 不能覆盖内置的颜色映射。
+  - 不能移除内置的颜色映射。
+  - 注册的颜色映射必须是`matplotlib.colors.Colormap`的实例。
+
+### 错误处理与异常设计
+
+- 错误处理：
+  - 当尝试注册已存在的颜色映射时，如果`force`参数为`False`，则抛出`ValueError`。
+  - 当尝试移除内置的颜色映射时，抛出`ValueError`。
+  - 当尝试获取不存在的颜色映射时，抛出`KeyError`。
+- 异常设计：
+  - 使用`ValueError`来处理配置错误，如尝试覆盖内置颜色映射或移除内置颜色映射。
+  - 使用`KeyError`来处理不存在的颜色映射。
+  - 使用`TypeError`来处理类型错误，如传递了错误的参数类型。
+
+### 数据流与状态机
+
+- 数据流：
+  - 用户通过名称访问颜色映射。
+  - 用户通过`register`方法注册新的颜色映射。
+  - 用户通过`unregister`方法移除颜色映射。
+- 状态机：
+  - 颜色映射注册状态：颜色映射被注册到注册表中。
+  - 颜色映射未注册状态：颜色映射未被注册到注册表中。
+
+### 外部依赖与接口契约
+
+- 外部依赖：
+  - `matplotlib`库：用于颜色映射的实现。
+  - `collections.abc`：用于`Mapping`接口。
+- 接口契约：
+  - `ColormapRegistry`类必须实现`Mapping`接口。
+  - `register`方法必须接受一个颜色映射实例和一个可选的名称参数。
+  - `unregister`方法必须接受一个颜色映射名称参数。
+  - `get_cmap`方法必须接受一个颜色映射名称或实例参数，并返回相应的颜色映射实例。
+
+    

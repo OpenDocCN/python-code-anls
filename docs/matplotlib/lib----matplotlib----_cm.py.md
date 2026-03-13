@@ -1,71 +1,1087 @@
-# `D:\src\scipysrc\matplotlib\lib\matplotlib\_cm.py`
 
-```py
-"""
-Nothing here but dictionaries for generating LinearSegmentedColormaps,
-and a dictionary of these dictionaries.
+# `matplotlib\lib\matplotlib\_cm.py` 详细设计文档
 
-Documentation for each is in pyplot.colormaps().  Please update this
-with the purpose and type of your colormap if you add data for one here.
-"""
+This file contains dictionaries for generating LinearSegmentedColormaps in matplotlib, providing predefined color palette data for various scientific visualization colormaps including standard colormaps (binary, bone, cool, cubehelix, etc.), ColorBrewer palettes, Gnuplot palettes, Gist palettes, and qualitative palettes for data visualization.
 
-from functools import partial  # 导入 partial 函数，用于创建偏函数
+## 整体流程
 
-import numpy as np  # 导入 NumPy 库，用于数值计算
+```mermaid
+graph TD
+    A[Colormap Data Definition] --> B[Load predefined color data dictionaries]
+    B --> C[Define helper functions for parametric colormaps]
+    C --> D[Generate function lookup table gfunc]
+    D --> E[Build datad dictionary mapping colormap names to data]
+    E --> F[Register colormaps via ColormapRegistry]
+    F --> G[End - Colormaps available for visualization]
+```
 
-_binary_data = {
-    'red':    ((0., 1., 1.), (1., 0., 0.)),  # 红色通道的颜色数据
-    'green':  ((0., 1., 1.), (1., 0., 0.)),  # 绿色通道的颜色数据
-    'blue':   ((0., 1., 1.), (1., 0., 0.))   # 蓝色通道的颜色数据
-    }
+## 类结构
 
-_autumn_data = {'red':   ((0., 1.0, 1.0), (1.0, 1.0, 1.0)),  # 秋季色调中红色通道的颜色数据
-                'green': ((0., 0., 0.), (1.0, 1.0, 1.0)),   # 秋季色调中绿色通道的颜色数据
-                'blue':  ((0., 0., 0.), (1.0, 0., 0.))}     # 秋季色调中蓝色通道的颜色数据
+```
+No class hierarchy - Data-driven module with functions and global variables
+```
 
-_bone_data = {'red':   ((0., 0., 0.),
-                        (0.746032, 0.652778, 0.652778),
-                        (1.0, 1.0, 1.0)),                     # 骨骼色调中红色通道的颜色数据
-              'green': ((0., 0., 0.),
-                        (0.365079, 0.319444, 0.319444),
-                        (0.746032, 0.777778, 0.777778),
-                        (1.0, 1.0, 1.0)),                     # 骨骼色调中绿色通道的颜色数据
-              'blue':  ((0., 0., 0.),
-                        (0.365079, 0.444444, 0.444444),
-                        (1.0, 1.0, 1.0))}                     # 骨骼色调中蓝色通道的颜色数据
+## 全局变量及字段
 
-_cool_data = {'red':   ((0., 0., 0.), (1.0, 1.0, 1.0)),          # 冷色调中红色通道的颜色数据
-              'green': ((0., 1., 1.), (1.0, 0.,  0.)),          # 冷色调中绿色通道的颜色数据
-              'blue':  ((0., 1., 1.), (1.0, 1.,  1.))}          # 冷色调中蓝色通道的颜色数据
 
-_copper_data = {'red':   ((0., 0., 0.),
-                          (0.809524, 1.000000, 1.000000),
-                          (1.0, 1.0, 1.0)),                     # 铜色调中红色通道的颜色数据
-                'green': ((0., 0., 0.),
-                          (1.0, 0.7812, 0.7812)),              # 铜色调中绿色通道的颜色数据
-                'blue':  ((0., 0., 0.),
-                          (1.0, 0.4975, 0.4975))}              # 铜色调中蓝色通道的颜色数据
+### `_binary_data`
+    
+Binary colormap data with simple red/green/blue transitions (black to white)
 
-def _flag_red(x): return 0.75 * np.sin((x * 31.5 + 0.25) * np.pi) + 0.5
-def _flag_green(x): return np.sin(x * 31.5 * np.pi)
-def _flag_blue(x): return 0.75 * np.sin((x * 31.5 - 0.25) * np.pi) + 0.5
-_flag_data = {'red': _flag_red, 'green': _flag_green, 'blue': _flag_blue}  # 国旗色调的颜色数据
+类型：`dict`
+    
 
-def _prism_red(x): return 0.75 * np.sin((x * 20.9 + 0.25) * np.pi) + 0.67
-def _prism_green(x): return 0.75 * np.sin((x * 20.9 - 0.25) * np.pi) + 0.33
-def _prism_blue(x): return -1.1 * np.sin((x * 20.9) * np.pi)
-_prism_data = {'red': _prism_red, 'green': _prism_green, 'blue': _prism_blue}  # 棱柱色调的颜色数据
 
+### `_autumn_data`
+    
+Autumn colormap data transitioning from red to yellow
+
+类型：`dict`
+    
+
+
+### `_bone_data`
+    
+Bone colormap data with blue-white-gray color sequence
+
+类型：`dict`
+    
+
+
+### `_cool_data`
+    
+Cool colormap data transitioning from cyan to magenta
+
+类型：`dict`
+    
+
+
+### `_copper_data`
+    
+Copper colormap data with black-orange-white sequence
+
+类型：`dict`
+    
+
+
+### `_flag_data`
+    
+Flag colormap data using sinusoidal functions for red/green/blue channels
+
+类型：`dict`
+    
+
+
+### `_prism_data`
+    
+Prism colormap data using sinusoidal functions for color cycling
+
+类型：`dict`
+    
+
+
+### `_cubehelix_data`
+    
+Cubehelix colormap data with monotonically increasing perceived brightness
+
+类型：`dict`
+    
+
+
+### `_bwr_data`
+    
+Blue-White-Red (bwr) diverging colormap data tuple
+
+类型：`tuple`
+    
+
+
+### `_brg_data`
+    
+Blue-Red-Green (brg) cyclic colormap data tuple
+
+类型：`tuple`
+    
+
+
+### `_gnuplot_data`
+    
+Gnuplot colormap data combining multiple gfunc functions
+
+类型：`dict`
+    
+
+
+### `_gnuplot2_data`
+    
+Gnuplot2 colormap data with different function mappings
+
+类型：`dict`
+    
+
+
+### `_ocean_data`
+    
+Ocean colormap data with blue-green color sequence
+
+类型：`dict`
+    
+
+
+### `_afmhot_data`
+    
+Afmhot (after hot) colormap data transitioning from black to white via orange
+
+类型：`dict`
+    
+
+
+### `_rainbow_data`
+    
+Rainbow colormap data with multiple function combinations
+
+类型：`dict`
+    
+
+
+### `_seismic_data`
+    
+Seismic diverging colormap data tuple (blue-white-red)
+
+类型：`tuple`
+    
+
+
+### `_terrain_data`
+    
+Terrain colormap data with geographic color stops
+
+类型：`tuple`
+    
+
+
+### `_gray_data`
+    
+Gray colormap data for simple grayscale mapping
+
+类型：`dict`
+    
+
+
+### `_hot_data`
+    
+Hot colormap data transitioning from black through red-yellow to white
+
+类型：`dict`
+    
+
+
+### `_hsv_data`
+    
+HSV colormap data with hue cycling through full spectrum
+
+类型：`dict`
+    
+
+
+### `_jet_data`
+    
+Jet colormap data with blue-cyan-yellow-red color sequence
+
+类型：`dict`
+    
+
+
+### `_pink_data`
+    
+Pink colormap data with extended grayscale through pink tones
+
+类型：`dict`
+    
+
+
+### `_spring_data`
+    
+Spring colormap data with magenta-yellow transition
+
+类型：`dict`
+    
+
+
+### `_summer_data`
+    
+Summer colormap data with green-yellow color sequence
+
+类型：`dict`
+    
+
+
+### `_winter_data`
+    
+Winter colormap data with blue-green color sequence
+
+类型：`dict`
+    
+
+
+### `_nipy_spectral_data`
+    
+Nipy Spectral colormap data with full rainbow spectrum
+
+类型：`dict`
+    
+
+
+### `_Blues_data`
+    
+ColorBrewer Blues sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_BrBG_data`
+    
+ColorBrewer Brown-Blue-Green diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_BuGn_data`
+    
+ColorBrewer Blue-Green sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_BuPu_data`
+    
+ColorBrewer Blue-Purple sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_GnBu_data`
+    
+ColorBrewer Green-Blue sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_Greens_data`
+    
+ColorBrewer Greens sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_Greys_data`
+    
+ColorBrewer Greys sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_Oranges_data`
+    
+ColorBrewer Oranges sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_OrRd_data`
+    
+ColorBrewer Orange-Red sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_PiYG_data`
+    
+ColorBrewer Pink-Yellow-Green diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_PRGn_data`
+    
+ColorBrewer Purple-Green diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_PuBu_data`
+    
+ColorBrewer Purple-Blue sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_PuBuGn_data`
+    
+ColorBrewer Purple-Blue-Green sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_PuOr_data`
+    
+ColorBrewer Purple-Orange diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_PuRd_data`
+    
+ColorBrewer Purple-Red sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_Purples_data`
+    
+ColorBrewer Purples sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_RdBu_data`
+    
+ColorBrewer Red-Blue diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_RdGy_data`
+    
+ColorBrewer Red-Gray diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_RdPu_data`
+    
+ColorBrewer Red-Purple sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_RdYlBu_data`
+    
+ColorBrewer Red-Yellow-Blue diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_RdYlGn_data`
+    
+ColorBrewer Red-Yellow-Green diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_Reds_data`
+    
+ColorBrewer Reds sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_Spectral_data`
+    
+ColorBrewer Spectral diverging colormap data
+
+类型：`tuple`
+    
+
+
+### `_wistia_data`
+    
+Wistia colorblind-friendly heatmap colormap data
+
+类型：`dict`
+    
+
+
+### `_YlGn_data`
+    
+ColorBrewer Yellow-Green sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_YlGnBu_data`
+    
+ColorBrewer Yellow-Green-Blue sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_YlOrBr_data`
+    
+ColorBrewer Yellow-Orange-Brown sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_YlOrRd_data`
+    
+ColorBrewer Yellow-Orange-Red sequential colormap data
+
+类型：`tuple`
+    
+
+
+### `_Accent_data`
+    
+ColorBrewer Accent qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Dark2_data`
+    
+ColorBrewer Dark2 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_okabe_ito_data`
+    
+Okabe-Ito colorblind-friendly qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Paired_data`
+    
+ColorBrewer Paired qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Pastel1_data`
+    
+ColorBrewer Pastel1 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Pastel2_data`
+    
+ColorBrewer Pastel2 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Set1_data`
+    
+ColorBrewer Set1 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Set2_data`
+    
+ColorBrewer Set2 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_Set3_data`
+    
+ColorBrewer Set3 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_tab10_data`
+    
+Tableau10 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_tab20_data`
+    
+Tableau20 qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_tab20b_data`
+    
+Tableau20b qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_tab20c_data`
+    
+Tableau20c qualitative colormap data
+
+类型：`tuple`
+    
+
+
+### `_gist_earth_data`
+    
+Gist Earth colormap data with earth-tone colors
+
+类型：`dict`
+    
+
+
+### `_gist_gray_data`
+    
+Gist Gray colormap data using gfunc for grayscale
+
+类型：`dict`
+    
+
+
+### `_gist_heat_data`
+    
+Gist Heat colormap data with linear functions
+
+类型：`dict`
+    
+
+
+### `_gist_ncar_data`
+    
+Gist NCAR colormap data with complex color transitions
+
+类型：`dict`
+    
+
+
+### `_gist_rainbow_data`
+    
+Gist Rainbow colormap data with color stops
+
+类型：`tuple`
+    
+
+
+### `_gist_stern_data`
+    
+Gist Stern colormap data with unique color sequence
+
+类型：`dict`
+    
+
+
+### `_gist_yarg_data`
+    
+Gist Yarg colormap data (inverted grayscale)
+
+类型：`dict`
+    
+
+
+### `_coolwarm_data`
+    
+Coolwarm diverging colormap data from Kenneth Moreland
+
+类型：`dict`
+    
+
+
+### `_CMRmap_data`
+    
+CMRmap colormap data for effective black-and-white rendering
+
+类型：`dict`
+    
+
+
+### `_petroff6_data`
+    
+Petroff 6-color accessible colormap data
+
+类型：`tuple`
+    
+
+
+### `_petroff8_data`
+    
+Petroff 8-color accessible colormap data
+
+类型：`tuple`
+    
+
+
+### `_petroff10_data`
+    
+Petroff 10-color accessible colormap data
+
+类型：`tuple`
+    
+
+
+### `gfunc`
+    
+Dictionary mapping indices 0-36 to gnuplot palette functions (_g0 through _g36)
+
+类型：`dict`
+    
+
+
+### `datad`
+    
+Main registry dictionary containing all colormap data indexed by name
+
+类型：`dict`
+    
+
+
+    
+
+## 全局函数及方法
+
+
+
+### `_flag_red`
+
+此函数是Matplotlib中用于生成"flag"彩色映射（colormap）的红色通道值的内部函数。它接受一个归一化值x（通常在0到1之间），通过正弦函数计算并返回对应的红色强度值，用于创建周期性变化的红色带状效果。
+
+参数：
+
+-  `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在0到1之间），代表颜色映射中的位置
+
+返回值：`float` 或 `numpy.ndarray`，计算得到的红色通道值，范围约为[-0.25, 1.25]
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C[计算 inner = x * 31.5 + 0.25]
+    C --> D[计算 inner_pi = inner * π]
+    D --> E[计算 sin_value = np.sin inner_pi]
+    E --> F[计算 result = 0.75 * sin_value + 0.5]
+    F --> G[返回 result]
+```
+
+#### 带注释源码
+
+```python
+def _flag_red(x): 
+    """
+    Flag colormap的红色通道生成函数。
+    
+    使用正弦函数生成周期性的红色强度变化，周期约为 1/31.5。
+    
+    参数:
+        x (float 或 numpy.ndarray): 归一化的输入值，通常范围为 [0, 1]
+        
+    返回:
+        float 或 numpy.ndarray: 红色通道值，范围约为 [-0.25, 1.25]
+    """
+    # 步骤1: 将输入值乘以31.5并加上0.25，得到内部角度偏移
+    # 步骤2: 乘以π转换为弧度
+    # 步骤3: 计算正弦值（产生周期性变化）
+    # 步骤4: 乘以0.75进行缩放（振幅控制）
+    # 步骤5: 加上0.5进行平移（偏移控制）
+    return 0.75 * np.sin((x * 31.5 + 0.25) * np.pi) + 0.5
+```
+
+
+
+### `_flag_green`
+
+该函数是"flag"颜色映射的绿色通道计算函数，通过正弦波生成绿通道的梯度变化值，用于构建旗帜风格的连续色彩映射。
+
+参数：
+
+- `x`：`float` 或 `ndarray`，输入值，表示色彩映射中的位置（通常在0到1之间）
+
+返回值：`float` 或 `ndarray`，对应的绿色通道颜色值（范围约在-1到1之间，会被映射到有效RGB范围）
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入参数 x]
+    B --> C[计算 x * 31.5 * π]
+    C --> D[计算 sin 结果]
+    D --> E[返回绿通道颜色值]
+```
+
+#### 带注释源码
+
+```python
+def _flag_green(x):
+    """
+    计算flag颜色映射的绿色通道值。
+    
+    Parameters
+    ----------
+    x : float or ndarray
+        输入值，通常为0到1之间的色彩映射位置
+    
+    Returns
+    -------
+    float or ndarray
+        绿色通道的颜色值，范围约在[-1, 1]之间
+    """
+    # 使用正弦函数生成绿通道梯度，31.5 * π 产生约15.5个完整周期的波形
+    # 这种高频振荡创造了flag图案的典型条纹效果
+    return np.sin(x * 31.5 * np.pi)
+```
+
+
+
+### `_flag_blue`
+
+该函数是"flag"颜色映射的蓝色通道生成函数，通过正弦波计算给定位置x对应的蓝色通道强度值，用于创建周期性变化的蓝色渐变效果。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在0到1之间，表示颜色映射中的位置（归一化值）
+
+返回值：`float` 或 `numpy.ndarray`，蓝色通道的强度值，范围约为0.125到0.875
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入x值]
+    B --> C[计算内部表达式: x * 31.5 - 0.25]
+    C --> D[乘以π: result * π]
+    D --> E[计算sin函数: sin(result)]
+    E --> F[乘以系数0.75]
+    F --> G[加上偏移0.5]
+    G --> H[返回蓝色通道强度值]
+    H --> I[结束]
+```
+
+#### 带注释源码
+
+```python
+def _flag_blue(x):
+    """
+    生成flag颜色映射的蓝色通道值。
+    
+    该函数使用正弦函数创建周期性的蓝色强度变化，
+    周期约为31.5个单位，通过相位偏移-0.25实现与红、绿通道的协调。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常在0到1之间，表示颜色映射中的归一化位置。
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        蓝色通道的强度值，范围约为[0.125, 0.875]。
+    
+    Examples
+    --------
+    >>> _flag_blue(0.0)
+    0.75*sin(-0.25*π) + 0.5 ≈ 0.125
+    >>> _flag_blue(0.5)
+    0.75*sin(15.5*π) + 0.5 ≈ 0.5
+    >>> _flag_blue(1.0)
+    0.75*sin(31.25*π) + 0.5 ≈ 0.875
+    """
+    # 计算: 0.75 * sin((x * 31.5 - 0.25) * π) + 0.5
+    # 系数0.75控制振幅，使输出范围在0.125到0.875之间
+    # 31.5决定周期性，-0.25提供相位偏移，+0.5提供基准偏移
+    return 0.75 * np.sin((x * 31.5 - 0.25) * np.pi) + 0.5
+```
+
+
+
+### `_prism_red`
+
+该函数是一个全局数学函数，用于生成 Matplotlib 的 'prism' 颜色映射表（Colormap）的红色通道数据。它接受一个归一化的输入值 `x`，通过特定的正弦波数学公式计算对应的红色强度值。
+
+参数：
+
+-  `x`：`float` 或 `numpy.ndarray`，归一化的输入值，通常在 0 到 1 之间，代表颜色映射的当前位置。
+
+返回值：`float` 或 `numpy.ndarray`，计算得出的红色通道强度值（通常也在 0 到 1 之间，但公式未做硬性限制，可能产生超出范围的值，后续会被映射处理）。
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B[计算 x * 20.9]
+    B --> C[加上 0.25]
+    C --> D[乘以 π]
+    D --> E[计算 sin]
+    E --> F[乘以 0.75]
+    F --> G[加上 0.67]
+    G --> H[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _prism_red(x):
+    """
+    计算 prism 颜色映射的红色通道分量。
+    
+    Parameters
+    ----------
+    x : float or array-like
+        归一化的输入值 (范围通常为 [0, 1])。
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        红色通道的强度值。
+    """
+    # 公式分解：0.75 * sin((x * 20.9 + 0.25) * π) + 0.67
+    # 1. 输入值乘以频率因子 20.9
+    # 2. 加上相位偏移 0.25
+    # 3. 乘以 π 将角度转换为弧度
+    # 4. 计算正弦值
+    # 5. 乘以幅度 0.75 进行缩放
+    # 6. 加上基准偏移 0.67
+    return 0.75 * np.sin((x * 20.9 + 0.25) * np.pi) + 0.67
+```
+
+
+
+### `_prism_green`
+
+该函数是 Matplotlib 中 prism 颜色映射的绿色通道生成函数，通过正弦波运算将输入的归一化值转换为对应的绿色通道颜色值，实现光谱色的绿色部分渐变效果。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在 0 到 1 之间），表示颜色映射中的位置
+
+返回值：`float` 或 `numpy.ndarray`，计算得到的绿色通道颜色值（范围大约在 -0.08 到 0.92 之间）
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入参数 x]
+    B --> C[计算内部表达式: x * 20.9 - 0.25]
+    C --> D[乘以 π: (x * 20.9 - 0.25) * π]
+    D --> E[计算正弦: sin(result)]
+    E --> F[乘以系数 0.75]
+    F --> G[加上偏移量 0.33]
+    G --> H[返回绿色通道值]
+```
+
+#### 带注释源码
+
+```python
+def _prism_green(x):
+    """
+    生成 prism 颜色映射的绿色通道值。
+    
+    该函数使用正弦函数创建周期性的绿色渐变，
+    通过调整频率、相位和振幅来实现独特的颜色效果。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        归一化的输入值，通常在 [0, 1] 范围内，
+        表示颜色映射中的位置
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        绿色通道的颜色值，范围约为 [-0.08, 0.92]
+    """
+    # 计算正弦波：
+    # 1. x * 20.9: 频率因子，20.9 个完整周期覆盖整个 [0,1] 范围
+    # 2. - 0.25: 相位偏移，调整颜色带的位置
+    # 3. * np.pi: 转换为弧度
+    # 4. np.sin(): 计算正弦值，输出范围 [-1, 1]
+    # 5. * 0.75: 缩放振幅至 [-0.75, 0.75]
+    # 6. + 0.33: 添加偏移，最终范围 [-0.42, 1.08]
+    # 实际有效范围受限于 [0, 1]
+    return 0.75 * np.sin((x * 20.9 - 0.25) * np.pi) + 0.33
+```
+
+
+
+### `_prism_blue`
+
+该函数是 matplotlib 中 prism 颜色映射的蓝色通道生成函数，通过正弦波运算将归一化的输入值转换为蓝色强度值，用于构建渐变色板。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，归一化的颜色位置值（0 到 1 之间的数值，表示颜色映射中的位置）
+
+返回值：`float` 或 `numpy.ndarray`，蓝色通道的强度值（经过正弦变换后的数值）
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x 值]
+    B --> C[计算 x * 20.9]
+    C --> D[计算 (x * 20.9) * π]
+    D --> E[计算 sin((x * 20.9) * π)]
+    E --> F[计算 -1.1 * sin(...)]
+    F --> G[返回蓝色通道强度值]
+```
+
+#### 带注释源码
+
+```python
+def _prism_blue(x):
+    """
+    生成 prism 颜色映射的蓝色通道值。
+
+    该函数使用正弦函数创建周期性的蓝色强度变化，
+    通过调整系数实现特定的色彩循环模式。
+
+    参数:
+        x: 归一化的输入值，范围 [0, 1]，表示颜色映射中的位置
+
+    返回:
+        蓝色通道的强度值，范围约为 [-1.1, 1.1]
+    """
+    # 计算蓝色通道值：-1.1 * sin(x * 20.9 * π)
+    # 20.9 控制周期数（约 10.45 个完整周期）
+    # -1.1 是振幅因子，用于调整颜色强度范围
+    return -1.1 * np.sin((x * 20.9) * np.pi)
+```
+
+
+
+### `_ch_helper`
+
+生成可序列化的cubehelix颜色映射的辅助函数，用于计算给定输入值x对应的RGB颜色分量值。
+
+参数：
+
+- `gamma`：`float`，伽马因子，用于强调低强度值(gamma < 1)或高强度值(gamma > 1)
+- `s`：`float`，起始颜色参数，控制颜色的起始色调
+- `r`：`float`，旋转参数，控制从起始到结束颜色方案中r、g、b的旋转次数
+- `h`：`float`，色调参数，控制颜色的饱和度，零值时为灰度
+- `p0`：`float`，余弦项的系数，用于调整颜色偏移
+- `p1`：`float`，正弦项的系数，用于调整颜色偏移
+- `x`：`float`或`numpy.ndarray`，输入值，范围在0到1之间
+
+返回值：`float`或`numpy.ndarray`，计算得到的RGB颜色分量值
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入参数 gamma, s, r, h, p0, p1, x]
+    B --> C[计算 xg = x ** gamma]
+    C --> D[计算振幅 a = h * xg * (1 - xg) / 2]
+    D --> E[计算角度 phi = 2 * π * (s / 3 + r * x)]
+    E --> F[计算返回值: xg + a * (p0 * cos(phi) + p1 * sin(phi))]
+    F --> G[返回计算结果]
+```
+
+#### 带注释源码
+
+```python
 def _ch_helper(gamma, s, r, h, p0, p1, x):
-    """Helper function for generating picklable cubehelix colormaps."""
-    # Apply gamma factor to emphasise low or high intensity values
-    xg = x ** gamma  # 应用 gamma 值来强调低或高强度值
-    # Calculate amplitude and angle of deviation from the black to white
-    # diagonal in the plane of constant perceived intensity.
-    a = h * xg * (1 - xg) / 2  # 计算从黑色到白色对角线的振幅和偏离角度
-    phi = 2 * np.pi * (s / 3 + r * x)  # 角度 phi 的计算
-    return xg + a * (p0 * np.cos(phi) + p1 * np.sin(phi))  # 返回计算结果
+    """
+    Helper function for generating picklable cubehelix colormaps.
+    
+    该函数是cubehelix颜色映射生成的核心计算函数，通过数学公式
+    计算在保持感知亮度单调性的前提下，为给定输入值x生成对应的
+    RGB颜色分量值。
+    
+    参数:
+        gamma: 伽马因子，用于调整颜色映射的对比度
+        s: 起始颜色参数
+        r: 旋转参数，控制颜色循环
+        h: 色调参数，控制饱和度
+        p0: 余弦分量系数
+        p1: 正弦分量系数
+        x: 输入值（0-1范围）
+    
+    返回:
+        计算得到的RGB颜色值
+    """
+    # 应用伽马因子来强调低强度或高强度值
+    # 伽马值小于1强调低强度，大于1强调高强度
+    xg = x ** gamma
+    
+    # 计算在恒定感知强度平面中偏离黑-白对角线的振幅和角度
+    # 使用抛物线形状使颜色变化平滑
+    a = h * xg * (1 - xg) / 2
+    
+    # 计算相位角，包含起始角度和旋转变化
+    # s/3 提供起始角度偏移，r*x 提供线性旋转
+    phi = 2 * np.pi * (s / 3 + r * x)
+    
+    # 最终返回结合了灰度分量和颜色偏移的RGB值
+    # 基础值为 xg（灰度），加上由振幅和三角函数计算的颜色偏移
+    return xg + a * (p0 * np.cos(phi) + p1 * np.sin(phi))
+```
 
+
+
+### `cubehelix`
+
+该函数生成并返回 cubehelix 色彩方案的自定义数据字典，包含红、绿、蓝三通道的转换函数，可用于创建单调递增且在黑白打印时也能呈现良好灰度效果的彩色映射。
+
+参数：
+
+- `gamma`：`float`，默认值 1.0，伽马因子，用于调节强调低强度值（gamma < 1）或高强度值（gamma > 1）的效果
+- `s`：`float`，默认值 0.5，色彩方案的起始颜色参数
+- `r`：`float`，默认值 -1.5，从起始到结束色彩方案中 r、g、b 的旋转次数，默认值 -1.5 对应 B -> G -> R -> B 的循环
+- `h`：`float`，默认值 1.0，色调参数，控制颜色的饱和度；为零时色彩方案为纯灰度
+
+返回值：`dict`，包含 'red'、'green'、'blue' 三个键的字典，每个键对应一个使用 `functools.partial` 部分应用后的 `_ch_helper` 函数
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始 cubehelix] --> B[接收参数 gamma, s, r, h]
+    B --> C[创建 red 通道部分函数<br/>partial&#95;ch_helper<br/>gamma, s, r, h, -0.14861, 1.78277]
+    C --> D[创建 green 通道部分函数<br/>partial&#95;ch_helper<br/>gamma, s, r, h, -0.29227, -0.90649]
+    D --> E[创建 blue 通道部分函数<br/>partial&#95;ch_helper<br/>gamma, s, r, h, 1.97294, 0.0]
+    E --> F[返回包含三个通道函数的字典<br/>{'red': ..., 'green': ..., 'blue': ...}]
+```
+
+#### 带注释源码
+
+```python
 def cubehelix(gamma=1.0, s=0.5, r=-1.5, h=1.0):
     """
     Return custom data dictionary of (r, g, b) conversion functions, which can
@@ -73,1228 +1089,2173 @@ def cubehelix(gamma=1.0, s=0.5, r=-1.5, h=1.0):
 
     Unlike most other color schemes cubehelix was designed by D.A. Green to
     be monotonically increasing in terms of perceived brightness.
+    Also, when printed on a black and white postscript printer, the scheme
+    results in a greyscale with monotonically increasing brightness.
+    This color scheme is named cubehelix because the (r, g, b) values produced
+    can be visualised as a squashed helix around the diagonal in the
+    (r, g, b) color cube.
+
+    For a unit color cube (i.e. 3D coordinates for (r, g, b) each in the
+    range 0 to 1) the color scheme starts at (r, g, b) = (0, 0, 0), i.e. black,
+    and finishes at (r, g, b) = (1, 1, 1), i.e. white. For some fraction *x*,
+    between 0 and 1, the color is the corresponding grey value at that
+    fraction along the black to white diagonal (x, x, x) plus a color
+    element. This color element is calculated in a plane of constant
+    perceived intensity and controlled by the following parameters.
+
+    Parameters
+    ----------
+    gamma : float, default: 1
+        Gamma factor emphasizing either low intensity values (gamma < 1), or
+        high intensity values (gamma > 1).
+    s : float, default: 0.5 (purple)
+        The starting color.
+    r : float, default: -1.5
+        The number of r, g, b rotations in color that are made from the start
+        to the end of the color scheme.  The default of -1.5 corresponds to ->
+        B -> G -> R -> B.
+    h : float, default: 1
+        The hue, i.e. how saturated the colors are. If this parameter is zero
+        then the color scheme is purely a greyscale.
     """
-    # 返回一个字典，包含颜色通道名称到颜色生成函数的部分应用
-    return {'red': partial(_ch_helper, gamma, s, r, h, -0.14861, 1.78277),
-            'green': partial(_ch_helper, gamma, s, r, h, -0.29227, -0.90649),
-            'blue': partial(_ch_helper, gamma, s, r, h, 1.97294, 0.0)}
-# 定义 cubehelix 调色板数据
-_cubehelix_data = cubehelix()
+    # 使用 functools.partial 预填充 _ch_helper 函数的前六个参数
+    # _ch_helper 的完整签名: gamma, s, r, h, p0, p1, x
+    # 其中 p0 和 p1 是特定于每个颜色通道的系数
+    return {
+        'red': partial(_ch_helper, gamma, s, r, h, -0.14861, 1.78277),
+        'green': partial(_ch_helper, gamma, s, r, h, -0.29227, -0.90649),
+        'blue': partial(_ch_helper, gamma, s, r, h, 1.97294, 0.0)
+    }
+```
 
-# 定义两种预定义的调色板数据
-_bwr_data = ((0.0, 0.0, 1.0), (1.0, 1.0, 1.0), (1.0, 0.0, 0.0))
-_brg_data = ((0.0, 0.0, 1.0), (1.0, 0.0, 0.0), (0.0, 1.0, 0.0))
 
-# Gnuplot 调色板函数定义
+
+### `_g0`
+
+此函数是Gnuplot调色板函数集中的一个简单辅助函数，用于生成调色板数据。它接收一个参数x（归一化的输入值），始终返回0。
+
+参数：
+
+- `x`：`float`或`numpy.ndarray`，输入的归一化值（通常在0到1之间）
+
+返回值：`int`或`numpy.ndarray`，始终返回0
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[接收输入 x]
+    B --> C[返回常量值 0]
+    C --> D[结束]
+```
+
+#### 带注释源码
+
+```python
 def _g0(x): return 0
-def _g1(x): return 0.5
-def _g2(x): return 1
-def _g3(x): return x
-def _g4(x): return x ** 2
-def _g5(x): return x ** 3
-def _g6(x): return x ** 4
-def _g7(x): return np.sqrt(x)
-def _g8(x): return np.sqrt(np.sqrt(x))
-def _g9(x): return np.sin(x * np.pi / 2)
-def _g10(x): return np.cos(x * np.pi / 2)
-def _g11(x): return np.abs(x - 0.5)
-def _g12(x): return (2 * x - 1) ** 2
-def _g13(x): return np.sin(x * np.pi)
-def _g14(x): return np.abs(np.cos(x * np.pi))
-def _g15(x): return np.sin(x * 2 * np.pi)
-def _g16(x): return np.cos(x * 2 * np.pi)
-def _g17(x): return np.abs(np.sin(x * 2 * np.pi))
-def _g18(x): return np.abs(np.cos(x * 2 * np.pi))
-def _g19(x): return np.abs(np.sin(x * 4 * np.pi))
-def _g20(x): return np.abs(np.cos(x * 4 * np.pi))
-def _g21(x): return 3 * x
-def _g22(x): return 3 * x - 1
-def _g23(x): return 3 * x - 2
-def _g24(x): return np.abs(3 * x - 1)
-def _g25(x): return np.abs(3 * x - 2)
-def _g26(x): return (3 * x - 1) / 2
-def _g27(x): return (3 * x - 2) / 2
-def _g28(x): return np.abs((3 * x - 1) / 2)
-def _g29(x): return np.abs((3 * x - 2) / 2)
-def _g30(x): return x / 0.32 - 0.78125
-def _g31(x): return 2 * x - 0.84
+"""
+Gnuplot调色板辅助函数 - 恒定函数
+参数:
+    x: 输入值，可以是单个浮点数或numpy数组
+返回:
+    始终返回0，用于创建全零通道的调色板数据
+该函数是gfunc字典中37个Gnuplot调色板生成函数之一，
+用于组合构建不同的colormap配置。
+"""
+```
 
-# 定义 Gnuplot 调色板函数列表
+### 相关上下文信息
+
+#### 关键组件
+
+- **gfunc 字典**：包含37个（_g0到_g36）调色板生成函数的字典，用于动态构建各种Gnuplot风格的颜色映射
+- **_gnuplot_data**：使用gfunc函数组合成的Gnuplot默认调色板数据
+
+#### 技术债务与优化空间
+
+1. **代码可读性**：函数采用单行lambda风格定义（`def _g0(x): return 0`），虽然简洁但缺乏文档注释
+2. **重复模式**：多个简单函数（_g0到_g36）存在大量相似模式，可考虑使用工厂函数或 functools.partial 生成
+3. **全局变量依赖**：gfunc字典使用`globals()[f"_g{i}"]`动态构建，这种魔法方式降低了代码可维护性
+
+#### 数据流说明
+
+此函数作为调色板数据生成流水线的基础组件：
+
+1. 输入：归一化值x（0-1范围）
+2. 处理：通过简单数学变换生成颜色通道值
+3. 输出：作为RGB通道的某个分量值，最终被`_gnuplot_data`等字典组合成完整调色板
+
+
+
+### `_g1`
+
+这是一个简单的常量函数，用于Gnuplot调色板生成。无论输入值如何，均返回固定值0.5。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常为0到1之间的归一化值
+
+返回值：`float` 或 `numpy.ndarray`，返回常量值0.5
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[接收输入 x]
+    B --> C{输入类型判断}
+    C -->|单个值| D[返回 0.5]
+    C -->|numpy数组| E[对每个元素返回 0.5]
+    D --> F[结束]
+    E --> F
+```
+
+#### 带注释源码
+
+```python
+def _g1(x):
+    """
+    Gnuplot调色板常量函数 - 始终返回0.5
+    
+    该函数是Gnuplot调色板生成系统的一部分（_g0到_g36系列函数），
+    用于定义颜色映射中的红色通道值。在这个特定的函数中，
+    它返回固定的0.5，不考虑输入值的变化。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常为0到1之间的归一化值（表示颜色映射中的位置）
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        返回常量值0.5
+    
+    Examples
+    --------
+    >>> _g1(0.0)
+    0.5
+    >>> _g1(0.5)
+    0.5
+    >>> _g1(1.0)
+    0.5
+    """
+    return 0.5
+```
+
+
+
+### `_g2`
+
+这是一个简单的 GNUPlot 调色板辅助函数，用于返回常数 1。
+
+参数：
+
+-  `x`：`float` 或 `numpy.ndarray`，输入值（通常为 0 到 1 之间的归一化值）
+
+返回值：`float` 或 `int` 或 `numpy.ndarray`，返回常数 1
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[接收输入 x]
+    B --> C[返回常数 1]
+    C --> D[结束]
+```
+
+#### 带注释源码
+
+```python
+def _g2(x):
+    """
+    GNUPlot 调色板辅助函数，返回常数 1。
+    
+    此函数是 gfunc 字典中定义的一系列调色板函数之一（索引为 2），
+    用于生成 GNUPlot 风格的颜色映射。通过返回常数 1，该函数
+    可以在颜色映射中创建平坦的颜色段。
+    
+    参数
+    ----------
+    x : float 或 numpy.ndarray
+        输入值，通常为 0 到 1 之间的归一化数值。
+        该值在此函数中未被使用。
+    
+    返回
+    ------
+    int 或 numpy.ndarray
+        返回常数 1。如果输入是 numpy 数组，则返回同形状的全 1 数组。
+    """
+    return 1
+```
+
+
+
+### `_g3`
+
+该函数是Gnuplot调色板函数集中的恒等函数，直接返回输入值x，不进行任何变换。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在0到1之间）
+
+返回值：`float` 或 `numpy.ndarray`，返回与输入相同的值
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B{_g3 函数}
+    B --> C[返回值: x]
+```
+
+#### 带注释源码
+
+```python
+def _g3(x):
+    """
+    Gnuplot调色板恒等函数。
+    
+    该函数是Gnuplot调色板函数集中的第4个函数（索引为3），
+    直接返回输入值，不进行任何变换。
+    在创建LinearSegmentedColormap时用作红色通道的映射函数。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        归一化的输入值，通常在0到1之间
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        返回与输入相同的值
+    """
+    return x
+```
+
+
+
+### `_g4`
+
+该函数是 GNUplot 调色板生成函数集中的成员之一，接收一个数值 `x` 并返回其平方值 (`x²`)，常用于构建线性分段颜色映射的蓝色通道数据。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常为归一化到 [0, 1] 区间的数值
+
+返回值：`float` 或 `numpy.ndarray`，输入值的平方
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B{计算 x²}
+    B --> C[输出 x²]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e9
+```
+
+#### 带注释源码
+
+```python
+def _g4(x):
+    """
+    GNUplot 调色板辅助函数 - 平方函数
+    
+    该函数是 GNUplot 调色板函数集合 (gfunc) 的一部分,
+    用于生成非线性颜色映射。具体用途见 _gnuplot_data 字典定义。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入的归一化数值 (通常在 0 到 1 之间)
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        输入值的平方 (x²)
+    
+    Examples
+    --------
+    >>> _g4(0.5)
+    0.25
+    >>> _g4([0, 0.5, 1])
+    array([0.  , 0.25, 1.  ])
+    """
+    return x ** 2
+```
+
+
+
+### `_g5`
+
+该函数是 Gnuplot 调色板函数之一，计算输入值的立方（即 x³），用于生成非线性颜色映射。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在 0 到 1 之间
+
+返回值：`float` 或 `numpy.ndarray`，输入值的立方结果
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[接收输入 x]
+    B --> C{判断输入类型}
+    C -->|单个浮点数| D[计算 x ** 3]
+    C -->|numpy数组| E[对数组中每个元素计算 x ** 3]
+    D --> F[返回结果]
+    E --> F
+```
+
+#### 带注释源码
+
+```python
+def _g5(x):
+    """
+    Gnuplot 调色板函数：计算输入值的立方
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常在 0 到 1 范围内
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        输入值的立方 (x³)
+    
+    Notes
+    -----
+    此函数是 gfunc 字典中定义的 37 个调色板函数之一（索引为 5）。
+    用于生成非线性颜色映射，通过立方运算增强低值区域的颜色变化。
+    """
+    return x ** 3
+```
+
+
+
+### _g6
+
+这是一个Gnuplot调色板函数，用于对输入值进行四次方变换，常用于生成非线性的颜色映射。
+
+参数：
+
+- `x`：float 或 numpy array，输入值，通常在0到1之间
+
+返回值：float 或 numpy array，输入值的四次方（x⁴）
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[接收输入x]
+    B --> C{判断x类型}
+    C -->|单个数值| D[计算x ** 4]
+    C -->|numpy数组| E[对数组中每个元素计算x ** 4]
+    D --> F[返回结果]
+    E --> F
+```
+
+#### 带注释源码
+
+```python
+def _g6(x): return x ** 4
+"""
+Gnuplot调色板函数 - 四次方变换
+
+参数:
+    x: float或numpy array，输入值，通常在0到1之间
+    
+返回:
+    float或numpy array，输入值的四次方
+    
+用途:
+    用于生成非线性的颜色映射，使较低值的变化更加细腻
+    常见于科学可视化的颜色渐变设计中
+"""
+```
+
+
+
+### `_g7`
+
+该函数是一个简单的数学函数，计算输入值的平方根。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值（通常为0到1之间的数值）
+
+返回值：`float` 或 `numpy.ndarray`，输入值的平方根
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[接收输入 x]
+    B --> C{计算 sqrtx}
+    C --> D[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g7(x):
+    """
+    计算输入值的平方根。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常为0到1之间的数值
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        输入值的平方根
+    """
+    return np.sqrt(x)  # 使用numpy的sqrt函数计算平方根
+```
+
+
+
+### `_g8`
+
+该函数是一个 GNUplot 调色板辅助函数，用于计算输入值的四次方根（即平方根的平方根），在生成 colormap 时提供非线性映射。
+
+参数：
+
+- `x`：`float 或 numpy.ndarray`，输入值，通常为归一化的颜色强度值（0 到 1 之间）
+
+返回值：`float 或 numpy.ndarray`，输入值的四次方根
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C[计算 sqrt x]
+    C --> D[再次计算 sqrt]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g8(x):
+    """
+    GNUplot palette function: computes the fourth root of the input.
+    
+    This function applies a square root transformation twice, 
+    creating a smooth non-linear mapping useful for color palette
+    generation. It emphasizes lower intensity values while 
+    compressing the higher end of the range.
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        Input value(s), typically normalized between 0 and 1.
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        Fourth root of input: sqrt(sqrt(x))
+    """
+    return np.sqrt(np.sqrt(x))
+```
+
+
+
+### `_g9`
+
+该函数是 Gnuplot 调色板函数之一，用于计算 sin(x * π / 2) 的值，常用于生成颜色映射中的红色通道数据。
+
+参数：
+
+- `x`：float 或 numpy.ndarray，输入值，通常在 0 到 1 之间，表示颜色映射中的位置
+
+返回值：float 或 numpy.ndarray，返回 sin(x * π / 2) 的计算结果，值域在 0 到 1 之间
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入参数 x]
+    B --> C[计算 x * π / 2]
+    C --> D[计算 sin 结果]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g9(x):
+    """
+    Gnuplot 调色板函数 - 计算 sin(x * π / 2)
+    
+    该函数是 matplotlib 中定义的 37 个 Gnuplot 调色板函数之一（_g0 到 _g36），
+    用于生成颜色映射中的颜色值。具体来说，_g9 被用作 gnuplot 调色板的红色通道。
+    
+    参数:
+        x: float 或 numpy.ndarray
+            输入值，通常在 0 到 1 之间，代表颜色映射中的位置
+            
+    返回:
+        float 或 numpy.ndarray
+            sin(x * π / 2) 的结果，值域在 [0, 1] 之间
+    """
+    return np.sin(x * np.pi / 2)  # 计算正弦值，将输入值映射到 [0, 1] 区间
+```
+
+
+
+### `_g10`
+
+这是一个Gnuplot调色板函数，用于生成颜色映射中的蓝色通道值。它接受一个0到1之间的归一化参数x，返回x乘以π/2后的余弦值。该函数是matplotlib颜色映射系统中的一部分，用于定义非线性颜色渐变。
+
+参数：
+
+- `x`：`float`，输入的归一化值，范围在0到1之间，代表颜色映射中的位置
+
+返回值：`float`，返回余弦计算结果，范围在0到1之间
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入参数x<br/>类型: float<br/>范围: 0到1]
+    B --> C[计算 x \* π / 2]
+    C --> D[计算 cos(x \* π / 2)]
+    D --> E[返回结果<br/>类型: float<br/>范围: 0到1]
+    E --> F[结束]
+```
+
+#### 带注释源码
+
+```python
+def _g10(x):
+    """
+    Gnuplot调色板函数 - 蓝色通道生成器
+    
+    该函数是matplotlib中Gnuplot调色板的蓝色通道定义函数之一。
+    通过余弦函数生成非线性颜色渐变，用于数据可视化中的颜色映射。
+    
+    参数:
+        x: float类型的归一化输入值，范围0到1
+        
+    返回值:
+        float类型的余弦计算结果，范围0到1
+    """
+    return np.cos(x * np.pi / 2)  # 计算x乘以π/2后的余弦值
+```
+
+
+
+### `_g11`
+
+该函数是 Gnuplot 调色板函数之一，用于计算输入值与 0.5 的绝对差，生成一个 V 形曲线，在 x=0.5 处返回 0，向两端线性增加到 0.5。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在 0 到 1 之间）
+
+返回值：`float` 或 `numpy.ndarray`，返回 `|x - 0.5|` 的结果
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入 x]
+    B --> C{计算 x - 0.5}
+    C --> D[取绝对值]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g11(x):
+    """
+    Gnuplot palette function: absolute difference from 0.5.
+    
+    This function creates a V-shaped curve that is 0 at x=0.5
+    and increases linearly to 0.5 at the boundaries (x=0 and x=1).
+    Commonly used in the gnuplot colormap for generating
+    perceptually uniform color gradients.
+    
+    Parameters
+    ----------
+    x : float or ndarray
+        Input value(s) in the range [0, 1]
+    
+    Returns
+    -------
+    float or ndarray
+        The absolute difference between x and 0.5
+    """
+    return np.abs(x - 0.5)
+```
+
+
+
+### `_g12`
+
+该函数是 Gnuplot 调色板中的一个颜色映射函数，通过二次变换 `(2x - 1)²` 将输入的归一化值（0 到 1）转换为抛物线形状的输出，常用于生成平滑的颜色渐变效果。
+
+参数：
+
+- `x`：float 或 array-like，输入的归一化颜色值（范围 0 到 1）
+
+返回值：float 或 array-like，变换后的值（范围 0 到 1）
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[输入 x] --> B{计算 2x - 1}
+    B --> C[计算平方]
+    C --> D[输出结果]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style D fill:#e8f5e9
+```
+
+#### 带注释源码
+
+```python
+def _g12(x): 
+    """
+    Gnuplot palette function for color mapping.
+    
+    This function implements a parabolic transformation that maps
+    the normalized input value to a symmetric curve. The formula
+    (2*x - 1) ** 2 creates a U-shaped curve that:
+    - At x=0: returns 1 (white)
+    - At x=0.5: returns 0 (black/lowest value)
+    - At x=1: returns 1 (white)
+    
+    This creates a 'V' shape color distribution commonly used
+    in scientific visualization for emphasizing middle values
+    or creating symmetric color patterns.
+    
+    Parameters
+    ----------
+    x : float or array-like
+        Normalized input value in range [0, 1]
+        
+    Returns
+    -------
+    float or array-like
+        Transformed value in range [0, 1]
+    """
+    return (2 * x - 1) ** 2
+```
+
+
+
+### `_g13`
+
+该函数是GNUplot调色板的数学函数之一，用于生成非线性颜色映射。它接受0到1之间的输入值x，返回`sin(x * π)`的计算结果，常作为GNUplot风格调色板的红色通道映射函数。
+
+参数：
+
+- `x`：`float`或`numpy.ndarray`，输入值，通常在0到1之间，代表颜色映射的归一化位置
+
+返回值：`float`或`numpy.ndarray`，返回`sin(x * π)`的计算结果，输出范围为[-1, 1]
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[开始: 输入x] --> B[计算x * np.pi]
+    B --> C[计算sin(x * np.pi)]
+    C --> D[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g13(x): 
+    """
+    GNUplot调色板函数 - 正弦函数映射
+    
+    该函数是GNUplot调色板的一部分，用于生成非线性的颜色渐变。
+    它计算输入值x与π的乘积的正弦值，产生一个周期性的波形输出。
+    
+    参数:
+        x: 输入值，通常为0到1之间的浮点数或numpy数组
+        
+    返回:
+        sin(x * π): 正弦计算结果，范围在[-1, 1]之间
+    """
+    return np.sin(x * np.pi)
+```
+
+
+
+### `_g14`
+
+该函数是 Gnuplot 调色板（Gnuplot palette）生成函数之一，用于计算输入值的绝对余弦值，常作为颜色映射表中的非线性变换函数。
+
+参数：
+
+-  `x`：`float` 或 `numpy.ndarray`，输入的归一化数值（通常在 0 到 1 之间），表示颜色映射中的位置。
+
+返回值：`float` 或 `numpy.ndarray`，返回 `|cos(π * x)|` 的计算结果。
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B[计算 x * π]
+    B --> C[计算 cos(x * π)]
+    C --> D[计算绝对值 |cos(x * π)|]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g14(x): 
+    """
+    Gnuplot 调色板辅助函数。
+    计算输入 x 的绝对余弦值，常用于生成周期性的颜色波动效果。
+    
+    参数:
+        x (float or np.ndarray): 归一化输入值 (0~1)。
+        
+    返回:
+        np.ndarray or float: 绝对余弦计算结果。
+    """
+    return np.abs(np.cos(x * np.pi))
+```
+
+
+
+### `_g15`
+
+这是一个Gnuplot调色板函数，用于生成正弦波形数据，常用于创建周期性的颜色映射。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在0到1之间，表示颜色映射中的位置
+
+返回值：`float` 或 `numpy.ndarray`，返回正弦波形的值，范围在-1到1之间
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[接收输入x]
+    B --> C[计算x * 2 * π]
+    C --> D[计算sin值]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g15(x):
+    """
+    Gnuplot调色板函数 - 正弦函数
+    
+    生成一个完整的正弦周期波形，用于颜色映射。
+    当x从0变化到1时，输出从0变化到1再回到0（因为sin(2π) = 0）。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常在0到1之间
+        
+    Returns
+    -------
+    float or numpy.ndarray
+        正弦值，范围在-1到1之间
+    """
+    return np.sin(x * 2 * np.pi)  # 计算2π乘以x的正弦值
+```
+
+
+
+### `_g16`
+
+该函数是Gnuplot调色板函数之一，计算输入值x的余弦值（乘以2π），用于生成调色板数据。
+
+参数：
+
+-  `x`：`float` 或 `array-like`，输入值，通常在[0, 1]范围内
+
+返回值：`float` 或 `numpy.ndarray`，返回 `cos(2π * x)` 的值
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C[计算 2π * x]
+    C --> D[计算 cos(2π * x)]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g16(x): 
+    """
+    Gnuplot palette function g16.
+    
+    Parameters
+    ----------
+    x : float or array-like
+        Input value, typically in the range [0, 1].
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        Cosine of 2*pi*x.
+    
+    Notes
+    -----
+    This function is part of the gnuplot palette functions (g0-g36).
+    It returns cos(2*pi*x), which produces a periodic waveform
+    that goes from 1 to -1 over the interval [0, 1].
+    """
+    return np.cos(x * 2 * np.pi)
+```
+
+
+
+### `_g17`
+
+该函数是Gnuplot调色板的颜色映射函数之一，通过对输入值乘以2π后取正弦的绝对值，生成周期性的波形输出，常用于创建平滑的颜色过渡效果。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在0到1之间，代表颜色映射的位置
+
+返回值：`float` 或 `numpy.ndarray`，返回经过 `|sin(2πx)|` 变换后的值，范围在0到1之间
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入x值]
+    B --> C[计算 x * 2 * π]
+    C --> D[计算 sin(x * 2 * π)]
+    D --> E[计算绝对值 np.abs]
+    E --> F[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g17(x):
+    """
+    Gnuplot调色板函数 - 生成周期性波形颜色映射
+    
+    该函数计算 |sin(2πx)|，产生一个周期性的波形，
+    在0到1的范围内完整循环一次。
+    
+    参数:
+        x: 输入值，通常在[0, 1]区间内
+        
+    返回:
+        绝对值正弦结果，范围在[0, 1]之间
+    """
+    return np.abs(np.sin(x * 2 * np.pi))
+```
+
+
+
+### `_g18`
+
+该函数是Gnuplot调色板函数之一，用于计算归一化输入值x的余弦绝对值，生成对称的波形输出，常用于创建平滑的颜色渐变映射。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，归一化输入值，通常在0到1之间
+
+返回值：`float` 或 `numpy.ndarray`，返回余弦绝对值，范围在0到1之间
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[输入 x] --> B[计算 x * 2π]
+    B --> C[计算 cos x*2π]
+    C --> D[计算绝对值]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g18(x):
+    """
+    Gnuplot调色板函数 - 计算余弦绝对值
+    
+    该函数是matplotlib中Gnuplot调色板的组成部分，用于生成颜色映射数据。
+    函数生成一个对称的波形，周期为1，在0到1之间波动。
+    
+    参数:
+        x: 归一化输入值，通常在0到1之间
+        
+    返回:
+        余弦绝对值，范围在0到1之间
+    """
+    return np.abs(np.cos(x * 2 * np.pi))
+```
+
+
+
+### `_g19`
+
+`_g19` 是一个Gnuplot调色板函数，接收归一化输入值x（通常在[0,1]范围内），返回|x·sin(4πx)|的绝对值，用于生成具有两个完整周期的波形调色板数据。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，归一化的输入值，通常在[0,1]范围内
+
+返回值：`float` 或 `numpy.ndarray`，返回输入值乘以4π后的正弦波的绝对值
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始: 输入x] --> B{检查x类型}
+    B -->|单个浮点数| C[计算 sin&#40;x \* 4π&#41;]
+    B -->|numpy数组| D[逐元素计算 sin&#40;x \* 4π&#41;]
+    C --> E[取绝对值: np.abs&#40;sin&#40;x \* 4π&#41;&#41;]
+    D --> E
+    E --> F[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g19(x):
+    """
+    Gnuplot调色板函数 - 生成绝对值正弦波（4π周期）
+    
+    该函数创建一个具有两个完整周期的波形，
+    常用于Gnuplot调色板的蓝色通道生成。
+    
+    参数:
+        x: 归一化输入值，通常在[0,1]范围内
+           可以是单个浮点数或numpy数组
+    
+    返回:
+        float或numpy.ndarray: 正弦波绝对值，范围在[0,1]之间
+    """
+    # 计算 x * 4 * π 的正弦值，然后取绝对值
+    # 4π 意味着在x从0到1的范围内完成2个完整周期
+    return np.abs(np.sin(x * 4 * np.pi))
+```
+
+#### 在gfunc字典中的使用
+
+```python
+# _g19 被添加到 gfunc 字典中，用于构建调色板数据
 gfunc = {i: globals()[f"_g{i}"] for i in range(37)}
 
-# 定义预定义的 Gnuplot 调色板数据
-_gnuplot_data = {
-        'red': gfunc[7],
-        'green': gfunc[5],
-        'blue': gfunc[15],
-}
-
-# 定义另一组 Gnuplot 调色板数据
-_gnuplot2_data = {
-        'red': gfunc[30],
-        'green': gfunc[31],
-        'blue': gfunc[32],
-}
-
-# 定义 Ocean 调色板数据
-_ocean_data = {
-        'red': gfunc[23],
-        'green': gfunc[28],
-        'blue': gfunc[3],
-}
-
-# 定义 AFMhot 调色板数据
-_afmhot_data = {
-        'red': gfunc[34],
-        'green': gfunc[35],
-        'blue': gfunc[36],
-}
-
-# 定义 Rainbow 调色板数据
-_rainbow_data = {
-        'red': gfunc[33],
-        'green': gfunc[13],
-        'blue': gfunc[10],
-}
-
-# 定义 Seismic 调色板数据
-_seismic_data = (
-        (0.0, 0.0, 0.3), (0.0, 0.0, 1.0),
-        (1.0, 1.0, 1.0), (1.0, 0.0, 0.0),
-        (0.5, 0.0, 0.0))
-
-# 定义 Terrain 调色板数据
-_terrain_data = (
-        (0.00, (0.2, 0.2, 0.6)),
-        (0.15, (0.0, 0.6, 1.0)),
-        (0.25, (0.0, 0.8, 0.4)),
-        (0.50, (1.0, 1.0, 0.6)),
-        (0.75, (0.5, 0.36, 0.33)),
-        (1.00, (1.0, 1.0, 1.0)))
-
-# 定义 Gray 调色板数据
-_gray_data = {'red':   ((0., 0, 0), (1., 1, 1)),
-              'green': ((0., 0, 0), (1., 1, 1)),
-              'blue':  ((0., 0, 0), (1., 1, 1))}
-# 定义颜色数据字典，包含了不同颜色通道的渐变数据
-_hot_data = {'red':   ((0., 0.0416, 0.0416),      # 热色图的红色通道数据，包括位置和颜色值
-                       (0.365079, 1.000000, 1.000000),
-                       (1.0, 1.0, 1.0)),
-             'green': ((0., 0., 0.),              # 热色图的绿色通道数据，包括位置和颜色值
-                       (0.365079, 0.000000, 0.000000),
-                       (0.746032, 1.000000, 1.000000),
-                       (1.0, 1.0, 1.0)),
-             'blue':  ((0., 0., 0.),              # 热色图的蓝色通道数据，包括位置和颜色值
-                       (0.746032, 0.000000, 0.000000),
-                       (1.0, 1.0, 1.0))}
-
-# 定义 HSV 颜色空间的颜色数据字典，包含了不同颜色通道的渐变数据
-_hsv_data = {'red':   ((0., 1., 1.),              # HSV 色彩空间中红色通道的渐变数据，包括位置和颜色值
-                       (0.158730, 1.000000, 1.000000),
-                       (0.174603, 0.968750, 0.968750),
-                       (0.333333, 0.031250, 0.031250),
-                       (0.349206, 0.000000, 0.000000),
-                       (0.666667, 0.000000, 0.000000),
-                       (0.682540, 0.031250, 0.031250),
-                       (0.841270, 0.968750, 0.968750),
-                       (0.857143, 1.000000, 1.000000),
-                       (1.0, 1.0, 1.0)),
-             'green': ((0., 0., 0.),              # HSV 色彩空间中绿色通道的渐变数据，包括位置和颜色值
-                       (0.158730, 0.937500, 0.937500),
-                       (0.174603, 1.000000, 1.000000),
-                       (0.507937, 1.000000, 1.000000),
-                       (0.666667, 0.062500, 0.062500),
-                       (0.682540, 0.000000, 0.000000),
-                       (1.0, 0., 0.)),
-             'blue':  ((0., 0., 0.),              # HSV 色彩空间中蓝色通道的渐变数据，包括位置和颜色值
-                       (0.333333, 0.000000, 0.000000),
-                       (0.349206, 0.062500, 0.062500),
-                       (0.507937, 1.000000, 1.000000),
-                       (0.841270, 1.000000, 1.000000),
-                       (0.857143, 0.937500, 0.937500),
-                       (1.0, 0.09375, 0.09375))}
-
-# 定义 Jet 调色板的颜色数据字典，包含了不同颜色通道的渐变数据
-_jet_data = {'red':   ((0.00, 0, 0),               # Jet 调色板的红色通道数据，包括位置和颜色值
-                       (0.35, 0, 0),
-                       (0.66, 1, 1),
-                       (0.89, 1, 1),
-                       (1.00, 0.5, 0.5)),
-             'green': ((0.000, 0, 0),              # Jet 调色板的绿色通道数据，包括位置和颜色值
-                       (0.125, 0, 0),
-                       (0.375, 1, 1),
-                       (0.640, 1, 1),
-                       (0.910, 0, 0),
-                       (1.000, 0, 0)),
-             'blue':  ((0.00, 0.5, 0.5),           # Jet 调色板的蓝色通道数据，包括位置和颜色值
-                       (0.11, 1, 1),
-                       (0.34, 1, 1),
-                       (0.65, 0, 0),
-                       (1.00, 0, 0))}
-
-# 定义 Spring 调色板的颜色数据字典，包含了不同颜色通道的渐变数据
-_spring_data = {'red':   ((0., 1., 1.),            # Spring 调色板的红色通道数据，包括位置和颜色值
-                           (1.0, 1.0, 1.0)),
-                'green': ((0., 0., 0.),            # Spring 调色板的绿色通道数据，包括位置和颜色值
-                           (1.0, 1.0, 1.0)),
-                'blue':  ((0., 1., 1.),            # Spring 调色板的蓝色通道数据，包括位置和颜色值
-                           (1.0, 0.0, 0.0))}
-
-# 定义 Summer 调色板的颜色数据字典，包含了不同颜色通道的渐变数据
-_summer_data = {'red':   ((0., 0., 0.),            # Summer 调色板的红色通道数据，包括位置和颜色值
-                           (1.0, 1.0, 1.0)),
-                'green': ((0., 0.5, 0.5),         # Summer 调色板的绿色通道数据，包括位置和颜色值
-                           (1.0, 1.0, 1.0)),
-                'blue':  ((0., 0.4, 0.4),         # Summer 调色板的蓝色通道数据，包括位置和颜色值
-                           (1.0, 0.4, 0.4))}
-
-# 定义 Winter 调色板的颜色数据字典，包含了不同颜色通道的渐变数据
-_winter_data = {'red':   ((0., 0., 0.),            # Winter 调色板的红色通道数据，包括位置和颜色值
-                           (1.0, 0.0, 0.0)),
-                'green': ((0., 0., 0.),            # Winter 调色板的绿色通道数据，包括位置和颜色值
-                           (1.0, 1.0, 1.0)),
-                'blue':  ((0., 1., 1.),            # Winter 调色板的蓝色通道数据，包括位置和颜色值
-                           (1.0, 0.5, 0.5))}
-
-# 定义 Nipy Spectral 调色板的颜色数据字典，暂时为空
-_nipy_spectral_data = {
-    'red': [
-        (0.0, 0.0, 0.0), (0.05, 0.4667, 0.4667),
-        (0.10, 0.5333, 0.5333), (0.15, 0.0, 0.0),
-        (0.20, 0.0, 0.0), (0.25, 0.0, 0.0),
-        (0.30, 0.0, 0.0), (0.35, 0.0, 0.0),
-        (0.40, 0.0, 0.0), (0.45, 0.0, 0.0),
-        (0.50, 0.0, 0.0), (0.55, 0.0, 0.0),
-        (0.60, 0.0, 0.0), (0.65, 0.7333, 0.7333),
-        (0.70, 0.9333, 0.9333), (0.75, 1.0, 1.0),
-        (0.80, 1.0, 1.0), (0.85, 1.0, 1.0),
-        (0.90, 0.8667, 0.8667), (0.95, 0.80, 0.80),
-        (1.0, 0.80, 0.80),
-    ],
-
-
-    # 红色通道的颜色映射列表，包含了多个元组，每个元组代表了一个颜色点的定义
-    'green': [
-        (0.0, 0.0, 0.0), (0.05, 0.0, 0.0),
-        (0.10, 0.0, 0.0), (0.15, 0.0, 0.0),
-        (0.20, 0.0, 0.0), (0.25, 0.4667, 0.4667),
-        (0.30, 0.6000, 0.6000), (0.35, 0.6667, 0.6667),
-        (0.40, 0.6667, 0.6667), (0.45, 0.6000, 0.6000),
-        (0.50, 0.7333, 0.7333), (0.55, 0.8667, 0.8667),
-        (0.60, 1.0, 1.0), (0.65, 1.0, 1.0),
-        (0.70, 0.9333, 0.9333), (0.75, 0.8000, 0.8000),
-        (0.80, 0.6000, 0.6000), (0.85, 0.0, 0.0),
-        (0.90, 0.0, 0.0), (0.95, 0.0, 0.0),
-        (1.0, 0.80, 0.80),
-    ],
-
-
-    # 绿色通道的颜色映射列表，包含了多个元组，每个元组代表了一个颜色点的定义
-    'blue': [
-        (0.0, 0.0, 0.0), (0.05, 0.5333, 0.5333),
-        (0.10, 0.6000, 0.6000), (0.15, 0.6667, 0.6667),
-        (0.20, 0.8667, 0.8667), (0.25, 0.8667, 0.8667),
-        (0.30, 0.8667, 0.8667), (0.35, 0.6667, 0.6667),
-        (0.40, 0.5333, 0.5333), (0.45, 0.0, 0.0),
-        (0.5, 0.0, 0.0), (0.55, 0.0, 0.0),
-        (0.60, 0.0, 0.0), (0.65, 0.0, 0.0),
-        (0.70, 0.0, 0.0), (0.75, 0.0, 0.0),
-        (0.80, 0.0, 0.0), (0.85, 0.0, 0.0),
-        (0.90, 0.0, 0.0), (0.95, 0.0, 0.0),
-        (1.0, 0.80, 0.80),
-    ],
-# RGB values for the _Blues_data colormap, representing shades of blue,
-# sourced from Cynthia Brewer's color specifications for use in data visualization.
-# Each tuple represents a color in RGB format, normalized between 0 and 1.
-_Blues_data = (
-    (0.96862745098039216,  0.98431372549019602,  1.0                ),  # Lightest blue
-    (0.87058823529411766,  0.92156862745098034,  0.96862745098039216),  # Light blue
-    (0.77647058823529413,  0.85882352941176465,  0.93725490196078431),  # Medium light blue
-    (0.61960784313725492,  0.792156862745098  ,  0.88235294117647056),  # Medium blue
-    (0.41960784313725491,  0.68235294117647061,  0.83921568627450982),  # Medium dark blue
-    (0.25882352941176473,  0.5725490196078431 ,  0.77647058823529413),  # Dark blue
-    (0.12941176470588237,  0.44313725490196076,  0.70980392156862748),  # Darker blue
-    (0.03137254901960784,  0.31764705882352939,  0.61176470588235299),  # Even darker blue
-    (0.03137254901960784,  0.18823529411764706,  0.41960784313725491)   # Darkest blue
-    )
-
-# RGB values for the _BrBG_data colormap, representing a diverging brown-green palette,
-# also sourced from Cynthia Brewer's specifications.
-# Each tuple represents a color in RGB format, normalized between 0 and 1.
-_BrBG_data = (
-    (0.32941176470588235,  0.18823529411764706,  0.0196078431372549 ),  # Dark brown
-    (0.5490196078431373 ,  0.31764705882352939,  0.0392156862745098 ),  # Brown
-    (0.74901960784313726,  0.50588235294117645,  0.17647058823529413),  # Light brown
-    (0.87450980392156863,  0.76078431372549016,  0.49019607843137253),  # Lightest brown
-    (0.96470588235294119,  0.90980392156862744,  0.76470588235294112),  # Lightest green
-    (0.96078431372549022,  0.96078431372549022,  0.96078431372549022),  # Light gray
-    (0.7803921568627451 ,  0.91764705882352937,  0.89803921568627454),  # Light teal
-    (0.50196078431372548,  0.80392156862745101,  0.75686274509803919),  # Teal
-    (0.20784313725490197,  0.59215686274509804,  0.5607843137254902 ),  # Dark teal
-    (0.00392156862745098,  0.4                ,  0.36862745098039218),  # Darker teal
-    (0.0                ,  0.23529411764705882,  0.18823529411764706)   # Darkest teal
-    )
-
-# RGB values for the _BuGn_data colormap, representing shades of blue-green,
-# sourced from Cynthia Brewer's specifications.
-# Each tuple represents a color in RGB format, normalized between 0 and 1.
-_BuGn_data = (
-    (0.96862745098039216,  0.9882352941176471 ,  0.99215686274509807),  # Lightest blue-green
-    (0.89803921568627454,  0.96078431372549022,  0.97647058823529409),  # Light blue-green
-    (0.8                ,  0.92549019607843142,  0.90196078431372551),  # Medium light blue-green
-    (0.6                ,  0.84705882352941175,  0.78823529411764703),  # Medium blue-green
-    (0.4                ,  0.76078431372549016,  0.64313725490196083),  # Medium dark blue-green
-    (0.25490196078431371,  0.68235294117647061,  0.46274509803921571),  # Dark blue-green
-    (0.13725490196078433,  0.54509803921568623,  0.27058823529411763),  # Darker blue-green
-    (0.0                ,  0.42745098039215684,  0.17254901960784313),  # Even darker blue-green
-    (0.0                ,  0.26666666666666666,  0.10588235294117647)   # Darkest blue-green
-    )
-
-# RGB values for the _BuPu_data colormap, representing shades of blue-purple,
-# sourced from Cynthia Brewer's specifications.
-# Each tuple represents a color in RGB format, normalized between 0 and 1.
-_BuPu_data = (
-    (0.96862745098039216,  0.9882352941176471 ,  0.99215686274509807),  # Lightest blue-purple
-    (0.8784313725490196 ,  0.92549019607843142,  0.95686274509803926),  # Light blue-purple
-    (0.74901960784313726,  0.82745098039215681,  0.90196078431372551),  # Medium light blue-purple
-    (0.61960784313725492,  0.73725490196078436,  0.85490196078431369),  # Medium blue-purple
-    (0.5490196078431373 ,  0.58823529411764708,  0.77647058823529413),  # Medium dark blue-purple
-    (0.5490196078431373 ,  0.41960784313725491,  0.69411764705882351)   # Dark blue-purple
-    )
-    # 定义一个包含多个元组的元组，每个元组表示一个 RGB 颜色
-    (
-        (0.5333333333333333, 0.2549019607843137, 0.615686274509804),
-        (0.5058823529411764, 0.058823529411764705, 0.48627450980392156),
-        (0.30196078431372547, 0.0, 0.29411764705882354)
-    )
-_GnBu_data = (
-    (0.96862745098039216,  0.9882352941176471 ,  0.94117647058823528),  # RGB颜色元组，代表一种颜色
-    (0.8784313725490196 ,  0.95294117647058818,  0.85882352941176465),  # 另一种颜色的 RGB 元组
-    (0.8                ,  0.92156862745098034,  0.77254901960784317),  # 还有另一种颜色的 RGB 元组
-    (0.6588235294117647 ,  0.8666666666666667 ,  0.70980392156862748),  # ...
-    (0.4823529411764706 ,  0.8                ,  0.7686274509803922 ),  # ...
-    (0.30588235294117649,  0.70196078431372544,  0.82745098039215681),  # ...
-    (0.16862745098039217,  0.5490196078431373 ,  0.74509803921568629),  # ...
-    (0.03137254901960784,  0.40784313725490196,  0.67450980392156867),  # ...
-    (0.03137254901960784,  0.25098039215686274,  0.50588235294117645)   # 最后一种颜色的 RGB 元组
-    )
-
-_Greens_data = (
-    (0.96862745098039216,  0.9882352941176471 ,  0.96078431372549022),  # 各种绿色的 RGB 元组
-    (0.89803921568627454,  0.96078431372549022,  0.8784313725490196 ),  # ...
-    (0.7803921568627451 ,  0.9137254901960784 ,  0.75294117647058822),  # ...
-    (0.63137254901960782,  0.85098039215686272,  0.60784313725490191),  # ...
-    (0.45490196078431372,  0.7686274509803922 ,  0.46274509803921571),  # ...
-    (0.25490196078431371,  0.6705882352941176 ,  0.36470588235294116),  # ...
-    (0.13725490196078433,  0.54509803921568623,  0.27058823529411763),  # ...
-    (0.0                ,  0.42745098039215684,  0.17254901960784313),  # ...
-    (0.0                ,  0.26666666666666666,  0.10588235294117647)   # 最后一种绿色的 RGB 元组
-    )
-
-_Greys_data = (
-    (1.0                ,  1.0                ,  1.0                ),  # 各种灰色的 RGB 元组
-    (0.94117647058823528,  0.94117647058823528,  0.94117647058823528),  # ...
-    (0.85098039215686272,  0.85098039215686272,  0.85098039215686272),  # ...
-    (0.74117647058823533,  0.74117647058823533,  0.74117647058823533),  # ...
-    (0.58823529411764708,  0.58823529411764708,  0.58823529411764708),  # ...
-    (0.45098039215686275,  0.45098039215686275,  0.45098039215686275),  # ...
-    (0.32156862745098042,  0.32156862745098042,  0.32156862745098042),  # ...
-    (0.14509803921568629,  0.14509803921568629,  0.14509803921568629),  # ...
-    (0.0                ,  0.0                ,  0.0                )   # 最后一种灰色的 RGB 元组
-    )
-
-_Oranges_data = (
-    (1.0                ,  0.96078431372549022,  0.92156862745098034),  # 各种橙色的 RGB 元组
-    (0.99607843137254903,  0.90196078431372551,  0.80784313725490198),  # ...
-    (0.99215686274509807,  0.81568627450980391,  0.63529411764705879),  # ...
-    (0.99215686274509807,  0.68235294117647061,  0.41960784313725491),  # ...
-    (0.99215686274509807,  0.55294117647058827,  0.23529411764705882),  # ...
-    (0.94509803921568625,  0.41176470588235292,  0.07450980392156863),  # ...
-    (0.85098039215686272,  0.28235294117647058,  0.00392156862745098),  # ...
-    (0.65098039215686276,  0.21176470588235294,  0.01176470588235294),  # ...
-    (0.49803921568627452,  0.15294117647058825,  0.01568627450980392)   # 最后一种橙色的 RGB 元组
-    )
-
-_OrRd_data = (
-    (1.0                ,  0.96862745098039216,  0.92549019607843142),  # 各种橙红色的 RGB 元组
-    (0.99607843137254903,  0.90980392156862744,  0.78431372549019607),  # ...
-    (0.99215686274509807,  0.83137254901960789,  0.61960784313725492),  # ...
-    (0.99215686274509807,  0.73333333333333328,  0.51764705882352946)   # 最后一种橙红色的 RGB 元组
-    )
-    # 定义一个元组(tuple)包含多个RGB颜色值，每个颜色用三个浮点数表示
-    (
-        (0.9882352941176471 ,  0.55294117647058827,  0.34901960784313724),  # 第一个颜色，浅橘色
-        (0.93725490196078431,  0.396078431372549  ,  0.28235294117647058),  # 第二个颜色，浅红色
-        (0.84313725490196079,  0.18823529411764706,  0.12156862745098039),  # 第三个颜色，深红色
-        (0.70196078431372544,  0.0                ,  0.0                ),  # 第四个颜色，深红色
-        (0.49803921568627452,  0.0                ,  0.0                )   # 第五个颜色，深红色
-    )
-# 定义颜色数据元组 _PiYG_data，包含多个元组，每个元组表示一个 RGB 颜色
-_PiYG_data = (
-    (0.55686274509803924,  0.00392156862745098,  0.32156862745098042),  # 粉绿色调数据
-    (0.77254901960784317,  0.10588235294117647,  0.49019607843137253),
-    (0.87058823529411766,  0.46666666666666667,  0.68235294117647061),
-    (0.94509803921568625,  0.71372549019607845,  0.85490196078431369),
-    (0.99215686274509807,  0.8784313725490196 ,  0.93725490196078431),
-    (0.96862745098039216,  0.96862745098039216,  0.96862745098039216),
-    (0.90196078431372551,  0.96078431372549022,  0.81568627450980391),
-    (0.72156862745098038,  0.88235294117647056,  0.52549019607843139),
-    (0.49803921568627452,  0.73725490196078436,  0.25490196078431371),
-    (0.30196078431372547,  0.5725490196078431 ,  0.12941176470588237),
-    (0.15294117647058825,  0.39215686274509803,  0.09803921568627451)
-)
-
-# 定义颜色数据元组 _PRGn_data，包含多个元组，每个元组表示一个 RGB 颜色
-_PRGn_data = (
-    (0.25098039215686274,  0.0                ,  0.29411764705882354),  # 紫绿色调数据
-    (0.46274509803921571,  0.16470588235294117,  0.51372549019607838),
-    (0.6                ,  0.4392156862745098 ,  0.6705882352941176 ),
-    (0.76078431372549016,  0.6470588235294118 ,  0.81176470588235294),
-    (0.90588235294117647,  0.83137254901960789,  0.90980392156862744),
-    (0.96862745098039216,  0.96862745098039216,  0.96862745098039216),
-    (0.85098039215686272,  0.94117647058823528,  0.82745098039215681),
-    (0.65098039215686276,  0.85882352941176465,  0.62745098039215685),
-    (0.35294117647058826,  0.68235294117647061,  0.38039215686274508),
-    (0.10588235294117647,  0.47058823529411764,  0.21568627450980393),
-    (0.0                ,  0.26666666666666666,  0.10588235294117647)
-)
-
-# 定义颜色数据元组 _PuBu_data，包含多个元组，每个元组表示一个 RGB 颜色
-_PuBu_data = (
-    (1.0                ,  0.96862745098039216,  0.98431372549019602),  # 蓝紫色调数据
-    (0.92549019607843142,  0.90588235294117647,  0.94901960784313721),
-    (0.81568627450980391,  0.81960784313725488,  0.90196078431372551),
-    (0.65098039215686276,  0.74117647058823533,  0.85882352941176465),
-    (0.45490196078431372,  0.66274509803921566,  0.81176470588235294),
-    (0.21176470588235294,  0.56470588235294117,  0.75294117647058822),
-    (0.0196078431372549 ,  0.4392156862745098 ,  0.69019607843137254),
-    (0.01568627450980392,  0.35294117647058826,  0.55294117647058827),
-    (0.00784313725490196,  0.2196078431372549 ,  0.34509803921568627)
-)
-
-# 定义颜色数据元组 _PuBuGn_data，包含多个元组，每个元组表示一个 RGB 颜色
-_PuBuGn_data = (
-    (1.0                ,  0.96862745098039216,  0.98431372549019602),  # 蓝绿色调数据
-    (0.92549019607843142,  0.88627450980392153,  0.94117647058823528),
-    (0.81568627450980391,  0.81960784313725488,  0.90196078431372551),
-    (0.65098039215686276,  0.74117647058823533,  0.85882352941176465),
-    (0.40392156862745099,  0.66274509803921566,  0.81176470588235294),
-    (0.21176470588235294,  0.56470588235294117,  0.75294117647058822),
-    (0.00784313725490196,  0.50588235294117645,  0.54117647058823526),
-    (0.00392156862745098,  0.42352941176470588,  0.34901960784313724),
-    (0.00392156862745098,  0.27450980392156865,  0.21176470588235294)
-)
-
-# 定义颜色数据元组 _PuOr_data，该元组尚未完成，仅有起始括号 (
-_PuOr_data = (
-    # 以下是一个包含RGB颜色值的元组列表，每个元组代表一个颜色
-    (
-        # RGB颜色值为 (0.49803921568627452,  0.23137254901960785,  0.03137254901960784)
-        (0.49803921568627452,  0.23137254901960785,  0.03137254901960784),
-        # RGB颜色值为 (0.70196078431372544,  0.34509803921568627,  0.02352941176470588)
-        (0.70196078431372544,  0.34509803921568627,  0.02352941176470588),
-        # RGB颜色值为 (0.8784313725490196 ,  0.50980392156862742,  0.07843137254901961)
-        (0.8784313725490196 ,  0.50980392156862742,  0.07843137254901961),
-        # RGB颜色值为 (0.99215686274509807,  0.72156862745098038,  0.38823529411764707)
-        (0.99215686274509807,  0.72156862745098038,  0.38823529411764707),
-        # RGB颜色值为 (0.99607843137254903,  0.8784313725490196 ,  0.71372549019607845)
-        (0.99607843137254903,  0.8784313725490196 ,  0.71372549019607845),
-        # RGB颜色值为 (0.96862745098039216,  0.96862745098039216,  0.96862745098039216)
-        (0.96862745098039216,  0.96862745098039216,  0.96862745098039216),
-        # RGB颜色值为 (0.84705882352941175,  0.85490196078431369,  0.92156862745098034)
-        (0.84705882352941175,  0.85490196078431369,  0.92156862745098034),
-        # RGB颜色值为 (0.69803921568627447,  0.6705882352941176 ,  0.82352941176470584)
-        (0.69803921568627447,  0.6705882352941176 ,  0.82352941176470584),
-        # RGB颜色值为 (0.50196078431372548,  0.45098039215686275,  0.67450980392156867)
-        (0.50196078431372548,  0.45098039215686275,  0.67450980392156867),
-        # RGB颜色值为 (0.32941176470588235,  0.15294117647058825,  0.53333333333333333)
-        (0.32941176470588235,  0.15294117647058825,  0.53333333333333333),
-        # RGB颜色值为 (0.17647058823529413,  0.0                ,  0.29411764705882354)
-        (0.17647058823529413,  0.0                ,  0.29411764705882354)
-    )
-# 定义颜色数据元组 _PuRd_data，包含多个 RGB 颜色元组作为颜色表示
-_PuRd_data = (
-    (0.96862745098039216,  0.95686274509803926,  0.97647058823529409),  # 浅紫色
-    (0.90588235294117647,  0.88235294117647056,  0.93725490196078431),  # 中浅紫色
-    (0.83137254901960789,  0.72549019607843135,  0.85490196078431369),  # 中深紫色
-    (0.78823529411764703,  0.58039215686274515,  0.7803921568627451 ),  # 深紫色
-    (0.87450980392156863,  0.396078431372549  ,  0.69019607843137254),  # 鲑紫色
-    (0.90588235294117647,  0.16078431372549021,  0.54117647058823526),  # 鲑紫色
-    (0.80784313725490198,  0.07058823529411765,  0.33725490196078434),  # 鲑紫色
-    (0.59607843137254901,  0.0                ,  0.2627450980392157 ),  # 鲑紫色
-    (0.40392156862745099,  0.0                ,  0.12156862745098039)   # 深鲑紫色
-    )
-
-# 定义颜色数据元组 _Purples_data，包含多个 RGB 颜色元组作为颜色表示
-_Purples_data = (
-    (0.9882352941176471 ,  0.98431372549019602,  0.99215686274509807),  # 浅紫色
-    (0.93725490196078431,  0.92941176470588238,  0.96078431372549022),  # 中浅紫色
-    (0.85490196078431369,  0.85490196078431369,  0.92156862745098034),  # 中深紫色
-    (0.73725490196078436,  0.74117647058823533,  0.86274509803921573),  # 深紫色
-    (0.61960784313725492,  0.60392156862745094,  0.78431372549019607),  # 深紫色
-    (0.50196078431372548,  0.49019607843137253,  0.72941176470588232),  # 深紫色
-    (0.41568627450980394,  0.31764705882352939,  0.63921568627450975),  # 深紫色
-    (0.32941176470588235,  0.15294117647058825,  0.5607843137254902 ),  # 深紫色
-    (0.24705882352941178,  0.0                ,  0.49019607843137253)   # 深紫色
-    )
-
-# 定义颜色数据元组 _RdBu_data，包含多个 RGB 颜色元组作为颜色表示
-_RdBu_data = (
-    (0.40392156862745099,  0.0                ,  0.12156862745098039),  # 深红色
-    (0.69803921568627447,  0.09411764705882353,  0.16862745098039217),  # 浅红色
-    (0.83921568627450982,  0.37647058823529411,  0.30196078431372547),  # 浅红色
-    (0.95686274509803926,  0.6470588235294118 ,  0.50980392156862742),  # 浅红色
-    (0.99215686274509807,  0.85882352941176465,  0.7803921568627451 ),  # 浅红色
-    (0.96862745098039216,  0.96862745098039216,  0.96862745098039216),  # 灰色
-    (0.81960784313725488,  0.89803921568627454,  0.94117647058823528),  # 浅蓝色
-    (0.5725490196078431 ,  0.77254901960784317,  0.87058823529411766),  # 浅蓝色
-    (0.2627450980392157 ,  0.57647058823529407,  0.76470588235294112),  # 浅蓝色
-    (0.12941176470588237,  0.4                ,  0.67450980392156867),  # 浅蓝色
-    (0.0196078431372549 ,  0.18823529411764706,  0.38039215686274508)   # 深蓝色
-    )
-
-# 定义颜色数据元组 _RdGy_data，包含多个 RGB 颜色元组作为颜色表示
-_RdGy_data = (
-    (0.40392156862745099,  0.0                ,  0.12156862745098039),  # 深红色
-    (0.69803921568627447,  0.09411764705882353,  0.16862745098039217),  # 浅红色
-    (0.83921568627450982,  0.37647058823529411,  0.30196078431372547),  # 浅红色
-    (0.95686274509803926,  0.6470588235294118 ,  0.50980392156862742),  # 浅红色
-    (0.99215686274509807,  0.85882352941176465,  0.7803921568627451 ),  # 浅红色
-    (1.0                ,  1.0                ,  1.0                ),  # 白色
-    (0.8784313725490196 ,  0.8784313725490196 ,  0.8784313725490196 ),  # 浅灰色
-    (0.72941176470588232,  0.72941176470588232,  0.72941176470588232),  # 中灰色
-    (0.52941176470588236,  0.52941176470588236,  0.52941176470588236),  # 中灰色
-    (0.30196078431372547,  0.30196078431372547,  0.30196078431372547),  # 中灰色
-    (0.10196078431372549,  0.10196078431372549,  0.10196078431372549)   # 深灰色
-    )
-
-# 定义颜色数据元组 _RdPu_data，包含多个 RGB 颜色元组作为颜色表示，此元组未完全填充
-_RdPu_data = (
-    # RGB 颜色元组列表，每个元组代表一个颜色，由红、绿、蓝三个通道的浮点数值组成
-    (
-        (1.0                ,  0.96862745098039216,  0.95294117647058818),  # 浅粉色
-        (0.99215686274509807,  0.8784313725490196 ,  0.86666666666666667),  # 薄雾玫瑰
-        (0.9882352941176471 ,  0.77254901960784317,  0.75294117647058822),  # 桃色
-        (0.98039215686274506,  0.62352941176470589,  0.70980392156862748),  # 浅鲑鱼色
-        (0.96862745098039216,  0.40784313725490196,  0.63137254901960782),  # 淡紫红
-        (0.86666666666666667,  0.20392156862745098,  0.59215686274509804),  # 深洋红
-        (0.68235294117647061,  0.00392156862745098,  0.49411764705882355),  # 紫罗兰红
-        (0.47843137254901963,  0.00392156862745098,  0.46666666666666667),  # 暗洋红
-        (0.28627450980392155,  0.0                ,  0.41568627450980394)   # 蓟色
-    )
-# 定义一个颜色数据元组，用于 RdYlBu 调色板
-_RdYlBu_data = (
-    (0.6470588235294118 , 0.0                 , 0.14901960784313725),  # RGB 颜色元组，代表颜色的红、绿、蓝分量
-    (0.84313725490196079, 0.18823529411764706 , 0.15294117647058825),
-    (0.95686274509803926, 0.42745098039215684 , 0.2627450980392157 ),
-    (0.99215686274509807, 0.68235294117647061 , 0.38039215686274508),
-    (0.99607843137254903, 0.8784313725490196  , 0.56470588235294117),
-    (1.0                , 1.0                 , 0.74901960784313726),
-    (0.8784313725490196 , 0.95294117647058818 , 0.97254901960784312),
-    (0.6705882352941176 , 0.85098039215686272 , 0.9137254901960784 ),
-    (0.45490196078431372, 0.67843137254901964 , 0.81960784313725488),
-    (0.27058823529411763, 0.45882352941176469 , 0.70588235294117652),
-    (0.19215686274509805, 0.21176470588235294 , 0.58431372549019611)
-    )
-
-# 定义一个颜色数据元组，用于 RdYlGn 调色板
-_RdYlGn_data = (
-    (0.6470588235294118 , 0.0                 , 0.14901960784313725),  # RGB 颜色元组，代表颜色的红、绿、蓝分量
-    (0.84313725490196079, 0.18823529411764706 , 0.15294117647058825),
-    (0.95686274509803926, 0.42745098039215684 , 0.2627450980392157 ),
-    (0.99215686274509807, 0.68235294117647061 , 0.38039215686274508),
-    (0.99607843137254903, 0.8784313725490196  , 0.54509803921568623),
-    (1.0                , 1.0                 , 0.74901960784313726),
-    (0.85098039215686272, 0.93725490196078431 , 0.54509803921568623),
-    (0.65098039215686276, 0.85098039215686272 , 0.41568627450980394),
-    (0.4                , 0.74117647058823533 , 0.38823529411764707),
-    (0.10196078431372549, 0.59607843137254901 , 0.31372549019607843),
-    (0.0                , 0.40784313725490196 , 0.21568627450980393)
-    )
-
-# 定义一个颜色数据元组，用于 Reds 调色板
-_Reds_data = (
-    (1.0                , 0.96078431372549022 , 0.94117647058823528),  # RGB 颜色元组，代表颜色的红、绿、蓝分量
-    (0.99607843137254903, 0.8784313725490196  , 0.82352941176470584),
-    (0.9882352941176471 , 0.73333333333333328 , 0.63137254901960782),
-    (0.9882352941176471 , 0.5725490196078431  , 0.44705882352941179),
-    (0.98431372549019602, 0.41568627450980394 , 0.29019607843137257),
-    (0.93725490196078431, 0.23137254901960785 , 0.17254901960784313),
-    (0.79607843137254897, 0.094117647058823528, 0.11372549019607843),
-    (0.6470588235294118 , 0.058823529411764705, 0.08235294117647058),
-    (0.40392156862745099, 0.0                 , 0.05098039215686274)
-    )
-
-# 定义一个颜色数据元组，用于 Spectral 调色板
-_Spectral_data = (
-    (0.61960784313725492, 0.003921568627450980, 0.25882352941176473),  # RGB 颜色元组，代表颜色的红、绿、蓝分量
-    (0.83529411764705885, 0.24313725490196078 , 0.30980392156862746),
-    (0.95686274509803926, 0.42745098039215684 , 0.2627450980392157 ),
-    (0.99215686274509807, 0.68235294117647061 , 0.38039215686274508),
-    (0.99607843137254903, 0.8784313725490196  , 0.54509803921568623),
-    (1.0                , 1.0                 , 0.74901960784313726),
-    (0.90196078431372551, 0.96078431372549022 , 0.59607843137254901),
-    (0.6705882352941176 , 0.8666666666666667  , 0.64313725490196083),
-    (0.4                , 0.76078431372549016 , 0.6470588235294118 ),
-    (0.19607843137254902, 0.53333333333333333 , 0.74117647058823533),
-    )
-    # 定义一个元组，表示 RGB 颜色，每个分量的取值范围是 0 到 1
-    (0.36862745098039218, 0.30980392156862746 , 0.63529411764705879)
-# ColorBrewer's qualitative maps, implemented using ListedColormap
-# for use with mpl.colors.NoNorm
-
-# Accent调色板的颜色数据，每个元组表示一个RGB颜色值
-_Accent_data = (
-    (0.49803921568627452, 0.78823529411764703, 0.49803921568627452),
-    (0.74509803921568629, 0.68235294117647061, 0.83137254901960789),
-    (0.99215686274509807, 0.75294117647058822, 0.52549019607843139),
-    # 更多颜色数据可以继续添加
-)
-
-
-
-# YlGn调色板的颜色数据，每个元组表示一个RGB颜色值
-_YlGn_data = (
-    (1.0                , 1.0                 , 0.89803921568627454),
-    (0.96862745098039216, 0.9882352941176471  , 0.72549019607843135),
-    (0.85098039215686272, 0.94117647058823528 , 0.63921568627450975),
-    (0.67843137254901964, 0.8666666666666667  , 0.55686274509803924),
-    (0.47058823529411764, 0.77647058823529413 , 0.47450980392156861),
-    (0.25490196078431371, 0.6705882352941176  , 0.36470588235294116),
-    (0.13725490196078433, 0.51764705882352946 , 0.2627450980392157 ),
-    (0.0                , 0.40784313725490196 , 0.21568627450980393),
-    (0.0                , 0.27058823529411763 , 0.16078431372549021)
-    # 更多颜色数据可以继续添加
-)
-
-
-
-# YlGnBu调色板的颜色数据，每个元组表示一个RGB颜色值
-_YlGnBu_data = (
-    (1.0                , 1.0                 , 0.85098039215686272),
-    (0.92941176470588238, 0.97254901960784312 , 0.69411764705882351),
-    (0.7803921568627451 , 0.9137254901960784  , 0.70588235294117652),
-    (0.49803921568627452, 0.80392156862745101 , 0.73333333333333328),
-    (0.25490196078431371, 0.71372549019607845 , 0.7686274509803922 ),
-    (0.11372549019607843, 0.56862745098039214 , 0.75294117647058822),
-    (0.13333333333333333, 0.36862745098039218 , 0.6588235294117647 ),
-    (0.14509803921568629, 0.20392156862745098 , 0.58039215686274515),
-    (0.03137254901960784, 0.11372549019607843 , 0.34509803921568627)
-    # 更多颜色数据可以继续添加
-)
-
-
-
-# YlOrBr调色板的颜色数据，每个元组表示一个RGB颜色值
-_YlOrBr_data = (
-    (1.0                , 1.0                 , 0.89803921568627454),
-    (1.0                , 0.96862745098039216 , 0.73725490196078436),
-    (0.99607843137254903, 0.8901960784313725  , 0.56862745098039214),
-    (0.99607843137254903, 0.7686274509803922  , 0.30980392156862746),
-    (0.99607843137254903, 0.6                 , 0.16078431372549021),
-    (0.92549019607843142, 0.4392156862745098  , 0.07843137254901961),
-    (0.8                , 0.29803921568627451 , 0.00784313725490196),
-    (0.6                , 0.20392156862745098 , 0.01568627450980392),
-    (0.4                , 0.14509803921568629 , 0.02352941176470588)
-    # 更多颜色数据可以继续添加
-)
-
-
-
-# YlOrRd调色板的颜色数据，每个元组表示一个RGB颜色值
-_YlOrRd_data = (
-    (1.0                , 1.0                 , 0.8                ),
-    (1.0                , 0.92941176470588238 , 0.62745098039215685),
-    (0.99607843137254903, 0.85098039215686272 , 0.46274509803921571),
-    (0.99607843137254903, 0.69803921568627447 , 0.29803921568627451),
-    (0.99215686274509807, 0.55294117647058827 , 0.23529411764705882),
-    (0.9882352941176471 , 0.30588235294117649 , 0.16470588235294117),
-    (0.8901960784313725 , 0.10196078431372549 , 0.10980392156862745),
-    (0.74117647058823533, 0.0                 , 0.14901960784313725),
-    (0.50196078431372548, 0.0                 , 0.14901960784313725)
-    # 更多颜色数据可以继续添加
-)
-    # 定义一个包含多个元组的元组，每个元组代表一个 RGB 颜色
-    (
-        # 第一个颜色的 RGB 值
-        (1.0,                 1.0,                 0.6                ),
-        # 第二个颜色的 RGB 值
-        (0.2196078431372549,  0.42352941176470588, 0.69019607843137254),
-        # 第三个颜色的 RGB 值
-        (0.94117647058823528, 0.00784313725490196, 0.49803921568627452),
-        # 第四个颜色的 RGB 值
-        (0.74901960784313726, 0.35686274509803922, 0.09019607843137254),
-        # 第五个颜色的 RGB 值
-        (0.4,                 0.4,                 0.4                ),
-    )
-# 定义颜色数据集 _Dark2_data
-_Dark2_data = (
-    (0.10588235294117647, 0.61960784313725492, 0.46666666666666667),  # RGB颜色值元组1
-    (0.85098039215686272, 0.37254901960784315, 0.00784313725490196),  # RGB颜色值元组2
-    (0.45882352941176469, 0.4392156862745098,  0.70196078431372544),  # RGB颜色值元组3
-    (0.90588235294117647, 0.16078431372549021, 0.54117647058823526),  # RGB颜色值元组4
-    (0.4,                 0.65098039215686276, 0.11764705882352941),  # RGB颜色值元组5
-    (0.90196078431372551, 0.6705882352941176,  0.00784313725490196),  # RGB颜色值元组6
-    (0.65098039215686276, 0.46274509803921571, 0.11372549019607843),  # RGB颜色值元组7
-    (0.4,                 0.4,                 0.4                ),  # RGB颜色值元组8
-    )
-
-# 定义颜色数据集 _Paired_data
-_Paired_data = (
-    (0.65098039215686276, 0.80784313725490198, 0.8901960784313725 ),  # RGB颜色值元组1
-    (0.12156862745098039, 0.47058823529411764, 0.70588235294117652),  # RGB颜色值元组2
-    (0.69803921568627447, 0.87450980392156863, 0.54117647058823526),  # RGB颜色值元组3
-    (0.2,                 0.62745098039215685, 0.17254901960784313),  # RGB颜色值元组4
-    (0.98431372549019602, 0.60392156862745094, 0.6                ),  # RGB颜色值元组5
-    (0.8901960784313725,  0.10196078431372549, 0.10980392156862745),  # RGB颜色值元组6
-    (0.99215686274509807, 0.74901960784313726, 0.43529411764705883),  # RGB颜色值元组7
-    (1.0,                 0.49803921568627452, 0.0                ),  # RGB颜色值元组8
-    (0.792156862745098,   0.69803921568627447, 0.83921568627450982),  # RGB颜色值元组9
-    (0.41568627450980394, 0.23921568627450981, 0.60392156862745094),  # RGB颜色值元组10
-    (1.0,                 1.0,                 0.6                ),  # RGB颜色值元组11
-    (0.69411764705882351, 0.34901960784313724, 0.15686274509803921),  # RGB颜色值元组12
-    )
-
-# 定义颜色数据集 _Pastel1_data
-_Pastel1_data = (
-    (0.98431372549019602, 0.70588235294117652, 0.68235294117647061),  # RGB颜色值元组1
-    (0.70196078431372544, 0.80392156862745101, 0.8901960784313725 ),  # RGB颜色值元组2
-    (0.8,                 0.92156862745098034, 0.77254901960784317),  # RGB颜色值元组3
-    (0.87058823529411766, 0.79607843137254897, 0.89411764705882357),  # RGB颜色值元组4
-    (0.99607843137254903, 0.85098039215686272, 0.65098039215686276),  # RGB颜色值元组5
-    (1.0,                 1.0,                 0.8                ),  # RGB颜色值元组6
-    (0.89803921568627454, 0.84705882352941175, 0.74117647058823533),  # RGB颜色值元组7
-    (0.99215686274509807, 0.85490196078431369, 0.92549019607843142),  # RGB颜色值元组8
-    (0.94901960784313721, 0.94901960784313721, 0.94901960784313721),  # RGB颜色值元组9
-    )
-
-# 定义颜色数据集 _Pastel2_data
-_Pastel2_data = (
-    (0.70196078431372544, 0.88627450980392153, 0.80392156862745101),  # RGB颜色值元组1
-    (0.99215686274509807, 0.80392156862745101, 0.67450980392156867),  # RGB颜色值元组2
-    (0.79607843137254897, 0.83529411764705885, 0.90980392156862744),  # RGB颜色值元组3
-    (0.95686274509803926, 0.792156862745098,   0.89411764705882357),  # RGB颜色值元组4
-    (0.90196078431372551, 0.96078431372549022, 0.78823529411764703),  # RGB颜色值元组5
-    (1.0,                 0.94901960784313721, 0.68235294117647061),  # RGB颜色值元组6
-    (0.94509803921568625, 0.88627450980392153, 0.8                ),  # RGB颜色值元组7
-    (0.8,                 0.8,                 0.8                ),  # RGB颜色值元组8
-    )
-
-# 定义颜色数据集 _Set1_data
-_Set1_data = (
-    (0.89411764705882357, 0.10196078431372549, 0.10980392156862745),  # RGB颜色值元组1
-    (0.21568627450980393, 0.49411764705882355, 0.72156862745098038),  # RGB颜色值元组2
-    (0.30196078431372547, 0.68627450980392157, 0.29019607843137257),  # RGB颜色值元组3
-    (0.59607843137254901, 0.30588235294117649, 0.63921568627450975),  # RGB颜色值元组4
-    )
-    # RGB颜色值元组，每个元组代表一个颜色，每个元组有三个值，分别是红、绿、蓝的色彩强度，取值范围是0到1
-    (
-    (1.0,                 0.49803921568627452, 0.0                ),
-    (1.0,                 1.0,                 0.2                ),
-    (0.65098039215686276, 0.33725490196078434, 0.15686274509803921),
-    (0.96862745098039216, 0.50588235294117645, 0.74901960784313726),
-    (0.6,                 0.6,                 0.6),
-    )
-_Set2_data = (
-    (0.4,                 0.76078431372549016, 0.6470588235294118 ),  # RGB颜色元组1
-    (0.9882352941176471,  0.55294117647058827, 0.3843137254901961 ),  # RGB颜色元组2
-    (0.55294117647058827, 0.62745098039215685, 0.79607843137254897),  # RGB颜色元组3
-    (0.90588235294117647, 0.54117647058823526, 0.76470588235294112),  # RGB颜色元组4
-    (0.65098039215686276, 0.84705882352941175, 0.32941176470588235),  # RGB颜色元组5
-    (1.0,                 0.85098039215686272, 0.18431372549019609),  # RGB颜色元组6
-    (0.89803921568627454, 0.7686274509803922,  0.58039215686274515),  # RGB颜色元组7
-    (0.70196078431372544, 0.70196078431372544, 0.70196078431372544),  # RGB颜色元组8
-    )
-
-_Set3_data = (
-    (0.55294117647058827, 0.82745098039215681, 0.7803921568627451 ),  # RGB颜色元组1
-    (1.0,                 1.0,                 0.70196078431372544),  # RGB颜色元组2
-    (0.74509803921568629, 0.72941176470588232, 0.85490196078431369),  # RGB颜色元组3
-    (0.98431372549019602, 0.50196078431372548, 0.44705882352941179),  # RGB颜色元组4
-    (0.50196078431372548, 0.69411764705882351, 0.82745098039215681),  # RGB颜色元组5
-    (0.99215686274509807, 0.70588235294117652, 0.3843137254901961 ),  # RGB颜色元组6
-    (0.70196078431372544, 0.87058823529411766, 0.41176470588235292),  # RGB颜色元组7
-    (0.9882352941176471,  0.80392156862745101, 0.89803921568627454),  # RGB颜色元组8
-    (0.85098039215686272, 0.85098039215686272, 0.85098039215686272),  # RGB颜色元组9
-    (0.73725490196078436, 0.50196078431372548, 0.74117647058823533),  # RGB颜色元组10
-    (0.8,                 0.92156862745098034, 0.77254901960784317),  # RGB颜色元组11
-    (1.0,                 0.92941176470588238, 0.43529411764705883),  # RGB颜色元组12
-    )
-
-
-# 下面的7个调色板取自Yorick科学可视化包，由David H. Munro开发。
-# Yorick是GIST包的进化版本，都遵循BSD类似许可证（参见matplotlib源代码分发中的LICENSE_YORICK文件）。
-# 大多数调色板函数已被Reinier Heeres简化为简单的函数描述，因为RGB组件大多数是直线。
-# gist_earth_data和gist_ncar_data通过脚本和手动努力进行了简化。
-
-_gist_earth_data = {
-    'red': (
-        (0.0, 0.0, 0.0000),     # 红色通道的RGB数据点1
-        (0.2824, 0.1882, 0.1882),  # 红色通道的RGB数据点2
-        (0.4588, 0.2714, 0.2714),  # 红色通道的RGB数据点3
-        (0.5490, 0.4719, 0.4719),  # 红色通道的RGB数据点4
-        (0.6980, 0.7176, 0.7176),  # 红色通道的RGB数据点5
-        (0.7882, 0.7553, 0.7553),  # 红色通道的RGB数据点6
-        (1.0000, 0.9922, 0.9922),  # 红色通道的RGB数据点7
-    ),
-    'green': (
-        (0.0, 0.0, 0.0000),     # 绿色通道的RGB数据点1
-        (0.0275, 0.0000, 0.0000),  # 绿色通道的RGB数据点2
-        (0.1098, 0.1893, 0.1893),  # 绿色通道的RGB数据点3
-        (0.1647, 0.3035, 0.3035),  # 绿色通道的RGB数据点4
-        (0.2078, 0.3841, 0.3841),  # 绿色通道的RGB数据点5
-        (0.2824, 0.5020, 0.5020),  # 绿色通道的RGB数据点6
-        (0.5216, 0.6397, 0.6397),  # 绿色通道的RGB数据点7
-        (0.6980, 0.7171, 0.7171),  # 绿色通道的RGB数据点8
-        (0.7882, 0.6392, 0.6392),  # 绿色通道的RGB数据点9
-        (0.7922, 0.6413, 0.6413),  # 绿色通道的RGB数据点10
-        (0.8000, 0.6447, 0.6447),  # 绿色通道的RGB数据点11
-        (0.8078, 0.6481, 0.6481),  # 绿色通道的RGB数据点12
-        (0.8157, 0.6549, 0.6549),  # 绿色通道的RGB数据点13
-        (0.8667, 0.6991, 0.6991),  # 绿色通道的RGB数据点14
-        (0.8745, 0.7103, 0.7103),  # 绿色通道的RGB数据点15
-        (0.8824, 0.7216, 0.7216),  # 绿色通道的RGB数据点16
-        (0.8902, 0.7323, 0.7323),  # 绿色通道的RGB数据点17
-        (0.8980, 0.7430, 0.7430),  # 绿色通道的RGB数据点18
-        (0.9412, 0.8275, 0.8275),  # 绿色通道的RGB数据点19
-        (0.9569, 0.8635, 0.8635),  # 绿色通道的RGB数据点20
-        (0.9647, 0.8816, 0.8816),  # 绿色通道的RGB数据点21
-        (0.9961, 0.9733, 0.9733),  # 绿色通道的RGB数据点22
-        (1.0000, 0.9843, 0.9843),  # 绿色通道的RGB数据点23
-    # 定义颜色 'blue' 的渐变色调
-    'blue': (
-        # 色调位置 0.0，RGB 值为 (0.0, 0.0, 0.0000)
-        (0.0, 0.0, 0.0000),
-        # 色调位置 0.0039，RGB 值为 (0.0039, 0.1684, 0.1684)
-        (0.0039, 0.1684, 0.1684),
-        # 色调位置 0.0078，RGB 值为 (0.0078, 0.2212, 0.2212)
-        (0.0078, 0.2212, 0.2212),
-        # 色调位置 0.0275，RGB 值为 (0.0275, 0.4329, 0.4329)
-        (0.0275, 0.4329, 0.4329),
-        # 色调位置 0.0314，RGB 值为 (0.0314, 0.4549, 0.4549)
-        (0.0314, 0.4549, 0.4549),
-        # 色调位置 0.2824，RGB 值为 (0.2824, 0.5004, 0.5004)
-        (0.2824, 0.5004, 0.5004),
-        # 色调位置 0.4667，RGB 值为 (0.4667, 0.2748, 0.2748)
-        (0.4667, 0.2748, 0.2748),
-        # 色调位置 0.5451，RGB 值为 (0.5451, 0.3205, 0.3205)
-        (0.5451, 0.3205, 0.3205),
-        # 色调位置 0.7843，RGB 值为 (0.7843, 0.3961, 0.3961)
-        (0.7843, 0.3961, 0.3961),
-        # 色调位置 0.8941，RGB 值为 (0.8941, 0.6651, 0.6651)
-        (0.8941, 0.6651, 0.6651),
-        # 色调位置 1.0000，RGB 值为 (1.0000, 0.9843, 0.9843)
-        (1.0000, 0.9843, 0.9843),
-    )
-# 定义一个包含三个颜色通道函数的字典，使用全局函数 gfunc 的索引 3
-_gist_gray_data = {
-    'red': gfunc[3],
-    'green': gfunc[3],
-    'blue': gfunc[3],
-}
-
-# 定义三个函数，分别用于红色、绿色和蓝色通道的转换，每个函数对输入 x 进行不同的数学变换
-def _gist_heat_red(x): return 1.5 * x
-def _gist_heat_green(x): return 2 * x - 1
-def _gist_heat_blue(x): return 4 * x - 3
-
-# 定义一个包含三个颜色通道函数的字典，每个通道对应不同的颜色转换函数
-_gist_heat_data = {
-    'red': _gist_heat_red,
-    'green': _gist_heat_green,
-    'blue': _gist_heat_blue
-}
-
-# 定义一个包含 'red', 'green', 'blue' 三个通道的颜色数据字典
-# 每个通道是一个包含多个颜色值的元组，每个元组包含位置和对应的 RGB 值
-_gist_ncar_data = {
-    'red': (
-        (0.0, 0.0, 0.0000),
-        (0.3098, 0.0000, 0.0000),
-        (0.3725, 0.3993, 0.3993),
-        (0.4235, 0.5003, 0.5003),
-        (0.5333, 1.0000, 1.0000),
-        (0.7922, 1.0000, 1.0000),
-        (0.8471, 0.6218, 0.6218),
-        (0.8980, 0.9235, 0.9235),
-        (1.0000, 0.9961, 0.9961),
-    ),
-    'green': (
-        (0.0, 0.0, 0.0000),
-        (0.0510, 0.3722, 0.3722),
-        (0.1059, 0.0000, 0.0000),
-        (0.1569, 0.7202, 0.7202),
-        (0.1608, 0.7537, 0.7537),
-        (0.1647, 0.7752, 0.7752),
-        (0.2157, 1.0000, 1.0000),
-        (0.2588, 0.9804, 0.9804),
-        (0.2706, 0.9804, 0.9804),
-        (0.3176, 1.0000, 1.0000),
-        (0.3686, 0.8081, 0.8081),
-        (0.4275, 1.0000, 1.0000),
-        (0.5216, 1.0000, 1.0000),
-        (0.6314, 0.7292, 0.7292),
-        (0.6863, 0.2796, 0.2796),
-        (0.7451, 0.0000, 0.0000),
-        (0.7922, 0.0000, 0.0000),
-        (0.8431, 0.1753, 0.1753),
-        (0.8980, 0.5000, 0.5000),
-        (1.0000, 0.9725, 0.9725),
-    ),
-    'blue': (
-        (0.0, 0.5020, 0.5020),
-        (0.0510, 0.0222, 0.0222),
-        (0.1098, 1.0000, 1.0000),
-        (0.2039, 1.0000, 1.0000),
-        (0.2627, 0.6145, 0.6145),
-        (0.3216, 0.0000, 0.0000),
-        (0.4157, 0.0000, 0.0000),
-        (0.4745, 0.2342, 0.2342),
-        (0.5333, 0.0000, 0.0000),
-        (0.5804, 0.0000, 0.0000),
-        (0.6314, 0.0549, 0.0549),
-        (0.6902, 0.0000, 0.0000),
-        (0.7373, 0.0000, 0.0000),
-        (0.7922, 0.9738, 0.9738),
-        (0.8000, 1.0000, 1.0000),
-        (0.8431, 1.0000, 1.0000),
-        (0.8980, 0.9341, 0.9341),
-        (1.0000, 0.9961, 0.9961),
-    )
-}
-
-# 定义一个包含 'red', 'green', 'blue' 三个通道的颜色数据元组
-# 每个元组包含位置和对应的 RGB 值
-_gist_rainbow_data = (
-    (0.000, (1.00, 0.00, 0.16)),
-    (0.030, (1.00, 0.00, 0.00)),
-    (0.215, (1.00, 1.00, 0.00)),
-    (0.400, (0.00, 1.00, 0.00)),
-    (0.586, (0.00, 1.00, 1.00)),
-    (0.770, (0.00, 0.00, 1.00)),
-    (0.954, (1.00, 0.00, 1.00)),
-    (1.000, (1.00, 0.00, 0.75))
-)
-
-# 定义一个包含 'red', 'green', 'blue' 三个通道的颜色数据字典
-# 每个通道对应一个颜色数据元组，元组内含位置和对应的 RGB 值
-_gist_stern_data = {
-    'red': (
-        (0.000, 0.000, 0.000), (0.0547, 1.000, 1.000),
-        (0.250, 0.027, 0.250),  # (0.2500, 0.250, 0.250),
-        (1.000, 1.000, 1.000)),
-    'green': ((0, 0, 0), (1, 1, 1)),
-    'blue': (
-        (0.000, 0.000, 0.000), (0.500, 1.000, 1.000),
-        (0.735, 0.000, 0.000), (1.000, 1.000, 1.000))
-}
-
-# 定义一个颜色转换函数 _gist_yarg，用于 'red', 'green', 'blue' 三个通道
-# 这些通道的转换方式是对输入 x 进行 1 - x 的操作
-_gist_yarg_data = {'red': _gist_yarg, 'green': _gist_yarg, 'blue': _gist_yarg}
-
-# 此注释描述了 "Diverging Color Maps for Scientific Visualization" 的作者 Kenneth Moreland
-# 使用的 CoolWarmFloat33.csv 生成的双极性颜色映射
-# 这个颜色映射用于科学可视化。
-# 定义一个名为 _coolwarm_data 的字典，包含了 'red' 和 'green' 两个键，分别对应着红色和绿色通道的颜色数据
-_coolwarm_data = {
-    'red': [
-        # 红色通道颜色映射表，每个元组表示 (位置, 红色值, 红色值)
-        (0.0, 0.2298057, 0.2298057),
-        (0.03125, 0.26623388, 0.26623388),
-        (0.0625, 0.30386891, 0.30386891),
-        (0.09375, 0.342804478, 0.342804478),
-        (0.125, 0.38301334, 0.38301334),
-        (0.15625, 0.424369608, 0.424369608),
-        (0.1875, 0.46666708, 0.46666708),
-        (0.21875, 0.509635204, 0.509635204),
-        (0.25, 0.552953156, 0.552953156),
-        (0.28125, 0.596262162, 0.596262162),
-        (0.3125, 0.639176211, 0.639176211),
-        (0.34375, 0.681291281, 0.681291281),
-        (0.375, 0.722193294, 0.722193294),
-        (0.40625, 0.761464949, 0.761464949),
-        (0.4375, 0.798691636, 0.798691636),
-        (0.46875, 0.833466556, 0.833466556),
-        (0.5, 0.865395197, 0.865395197),
-        (0.53125, 0.897787179, 0.897787179),
-        (0.5625, 0.924127593, 0.924127593),
-        (0.59375, 0.944468518, 0.944468518),
-        (0.625, 0.958852946, 0.958852946),
-        (0.65625, 0.96732803, 0.96732803),
-        (0.6875, 0.969954137, 0.969954137),
-        (0.71875, 0.966811177, 0.966811177),
-        (0.75, 0.958003065, 0.958003065),
-        (0.78125, 0.943660866, 0.943660866),
-        (0.8125, 0.923944917, 0.923944917),
-        (0.84375, 0.89904617, 0.89904617),
-        (0.875, 0.869186849, 0.869186849),
-        (0.90625, 0.834620542, 0.834620542),
-        (0.9375, 0.795631745, 0.795631745),
-        (0.96875, 0.752534934, 0.752534934),
-        (1.0, 0.705673158, 0.705673158)
-    ],
-    'green': [
-        # 绿色通道颜色映射表，每个元组表示 (位置, 绿色值, 绿色值)
-        (0.0, 0.298717966, 0.298717966),
-        (0.03125, 0.353094838, 0.353094838),
-        (0.0625, 0.406535296, 0.406535296),
-        (0.09375, 0.458757618, 0.458757618),
-        (0.125, 0.50941904, 0.50941904),
-        (0.15625, 0.558148092, 0.558148092),
-        (0.1875, 0.604562568, 0.604562568),
-        (0.21875, 0.648280772, 0.648280772),
-        (0.25, 0.688929332, 0.688929332),
-        (0.28125, 0.726149107, 0.726149107),
-        (0.3125, 0.759599947, 0.759599947),
-        (0.34375, 0.788964712, 0.788964712),
-        (0.375, 0.813952739, 0.813952739),
-        (0.40625, 0.834302879, 0.834302879),
-        (0.4375, 0.849786142, 0.849786142),
-        (0.46875, 0.860207984, 0.860207984),
-        (0.5, 0.86541021, 0.86541021),
-        (0.53125, 0.848937047, 0.848937047),
-        (0.5625, 0.827384882, 0.827384882),
-        (0.59375, 0.800927443, 0.800927443),
-        (0.625, 0.769767752, 0.769767752),
-        (0.65625, 0.734132809, 0.734132809),
-        (0.6875, 0.694266682, 0.694266682),
-        (0.71875, 0.650421156, 0.650421156),
-        (0.75, 0.602842431, 0.602842431),
-        (0.78125, 0.551750968, 0.551750968),
-        (0.8125, 0.49730856, 0.49730856),
-        (0.84375, 0.439559467, 0.439559467),
-        (0.875, 0.378313092, 0.378313092),
-        (0.90625, 0.312874446, 0.312874446),
-        (0.9375, 0.24128379, 0.24128379),
-        (0.96875, 0.157246067, 0.157246067),
-        (1.0, 0.01555616, 0.01555616)
-    ],
-    # 定义一个名为 'blue' 的列表，包含多个元组，每个元组包含三个浮点数，表示色彩的 RGB 值
-    'blue': [
-        (0.0, 0.753683153, 0.753683153),    # RGB 值在位置 0.0 时
-        (0.03125, 0.801466763, 0.801466763),    # RGB 值在位置 0.03125 时
-        (0.0625, 0.84495867, 0.84495867),    # RGB 值在位置 0.0625 时
-        (0.09375, 0.883725899, 0.883725899),    # RGB 值在位置 0.09375 时
-        (0.125, 0.917387822, 0.917387822),    # RGB 值在位置 0.125 时
-        (0.15625, 0.945619588, 0.945619588),    # RGB 值在位置 0.15625 时
-        (0.1875, 0.968154911, 0.968154911),    # RGB 值在位置 0.1875 时
-        (0.21875, 0.98478814, 0.98478814),    # RGB 值在位置 0.21875 时
-        (0.25, 0.995375608, 0.995375608),    # RGB 值在位置 0.25 时
-        (0.28125, 0.999836203, 0.999836203),    # RGB 值在位置 0.28125 时
-        (0.3125, 0.998151185, 0.998151185),    # RGB 值在位置 0.3125 时
-        (0.34375, 0.990363227, 0.990363227),    # RGB 值在位置 0.34375 时
-        (0.375, 0.976574709, 0.976574709),    # RGB 值在位置 0.375 时
-        (0.40625, 0.956945269, 0.956945269),    # RGB 值在位置 0.40625 时
-        (0.4375, 0.931688648, 0.931688648),    # RGB 值在位置 0.4375 时
-        (0.46875, 0.901068838, 0.901068838),    # RGB 值在位置 0.46875 时
-        (0.5, 0.865395561, 0.865395561),    # RGB 值在位置 0.5 时
-        (0.53125, 0.820880546, 0.820880546),    # RGB 值在位置 0.53125 时
-        (0.5625, 0.774508472, 0.774508472),    # RGB 值在位置 0.5625 时
-        (0.59375, 0.726736146, 0.726736146),    # RGB 值在位置 0.59375 时
-        (0.625, 0.678007945, 0.678007945),    # RGB 值在位置 0.625 时
-        (0.65625, 0.628751763, 0.628751763),    # RGB 值在位置 0.65625 时
-        (0.6875, 0.579375448, 0.579375448),    # RGB 值在位置 0.6875 时
-        (0.71875, 0.530263762, 0.530263762),    # RGB 值在位置 0.71875 时
-        (0.75, 0.481775914, 0.481775914),    # RGB 值在位置 0.75 时
-        (0.78125, 0.434243684, 0.434243684),    # RGB 值在位置 0.78125 时
-        (0.8125, 0.387970225, 0.387970225),    # RGB 值在位置 0.8125 时
-        (0.84375, 0.343229596, 0.343229596),    # RGB 值在位置 0.84375 时
-        (0.875, 0.300267182, 0.300267182),    # RGB 值在位置 0.875 时
-        (0.90625, 0.259301199, 0.259301199),    # RGB 值在位置 0.90625 时
-        (0.9375, 0.220525627, 0.220525627),    # RGB 值在位置 0.9375 时
-        (0.96875, 0.184115123, 0.184115123),    # RGB 值在位置 0.96875 时
-        (1.0, 0.150232812, 0.150232812)    # RGB 值在位置 1.0 时
-    ]
-# Implementation of Carey Rappaport's CMRmap.
-# See `A Color Map for Effective Black-and-White Rendering of Color-Scale
-# Images' by Carey Rappaport
-# https://www.mathworks.com/matlabcentral/fileexchange/2662-cmrmap-m
-# 定义了一个名为 _CMRmap_data 的字典，包含了 CMRmap 调色板的红、绿、蓝三个通道的数据
-_CMRmap_data = {'red':    ((0.000, 0.00, 0.00),
-                           (0.125, 0.15, 0.15),
-                           (0.250, 0.30, 0.30),
-                           (0.375, 0.60, 0.60),
-                           (0.500, 1.00, 1.00),
-                           (0.625, 0.90, 0.90),
-                           (0.750, 0.90, 0.90),
-                           (0.875, 0.90, 0.90),
-                           (1.000, 1.00, 1.00)),
-                'green':  ((0.000, 0.00, 0.00),
-                           (0.125, 0.15, 0.15),
-                           (0.250, 0.15, 0.15),
-                           (0.375, 0.20, 0.20),
-                           (0.500, 0.25, 0.25),
-                           (0.625, 0.50, 0.50),
-                           (0.750, 0.75, 0.75),
-                           (0.875, 0.90, 0.90),
-                           (1.000, 1.00, 1.00)),
-                'blue':   ((0.000, 0.00, 0.00),
-                           (0.125, 0.50, 0.50),
-                           (0.250, 0.75, 0.75),
-                           (0.375, 0.50, 0.50),
-                           (0.500, 0.15, 0.15),
-                           (0.625, 0.00, 0.00),
-                           (0.750, 0.10, 0.10),
-                           (0.875, 0.50, 0.50),
-                           (1.000, 1.00, 1.00))}
-
-
-# An MIT licensed, colorblind-friendly heatmap from Wistia:
-#   https://github.com/wistia/heatmap-palette
-#   https://wistia.com/learn/culture/heatmaps-for-colorblindness
-# 
-# >>> import matplotlib.colors as c
-# >>> colors = ["#e4ff7a", "#ffe81a", "#ffbd00", "#ffa000", "#fc7f00"]
-# >>> cm = c.LinearSegmentedColormap.from_list('wistia', colors)
-# >>> _wistia_data = cm._segmentdata
-# >>> del _wistia_data['alpha']
-# 定义了一个名为 _wistia_data 的字典，包含了 Wistia 调色板的红、绿、蓝三个通道的数据
-_wistia_data = {
-    'red': [(0.0, 0.8941176470588236, 0.8941176470588236),
-            (0.25, 1.0, 1.0),
-            (0.5, 1.0, 1.0),
-            (0.75, 1.0, 1.0),
-            (1.0, 0.9882352941176471, 0.9882352941176471)],
-    'green': [(0.0, 1.0, 1.0),
-              (0.25, 0.9098039215686274, 0.9098039215686274),
-              (0.5, 0.7411764705882353, 0.7411764705882353),
-              (0.75, 0.6274509803921569, 0.6274509803921569),
-              (1.0, 0.4980392156862745, 0.4980392156862745)],
-    'blue': [(0.0, 0.47843137254901963, 0.47843137254901963),
-             (0.25, 0.10196078431372549, 0.10196078431372549),
-             (0.5, 0.0, 0.0),
-             (0.75, 0.0, 0.0),
-             (1.0, 0.0, 0.0)],
-}
-
-
-# Categorical palettes from Vega:
-# https://github.com/vega/vega/wiki/Scales
-# (divided by 255)
-# 定义了一个名为 _tab10_data 的元组，包含了 Vega 调色板中各颜色的 RGB 值，每个颜色都被除以 255 进行了归一化
-_tab10_data = (
-    (0.12156862745098039, 0.4666666666666667,  0.7058823529411765  ),  # 1f77b4
-    (1.0,                 0.4980392156862745,  0.054901960784313725),  # ff7f0e
-    # RGB颜色元组表示，每个元组包含三个浮点数，分别表示红、绿、蓝通道的颜色强度
-    (0.17254901960784313, 0.6274509803921569,  0.17254901960784313 ),  # 2ca02c
-    # 绿色色调的RGB表示，用于图表或可视化中
-    (0.8392156862745098,  0.15294117647058825, 0.1568627450980392  ),  # d62728
-    # 紫色色调的RGB表示，用于图表或可视化中
-    (0.5803921568627451,  0.403921568627451,   0.7411764705882353  ),  # 9467bd
-    # 棕色色调的RGB表示，用于图表或可视化中
-    (0.5490196078431373,  0.33725490196078434, 0.29411764705882354 ),  # 8c564b
-    # 粉红色调的RGB表示，用于图表或可视化中
-    (0.8901960784313725,  0.4666666666666667,  0.7607843137254902  ),  # e377c2
-    # 灰色色调的RGB表示，用于图表或可视化中
-    (0.4980392156862745,  0.4980392156862745,  0.4980392156862745  ),  # 7f7f7f
-    # 黄绿色调的RGB表示，用于图表或可视化中
-    (0.7372549019607844,  0.7411764705882353,  0.13333333333333333 ),  # bcbd22
-    # 青色色调的RGB表示，用于图表或可视化中
-    (0.09019607843137255, 0.7450980392156863,  0.8117647058823529),    # 17becf
-# 定义_Tab20颜色数据元组，每个元组包含三个RGB浮点数，表示一个颜色
-_tab20_data = (
-    (0.12156862745098039, 0.4666666666666667,  0.7058823529411765  ),  # 1f77b4
-    (0.6823529411764706,  0.7803921568627451,  0.9098039215686274  ),  # aec7e8
-    (1.0,                 0.4980392156862745,  0.054901960784313725),  # ff7f0e
-    (1.0,                 0.7333333333333333,  0.47058823529411764 ),  # ffbb78
-    (0.17254901960784313, 0.6274509803921569,  0.17254901960784313 ),  # 2ca02c
-    (0.596078431372549,   0.8745098039215686,  0.5411764705882353  ),  # 98df8a
-    (0.8392156862745098,  0.15294117647058825, 0.1568627450980392  ),  # d62728
-    (1.0,                 0.596078431372549,   0.5882352941176471  ),  # ff9896
-    (0.5803921568627451,  0.403921568627451,   0.7411764705882353  ),  # 9467bd
-    (0.7725490196078432,  0.6901960784313725,  0.8352941176470589  ),  # c5b0d5
-    (0.5490196078431373,  0.33725490196078434, 0.29411764705882354 ),  # 8c564b
-    (0.7686274509803922,  0.611764705882353,   0.5803921568627451  ),  # c49c94
-    (0.8901960784313725,  0.4666666666666667,  0.7607843137254902  ),  # e377c2
-    (0.9686274509803922,  0.7137254901960784,  0.8235294117647058  ),  # f7b6d2
-    (0.4980392156862745,  0.4980392156862745,  0.4980392156862745  ),  # 7f7f7f
-    (0.7803921568627451,  0.7803921568627451,  0.7803921568627451  ),  # c7c7c7
-    (0.7372549019607844,  0.7411764705882353,  0.13333333333333333 ),  # bcbd22
-    (0.8588235294117647,  0.8588235294117647,  0.5529411764705883  ),  # dbdb8d
-    (0.09019607843137255, 0.7450980392156863,  0.8117647058823529  ),  # 17becf
-    (0.6196078431372549,  0.8549019607843137,  0.8980392156862745)    # 9edae5
-)
-
-# 定义_Tab20b颜色数据元组，每个元组包含三个RGB浮点数，表示一个颜色
-_tab20b_data = (
-    (0.2235294117647059,  0.23137254901960785, 0.4745098039215686 ),  # 393b79
-    (0.3215686274509804,  0.32941176470588235, 0.6392156862745098 ),  # 5254a3
-    (0.4196078431372549,  0.43137254901960786, 0.8117647058823529 ),  # 6b6ecf
-    (0.611764705882353,   0.6196078431372549,  0.8705882352941177 ),  # 9c9ede
-    (0.38823529411764707, 0.4745098039215686,  0.2235294117647059 ),  # 637939
-    (0.5490196078431373,  0.6352941176470588,  0.3215686274509804 ),  # 8ca252
-    (0.7098039215686275,  0.8117647058823529,  0.4196078431372549 ),  # b5cf6b
-    (0.807843137254902,   0.8588235294117647,  0.611764705882353  ),  # cedb9c
-    (0.5490196078431373,  0.42745098039215684, 0.19215686274509805),  # 8c6d31
-    (0.7411764705882353,  0.6196078431372549,  0.2235294117647059 ),  # bd9e39
-    (0.9058823529411765,  0.7294117647058823,  0.3215686274509804 ),  # e7ba52
-    (0.9058823529411765,  0.796078431372549,   0.5803921568627451 ),  # e7cb94
-    (0.5176470588235295,  0.23529411764705882, 0.2235294117647059 ),  # 843c39
-    (0.6784313725490196,  0.28627450980392155, 0.2901960784313726 ),  # ad494a
-    (0.8392156862745098,  0.3803921568627451,  0.4196078431372549 ),  # d6616b
-    (0.9058823529411765,  0.5882352941176471,  0.611764705882353  ),  # e7969c
-    (0.4823529411764706,  0.2549019607843137,  0.45098039215686275),  # 7b4173
-)
-    # RGB颜色元组表示，每个元组包含三个浮点数，代表红、绿、蓝三种颜色的强度
-    (0.6470588235294118,  0.3176470588235294,  0.5803921568627451 ),  # a55194
-    # 用十六进制颜色代码a55194表示的颜色，对应的RGB值为(0.647, 0.318, 0.580)
-    (0.807843137254902,   0.42745098039215684, 0.7411764705882353 ),  # ce6dbd
-    # 用十六进制颜色代码ce6dbd表示的颜色，对应的RGB值为(0.808, 0.427, 0.741)
-    (0.8705882352941177,  0.6196078431372549,  0.8392156862745098 ),  # de9ed6
-    # 用十六进制颜色代码de9ed6表示的颜色，对应的RGB值为(0.871, 0.620, 0.839)
-_tab20c_data = (
-    (0.19215686274509805, 0.5098039215686274,  0.7411764705882353  ),  # RGB颜色元组表示第一种颜色 (3182bd)
-    (0.4196078431372549,  0.6823529411764706,  0.8392156862745098  ),  # RGB颜色元组表示第二种颜色 (6baed6)
-    (0.6196078431372549,  0.792156862745098,   0.8823529411764706  ),  # RGB颜色元组表示第三种颜色 (9ecae1)
-    (0.7764705882352941,  0.8588235294117647,  0.9372549019607843  ),  # RGB颜色元组表示第四种颜色 (c6dbef)
-    (0.9019607843137255,  0.3333333333333333,  0.050980392156862744),  # RGB颜色元组表示第五种颜色 (e6550d)
-    (0.9921568627450981,  0.5529411764705883,  0.23529411764705882 ),  # RGB颜色元组表示第六种颜色 (fd8d3c)
-    (0.9921568627450981,  0.6823529411764706,  0.4196078431372549  ),  # RGB颜色元组表示第七种颜色 (fdae6b)
-    (0.9921568627450981,  0.8156862745098039,  0.6352941176470588  ),  # RGB颜色元组表示第八种颜色 (fdd0a2)
-    (0.19215686274509805, 0.6392156862745098,  0.32941176470588235 ),  # RGB颜色元组表示第九种颜色 (31a354)
-    (0.4549019607843137,  0.7686274509803922,  0.4627450980392157  ),  # RGB颜色元组表示第十种颜色 (74c476)
-    (0.6313725490196078,  0.8509803921568627,  0.6078431372549019  ),  # RGB颜色元组表示第十一种颜色 (a1d99b)
-    (0.7803921568627451,  0.9137254901960784,  0.7529411764705882  ),  # RGB颜色元组表示第十二种颜色 (c7e9c0)
-    (0.4588235294117647,  0.4196078431372549,  0.6941176470588235  ),  # RGB颜色元组表示第十三种颜色 (756bb1)
-    (0.6196078431372549,  0.6039215686274509,  0.7843137254901961  ),  # RGB颜色元组表示第十四种颜色 (9e9ac8)
-    (0.7372549019607844,  0.7411764705882353,  0.8627450980392157  ),  # RGB颜色元组表示第十五种颜色 (bcbddc)
-    (0.8549019607843137,  0.8549019607843137,  0.9215686274509803  ),  # RGB颜色元组表示第十六种颜色 (dadaeb)
-    (0.38823529411764707, 0.38823529411764707, 0.38823529411764707 ),  # RGB颜色元组表示第十七种颜色 (636363)
-    (0.5882352941176471,  0.5882352941176471,  0.5882352941176471  ),  # RGB颜色元组表示第十八种颜色 (969696)
-    (0.7411764705882353,  0.7411764705882353,  0.7411764705882353  ),  # RGB颜色元组表示第十九种颜色 (bdbdbd)
-    (0.8509803921568627,  0.8509803921568627,  0.8509803921568627  ),  # RGB颜色元组表示第二十种颜色 (d9d9d9)
-)
-    'gray': _gray_data,
-    'hot': _hot_data,
-    'hsv': _hsv_data,
-    'jet': _jet_data,
-    'nipy_spectral': _nipy_spectral_data,
-    'ocean': _ocean_data,
-    'pink': _pink_data,
-    'prism': _prism_data,
-    'rainbow': _rainbow_data,
-    'seismic': _seismic_data,
-    'spring': _spring_data,
-    'summer': _summer_data,
-    'terrain': _terrain_data,
-    'winter': _winter_data,
-    # Qualitative
-    'Accent': {'listed': _Accent_data},  # Accent颜色映射，使用列表_Accent_data
-    'Dark2': {'listed': _Dark2_data},    # Dark2颜色映射，使用列表_Dark2_data
-    'Paired': {'listed': _Paired_data},  # Paired颜色映射，使用列表_Paired_data
-    'Pastel1': {'listed': _Pastel1_data},  # Pastel1颜色映射，使用列表_Pastel1_data
-    'Pastel2': {'listed': _Pastel2_data},  # Pastel2颜色映射，使用列表_Pastel2_data
-    'Set1': {'listed': _Set1_data},      # Set1颜色映射，使用列表_Set1_data
-    'Set2': {'listed': _Set2_data},      # Set2颜色映射，使用列表_Set2_data
-    'Set3': {'listed': _Set3_data},      # Set3颜色映射，使用列表_Set3_data
-    'tab10': {'listed': _tab10_data},    # tab10颜色映射，使用列表_tab10_data
-    'tab20': {'listed': _tab20_data},    # tab20颜色映射，使用列表_tab20_data
-    'tab20b': {'listed': _tab20b_data},  # tab20b颜色映射，使用列表_tab20b_data
-    'tab20c': {'listed': _tab20c_data},  # tab20c颜色映射，使用列表_tab20c_data
-}
-
-
-
-# 这是一个单独的右大括号，用于结束某个代码块的定义或语句块。
+# 示例：将 _g19 映射到特定调色板
+# _g19 在某些调色板中可能被使用
 ```
+
+#### 关键特性说明
+
+| 特性 | 描述 |
+|------|------|
+| 函数类型 | 调色板生成函数（palette function） |
+| 周期 | 2个完整周期（4π） |
+| 输出范围 | [0, 1] |
+| 典型用途 | Gnuplot系列调色板的蓝色/绿色通道 |
+
+#### 技术债务与优化空间
+
+1. **缺少文档字符串**：虽然模块顶部有注释说明这些是Gnuplot调色板函数，但具体每个函数的数学含义和用途缺乏详细文档
+2. **动态函数构建**：使用`globals()[f"_g{i}"]`动态构建gfunc字典不是最佳实践，可读性较差
+3. **类型提示缺失**：建议添加类型提示以提高代码可维护性
+
+
+
+### `_g20`
+
+这是一个Gnuplot调色板函数，用于生成颜色映射中的蓝色通道值。该函数通过计算 `|cos(4πx)|` 来返回一个周期性波形，常用于创建具有周期性变化的颜色渐变。
+
+参数：
+
+-  `x`：`float` 或 `numpy.ndarray`，输入值，通常在0到1之间，表示颜色映射中的位置
+
+返回值：`float` 或 `numpy.ndarray`，返回计算后的蓝色通道值，范围在0到1之间
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始: 输入x] --> B{输入类型判断}
+    B -->|单个浮点数| C[计算: cos x * 4 * π]
+    B -->|numpy数组| D[向量化计算: cos x * 4 * π]
+    C --> E[取绝对值: abs result]
+    D --> E
+    E --> F[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g20(x):
+    """
+    Gnuplot调色板函数 - 蓝色通道生成器
+    
+    该函数是Gnuplot调色板的第20个基础函数，用于生成颜色映射中的蓝色分量。
+    通过计算 |cos(4πx)| 生成周期性的波形，周期为0.5（因为4π的周期是2π/4π=0.5）。
+    
+    参数:
+        x: float或numpy数组，输入值，通常在[0, 1]范围内
+        
+    返回:
+        float或numpy数组，计算结果，范围在[0, 1]之间
+    """
+    # 计算 cos(4πx)，然后取绝对值确保结果在 [0, 1] 范围内
+    # 4π = 12.566370614359172
+    return np.abs(np.cos(x * 4 * np.pi))
+```
+
+
+
+### _g21
+
+这是一个用于 Gnuplot 调色板的线性函数，将输入的数值 `x` 按 3 倍放大后返回，常作为调色板（colormap）红色、绿色或蓝色通道的映射函数。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在 \([0,1]\) 范围内，表示在调色板中的位置。
+
+返回值：`float` 或 `numpy.ndarray`，返回 `3 * x`，即对输入值进行线性放大，用于生成调色板的红、绿、蓝通道。
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B[计算 3 * x]
+    B --> C[返回 3*x]
+```
+
+#### 带注释源码
+
+```python
+def _g21(x):
+    """
+    Gnuplot palette function: 返回 3 * x。
+
+    参数
+    ----------
+    x : float 或 numpy.ndarray
+        输入值，通常在 [0, 1] 范围内，表示在调色板中的位置。
+
+    返回
+    -------
+    float 或 numpy.ndarray
+        输入值的 3 倍，用于生成调色板的红色、绿色或蓝色通道。
+    """
+    return 3 * x
+```
+
+
+
+### `_g22`
+
+**描述**  
+该函数是 Gnuplot 调色板（palette）中的一个基础映射函数，实现线性变换 `y = 3 * x - 1`，用于在颜色映射的生成过程中计算红色通道的数值。输入 `x` 通常是归一化到 `[0, 1]` 区间的浮点数或数组，输出会线性映射到 `[-1, 2]` 区间。
+
+---
+
+#### 参数
+
+- **`x`**：`float` 或 `array‑like`  
+  输入的归一化值（0 ≤ x ≤ 1），可以是单个标量或 NumPy 数组。
+
+---
+
+#### 返回值
+
+- **`float` 或 `numpy.ndarray`**  
+  计算结果 `3 * x - 1`。若 `x` 为数组，则返回同形状的数组。
+
+---
+
+#### 流程图
+
+```mermaid
+flowchart LR
+    A[输入 x] --> B{计算 3 * x - 1}
+    B --> C[返回结果]
+```
+
+---
+
+#### 带注释源码
+
+```python
+def _g22(x):
+    """
+    Gnuplot 调色板函数：返回线性映射 3 * x - 1。
+
+    参数
+    ----------
+    x : float 或 array‑like
+        归一化的输入值，通常在 [0, 1] 区间。
+
+    返回
+    -------
+    float 或 numpy.ndarray
+        计算结果 3 * x - 1。
+    """
+    # 直接执行线性变换：乘以 3 再减 1
+    return 3 * x - 1
+```
+
+---
+
+#### 关键组件信息
+
+- **名称**：`_g22`  
+- **一句话描述**：实现 `y = 3 * x - 1` 线性映射的 Gnuplot 调色板函数。
+
+---
+
+#### 潜在的技术债务或优化空间
+
+1. **缺少输入校验**：函数未对 `x` 的取值范围进行检查，若传入超出 `[0, 1]` 的值，可能导致颜色映射出现不可预期的负值或大于 1 的值。可以考虑在函数入口添加范围检查（如 `np.clip(x, 0, 1)`）或显式抛出异常。
+2. **文档可增强**：虽然已有简短的文档字符串，但缺少对 **使用场景**、**数值范围**、**与其它调色板函数的关系** 的说明，容易导致后续维护者误解。
+3. **全局函数注册方式**：`gfunc = {i: globals()[f"_g{i}"] for i in range(37)}` 使用 `globals()` 动态构造映射表，这种方式不易于静态分析且在极端情况下（如函数名冲突）可能产生副作用。可以改为显式字典或使用装饰器注册。
+4. **性能**：对于大规模数组输入，函数本身已足够简洁（单步线性运算），但若后续在大量彩色映射渲染时出现瓶颈，可考虑使用 NumPy 向量化或 JIT 编译（如 Numba）进行加速。
+
+---
+
+#### 其它项目
+
+- **设计目标**：为 Gnuplot 系列颜色映射提供统一的、基于简单数学函数的红色通道生成方式。
+- **约束**：输入必须是归一化的 0‑1 范围；输出范围不受限制（可超出 0‑1）。
+- **错误处理**：当前未实现，调用方需自行保证输入合法。
+- **外部依赖**：仅依赖 `numpy`，符合项目轻量化需求。
+
+
+
+### _g23
+
+该函数是GNUPlot调色板生成函数之一，接收一个输入值x，计算并返回3*x - 2的结果，用于生成特定的颜色映射曲线。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在0到1之间，表示颜色映射中的位置
+
+返回值：`float` 或 `numpy.ndarray`，计算结果，等于3*x - 2
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入参数x]
+    B --> C[计算表达式: 3 * x - 2]
+    C --> D[返回计算结果]
+    D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+def _g23(x):
+    """
+    GNUPlot palette function that computes 3*x - 2.
+    
+    This function is part of the gfunc dictionary used to generate
+    GNUPlot-style colormaps. It maps the input value x (typically
+    in the range [0, 1]) to a transformed value using the linear
+    equation 3*x - 2.
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        Input value, typically in the range [0, 1], representing
+        a position along the colormap.
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        The transformed value equal to 3*x - 2.
+    """
+    return 3 * x - 2
+```
+
+
+
+### `_g24`
+
+该函数是 Gnuplot 调色板函数之一，计算输入值 x 的线性变换后取绝对值，即返回 |3*x - 1|，用于生成特定的颜色渐变效果。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在 0 到 1 之间
+
+返回值：`float` 或 `numpy.ndarray`，返回 |3*x - 1| 的值
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C[计算 3 * x]
+    C --> D[计算 3 * x - 1]
+    D --> E[计算绝对值 np.abs3 * x - 1]
+    E --> F[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g24(x):
+    """
+    Gnuplot 调色板函数，计算 |3*x - 1|。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常在 0 到 1 之间
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        返回 |3*x - 1| 的值
+    """
+    return np.abs(3 * x - 1)
+```
+
+
+
+### `_g25`
+
+这是 Gnuplot 调色板函数之一，用于生成颜色映射数据。该函数计算 `|3*x - 2|` 的值，常用于构建特定的颜色渐变。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在 0 到 1 之间，表示颜色映射的位置
+
+返回值：`float` 或 `numpy.ndarray`，返回 `|3*x - 2|` 的值，范围在 [0, 2] 之间
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入 x]
+    B --> C{计算 3*x - 2}
+    C --> D{取绝对值}
+    D --> E[输出 |3*x - 2|]
+    E --> F[结束]
+```
+
+#### 带注释源码
+
+```python
+def _g25(x):
+    """
+    Gnuplot palette function: computes |3*x - 2|.
+    
+    This function is part of a set of Gnuplot palette functions (gfunc)
+    used to generate color mapping data for visualization.
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        Input value, typically in the range [0, 1], representing 
+        the position along the color gradient.
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        The absolute value of (3*x - 2), producing values in range [0, 2].
+        This creates a V-shaped curve commonly used in scientific 
+        visualization color maps.
+    
+    Example
+    -------
+    >>> import numpy as np
+    >>> _g25(0.0)
+    2.0
+    >>> _g25(0.5)
+    0.5
+    >>> _g25(1.0)
+    1.0
+    >>> _g25(np.array([0.0, 0.5, 1.0]))
+    array([2. , 0.5, 1. ])
+    """
+    return np.abs(3 * x - 2)
+```
+
+
+
+### `_g26`
+
+这是一个Gnuplot调色板函数，用于将输入值x进行线性变换 `(3x - 1) / 2`，是Matplotlib中Gnuplot系列colormap的生成函数之一，属于datadict的一部分，用于生成LinearSegmentedColormap。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在0到1之间）
+
+返回值：`float` 或 `numpy.ndarray`，线性变换后的输出值
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B[计算 3x]
+    B --> C[计算 3x - 1]
+    C --> D[计算 (3x - 1) / 2]
+    D --> E[输出结果]
+```
+
+#### 带注释源码
+
+```python
+def _g26(x):
+    """
+    Gnuplot palette function for generating colormap values.
+    
+    该函数实现线性变换: f(x) = (3*x - 1) / 2
+    将输入值x从[0,1]区间映射到[-0.5,1]区间
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入的归一化值，范围通常在0到1之间
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        变换后的值，范围在-0.5到1之间
+    """
+    return (3 * x - 1) / 2
+```
+
+
+
+### `_g27`
+
+该函数是Gnuplot调色板函数之一，实现了一个线性变换 `(3 * x - 2) / 2`，用于将输入值x从[0,1]区间映射到[-1, 0.5]区间，是Gnuplot调色板数据生成的一部分。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在[0,1]区间内
+
+返回值：`float` 或 `numpy.ndarray`，线性变换后的值
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入 x]
+    B --> C{判断输入类型}
+    C -->|单个数值| D[计算 3*x - 2]
+    C -->|numpy数组| E[对数组每个元素计算 3*x - 2]
+    D --> F[结果除以2]
+    E --> F
+    F --> G[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g27(x):
+    """
+    Gnuplot调色板函数 - 线性变换函数
+    
+    将输入值x从[0,1]区间映射到[-1, 0.5]区间
+    变换公式: (3*x - 2) / 2
+    
+    参数:
+        x: float或numpy.ndarray, 输入值, 通常在[0,1]区间内
+        
+    返回:
+        float或numpy.ndarray, 线性变换后的值
+    """
+    # 步骤1: 计算 3*x - 2
+    # 步骤2: 结果除以2
+    return (3 * x - 2) / 2
+```
+
+
+
+### `_g28`
+
+这是一个Gnuplot调色板函数，计算 `|(3*x - 1) / 2|` 的绝对值，用于生成颜色映射中的绿色通道数据。
+
+参数：
+
+- `x`：`float` 或 `np.ndarray`，输入值，通常在0到1之间
+
+返回值：`float` 或 `np.ndarray`，返回 `|(3*x - 1) / 2|` 的计算结果
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[输入 x] --> B[计算 3*x - 1]
+    B --> C[除以 2]
+    C --> D[取绝对值]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g28(x):
+    """
+    Gnuplot调色板函数 - 计算 |(3*x - 1) / 2| 的绝对值。
+    
+    这是一个用于生成颜色映射的数学函数，属于Gnuplot调色板函数系列(gfunc)之一。
+    在代码中，此函数被用作 _gnuplot_data 字典中 'green' 通道的映射函数。
+    
+    参数:
+        x: float或np.ndarray，输入值，通常在0到1之间
+        
+    返回:
+        float或np.ndarray，|(3*x - 1) / 2| 的绝对值结果
+    """
+    return np.abs((3 * x - 1) / 2)
+```
+
+
+
+### `_g29`
+
+Gnuplot 调色板函数，用于将输入的归一化值 x 映射为绝对值形式的输出，常用于生成颜色映射的绿色通道。
+
+参数：
+
+-  `x`：`float` 或 `numpy.ndarray`，归一化值，通常在 0 到 1 之间
+
+返回值：`float` 或 `numpy.ndarray`，计算后的绝对值结果
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[输入 x] --> B{计算 3*x - 2}
+    B --> C{除以 2}
+    C --> D{计算绝对值 np.abs}
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g29(x):
+    """
+    Gnuplot 调色板函数 - 计算绝对值的线性映射
+    
+    该函数是 matplotlib 中 gnuplot2 调色板的绿色通道生成函数。
+    实现公式: |(3x - 2) / 2|，用于生成从深绿到浅绿的颜色渐变。
+    
+    参数:
+        x: 归一化输入值，范围通常为 [0, 1]
+    
+    返回:
+        绝对值处理后的输出值，范围 [0, 1]
+    """
+    return np.abs((3 * x - 2) / 2)
+```
+
+
+
+### `_g30`
+
+这是 Gnuplot 调色板的数学转换函数之一，用于将输入值 x 线性映射到特定的输出范围，作为调色板颜色生成的辅助函数。
+
+**参数：**
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在 0 到 1 之间，表示颜色映射的归一化位置
+
+**返回值：**`float` 或 `numpy.ndarray`，线性变换后的输出值
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C{计算 x / 0.32}
+    C --> D[计算 result - 0.78125]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g30(x):
+    """
+    Gnuplot 调色板函数 - 线性映射变换
+    
+    将输入值 x 通过线性变换映射到目标范围：
+    y = x / 0.32 - 0.78125
+    
+    这相当于将输入值乘以约 3.125，然后减去 0.78125。
+    用于 Gnuplot 调色板中 red 通道的颜色插值。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入值，通常在 0-1 范围内
+        
+    Returns
+    -------
+    float or numpy.ndarray
+        变换后的输出值
+    """
+    return x / 0.32 - 0.78125
+```
+
+
+
+### `_g31`
+
+这是一个Gnuplot调色板函数，用于生成颜色映射的绿色通道值，实现简单的线性变换 `y = 2 * x - 0.84`。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在0到1之间）
+
+返回值：`float` 或 `numpy.ndarray`，线性变换后的绿色通道值（范围约为-0.84到0.16）
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C{计算 y = 2 * x - 0.84}
+    C --> D[返回 y]
+    D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+def _g31(x):
+    """
+    Gnuplot2调色板的绿色通道函数。
+    
+    这是一个简单的线性函数，将输入值x（0到1之间）映射到绿色通道。
+    变换公式: y = 2 * x - 0.84
+    
+    参数:
+        x: 输入的归一化值，可以是单个浮点数或numpy数组
+        
+    返回:
+        线性变换后的值，范围约在-0.84到0.16之间
+    """
+    return 2 * x - 0.84
+```
+
+
+
+### `_g32`
+
+这是一个 Gnuplot 调色板函数，用于生成非线性颜色映射的蓝色通道值。该函数通过分段线性变换将归一化输入值 `[0,1]` 转换为特定的颜色强度曲线，是 GNUPlot2 调色板（`_gnuplot2_data`）的蓝色分量函数。
+
+参数：
+
+- `x`：`numpy.ndarray`，归一化的输入值，范围通常在 [0, 1] 之间
+
+返回值：`numpy.ndarray`，变换后的颜色强度值，与输入数组长度相同
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始: 输入数组 x] --> B[创建零数组 ret]
+    B --> C{检查条件 x < 0.25}
+    C -->|是| D[计算: ret = 4 * x]
+    D --> E{检查条件 0.25 ≤ x < 0.92}
+    C -->|否| E
+    E -->|是| F[计算: ret = -2 * x + 1.84]
+    F --> G{检查条件 x ≥ 0.92}
+    E -->|否| G
+    G -->|是| H[计算: ret = x / 0.08 - 11.5]
+    G -->|否| I[返回 ret]
+    H --> I
+```
+
+#### 带注释源码
+
+```python
+def _g32(x):
+    """
+    Gnuplot 调色板函数 - 蓝色通道
+    
+    实现一个分段线性变换，将归一化输入值映射为特定的颜色强度曲线。
+    该函数是 GNUPlot2 调色板的蓝色分量，用于数据可视化中的颜色映射。
+    
+    参数:
+        x: numpy.ndarray, 归一化的输入值数组，值域通常在 [0, 1]
+    
+    返回:
+        numpy.ndarray, 变换后的颜色强度值数组
+    """
+    # 步骤1: 初始化输出数组，创建一个与输入长度相同的零数组
+    ret = np.zeros(len(x))
+    
+    # 步骤2: 第一段变换 - 线性上升段 (x < 0.25)
+    # 当输入值在 [0, 0.25) 区间时，输出值从 0 线性增加到 1
+    m = (x < 0.25)
+    ret[m] = 4 * x[m]
+    
+    # 步骤3: 第二段变换 - 线性下降段 (0.25 ≤ x < 0.92)
+    # 当输入值在 [0.25, 0.92) 区间时，输出值从 1 线性下降到 0
+    m = (x >= 0.25) & (x < 0.92)
+    ret[m] = -2 * x[m] + 1.84
+    
+    # 步骤4: 第三段变换 - 线性上升段 (x ≥ 0.92)
+    # 当输入值在 [0.92, 1] 区间时，输出值从 0 线性增加到 1
+    m = (x >= 0.92)
+    ret[m] = x[m] / 0.08 - 11.5
+    
+    # 步骤5: 返回变换后的数组
+    return ret
+```
+
+#### 关键信息
+
+| 项目 | 描述 |
+|------|------|
+| **函数类型** | 模块级全局函数 |
+| **所属模块** | `_gnuplot2_data` 调色板定义 |
+| **颜色通道** | 蓝色 (blue) |
+| **调用来源** | `gfunc` 字典，通过 `globals()[f"_g{i}"]` 动态生成 |
+| **实际用途** | 作为 `_gnuplot2_data['blue']` 构建 GNUPlot2 颜色映射 |
+
+#### 技术债务与优化空间
+
+1. **魔法数字**：函数中使用了多个硬编码的数值（0.25, 0.92, 4, 1.84, 0.08, 11.5），建议提取为可配置的常量或参数。
+2. **重复计算**：每次调用都会创建多个布尔掩码，可以考虑优化内存使用。
+3. **文档缺失**：原始代码中该函数没有文档字符串，建议添加说明其数学含义。
+
+
+
+### `_g33`
+
+这是一个Gnuplot调色板函数，用于生成颜色映射数据。该函数计算 `|2x - 0.5|`，是Gnuplot调色板中常用的数学转换函数之一，常用于科学可视化中的颜色渐变计算。
+
+参数：
+
+- `x`：`float` 或 `np.ndarray`，输入值，通常为归一化的数值（0到1之间），代表颜色映射的位置
+
+返回值：`float` 或 `np.ndarray`，返回计算结果 `|2x - 0.5|`，用于生成彩虹色映射（rainbow colormap）的红色通道数据
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[接收输入 x]
+    B --> C[计算 2 * x]
+    C --> D[计算 2 * x - 0.5]
+    D --> E[计算绝对值 np.abs2 * x - 0.5]
+    E --> F[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g33(x):
+    """
+    Gnuplot调色板函数 - 用于生成彩虹色映射的红色通道数据。
+    
+    该函数实现数学变换 |2x - 0.5|，是Gnuplot调色板中的标准函数之一。
+    在matplotlib的彩虹色映射(rainbow colormap)中，_g33函数负责生成红色通道值，
+    配合_g13(绿色)和_g10(蓝色)共同构成完整的彩虹渐变效果。
+    
+    参数:
+        x: float或np.ndarray，输入的归一化值(通常在0-1范围内)
+        
+    返回值:
+        float或np.ndarray，计算结果 |2x - 0.5|
+    """
+    return np.abs(2 * x - 0.5)  # 计算2x-0.5的绝对值
+```
+
+
+
+### `_g34`
+
+该函数是GNUplot调色板中的线性映射函数之一，将输入值乘以2，实现最简单的线性变换。
+
+参数：
+
+- `x`：`float`或`numpy.ndarray`，输入值，通常为0到1之间的标准化颜色坐标
+
+返回值：`float`或`numpy.ndarray`，输入值的2倍
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入参数 x]
+    B --> C{计算 2 * x}
+    C --> D[返回结果]
+    D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+def _g34(x): 
+    """
+    GNUplot调色板函数 - 线性放大函数
+    
+    这是一个简单的线性映射函数，将输入值乘以2。
+    在GNUplot调色板定义中用于生成颜色映射的红色通道。
+    
+    Parameters
+    ----------
+    x : float or numpy.ndarray
+        输入的标准化值，通常在[0, 1]范围内
+    
+    Returns
+    -------
+    float or numpy.ndarray
+        输入值的两倍，如果输入为0.5则返回1.0
+    """
+    return 2 * x
+```
+
+
+
+### `_g35`
+
+该函数是 Gnuplot 调色板生成函数之一，用于将输入值 x 线性映射到 [ -0.5, 1.5 ] 区间，实现调色板颜色的非线性变换。
+
+参数：
+- `x`：`float` 或 `array-like`，输入值，通常为 0 到 1 之间的归一化数值
+
+返回值：`float` 或 `ndarray`，线性变换后的输出值
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[输入 x] --> B{计算 2 * x - 0.5}
+    B --> C[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g35(x):
+    """
+    Gnuplot 调色板映射函数。
+    
+    将输入值 x 线性变换为 2*x - 0.5，用于生成特定的颜色渐变效果。
+    该函数是 gfunc 字典中的元素之一，用于构建 Gnuplot 系列调色板。
+    
+    参数:
+        x: 输入的归一化数值，通常范围在 [0, 1]
+    
+    返回:
+        变换后的数值，范围约为 [-0.5, 1.5]
+    """
+    return 2 * x - 0.5
+```
+
+
+
+### `_g36`
+
+该函数是 GNUPlot 调色板函数系列中的第36号函数，实现了一个简单的线性变换 `f(x) = 2x - 1`，用于将输入值 `x`（通常在 0 到 1 范围内）映射到 -1 到 1 的范围内。这是 matplotlib 中用于生成 colormap 的辅助函数，属于 `_gfunc` 字典中的一系列全局函数之一。
+
+参数：
+
+- `x`：`float` 或 `numpy array`，输入的归一化值（通常在 [0, 1] 范围内）
+
+返回值：`float` 或 `numpy array`，线性变换后的值，范围在 [-1, 1] 之间
+
+#### 流程图
+
+```mermaid
+graph LR
+    A[开始] --> B[输入 x]
+    B --> C[计算 2 * x]
+    C --> D[计算 2 * x - 1]
+    D --> E[返回结果]
+```
+
+#### 带注释源码
+
+```python
+def _g36(x): 
+    """
+    GNUPlot palette function #36.
+    
+    该函数实现线性变换 f(x) = 2x - 1，将输入值 x（通常在 [0,1] 范围）
+    映射到 [-1, 1] 范围。常用于生成 colormap 的蓝色通道数据。
+    
+    参数:
+        x: float 或 numpy array，输入的归一化值
+        
+    返回:
+        float 或 numpy array，线性变换后的值
+    """
+    return 2 * x - 1  # 线性映射：将 [0,1] 映射到 [-1,1]
+```
+
+#### 关键组件信息
+
+| 名称 | 一句话描述 |
+|------|----------|
+| `_g36` | GNUPlot 调色板函数，实现 `f(x) = 2x - 1` 的线性变换 |
+| `gfunc` | 包含 `_g0` 到 `_g36` 所有函数的字典，用于 colormap 注册 |
+| `_gnuplot_data` | 使用部分 `gfunc` 函数作为值的 GNUPlot 调色板数据字典 |
+
+#### 潜在技术债务或优化空间
+
+1. **缺乏类型提示**：该函数没有类型注解（type hints），建议添加如 `def _g36(x: float) -> float:` 以提高代码可读性和 IDE 支持
+2. **文档字符串缺失**：虽然有简单的 docstring，但未说明该函数在 colormap 中的具体用途
+3. **函数命名不够直观**：`_g36` 这样的数字命名方式缺乏语义信息，建议添加更描述性的名称或常量映射
+
+#### 其它说明
+
+- **设计目标**：作为 GNUPlot 调色板的蓝色通道生成函数之一，用于创建特定的颜色渐变效果
+- **错误处理**：未对输入值范围进行校验，当输入超出 [0,1] 范围时，返回值也会相应超出 [-1,1] 范围
+- **外部依赖**：仅依赖 `numpy` 库，但函数本身也支持纯 Python 数值类型
+- **使用场景**：该函数通过 `gfunc` 字典被 `_afmhot_data` 等 colormap 数据引用，用于生成 matplotlib 的颜色映射表
+
+
+
+### `_gist_heat_red`
+
+该函数是 gist_heat 颜色方案中用于计算红色通道值的简单线性函数，通过将输入值乘以 1.5 来生成对应的红色强度。
+
+参数：
+
+- `x`：`float`，输入值，通常为 0 到 1 之间的归一化值，表示颜色映射中的位置
+
+返回值：`float`，计算后的红色通道值，范围通常在 0 到 1.5 之间
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B[输入 x]
+    B --> C[计算 1.5 * x]
+    C --> D[返回结果]
+    D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+def _gist_heat_red(x): 
+    """
+    计算 gist_heat 颜色方案中红色通道的值。
+    
+    这是一个简单的线性函数，将输入值乘以 1.5。
+    用于生成从黑色到红色的渐变中的红色通道强度。
+    
+    参数:
+        x: 输入的归一化值（0到1之间的浮点数）
+    
+    返回:
+        红色通道的强度值（0到1.5之间的浮点数）
+    """
+    return 1.5 * x
+```
+
+
+
+### `_gist_heat_green`
+
+这是一个定义 gist_heat 配色方案的绿色通道的函数，通过线性变换 `2 * x - 1` 将输入值映射到绿色通道值。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入的归一化值（通常在 0 到 1 之间），表示颜色映射中的位置
+
+返回值：`float` 或 `numpy.ndarray`，绿色通道的输出值（范围约为 -1 到 1）
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[输入 x] --> B{计算 2*x - 1}
+    B --> C[返回绿色通道值]
+```
+
+#### 带注释源码
+
+```python
+def _gist_heat_green(x): return 2 * x - 1
+```
+
+**说明：**
+- 该函数是 gist_heat 配色方案的绿色通道映射函数
+- 采用线性变换：`2 * x - 1`
+- 当输入 x=0 时，输出为 -1（无绿色）
+- 当输入 x=0.5 时，输出为 0（中等绿色）
+- 当输入 x=1 时，输出为 1（最大绿色）
+- 此函数与 `_gist_heat_red`（`1.5 * x`）和 `_gist_heat_blue`（`4 * x - 3`）共同构成完整的 gist_heat 配色方案数据字典 `_gist_heat_data`
+
+
+
+### `_gist_heat_blue`
+
+该函数是 gist_heat 颜色映射的蓝色通道生成函数，通过线性变换 `4 * x - 3` 将输入值映射为蓝色通道的强度值。
+
+参数：
+
+- `x`：`float` 或 `numpy.ndarray`，输入值，通常在 0 到 1 之间
+
+返回值：`float` 或 `numpy.ndarray`，蓝色通道的强度值
+
+#### 流程图
+
+```mermaid
+flowchart TD
+    A[开始] --> B[输入 x]
+    B --> C{计算 4*x - 3}
+    C --> D[输出结果]
+    D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+def _gist_heat_blue(x): 
+    """
+    生成 gist_heat 颜色映射的蓝色通道值。
+    
+    这是一个线性函数，用于将输入值 x 映射到蓝色通道。
+    当 x 从 0 到 1 变化时，蓝色通道值从 -3 变化到 1。
+    （在实际应用中会被裁剪到有效范围 [0, 1]）
+    
+    参数:
+        x: 输入值，类型为 float 或 numpy.ndarray
+        
+    返回:
+        4*x - 3 的计算结果
+    """
+    return 4 * x - 3
+```
+
+
+
+### `_gist_yarg`
+
+该函数是一个简单的数值反转函数，用于创建gist_yarg颜色映射。它接收一个[0,1]范围内的输入值x，返回1-x作为输出，从而实现灰度值的反转（从黑到白变为从白到黑）。
+
+参数：
+
+- `x`：`float`或`array-like`，输入的颜色值，范围在0到1之间
+
+返回值：`float`或`array-like`，反转后的颜色值（1 - x）
+
+#### 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B{输入x}
+    B --> C[计算 1 - x]
+    C --> D[返回结果]
+    D --> E[结束]
+```
+
+#### 带注释源码
+
+```python
+def _gist_yarg(x):
+    """
+    反转输入值，用于创建反转的灰度颜色映射（gist_yarg）。
+    
+    该函数是gist_yarg颜色映射的核心，它将输入值x反转。
+    当x=0时返回1（白色），当x=1时返回0（黑色），实现从白到黑的渐变。
+    
+    Parameters
+    ----------
+    x : float or array-like
+        输入的颜色值，范围在0到1之间
+    
+    Returns
+    -------
+    float or array-like
+        反转后的颜色值，范围在0到1之间
+    """
+    return 1 - x
+```
+
+## 关键组件
+
+
+
+
+### datad
+
+主颜色映射注册字典，包含所有预定义颜色映射的集合，通过名称索引访问各个颜色方案的数据。
+
+### cubehelix
+
+生成可定制cubehelix颜色方案的函数，返回包含red、green、blue三个通道转换函数的字典，支持gamma、saturation、rotation和hue参数调整。
+
+### _ch_helper
+
+cubehelix颜色方案的辅助计算函数，根据gamma因子和极坐标参数生成单调递增的感知亮度颜色，用于实现平滑过渡的螺旋颜色效果。
+
+### _flag_red, _flag_green, _flag_blue
+
+美国国旗颜色方案的RGB通道生成函数，使用正弦函数生成周期性颜色波动模式。
+
+### _prism_red, _prism_green, _prism_blue
+
+棱镜颜色方案的RGB通道生成函数，通过不同相位的正弦函数创造光谱分离效果。
+
+### gfunc (包含_g0至_g36)
+
+GNUPlot调色板的37个基础颜色函数集合，涵盖线性、二次、三次、平方根、三角函数等多种数学变换，用于构建各种GNUPlot风格的颜色映射。
+
+### _gist_heat_red, _gist_heat_green, _gist_heat_blue
+
+Gist热力图颜色方案的RGB通道生成函数，使用分段线性变换实现从黑到红的热力渐变。
+
+### _gist_yarg
+
+Gist灰度反转函数，返回1-x实现灰度值的黑白反转。
+
+### LinearSegmentedColormap数据
+
+使用分段线性插值定义的颜色数据，包括binary、bone、cool、copper、gray、hot、hsv、jet、pink等传统Matplotlib颜色映射。
+
+### ListedColormap数据
+
+离散颜色列表数据，用于定性可视化，包括Accent、Dark2、Paired、Pastel1、Set1、Set2、Set3、tab10、tab20等颜色集合。
+
+### ColorBrewer数据
+
+来自ColorBrewer配色方案的序列颜色映射，包括Blues、BrBG、BuGn、BuPu、Greens、Greys、Oranges、OrRd、PiYG、PRGn、PuBu、PuOr、RdBu、RdGy、RdPu、RdYlBu、RdYlGn、Reds、Spectral等diverging和sequential配色方案。
+
+### _coolwarm_data
+
+基于Kenneth Moreland发散颜色映射研究的coolwarm双极颜色方案，提供科学可视化用的蓝红渐变。
+
+### _CMRmap_data
+
+Carey Rappaport的CMRmap颜色映射实现，专门为黑白打印优化设计的颜色到灰度转换。
+
+### Petroff颜色方案
+
+Matthew A. Petroff的可访问性颜色序列数据（_petroff6_data、_petroff8_data、_petroff10_data），为数据可视化提供色盲友好的调色板。
+
+### Okabe-Ito颜色方案
+
+无障碍定性调色板，由Masataka Okabe和Kei Ito开发，确保色盲用户也能区分不同颜色类别。
+
+
+## 问题及建议
+
+
+
+
+
+### 已知问题
+
+-   **命名风格不一致**：颜色映射数据变量命名混乱，部分使用 CamelCase（如 `_Blues_data`、`_BrBG_data`），部分使用 snake_case（如 `_afmhot_data`、`_gray_data`），函数命名也未统一（`cubehelix` 小写，`_flag_red` 带下划线前缀）。
+-   **全局命名空间污染**：定义了约 70+ 个全局变量（`_xxx_data`），极易与其他模块冲突，且难以追踪依赖关系。
+-   **不安全的动态全局查找**：`gfunc = {i: globals()[f"_g{i}"] for i in range(37)}` 依赖 `globals()` 字典动态查找，违反封装原则，且在模块导入顺序变化时可能产生意外行为。
+-   **魔法数字缺乏解释**：`_flag_red` 中的 `31.5`、`_prism_red` 中的 `20.9`、`cubehelix` 中的 `-0.14861`、`1.78277` 等数值无注释说明来源或含义。
+-   **数据冗余**：`_pink_data` 包含约 120 个几乎线性递增的 RGB 元组，可通过算法生成或使用更紧凑的插值方式。
+-   **缺乏类型注解**：所有函数和变量均无类型注解，降低了代码的可读性和 IDE 支持。
+-   **部分颜色值未归一化**：某些数据（如 `_pink_data`）的 RGB 值在 0-1 范围内，但 `_Blues_data` 等 ColorBrewer 数据已除以 255，格式不统一。
+-   **文档不完整**：模块级 docstring 提到 "Please update this with the purpose and type of your colormap if you add data for one here"，但大多数颜色映射数据无用途说明。
+
+### 优化建议
+
+-   **统一命名规范**：采用 snake_case 命名所有颜色映射数据变量，将 `_Blues_data` 改为 `blues_data` 等，并建立内部约定区分私有数据（如加单下划线）。
+-   **重构全局变量**：使用类或字典封装颜色映射数据，将所有 `_xxx_data` 放入 `ColormapData` 类或 `_COLORMAP_DATA` 字典中，减少全局命名空间污染。
+-   **消除动态全局查找**：直接定义 `gfunc` 字典或使用显式函数引用，移除对 `globals()` 的依赖，例如 `gfunc = {_g0: lambda x: 0, ...}` 或在文件顶部预定义。
+-   **提取魔法数字**：为关键数值定义具名常量，如 `FLAG_CYCLES = 31.5`、`PRISM_CYCLES = 20.9`、`CUBEHELIX_COS_COEFF = -0.14861` 等，并在注释中说明其物理意义或来源。
+-   **压缩冗余数据**：使用算法生成 `_pink_data`，或采用分段线性插值减少存储，例如使用 `numpy.interp` 或定义起始/结束点及步长。
+-   **添加类型注解**：为 `cubehelix()`、`_ch_helper()` 等函数添加参数和返回值类型注解，并使用 `typing.Dict` / `typing.Tuple` 等明确数据结构类型。
+-   **统一数据格式**：确保所有 RGB 值均归一化到 [0, 1]，或明确区分归一化与非归一化数据集，并在 docstring 中说明。
+-   **完善文档**：为每个颜色映射数据添加一行 docstring 说明其用途（如 "Greys: sequential blue-purple colormap"）和类型（"sequential" / "diverging" / "qualitative"）。
+
+
+
+## 其它
+
+
+
+
+### 设计目标与约束
+
+本模块的核心目标是提供预定义的颜色映射数据，供Matplotlib的`LinearSegmentedColormap`和`ListedColormap`使用。设计约束包括：颜色数据必须符合Matplotlib的颜色规范（RGB值在0-1范围内）；数据格式需支持线性分段和函数式两种定义方式；需兼容Python的pickle序列化机制；颜色方案需覆盖科学可视化的多种场景（离散、连续、发散、定性等）。
+
+### 错误处理与异常设计
+
+由于本模块主要是静态数据定义，运行时错误处理较少。潜在错误场景包括：1) 数据格式错误（如RGB值超出[0,1]范围）；2) 函数定义错误（如gfunc索引越界）；3) 参数范围错误（如cubehelix的gamma参数为负）。这些错误主要在数据定义阶段被发现，建议在数据定义时进行静态检查，并提供验证函数。
+
+### 数据流与状态机
+
+本模块不涉及复杂的状态机。数据流较为简单：数据定义 → 数据字典（datad）→ 上层调用者（pyplot.colormaps()）。数据字典datad是整个模块的核心出口，包含约80+个颜色映射的完整定义。颜色数据流向：原始定义 → gfunc函数映射 → 最终颜色映射对象。
+
+### 外部依赖与接口契约
+
+主要依赖：1) numpy库（用于数值计算和数组操作）；2) functools.partial（用于创建cubehelix的偏函数）。接口契约：datad字典是唯一公开接口，每个颜色映射数据需符合特定格式（线性分段需包含'red'/'green'/'blue'键，定性映射需包含'listed'键）。
+
+### 性能考虑
+
+模块性能关键点：1) gfunc字典通过globals()动态生成，可能影响加载性能；2) cubehelix使用partial创建函数对象，每次调用可能存在额外开销；3) 大量静态颜色数据可能导致内存占用较高。建议：考虑延迟加载不常用的颜色映射；gfunc可改为静态定义而非动态生成。
+
+### 安全性考虑
+
+本模块不涉及用户输入或网络交互，安全性风险较低。主要安全考量：1) 防止通过globals()访问非预期的全局变量（已通过白名单_g{i}格式控制）；2) 确保颜色数据值在合法范围内（0-1），避免潜在的数值计算错误。
+
+### 版本兼容性
+
+需注意：1) Python 2/3兼容性（print语句vs函数，dict顺序）；2) numpy版本兼容性（某些numpy函数可能弃用或行为改变）；3) Matplotlib内部API变化（如ColormapRegistry接口）。建议添加版本检测和条件分支。
+
+### 测试策略
+
+建议测试覆盖：1) 数据格式验证（RGB值范围、键完整性）；2) gfunc函数正确性验证；3) cubehelix参数边界测试；4) datad字典完整性检查（所有颜色映射是否存在）；5) 与Matplotlib ColormapRegistry的集成测试。
+
+### 使用示例
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import numpy as np
+
+# 使用内置颜色映射
+x = np.linspace(0, 1, 100).reshape(10, 10)
+plt.imshow(x, cmap='viridis')
+plt.colorbar()
+
+# 使用cubehelix自定义颜色映射
+from matplotlib.colors import LinearSegmentedColormap
+custom_cmap = LinearSegmentedColormap.from_list('custom', ['red', 'blue'])
+```
+
+### 维护建议
+
+1. 添加数据验证函数，在模块加载时检查数据完整性；2. 考虑将颜色数据分离到单独文件（JSON/YAML），提高可维护性；3. 为新增颜色映射添加文档注释，说明设计意图和适用场景；4. 建立颜色映射分类体系（连续/离散/发散/定性），便于用户选择；5. 考虑添加颜色映射预览功能，帮助用户直观选择。
+
+### 关键组件信息
+
+- **datad**: 核心数据字典，包含所有颜色映射定义，是模块的主要出口点
+- **_cubehelix_data**: CubeHelix颜色方案的默认参数版本
+- **gfunc**: Gnuplot调色板函数集合，包含37个预定义颜色映射函数
+- **cubehelix()**: 生成可定制CubeHelix颜色映射的工厂函数
+- **_ch_helper**: CubeHelix算法的内部辅助函数，实现核心颜色计算逻辑
+
+### 潜在的技术债务与优化空间
+
+1. gfunc动态生成方式不够直观，建议改为显式定义；2. 颜色数据重复性较高（如_pink_data的冗长定义），可考虑压缩或程序化生成；3. 缺乏统一的颜色映射分类和元数据管理；4. 文档字符串不够完整，部分颜色映射缺少用途说明；5. 测试覆盖不足，缺乏边界条件和异常情况测试。
+
+    
